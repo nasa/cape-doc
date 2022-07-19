@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3.5. Setting Freestream Conditions in Cape &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.6. Automated Post-Processing Reports" href="report/index.html" />
+    <link rel="prev" title="3.4. Syntax for Run Matrix Files" href="file/matrix.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="report/index.html" title="3.6. Automated Post-Processing Reports"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="file/matrix.html" title="3.4. Syntax for Run Matrix Files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.5. </span>Setting Freestream Conditions in Cape</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="setting-freestream-conditions-in-cape">
+<span id="cape-freestream"></span><h1><span class="section-number">3.5. </span>Setting Freestream Conditions in Cape<a class="headerlink" href="#setting-freestream-conditions-in-cape" title="Permalink to this headline">¶</a></h1>
+<p>Setting freestream conditions for the various solvers in Cape is controlled from
+the JSON file (e.g. <code class="file docutils literal notranslate"><span class="pre">pyCart.json</span></code>) and the run matrix file.  Varying
+freestream conditions like Mach number, angle of attack, sideslip angle,
+temperature, and pressure is one of the most common ways to use Cape or any
+other CFD wrapper.</p>
+<p>Cape adds a few capabilities to this procedure that are not exactly typical.
+The freestream conditions are divided into two groups.  The first group sets the
+orientation of the velocity relative to the CFD domain, and the second group
+sets the freestream state.</p>
+<div class="section" id="angle-of-attack-and-sideslip">
+<span id="cape-alpha-beta"></span><h2><span class="section-number">3.5.1. </span>Angle of Attack and Sideslip<a class="headerlink" href="#angle-of-attack-and-sideslip" title="Permalink to this headline">¶</a></h2>
+<p>Most CFD solvers need an input angle of attack and sideslip angle, commonly
+known as <em>alpha</em> and <em>beta</em>, respectively.  Cape recognizes this and provides
+both as standard input variables.  However, there is another convention that is
+especially common in the missile and launch vehicle fields that uses the total
+angle of attack and roll angle.  The parameters are related using the following
+two equations.</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\tan\alpha &amp;= \cos\phi_p\tan\alpha_p \\
+\sin\beta  &amp;= \sin\phi_p\sin\alpha_p\end{split}\]</div>
+</div></blockquote>
+<p>The total angle of attack is the angle between the body <em>x</em> axis (or the <em>x</em>
+axis of the CFD coordinate system) and the velocity, and the roll angle gives
+the angle of the velocity projected into the CFD <em>yz</em> plane.</p>
+<p>CAPE also provides <em>aoap</em> (a.k.a. <em>alpha_t</em>) and <em>phip</em> (a.k.a. <em>phi</em>) as
+variables for the user, and it automatically calculates <em>alpha</em> and <em>beta</em>
+accordingly. These are listed in the <a class="reference internal" href="json/RunMatrix.html#cape-json-runmatrixgroups"><span class="std std-ref">JSON settings description</span></a>, and more details are provided below.</p>
+<blockquote>
+<div><p><strong>alpha</strong>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>Group</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to consider the angle of attack as a group key</p>
+</dd>
+<dt><em>Type</em>: <code class="docutils literal notranslate"><span class="pre">&quot;alpha&quot;</span></code></dt><dd><p>RunMatrix key type, must be <code class="docutils literal notranslate"><span class="pre">&quot;alpha&quot;</span></code> for this type of key</p>
+</dd>
+<dt><em>Value</em>: <code class="docutils literal notranslate"><span class="pre">&quot;float&quot;</span></code></dt><dd><p>Name of Python type for this key, must be <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+<dt><em>Label</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to use the value of this key in the folder name</p>
+</dd>
+<dt><em>Abbreviation</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Abbreviation for this variable when creating folder names</p>
+</dd>
+<dt><em>Format</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;%s&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;%.2f&quot;</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Print flag for the name of the folder</p>
+</dd>
+<dt><em>PBSLabel</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to use the value of this key in the PBS job name</p>
+</dd>
+<dt><em>PBSFormat</em>: {<code class="docutils literal notranslate"><span class="pre">%.1f</span></code>} | <code class="docutils literal notranslate"><span class="pre">%s</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Print flag for the name of the PBS job</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>beta</strong>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>Group</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to consider the angle of attack as a group key</p>
+</dd>
+<dt><em>Type</em>: <code class="docutils literal notranslate"><span class="pre">&quot;beta&quot;</span></code></dt><dd><p>RunMatrix key type, must be <code class="docutils literal notranslate"><span class="pre">&quot;beta&quot;</span></code> for this type of key</p>
+</dd>
+<dt><em>Value</em>: <code class="docutils literal notranslate"><span class="pre">&quot;float&quot;</span></code></dt><dd><p>Name of Python type for this key, must be <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+<dt><em>Label</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to use the value of this key in the folder name</p>
+</dd>
+<dt><em>Abbreviation</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;b&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Abbreviation for this variable when creating folder names</p>
+</dd>
+<dt><em>Format</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;%s&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;%.2f&quot;</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Print flag for the name of the folder</p>
+</dd>
+<dt><em>PBSLabel</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to use the value of this key in the PBS job name</p>
+</dd>
+<dt><em>PBSFormat</em>: {<code class="docutils literal notranslate"><span class="pre">%.1f</span></code>} | <code class="docutils literal notranslate"><span class="pre">%s</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Print flag for the name of the PBS job</p>
+</dd>
+<dt><em>SkipIfZero</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>If set, skip this in the folder name.  For example, a folder name
+would be <code class="docutils literal notranslate"><span class="pre">m2.5a1.0</span></code> instead of <code class="docutils literal notranslate"><span class="pre">m2.5a1.0b0.0</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+<p>If the user names a trajectory key <em>alpha</em> or <em>beta</em>, these settings
+automatically get applied.  However, the user can alter the default settings in
+the JSON file or use a different variable name.  If the variable name is
+something completely different, like <code class="docutils literal notranslate"><span class="pre">&quot;TV&quot;</span></code>, the <em>Type</em> flag can still define
+the variable as an angle of attack.  See the following example.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;TV&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;alpha&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Format&quot;</span><span class="o">:</span> <span class="s2">&quot;%05.2f&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Setting the <em>Format</em> flag to has two purposes.  The first is to keep a
+consistent number of characters and have the folder names sorted in a more
+logical order.  For example, <code class="docutils literal notranslate"><span class="pre">a10.00</span></code> comes before <code class="docutils literal notranslate"><span class="pre">a2.00</span></code> but not
+<code class="docutils literal notranslate"><span class="pre">a02.00</span></code>.  The second reason for using <em>Format</em> other than <code class="docutils literal notranslate"><span class="pre">&quot;%s&quot;</span></code> is to trim
+extra digits.  This avoids having folder names such as <code class="docutils literal notranslate"><span class="pre">a2.7893478247</span></code>.</p>
+<p>The second way to define the flow angles is using <em>alpha_t</em> and <em>phi</em>.</p>
+<blockquote>
+<div><p><strong>alpha_t</strong>, <strong>aoap</strong>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>Group</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to consider the angle of attack as a group key</p>
+</dd>
+<dt><em>Type</em>: <code class="docutils literal notranslate"><span class="pre">&quot;alpha_t&quot;</span></code></dt><dd><p>RunMatrix key type, must be <code class="docutils literal notranslate"><span class="pre">&quot;alpha_t&quot;</span></code> for this type of key</p>
+</dd>
+<dt><em>Value</em>: <code class="docutils literal notranslate"><span class="pre">&quot;float&quot;</span></code></dt><dd><p>Name of Python type for this key, must be <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+<dt><em>Label</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to use the value of this key in the folder name</p>
+</dd>
+<dt><em>Abbreviation</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Abbreviation for this variable when creating folder names</p>
+</dd>
+<dt><em>Format</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;%s&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;%.2f&quot;</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Print flag for the name of the folder</p>
+</dd>
+<dt><em>PBSLabel</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to use the value of this key in the PBS job name</p>
+</dd>
+<dt><em>PBSFormat</em>: {<code class="docutils literal notranslate"><span class="pre">%.1f</span></code>} | <code class="docutils literal notranslate"><span class="pre">%s</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Print flag for the name of the PBS job</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>phi</strong>, <strong>phip</strong>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>Group</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to consider the angle of attack as a group key</p>
+</dd>
+<dt><em>Type</em>: <code class="docutils literal notranslate"><span class="pre">&quot;phi&quot;</span></code></dt><dd><p>RunMatrix key type, must be <code class="docutils literal notranslate"><span class="pre">&quot;phi&quot;</span></code> for this type of key</p>
+</dd>
+<dt><em>Value</em>: <code class="docutils literal notranslate"><span class="pre">&quot;float&quot;</span></code></dt><dd><p>Name of Python type for this key, must be <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+<dt><em>Label</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to use the value of this key in the folder name</p>
+</dd>
+<dt><em>Abbreviation</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;r&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Abbreviation for this variable when creating folder names</p>
+</dd>
+<dt><em>Format</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;%s&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;%.2f&quot;</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Print flag for the name of the folder</p>
+</dd>
+<dt><em>PBSLabel</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to use the value of this key in the PBS job name</p>
+</dd>
+<dt><em>PBSFormat</em>: {<code class="docutils literal notranslate"><span class="pre">%.1f</span></code>} | <code class="docutils literal notranslate"><span class="pre">%s</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Print flag for the name of the PBS job</p>
+</dd>
+<dt><em>SkipIfZero</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>If set, skip this in the folder name.  For example, a folder name
+would be <code class="docutils literal notranslate"><span class="pre">m2.5a1.0</span></code> instead of <code class="docutils literal notranslate"><span class="pre">m2.5a1.0r0.0</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+</div>
+<div class="section" id="freestream-state">
+<span id="cape-state"></span><h2><span class="section-number">3.5.2. </span>Freestream State<a class="headerlink" href="#freestream-state" title="Permalink to this headline">¶</a></h2>
+<p>The rest of the freestream variables are Mach number, freestream temperature,
+and freestream pressure or something equivalent. Cart3D is an inviscid solver,
+and only needs the Mach number, but even then defining a freestream state can
+be useful for post-processing or providing a reference for thrust values
+(since thrust coefficient depends on dynamic pressure).</p>
+<p>OVERFLOW and FUN3D use freestream static temperature and Reynolds number per
+unit grid length as input variables. Calculating this Reynolds number is not
+particularly challenging, but Cape makes it easy to just specify freestream
+static pressure or freestream dynamic pressure instead. Cape will automatically
+calculate <em>Re</em> using the temperature and either static pressure or dynamic
+pressure when setting up a case. Conversely, the user may define <em>Re</em> in the
+standard manner, and it will automatically calculate the freestream static and
+dynamic pressures and several other common state variables:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../api/cape/runmatrix.html#cape.runmatrix.RunMatrix.GetPressure" title="cape.runmatrix.RunMatrix.GetPressure"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix.GetPressure()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../api/cape/runmatrix.html#cape.runmatrix.RunMatrix.GetDynamicPressure" title="cape.runmatrix.RunMatrix.GetDynamicPressure"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix.GetDynamicPressure()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../api/cape/runmatrix.html#cape.runmatrix.RunMatrix.GetTotalPressure" title="cape.runmatrix.RunMatrix.GetTotalPressure"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix.GetTotalPressure()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../api/cape/runmatrix.html#cape.runmatrix.RunMatrix.GetTemperature" title="cape.runmatrix.RunMatrix.GetTemperature"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix.GetTemperature()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../api/cape/runmatrix.html#cape.runmatrix.RunMatrix.GetTotalTemperature" title="cape.runmatrix.RunMatrix.GetTotalTemperature"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix.GetTotalTemperature()</span></code></a>.</p></li>
+</ul>
+</div></blockquote>
+<p>Finally, most codes also allow the user to specify non-default values of the
+freestream ratio of specific heats, which can be done using the <em>gamma</em> run
+matrix variable type.</p>
+<p>Each of these trajectory key types are <em>mach</em>, <em>T</em>, <em>Re</em>, <em>gamma</em>, <em>p</em>, and
+<em>q</em>. Each of these variables and their aliases are listed in the <a class="reference internal" href="json/RunMatrix.html#cape-json-runmatrixgroups"><span class="std std-ref">JSON
+settings description</span></a>, and they have the same
+suboptions as the <em>alpha</em> and <em>beta</em> keys described in the previous section.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3.5. Setting Freestream Conditions in Cape</a><ul>
+<li><a class="reference internal" href="#angle-of-attack-and-sideslip">3.5.1. Angle of Attack and Sideslip</a></li>
+<li><a class="reference internal" href="#freestream-state">3.5.2. Freestream State</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="file/matrix.html"
+                        title="previous chapter"><span class="section-number">3.4. </span>Syntax for Run Matrix Files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="report/index.html"
+                        title="next chapter"><span class="section-number">3.6. </span>Automated Post-Processing Reports</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/common/freestream.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="report/index.html" title="3.6. Automated Post-Processing Reports"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="file/matrix.html" title="3.4. Syntax for Run Matrix Files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.5. </span>Setting Freestream Conditions in Cape</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

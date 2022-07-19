@@ -1,0 +1,235 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Testing cape.case: Individual-Case Functions &#8212; CAPE 0.9.2</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Testing cape.cmd: Command-line Call Generation" href="cmd.html" />
+    <link rel="prev" title="Testing cape.atm: Standard Atmospheric Models" href="atm.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cmd.html" title="Testing cape.cmd: Command-line Call Generation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="atm.html" title="Testing cape.atm: Standard Atmospheric Models"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 0.9.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Testing <code class="docutils literal notranslate"><span class="pre">cape</span></code></a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Testing <code class="docutils literal notranslate"><span class="pre">cape.case</span></code>: Individual-Case Functions</a><ul>
+<li><a class="reference internal" href="#conditions-file">Conditions File</a></li>
+<li><a class="reference internal" href="#cape-case-settings-file">CAPE Case Settings File</a></li>
+<li><a class="reference internal" href="#timing-settings">Timing Settings</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="atm.html"
+                        title="previous chapter">Testing <code class="docutils literal notranslate"><span class="pre">cape.atm</span></code>: Standard Atmospheric Models</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cmd.html"
+                        title="next chapter">Testing <code class="docutils literal notranslate"><span class="pre">cape.cmd</span></code>: Command-line Call Generation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/test/cape/case.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="testing-cape-case-individual-case-functions">
+<span id="test-cape-case"></span><h1>Testing <a class="reference internal" href="../../api/cape/case.html#module-cape.case" title="cape.case"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.case</span></code></a>: Individual-Case Functions<a class="headerlink" href="#testing-cape-case-individual-case-functions" title="Permalink to this headline">¶</a></h1>
+<p>This section tests generic calls to case utility functions.  That is, these are
+functions that operate within individual case folders.  The are often called
+while running a case rather than the master command-line call that sets up and
+starts or submits cases.</p>
+<p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">case</span></code> module is one of the more heavily-customized modules for each
+individual solver as it has responsibility for counting iterations, calling the
+appropriate executables, and more.</p>
+<div class="section" id="conditions-file">
+<span id="test-cape-case-conditions"></span><h2>Conditions File<a class="headerlink" href="#conditions-file" title="Permalink to this headline">¶</a></h2>
+<p>This function reads the <code class="docutils literal notranslate"><span class="pre">conditions.json</span></code> file, which is a simple JSON file
+of all the values of CAPE run matrix (trajectory) keys for this particular
+case.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Case test folder</span>
+<span class="n">fcape</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cape</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">ftcape</span><span class="p">,</span> <span class="s2">&quot;case&quot;</span><span class="p">)</span>
+<span class="c1"># Go to this folder.</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">fcape</span><span class="p">)</span>
+
+<span class="c1"># Read conditions</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">ReadConditions</span><span class="p">()</span>
+
+<span class="c1"># Show conditions</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">])</span>
+
+<span class="c1"># Read conditions directly</span>
+<span class="n">beta</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">ReadConditions</span><span class="p">(</span><span class="s1">&#39;beta&#39;</span><span class="p">)</span>
+<span class="c1"># Display</span>
+<span class="k">print</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.4
+4.0
+-0.2
+</pre></div>
+</div>
+</div>
+<div class="section" id="cape-case-settings-file">
+<span id="test-cape-case-case"></span><h2>CAPE Case Settings File<a class="headerlink" href="#cape-case-settings-file" title="Permalink to this headline">¶</a></h2>
+<p>A subset of the global settings are copied into each case folder in the file
+<code class="docutils literal notranslate"><span class="pre">case.json</span></code>.  This allows customizations of settings for individual cases.
+For example, it allows neighboring cases to use a different number of
+processors or (very importantly) the number of iterations each case must run
+for.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Case test folder</span>
+<span class="n">fcape</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cape</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">ftcape</span><span class="p">,</span> <span class="s2">&quot;case&quot;</span><span class="p">)</span>
+<span class="c1"># Go to this folder.</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">fcape</span><span class="p">)</span>
+
+<span class="c1"># Read conditions</span>
+<span class="n">rc</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">ReadCaseJSON</span><span class="p">()</span>
+
+<span class="c1"># Show settings</span>
+<span class="k">print</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">get_PhaseSequence</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">get_PhaseIters</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">get_qsub</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[0, 1, 2, 3]
+1000
+False
+</pre></div>
+</div>
+</div>
+<div class="section" id="timing-settings">
+<span id="test-cape-case-time"></span><h2>Timing Settings<a class="headerlink" href="#timing-settings" title="Permalink to this headline">¶</a></h2>
+<p>Three functions in this module are responsible to reading and writing and CPU
+time used by various programs.  Solver-specific customizations of these files
+have fixed values for some arguments.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Case test folder</span>
+<span class="n">fcape</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cape</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">ftcape</span><span class="p">,</span> <span class="s2">&quot;case&quot;</span><span class="p">)</span>
+<span class="c1"># Go to this folder.</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">fcape</span><span class="p">)</span>
+
+<span class="c1"># Example file names</span>
+<span class="n">fstrt</span> <span class="o">=</span> <span class="s2">&quot;cape_start.dat&quot;</span>
+<span class="n">ftime</span> <span class="o">=</span> <span class="s2">&quot;cape_time.dat&quot;</span>
+
+<span class="c1"># Delete test files if present</span>
+<span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="p">[</span><span class="n">fstrt</span><span class="p">,</span> <span class="n">ftime</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+
+<span class="c1"># Create initial time</span>
+<span class="n">tic</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+<span class="c1"># Read settings</span>
+<span class="n">rc</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">ReadCaseJSON</span><span class="p">()</span>
+
+<span class="c1"># Write a flag for starting a program</span>
+<span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">WriteStartTimeProg</span><span class="p">(</span><span class="n">tic</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fstrt</span><span class="p">,</span> <span class="s2">&quot;prog&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read it</span>
+<span class="n">nProc</span><span class="p">,</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">ReadStartTimeProg</span><span class="p">(</span><span class="n">fstrt</span><span class="p">)</span>
+
+<span class="c1"># Calculate delta time</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="n">tic</span> <span class="o">-</span> <span class="n">t0</span>
+
+<span class="c1"># Test output</span>
+<span class="k">print</span><span class="p">(</span><span class="n">nProc</span> <span class="o">-</span> <span class="n">rc</span><span class="o">.</span><span class="n">get_nProc</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">seconds</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Write output file</span>
+<span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">WriteUserTimeProg</span><span class="p">(</span><span class="n">tic</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ftime</span><span class="p">,</span> <span class="s2">&quot;cape&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0
+False
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cmd.html" title="Testing cape.cmd: Command-line Call Generation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="atm.html" title="Testing cape.atm: Standard Atmospheric Models"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 0.9.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Testing <code class="docutils literal notranslate"><span class="pre">cape</span></code></a> &#187;</li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 0.8 documentation, 2018.  Created using Sphinx 1.6.3.
+  </div>
+
+
+  </body>
+</html>

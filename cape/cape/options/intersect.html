@@ -1,0 +1,660 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4.3.22.4. Cart3D triangulation intersect options &mdash; pyCart 0.8 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="pyCart 0.8 documentation" href="../../../index.html" />
+    <link rel="up" title="4.3.22. Options Module: cape.options" href="index.html" />
+    <link rel="next" title="4.3.22.5. Interface to case archiving options" href="Archive.html" />
+    <link rel="prev" title="4.3.22.3. AFLR3 volume mesh generation options" href="aflr3.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Archive.html" title="4.3.22.5. Interface to case archiving options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="aflr3.html" title="4.3.22.3. AFLR3 volume mesh generation options"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyCart 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >4. Cape Module Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >4.3. The <code class="docutils literal"><span class="pre">cape</span></code> module</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">4.3.22. Options Module: <code class="docutils literal"><span class="pre">cape.options</span></code></a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aflr3.html"
+                        title="previous chapter">4.3.22.3. AFLR3 volume mesh generation options</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Archive.html"
+                        title="next chapter">4.3.22.5. Interface to case archiving options</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/cape/cape/options/intersect.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.options.intersect"></span><div class="section" id="cart3d-triangulation-intersect-options">
+<h1>4.3.22.4. Cart3D triangulation intersect options<a class="headerlink" href="#cart3d-triangulation-intersect-options" title="Permalink to this headline">¶</a></h1>
+<p>This module interfaces options for two Cart3D triangulation tools called
+<code class="docutils literal"><span class="pre">intersect</span></code> and <code class="docutils literal"><span class="pre">verify</span></code>.  This allows the user to intersect overlapping
+triangulated bodies and create a single water-tight body.  The <code class="docutils literal"><span class="pre">verify</span></code> script
+then tests for a well-defined water-tight triangulation.  Intersections, missing
+triangles, holes, etc. all cause <code class="docutils literal"><span class="pre">verify</span></code> to fail.</p>
+<p>The main option for both <code class="docutils literal"><span class="pre">intersect</span></code> and <code class="docutils literal"><span class="pre">verify</span></code> is simply whether or not
+to use them.  The user can specify the following in the <code class="docutils literal"><span class="pre">&quot;RunControl&quot;</span></code> section
+of the JSON file.</p>
+<blockquote>
+<div><div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="s2">&quot;RunControl&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;intersect&quot;</span><span class="o">:</span> <span class="nx">True</span><span class="p">,</span>
+    <span class="s2">&quot;verfiy&quot;</span><span class="o">:</span> <span class="nx">False</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>There are a variety of input flags to those utilities, which are interfaced via
+the <a class="reference internal" href="#cape.options.intersect.intersect" title="cape.options.intersect.intersect"><code class="xref py py-class docutils literal"><span class="pre">cape.options.intersect.intersect</span></code></a> and
+<a class="reference internal" href="#cape.options.intersect.verify" title="cape.options.intersect.verify"><code class="xref py py-class docutils literal"><span class="pre">cape.options.intersect.verify</span></code></a> classes defined here.</p>
+<dl class="class">
+<dt id="cape.options.intersect.intersect">
+<em class="property">class </em><code class="descclassname">cape.options.intersect.</code><code class="descname">intersect</code><a class="headerlink" href="#cape.options.intersect.intersect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for Cart3D <code class="docutils literal"><span class="pre">intersect</span></code> command-line settings</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span> <span class="o">=</span> <span class="n">intersect</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>kw</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of <code class="docutils literal"><span class="pre">intersect</span></code> command-line options</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.options.intersect.intersect" title="cape.options.intersect.intersect"><code class="xref py py-class docutils literal"><span class="pre">cape.options.intersect.intersect</span></code></a></dt>
+<dd><p class="first last">Intersect utility options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.options.intersect.intersect.get_ascii">
+<code class="descname">get_ascii</code><span class="sig-paren">(</span><em>j=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.intersect.intersect.get_ascii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the ASCII setting for the input file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ascii</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_ascii</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>ascii</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Whether or not input file is ASCII</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.intersect.intersect.get_cutout">
+<code class="descname">get_cutout</code><span class="sig-paren">(</span><em>j=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.intersect.intersect.get_cutout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of the component to subtract (cut out)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cutout</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_cutout</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>cutout</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Component ID</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.intersect.intersect.get_intersect_i">
+<code class="descname">get_intersect_i</code><span class="sig-paren">(</span><em>j=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.intersect.intersect.get_intersect_i" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input file for <code class="docutils literal"><span class="pre">intersect</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_intersect_i</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of input file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.intersect.intersect.get_intersect_o">
+<code class="descname">get_intersect_o</code><span class="sig-paren">(</span><em>j=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.intersect.intersect.get_intersect_o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output file for <code class="docutils literal"><span class="pre">intersect</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_intersect_o</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of output file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.intersect.intersect.set_ascii">
+<code class="descname">set_ascii</code><span class="sig-paren">(</span><em>ascii</em>, <em>j=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.intersect.intersect.set_ascii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the ASCII setting for the input file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">get_ascii</span><span class="p">(</span><span class="n">ascii</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>ascii</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Whether or not input file is ASCII</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.intersect.intersect.set_cutout">
+<code class="descname">set_cutout</code><span class="sig-paren">(</span><em>cutout</em>, <em>j=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.intersect.intersect.set_cutout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the component ID to subtract (cut out)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">set_cutout</span><span class="p">(</span><span class="n">cutout</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>cutout</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Component ID</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.intersect.intersect.set_intersect_i">
+<code class="descname">set_intersect_i</code><span class="sig-paren">(</span><em>fname</em>, <em>j=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.intersect.intersect.set_intersect_i" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the input file for <code class="docutils literal"><span class="pre">intersect</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">set_intersect_i</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of input file (usually <code class="docutils literal"><span class="pre">.surf</span></code>)</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.intersect.intersect.set_intersect_o">
+<code class="descname">set_intersect_o</code><span class="sig-paren">(</span><em>fname</em>, <em>j=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.intersect.intersect.set_intersect_o" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the output file for <code class="docutils literal"><span class="pre">intersect</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">set_intersect_o</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of output file</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cape.options.intersect.verify">
+<em class="property">class </em><code class="descclassname">cape.options.intersect.</code><code class="descname">verify</code><a class="headerlink" href="#cape.options.intersect.verify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for Cart3D <code class="docutils literal"><span class="pre">verify</span></code> command-line settings</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span> <span class="o">=</span> <span class="n">verify</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>kw</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of <code class="docutils literal"><span class="pre">verify</span></code> command-line options</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.options.intersect.verify" title="cape.options.intersect.verify"><code class="xref py py-class docutils literal"><span class="pre">cape.options.intersect.verify</span></code></a></dt>
+<dd><p class="first last">Intersect utility options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.options.intersect.verify.get_ascii">
+<code class="descname">get_ascii</code><span class="sig-paren">(</span><em>j=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.intersect.verify.get_ascii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the ASCII setting for the input file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ascii</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_ascii</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>ascii</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Whether or not input file is ASCII</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.intersect.verify.get_verify_i">
+<code class="descname">get_verify_i</code><span class="sig-paren">(</span><em>j=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.intersect.verify.get_verify_i" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input file for <code class="docutils literal"><span class="pre">verify</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_verify_i</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of input file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.intersect.verify.set_ascii">
+<code class="descname">set_ascii</code><span class="sig-paren">(</span><em>ascii</em>, <em>j=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.intersect.verify.set_ascii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the ASCII setting for the input file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">get_ascii</span><span class="p">(</span><span class="n">ascii</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>ascii</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Whether or not input file is ASCII</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.intersect.verify.set_verify_i">
+<code class="descname">set_verify_i</code><span class="sig-paren">(</span><em>fname</em>, <em>j=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.intersect.verify.set_verify_i" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the input file for <code class="docutils literal"><span class="pre">verify</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">set_verify_i</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of input file</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-04-05 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Archive.html" title="4.3.22.5. Interface to case archiving options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="aflr3.html" title="4.3.22.3. AFLR3 volume mesh generation options"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyCart 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >4. Cape Module Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >4.3. The <code class="docutils literal"><span class="pre">cape</span></code> module</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" >4.3.22. Options Module: <code class="docutils literal"><span class="pre">cape.options</span></code></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014-2017, Derek J. Dalle.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

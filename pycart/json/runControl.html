@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4.2.4. Run Sequence and Cart3D Mode Control &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="4.2.5. Run Options for flowCart" href="flowCart.html" />
+    <link rel="prev" title="4.2.3. SLURM Script Options" href="slurm.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="flowCart.html" title="4.2.5. Run Options for flowCart"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="slurm.html" title="4.2.3. SLURM Script Options"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><span class="section-number">4.2. </span>Control Files for pyCart (<code class="file docutils literal notranslate"><span class="pre">pyCart.json</span></code>)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.2.4. </span>Run Sequence and Cart3D Mode Control</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="run-sequence-and-cart3d-mode-control">
+<span id="pycart-json-runcontrol"></span><h1><span class="section-number">4.2.4. </span>Run Sequence and Cart3D Mode Control<a class="headerlink" href="#run-sequence-and-cart3d-mode-control" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> section of <code class="file docutils literal notranslate"><span class="pre">pyCart.json</span></code> contains settings that
+control how many iterations to run Cart3D, what mode to use for each subset of
+iterations, and command-line inputs to the various Cart3D binaries. The entire
+contents of this section, with all default options applied where necessary, is
+written to a file called <code class="file docutils literal notranslate"><span class="pre">case.json</span></code> in the folder created for each case.</p>
+<p>Several subsections of this section are described separately.</p>
+<p>The options for this section have the following JSON syntax.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;RunControl&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Phase description</span>
+    <span class="s2">&quot;PhaseSequence&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">0</span><span class="p">,</span> <span class="mf">1</span><span class="p">],</span>
+    <span class="s2">&quot;PhaseIters&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">200</span><span class="p">,</span> <span class="mf">400</span><span class="p">],</span>
+    <span class="c1">// Job type</span>
+    <span class="s2">&quot;MPI&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="s2">&quot;qsub&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">&quot;Resubmit&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="s2">&quot;Continue&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">&quot;nProc&quot;</span><span class="o">:</span> <span class="mf">8</span><span class="p">,</span>
+    <span class="s2">&quot;Adaptive&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="c1">// Environment variable settings</span>
+    <span class="s2">&quot;Environ&quot;</span><span class="o">:</span> <span class="p">{</span> <span class="p">},</span>
+    <span class="c1">// System-wide resource settings</span>
+    <span class="s2">&quot;ulimit&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;s&quot;</span><span class="o">:</span> <span class="mf">4194304</span>
+    <span class="p">},</span>
+
+    <span class="c1">// Surface mesh preparation options</span>
+    <span class="s2">&quot;intersect&quot;</span><span class="o">:</span> <span class="p">{},</span>
+    <span class="s2">&quot;verify&quot;</span><span class="o">:</span> <span class="p">{},</span>
+
+    <span class="c1">// Mesh setup options</span>
+    <span class="s2">&quot;autoInputs&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;r&quot;</span><span class="o">:</span> <span class="mf">8</span><span class="p">,</span>
+        <span class="s2">&quot;nDiv&quot;</span><span class="o">:</span> <span class="mf">4</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="c1">// Volume mesh generation options</span>
+    <span class="s2">&quot;cubes&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;maxR&quot;</span><span class="o">:</span> <span class="mf">10</span><span class="p">,</span>
+        <span class="s2">&quot;cubes_a&quot;</span><span class="o">:</span> <span class="mf">10</span><span class="p">,</span>
+        <span class="s2">&quot;cubes_b&quot;</span><span class="o">:</span> <span class="mf">2</span><span class="p">,</span>
+        <span class="s2">&quot;reorder&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="s2">&quot;sf&quot;</span><span class="o">:</span> <span class="mf">0</span>
+    <span class="p">},</span>
+
+    <span class="c1">// Adaptation settings</span>
+    <span class="s2">&quot;Adaptation&quot;</span><span class="o">:</span> <span class="p">{</span> <span class="p">},</span>
+    <span class="c1">// Main flow solver inputs</span>
+    <span class="s2">&quot;flowCart&quot;</span><span class="o">:</span> <span class="p">{</span> <span class="p">},</span>
+    <span class="c1">// Adjoint solver inputs</span>
+    <span class="s2">&quot;adjointCart&quot;</span><span class="o">:</span> <span class="p">{</span> <span class="p">},</span>
+    <span class="c1">// Archive settings</span>
+    <span class="s2">&quot;Archive&quot;</span><span class="o">:</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Some of these options are common to all solvers, and the full description of
+such settings can be found on the <a class="reference internal" href="../../common/json/runControl.html#cape-json-runcontrol"><span class="std std-ref">corresponding Cape page</span></a>.  Separate sections for <a class="reference internal" href="flowCart.html#pycart-json-flowcart"><span class="std std-ref">flowCart</span></a>, <a class="reference internal" href="adjointCart.html#pycart-json-adjointcart"><span class="std std-ref">adjointCart</span></a>, and
+<a class="reference internal" href="Adaptation.html#pycart-json-adaptation"><span class="std std-ref">Adaptation</span></a> are provided for some of the subset
+dictionaries.</p>
+<p>The <a class="reference internal" href="../../common/json/runControl.html#cape-json-intersect"><span class="std std-ref">CAPE intersect</span></a> section is also relevant.</p>
+<div class="section" id="options-for-autoinputs">
+<span id="pycart-json-autoinputs"></span><h2><span class="section-number">4.2.4.1. </span>Options for <cite>autoInputs</cite><a class="headerlink" href="#options-for-autoinputs" title="Permalink to this headline">¶</a></h2>
+<p>The description of <code class="docutils literal notranslate"><span class="pre">autoInputs</span></code> controls are shown below. The user can also
+tell pyCart not to use <code class="docutils literal notranslate"><span class="pre">autoInputs</span></code> (and use a premade <code class="file docutils literal notranslate"><span class="pre">input.c3d</span></code>
+instead) by adding <code class="docutils literal notranslate"><span class="pre">&quot;autoInputs&quot;:</span> <span class="pre">{}</span></code> to <code class="file docutils literal notranslate"><span class="pre">pyCart.json</span></code>.</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>r</em>: {<code class="docutils literal notranslate"><span class="pre">8</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Mesh radius.  This defines the dimensions of the flow domain;
+specifically the limits are set <em>r</em> times the largest dimension of the
+surface away from the surface.</p>
+</dd>
+<dt><em>nDiv</em>: {<code class="docutils literal notranslate"><span class="pre">4</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of divisions in the initial mesh.  An exponent of 2 is highly
+recommended for efficiency purposes.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="options-for-cubes">
+<span id="pycart-json-cubes"></span><h2><span class="section-number">4.2.4.2. </span>Options for <cite>cubes</cite><a class="headerlink" href="#options-for-cubes" title="Permalink to this headline">¶</a></h2>
+<p>The program that actually creates the volume mesh in Cart3D is called
+<code class="docutils literal notranslate"><span class="pre">cubes</span></code>. The options that apply to it directly are shown below.</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>maxR</em>: {<code class="docutils literal notranslate"><span class="pre">10</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Maximum number of refinements in volume mesh before <em>XLevs</em></p>
+</dd>
+<dt><em>cubes_a</em>: {<code class="docutils literal notranslate"><span class="pre">10</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Angle criterion for cut cell refinement</p>
+</dd>
+<dt><em>cubes_b</em>: {<code class="docutils literal notranslate"><span class="pre">2</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of additional buffer layers</p>
+</dd>
+<dt><em>reorder</em>: {<code class="docutils literal notranslate"><span class="pre">true</span></code>} | <code class="docutils literal notranslate"><span class="pre">false</span></code></dt><dd><p>Whether or not to reorder cells for optimal performance</p>
+</dd>
+<dt><em>sf</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of additional refinements for sharp features</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4.2.4. Run Sequence and Cart3D Mode Control</a><ul>
+<li><a class="reference internal" href="#options-for-autoinputs">4.2.4.1. Options for <cite>autoInputs</cite></a></li>
+<li><a class="reference internal" href="#options-for-cubes">4.2.4.2. Options for <cite>cubes</cite></a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="slurm.html"
+                        title="previous chapter"><span class="section-number">4.2.3. </span>SLURM Script Options</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="flowCart.html"
+                        title="next chapter"><span class="section-number">4.2.5. </span>Run Options for <cite>flowCart</cite></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/pycart/json/runControl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="flowCart.html" title="4.2.5. Run Options for flowCart"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="slurm.html" title="4.2.3. SLURM Script Options"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><span class="section-number">4.2. </span>Control Files for pyCart (<code class="file docutils literal notranslate"><span class="pre">pyCart.json</span></code>)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.2.4. </span>Run Sequence and Cart3D Mode Control</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

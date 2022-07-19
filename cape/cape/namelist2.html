@@ -1,0 +1,824 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4.3.13. Module to interface with Fortran namelists: cape.namelist2 &mdash; pyCart 0.8 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="pyCart 0.8 documentation" href="../../index.html" />
+    <link rel="up" title="4.3. The cape module" href="index.html" />
+    <link rel="next" title="4.3.14. Point sensors module: cape.pointSensor" href="pointSensor.html" />
+    <link rel="prev" title="4.3.12. Module to interface with Fortran namelists: cape.namelist" href="namelist.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pointSensor.html" title="4.3.14. Point sensors module: cape.pointSensor"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="namelist.html" title="4.3.12. Module to interface with Fortran namelists: cape.namelist"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyCart 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >4. Cape Module Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">4.3. The <code class="docutils literal"><span class="pre">cape</span></code> module</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="namelist.html"
+                        title="previous chapter">4.3.12. Module to interface with Fortran namelists: <code class="docutils literal"><span class="pre">cape.namelist</span></code></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pointSensor.html"
+                        title="next chapter">4.3.14. Point sensors module: <code class="docutils literal"><span class="pre">cape.pointSensor</span></code></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/cape/cape/namelist2.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.namelist2"></span><div class="section" id="module-to-interface-with-fortran-namelists-cape-namelist2">
+<h1>4.3.13. Module to interface with Fortran namelists: <a class="reference internal" href="#module-cape.namelist2" title="cape.namelist2"><code class="xref py py-mod docutils literal"><span class="pre">cape.namelist2</span></code></a><a class="headerlink" href="#module-to-interface-with-fortran-namelists-cape-namelist2" title="Permalink to this headline">¶</a></h1>
+<p>This is a module built off of the <a class="reference internal" href="fileCntl.html#cape.fileCntl.FileCntl" title="cape.fileCntl.FileCntl"><code class="xref py py-mod docutils literal"><span class="pre">cape.fileCntl.FileCntl</span></code></a> module
+customized for manipulating Fortran namelists.  Such files are split into
+sections which are called &#8220;name lists.&#8221;  Each name list has syntax similar to
+the following.</p>
+<blockquote>
+<div><div class="highlight-none"><div class="highlight"><pre><span></span>$FLOINP
+    FSMACH = 4.0,
+    ALPHA = 1.0,
+    BETA = 0.0,
+    $END
+</pre></div>
+</div>
+</div></blockquote>
+<p>and this module is designed to recognize such sections.  The main feature of
+this module is methods to set specific properties of a namelist file, for
+example the Mach number or CFL number.</p>
+<p>The difference between this module and <a class="reference internal" href="namelist.html#cape.namelist.Namelist" title="cape.namelist.Namelist"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist.Namelist</span></code></a> is that
+this module can support multiple namelists with the same title.  This is
+particularly important for Overflow, which has <code class="docutils literal"><span class="pre">GRDNAM</span></code>, <code class="docutils literal"><span class="pre">BCINP</span></code>, and other
+sections defined for each structured grid.</p>
+<dl class="class">
+<dt id="cape.namelist2.Namelist2">
+<em class="property">class </em><code class="descclassname">cape.namelist2.</code><code class="descname">Namelist2</code><span class="sig-paren">(</span><em>fname='overflow.inp'</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2" title="Permalink to this definition">¶</a></dt>
+<dd><p>File control class for Fortran namelists with duplicate sections</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span> <span class="o">=</span> <span class="n">Namelist2</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span> <span class="o">=</span> <span class="n">Namelist2</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of namelist file to read, defaults to <code class="docutils literal"><span class="pre">'overflow.inp'</span></code></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">Namelist file control instance</p>
+</dd>
+<dt><em>nml.ibeg</em>: <code class="xref py py-class docutils literal"><span class="pre">np.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">Indices of lines starting each namelist/section</p>
+</dd>
+<dt><em>nml.iend</em>: <code class="xref py py-class docutils literal"><span class="pre">np.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">Indices of lines ending each namelist/section</p>
+</dd>
+<dt><em>nml.Groups</em>: <code class="xref py py-class docutils literal"><span class="pre">np.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of namelist/section/group titles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-02-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.ApplyDict">
+<code class="descname">ApplyDict</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.ApplyDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a whole dictionary of settings to the namelist</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">ApplyDict</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">Old-style namelist inerface</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of namelist options</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-02-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.ConvertToText">
+<code class="descname">ConvertToText</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.ConvertToText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a scalar value to text to write in the namelist file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">ConvertToText</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">File control instance for old-style Fortran namelist</p>
+</dd>
+<dt><em>v</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code></dt>
+<dd><p class="first last">Evaluated value of the text</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>val</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">unicode</span></code></dt>
+<dd><p class="first last">Text of the value from file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-10-16 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.ConvertToVal">
+<code class="descname">ConvertToVal</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.ConvertToVal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a text file value to Python based on a series of rules</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">ConvertToVal</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="namelist.html#cape.namelist.Namelist" title="cape.namelist.Namelist"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist.Namelist</span></code></a></dt>
+<dd><p class="first last">File control instance for <code class="file docutils literal"><span class="pre">fun3d.nml</span></code></p>
+</dd>
+<dt><em>val</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">unicode</span></code></dt>
+<dd><p class="first last">Text of the value from file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>v</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code></dt>
+<dd><p class="first last">Evaluated value of the text</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-10-16 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-01-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added boolean shortcuts, <code class="docutils literal"><span class="pre">.T.</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.GetGroupByName">
+<code class="descname">GetGroupByName</code><span class="sig-paren">(</span><em>grp</em>, <em>igrp=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.GetGroupByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get index of group with a specific name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">GetGroupByName</span><span class="p">(</span><span class="n">grp</span><span class="p">,</span> <span class="n">igrp</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <code class="xref py py-class docutils literal"><span class="pre">cape.name.ist2.Namelist2</span></code></dt>
+<dd><p class="first last">Interface to namelist with repeated lists</p>
+</dd>
+<dt><em>grp</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of namelist group</p>
+</dd>
+<dt><em>igrp</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">If namelist contains multiple copies, return match number <em>igrp</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>i</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal"><span class="pre">np.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">Group index of requested match</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-01-31 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.GetKeyFromGroupIndex">
+<code class="descname">GetKeyFromGroupIndex</code><span class="sig-paren">(</span><em>igrp</em>, <em>key</em>, <em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.GetKeyFromGroupIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value of a key from a specific section</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">GetKeyFromGroupIndex</span><span class="p">(</span><span class="n">igrp</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">Interface to namelist with repeated lists</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the key to search for</p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="docutils literal"><span class="pre">&quot;:&quot;</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Index to use in the namelist, e.g. &#8220;BCPAR(<em>i</em>)&#8221;</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>v</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code></dt>
+<dd><p class="first last">Evaluated value of the text for this key</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-01-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-08-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added parameter index</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.GetKeyFromGroupName">
+<code class="descname">GetKeyFromGroupName</code><span class="sig-paren">(</span><em>grp</em>, <em>key</em>, <em>igrp=0</em>, <em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.GetKeyFromGroupName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value of a key from a section by group name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">GetKeyFromGroupName</span><span class="p">(</span><span class="n">grp</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">igrp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">Old-style Fortran namelist interface</p>
+</dd>
+<dt><em>grp</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Group name to search for</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of key to search for</p>
+</dd>
+<dt><em>igrp</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">If multiple sections have same name, use match number <em>igrp</em></p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="docutils literal"><span class="pre">&quot;:&quot;</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Index to use in the namelist, e.g. &#8220;BCPAR(<em>i</em>)&#8221;</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>v</em>: <code class="xref py py-class docutils literal"><span class="pre">any</span></code></dt>
+<dd><p class="first last">Converted value</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-01-31 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-08-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added parameter index</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.GetKeyFromLine">
+<code class="descname">GetKeyFromLine</code><span class="sig-paren">(</span><em>line</em>, <em>key</em>, <em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.GetKeyFromLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the value of a key from a line</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="p">,</span> <span class="n">val</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">GetKeyFromLine</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">Interface to namelist with repeated lists</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">A line of text that may or may not contain the value of <em>key</em></p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of key</p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="docutils literal"><span class="pre">&quot;:&quot;</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Index to use in the namelist, e.g. &#8220;BCPAR(<em>i</em>)&#8221;</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>q</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Whether or not the key was found in the line</p>
+</dd>
+<dt><em>val</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Value of the key, if found</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-01-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-01-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Case-insensitive</li>
+<li>2016-08-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added index capability</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.InsertGroup">
+<code class="descname">InsertGroup</code><span class="sig-paren">(</span><em>igrp</em>, <em>grp</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.InsertGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a group as group number <em>igrp</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">InsertGroup</span><span class="p">(</span><span class="n">igrp</span><span class="p">,</span> <span class="n">grp</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">Interface to namelist with repeated lists</p>
+</dd>
+<dt><em>igrp</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Index of location at which to insert group</p>
+</dd>
+<dt><em>grp</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the group to insert</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-02-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.PopLine">
+<code class="descname">PopLine</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.PopLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the left-most key from a namelist line and return rest of line</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">PopLine</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">Interface to namelist with repeated lists</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">One line of namelist text</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>txt</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Remaining text in <em>line</em> after first key has been read</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of first key read from <em>line</em></p>
+</dd>
+<dt><em>val</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Raw (unconverted) value of <em>key</em></p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="docutils literal"><span class="pre">':&quot;</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Vector index if specified</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-01-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-08-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added indices, e.g. BCPAR(2)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.ReadGroupIndex">
+<code class="descname">ReadGroupIndex</code><span class="sig-paren">(</span><em>igrp</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.ReadGroupIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read group <em>igrp</em> and return a dictionary</p>
+<p>The output is a <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> such as the following</p>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">{'FSMACH':</span> <span class="pre">'0.8',</span> <span class="pre">'ALPHA':</span> <span class="pre">'2.0'}</span></code></div></blockquote>
+<p>If a parameter has an index specification, such as <code class="docutils literal"><span class="pre">&quot;PAR(2)</span> <span class="pre">=</span> <span class="pre">1.0&quot;</span></code>,
+the dictionary will have the following format for such keys.</p>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">{'PAR':</span> <span class="pre">{2:</span> <span class="pre">1.0}}</span></code></div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">ReadGroupIndex</span><span class="p">(</span><span class="n">igrp</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">Interface to namelist with repeated lists</p>
+</dd>
+<dt><em>igrp</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Group index to read</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>d</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Raw (uncoverted) values of the dict</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-01-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.ReadKeysFromLine">
+<code class="descname">ReadKeysFromLine</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.ReadKeysFromLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read zero or more keys from a single text line</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">ReadKeysFromLine</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">Interface to namelist with repeated lists</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">One line from a namelist file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>d</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Unconverted values of each key</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-01-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.SetKeyInGroupIndex">
+<code class="descname">SetKeyInGroupIndex</code><span class="sig-paren">(</span><em>igrp</em>, <em>key</em>, <em>val</em>, <em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.SetKeyInGroupIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of a key in a group by index</p>
+<p>If the key is not set in the present text, add it as a new line.  The
+contents of the file control&#8217;s text (in <em>nml.lines</em>) will be edited, and
+the list indices will be updated if a line is added.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetKeyInGroupIndex</span><span class="p">(</span><span class="n">igrp</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">File control instance for old-style Fortran namelist</p>
+</dd>
+<dt><em>igrp</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Index of namelist to edit</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of key to alter or set</p>
+</dd>
+<dt><em>val</em>: <code class="xref py py-class docutils literal"><span class="pre">any</span></code></dt>
+<dd><p class="first last">Value to use for <em>key</em></p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="docutils literal"><span class="pre">&quot;:&quot;</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Index to use in the namelist, e.g. &#8220;BCPAR(<em>i</em>)&#8221;</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-01-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-08-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added index capability</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.SetKeyInGroupName">
+<code class="descname">SetKeyInGroupName</code><span class="sig-paren">(</span><em>grp</em>, <em>key</em>, <em>val</em>, <em>igrp=0</em>, <em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.SetKeyInGroupName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of a key from a group by name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetKeyInGroupName</span><span class="p">(</span><span class="n">grp</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">igrp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">Old-style Fortran namelist interface</p>
+</dd>
+<dt><em>grp</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Group name to search for</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of key to search for</p>
+</dd>
+<dt><em>val</em>: <code class="xref py py-class docutils literal"><span class="pre">any</span></code></dt>
+<dd><p class="first last">Converted value</p>
+</dd>
+<dt><em>igrp</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">If multiple sections have same name, use match number <em>igrp</em></p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="docutils literal"><span class="pre">&quot;:&quot;</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Index to use in the namelist, e.g. &#8220;BCPAR(<em>i</em>)&#8221;</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-01-31 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-08-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added index capability</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.SetKeyInLine">
+<code class="descname">SetKeyInLine</code><span class="sig-paren">(</span><em>line</em>, <em>key</em>, <em>val</em>, <em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.SetKeyInLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of a key in a line if the key is already in the line</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="p">,</span> <span class="n">line</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">SetKeyInLine</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">Interface to namelist with repeated lists</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">A line of text that may or may not contain the value of <em>key</em></p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of key</p>
+</dd>
+<dt><em>val</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Value of the key, if found</p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="docutils literal"><span class="pre">&quot;:&quot;</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Index to use in the namelist, e.g. &#8220;BCPAR(<em>i</em>)&#8221;</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>q</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Whether or not the key was found in the line</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">New version of the line with <em>key</em> reset to <em>val</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-01-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-08-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added index capability</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.namelist2.Namelist2.UpdateNamelist">
+<code class="descname">UpdateNamelist</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.namelist2.Namelist2.UpdateNamelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the line indices for each namelist</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">UpdateNamelist</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.namelist2.Namelist2" title="cape.namelist2.Namelist2"><code class="xref py py-class docutils literal"><span class="pre">cape.namelist2.Namelist2</span></code></a></dt>
+<dd><p class="first last">Interface to namelist with repeated lists</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-01-29 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pointSensor.html" title="4.3.14. Point sensors module: cape.pointSensor"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="namelist.html" title="4.3.12. Module to interface with Fortran namelists: cape.namelist"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyCart 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >4. Cape Module Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >4.3. The <code class="docutils literal"><span class="pre">cape</span></code> module</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014-2017, Derek J. Dalle.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

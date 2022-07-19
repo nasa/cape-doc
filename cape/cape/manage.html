@@ -1,0 +1,1762 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4.3.11. Manage Run Directory Folders: cape.manage &mdash; pyCart 0.8 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="pyCart 0.8 documentation" href="../../index.html" />
+    <link rel="up" title="4.3. The cape module" href="index.html" />
+    <link rel="next" title="4.3.12. Module to interface with Fortran namelists: cape.namelist" href="namelist.html" />
+    <link rel="prev" title="4.3.10. Generic Cape Geometry Module: cape.geom" href="geom.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="namelist.html" title="4.3.12. Module to interface with Fortran namelists: cape.namelist"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="geom.html" title="4.3.10. Generic Cape Geometry Module: cape.geom"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyCart 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >4. Cape Module Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">4.3. The <code class="docutils literal"><span class="pre">cape</span></code> module</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="geom.html"
+                        title="previous chapter">4.3.10. Generic Cape Geometry Module: <code class="docutils literal"><span class="pre">cape.geom</span></code></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="namelist.html"
+                        title="next chapter">4.3.12. Module to interface with Fortran namelists: <code class="docutils literal"><span class="pre">cape.namelist</span></code></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/cape/cape/manage.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.manage"></span><div class="section" id="manage-run-directory-folders-cape-manage">
+<h1>4.3.11. Manage Run Directory Folders: <a class="reference internal" href="#module-cape.manage" title="cape.manage"><code class="xref py py-mod docutils literal"><span class="pre">cape.manage</span></code></a><a class="headerlink" href="#manage-run-directory-folders-cape-manage" title="Permalink to this headline">¶</a></h1>
+<p>This module provides methods to manage and archive files for run folders.  It
+provides extensive tools for archiving results to other locations either as a
+tar ball or zip archive of the entire folder or a folder of several smaller zip
+files.</p>
+<p>It also provides tools for deleting files either before or after creating the
+archive.  In addition, there is an easy interface for keeping only the most
+recent <em>n</em> files of a certain glob.  For example, if there are solution files
+<code class="docutils literal"><span class="pre">flow.01</span></code>, <code class="docutils literal"><span class="pre">flow.02</span></code>, <code class="docutils literal"><span class="pre">flow.03</span></code>, and <code class="docutils literal"><span class="pre">flow.04</span></code>, setting the
+<em>PostUpdateFiles</em> parameter to <code class="docutils literal"><span class="pre">{&quot;flow.??&quot;:</span> <span class="pre">2}</span></code> will delete only <code class="docutils literal"><span class="pre">flow.01</span></code>
+and <code class="docutils literal"><span class="pre">flow.02</span></code>.</p>
+<p>The module provides methods to perform deletions, conditional deletions, and
+grouping files into tar or zip archives at multiple stages.  For example,
+<a class="reference internal" href="#cape.manage.PreDeleteFiles" title="cape.manage.PreDeleteFiles"><code class="xref py py-func docutils literal"><span class="pre">PreDeleteFiles()</span></code></a> deletes files after a case has been completed and before
+generating the archive of the case.  On the other hand, <a class="reference internal" href="#cape.manage.PostDeleteFiles" title="cape.manage.PostDeleteFiles"><code class="xref py py-func docutils literal"><span class="pre">PostDeleteFiles()</span></code></a>
+deletes files after creating the archive; the difference is whether or not the
+file in question is included in the archive before it is deleted.</p>
+<p>Functions such as <a class="reference internal" href="#cape.manage.ProgressDeleteFiles" title="cape.manage.ProgressDeleteFiles"><code class="xref py py-func docutils literal"><span class="pre">ProgressDeleteFiles()</span></code></a> deletes files between phases, and
+as such it is much more dangerous.  Other methods will only delete or archive
+once the case has been marked as PASS by the user.</p>
+<dl class="function">
+<dt id="cape.manage.ArchiveCaseWhole">
+<code class="descclassname">cape.manage.</code><code class="descname">ArchiveCaseWhole</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.ArchiveCaseWhole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Archive an entire run folder</p>
+<p>This function must be run from the case folder to be archived</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ArchiveCaseWhole</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.ArchiveFiles">
+<code class="descclassname">cape.manage.</code><code class="descname">ArchiveFiles</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.ArchiveFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete files that match a list of glob</p>
+<p>The function also searches in any folder matching the directory glob or list
+of directory globs <em>fsub</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">ArchiveFiles</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">File name or glob of files to delete</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Folder, list of folders, or glob of folders to also search</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Default number of files to archive</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-12-09 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Now depends on <code class="docutils literal"><span class="pre">&quot;ArchiveFiles&quot;</span></code> option</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.ArchiveFolder">
+<code class="descclassname">cape.manage.</code><code class="descname">ArchiveFolder</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.ArchiveFolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Archive a folder to a backup location and clean up nonessential files</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">ArchiveFolder</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="p">[])</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface including management/archive interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of globs of subdirectories that are adaptive run folders</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-12-09 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.CreateArchiveCaseFolder">
+<code class="descclassname">cape.manage.</code><code class="descname">CreateArchiveCaseFolder</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.CreateArchiveCaseFolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the group and run folders in the archive, as appropriate</p>
+<p>This function must be run from within the folder that is to be archived</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CreateArchiveCaseFolder</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.CreateArchiveFolder">
+<code class="descclassname">cape.manage.</code><code class="descname">CreateArchiveFolder</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.CreateArchiveFolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the folder that will contain the archive, if necessary</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CreateArchiveFolder</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.CreateArchiveGroupFolder">
+<code class="descclassname">cape.manage.</code><code class="descname">CreateArchiveGroupFolder</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.CreateArchiveGroupFolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the group folder in the archive, as appropriate</p>
+<p>This function must be run from within the folder that is to be archived</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CreateArchiveGroupFolder</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.DeleteDirs">
+<code class="descclassname">cape.manage.</code><code class="descname">DeleteDirs</code><span class="sig-paren">(</span><em>fdel</em>, <em>fsub=None</em>, <em>n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.DeleteDirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete folders that match a glob</p>
+<p>The function also searches in any folder matching the directory glob or list
+of directory globs <em>fsub</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">DeleteDirs_SubDir</span><span class="p">(</span><span class="n">fdel</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fdel</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">File name or glob of files to delete</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Folder, list of folders, or glob of folders to also search</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of folders to keep at end of glob</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.DeleteFiles">
+<code class="descclassname">cape.manage.</code><code class="descname">DeleteFiles</code><span class="sig-paren">(</span><em>fdel</em>, <em>fsub=None</em>, <em>n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.DeleteFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete files that match a list of glob</p>
+<p>The function also searches in any folder matching the directory glob or list
+of directory globs <em>fsub</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">DeleteFiles_SubDir</span><span class="p">(</span><span class="n">fdel</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fdel</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">File name or glob of files to delete</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Folder, list of folders, or glob of folders to also search</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of files to keep</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.GetDirMatches">
+<code class="descclassname">cape.manage.</code><code class="descname">GetDirMatches</code><span class="sig-paren">(</span><em>fname</em>, <em>fsub=None</em>, <em>n=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.GetDirMatches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of all folders matching a list of patterns</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fglob</span> <span class="o">=</span> <span class="n">GetDirMatches</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fglob</span> <span class="o">=</span> <span class="n">GetDirMatches</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fsubs</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">dict</span></code> | <code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of file name patterns</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Folder name of folder name pattern</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Default number of files to ignore at end of glob</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fglob</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of files matching input pattern</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">See also:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference internal" href="#cape.manage.process_ArchiveFile" title="cape.manage.process_ArchiveFile"><code class="xref py py-func docutils literal"><span class="pre">cape.manage.process_ArchiveFile()</span></code></a></li>
+<li><a class="reference internal" href="#cape.manage.GetMatchesList" title="cape.manage.GetMatchesList"><code class="xref py py-func docutils literal"><span class="pre">cape.manage.GetMatchesList()</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.GetFileMatches">
+<code class="descclassname">cape.manage.</code><code class="descname">GetFileMatches</code><span class="sig-paren">(</span><em>fname</em>, <em>fsub=None</em>, <em>n=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.GetFileMatches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of all files or links matching a list of patterns</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fglob</span> <span class="o">=</span> <span class="n">GetFileMatches</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fglob</span> <span class="o">=</span> <span class="n">GetFileMatches</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fsubs</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">dict</span></code> | <code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of file name patterns</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Folder name of folder name pattern</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Default number of files to ignore at end of glob</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fglob</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of files matching input pattern</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">See also:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference internal" href="#cape.manage.process_ArchiveFile" title="cape.manage.process_ArchiveFile"><code class="xref py py-func docutils literal"><span class="pre">cape.manage.process_ArchiveFile()</span></code></a></li>
+<li><a class="reference internal" href="#cape.manage.GetMatchesList" title="cape.manage.GetMatchesList"><code class="xref py py-func docutils literal"><span class="pre">cape.manage.GetMatchesList()</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.GetLinkMatches">
+<code class="descclassname">cape.manage.</code><code class="descname">GetLinkMatches</code><span class="sig-paren">(</span><em>fname</em>, <em>fsub=None</em>, <em>n=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.GetLinkMatches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of all links matching a list of patterns</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fglob</span> <span class="o">=</span> <span class="n">GetLinkMatches</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fglob</span> <span class="o">=</span> <span class="n">GetLinkMatches</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fsubs</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">dict</span></code> | <code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of file name patterns</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Folder name of folder name pattern</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Default number of files to ignore at end of glob</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fglob</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of files matching input pattern</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">See also:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference internal" href="#cape.manage.process_ArchiveFile" title="cape.manage.process_ArchiveFile"><code class="xref py py-func docutils literal"><span class="pre">cape.manage.process_ArchiveFile()</span></code></a></li>
+<li><a class="reference internal" href="#cape.manage.GetMatchesList" title="cape.manage.GetMatchesList"><code class="xref py py-func docutils literal"><span class="pre">cape.manage.GetMatchesList()</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.GetMatches">
+<code class="descclassname">cape.manage.</code><code class="descname">GetMatches</code><span class="sig-paren">(</span><em>fname</em>, <em>fsub=None</em>, <em>fkeep=None</em>, <em>ftest=None</em>, <em>n=0</em>, <em>fsort=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.GetMatches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get matches based on arbitrary rules</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fglob</span> <span class="o">=</span> <span class="n">GetMatches</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">fkeep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ftest</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">File name or file name pattern</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Subfolder name of folder name patterns in which to search</p>
+</dd>
+<dt><em>fkeep</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of file names matching a negative file glob</p>
+</dd>
+<dt><em>ftest</em>: <code class="xref py py-class docutils literal"><span class="pre">func</span></code></dt>
+<dd><p class="first last">Function to test file type, e.g. <code class="xref py py-func docutils literal"><span class="pre">os.path.isdir()</span></code></p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Default number of files to ignore from the end of the glob or
+number of files to ignore from beginning of glob if negative</p>
+</dd>
+<dt><em>fsort</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Non-default sorting function</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fglob</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of files matching input pattern</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.GetMatchesList">
+<code class="descclassname">cape.manage.</code><code class="descname">GetMatchesList</code><span class="sig-paren">(</span><em>flist</em>, <em>fsub=None</em>, <em>ftest=None</em>, <em>n=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.GetMatchesList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get matches from a list of file glob descriptors</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fglob</span> <span class="o">=</span> <span class="n">GetMatchesList</span><span class="p">(</span><span class="n">flist</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ftest</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>flist</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code>)</dt>
+<dd><p class="first last">List of file names or file name patterns</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Subfolder name of folder name patterns in which to search</p>
+</dd>
+<dt><em>ftest</em>: <code class="xref py py-class docutils literal"><span class="pre">func</span></code></dt>
+<dd><p class="first last">Function to test file type, e.g. <code class="xref py py-func docutils literal"><span class="pre">os.path.isdir()</span></code></p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Default number of files to ignore from the end of the glob or
+number of files to ignore from beginning of glob if negative</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fglob</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of files matching input pattern</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.GetSearchDirs">
+<code class="descclassname">cape.manage.</code><code class="descname">GetSearchDirs</code><span class="sig-paren">(</span><em>fsub=None</em>, <em>fsort=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.GetSearchDirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of current folder and folders matching pattern</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fdirs</span> <span class="o">=</span> <span class="n">GetSearchDirs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fdirs</span> <span class="o">=</span> <span class="n">GetSearchDirs</span><span class="p">(</span><span class="n">fsub</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fdirs</span> <span class="o">=</span> <span class="n">GetSearchDirs</span><span class="p">(</span><span class="n">fsubs</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Folder name of folder name pattern</p>
+</dd>
+<dt><em>fsubs</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of folder names or folder name patterns</p>
+</dd>
+<dt><em>fsort</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Non-default sorting function</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.ManageFilesPost">
+<code class="descclassname">cape.manage.</code><code class="descname">ManageFilesPost</code><span class="sig-paren">(</span><em>opts=None</em>, <em>fsub=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.ManageFilesPost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete or group files and folders after creating archive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">ManageFilesPost</span><span class="p">(</span><span class="n">opts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options interface for archiving</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of globs of subdirectories that are adaptive run folders</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.ManageFilesPre">
+<code class="descclassname">cape.manage.</code><code class="descname">ManageFilesPre</code><span class="sig-paren">(</span><em>opts=None</em>, <em>fsub=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.ManageFilesPre" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete or group files and folders before creating archive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">ManageFilesPre</span><span class="p">(</span><span class="n">opts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options interface for archiving</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of globs of subdirectories that are adaptive run folders</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.ManageFilesProgress">
+<code class="descclassname">cape.manage.</code><code class="descname">ManageFilesProgress</code><span class="sig-paren">(</span><em>opts=None</em>, <em>fsub=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.ManageFilesProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete or group files and folders at end of each run</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">ManageFilesProgress</span><span class="p">(</span><span class="n">opts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options interface for archiving</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of globs of subdirectories that are adaptive run folders</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.PostDeleteDirs">
+<code class="descclassname">cape.manage.</code><code class="descname">PostDeleteDirs</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.PostDeleteDirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete folders that match a list of file name patterns before archiving</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PostDeleteDirs</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.PostDeleteFiles">
+<code class="descclassname">cape.manage.</code><code class="descname">PostDeleteFiles</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.PostDeleteFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete files that match a list of file name patterns</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PostDeleteFiles</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.PostTarDirs">
+<code class="descclassname">cape.manage.</code><code class="descname">PostTarDirs</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em>, <em>frun=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.PostTarDirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tar folders after archiving</p>
+<p>The folders are not deleted after the tar ball is created</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PostTarDirs</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">frun</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+<dt><em>frun</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of case folder</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.PostTarGroups">
+<code class="descclassname">cape.manage.</code><code class="descname">PostTarGroups</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em>, <em>frun=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.PostTarGroups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tar file/folder groups</p>
+<p>The files are not deleted after the tar ball is created</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PostTarGroups</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">frun</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+<dt><em>frun</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Case folder name</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.PostUpdateFiles">
+<code class="descclassname">cape.manage.</code><code class="descname">PostUpdateFiles</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.PostUpdateFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete files that match a list, keeping the most recent file by default</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PreUpdateFiles</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.PreDeleteDirs">
+<code class="descclassname">cape.manage.</code><code class="descname">PreDeleteDirs</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.PreDeleteDirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete folders that match a list of file name patterns before archiving</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PreDeleteDirs</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.PreDeleteFiles">
+<code class="descclassname">cape.manage.</code><code class="descname">PreDeleteFiles</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.PreDeleteFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete files that match a list of file name patterns</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PreDeleteFiles</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.PreTarDirs">
+<code class="descclassname">cape.manage.</code><code class="descname">PreTarDirs</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.PreTarDirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tar folders before archiving</p>
+<p>The folders are deleted after the tar ball is created</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PreTarDirs</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.PreTarGroups">
+<code class="descclassname">cape.manage.</code><code class="descname">PreTarGroups</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.PreTarGroups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tar file/folder groups</p>
+<p>The files are deleted after the tar ball is created</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PreTarGroups</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.PreUpdateFiles">
+<code class="descclassname">cape.manage.</code><code class="descname">PreUpdateFiles</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.PreUpdateFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete files that match a list, keeping the most recent file by default</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PreUpdateFiles</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.ProgressArchiveFiles">
+<code class="descclassname">cape.manage.</code><code class="descname">ProgressArchiveFiles</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.ProgressArchiveFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete files that match a list of file name patterns</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ProgressDeleteFiles</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.ProgressDeleteDirs">
+<code class="descclassname">cape.manage.</code><code class="descname">ProgressDeleteDirs</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.ProgressDeleteDirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete folders that match a list of file name patterns before archiving</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ProgressDeleteDirs</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.ProgressDeleteFiles">
+<code class="descclassname">cape.manage.</code><code class="descname">ProgressDeleteFiles</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.ProgressDeleteFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete files that match a list of file name patterns</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ProgressDeleteFiles</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.ProgressTarDirs">
+<code class="descclassname">cape.manage.</code><code class="descname">ProgressTarDirs</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.ProgressTarDirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tar folders after each run</p>
+<p>The folders are deleted after the tar ball is created</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ProgressTarDirs</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.ProgressTarGroups">
+<code class="descclassname">cape.manage.</code><code class="descname">ProgressTarGroups</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.ProgressTarGroups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tar file/folder groups after each run</p>
+<p>The files are deleted after the tar ball is created</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ProgressTarGroups</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.ProgressUpdateFiles">
+<code class="descclassname">cape.manage.</code><code class="descname">ProgressUpdateFiles</code><span class="sig-paren">(</span><em>opts</em>, <em>fsub=None</em>, <em>aa=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.ProgressUpdateFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete files that match a list, keeping the most recent file by default</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ProgressUpdateFiles</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">fsub</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">Archive</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options dictionary or options interface</p>
+</dd>
+<dt><em>fsub</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">List of sub-directory globs in which to search</p>
+</dd>
+<dt><em>aa</em>: <code class="xref py py-class docutils literal"><span class="pre">function</span></code></dt>
+<dd><p class="first last">Conversion function applied to <em>opts</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.TarDir">
+<code class="descclassname">cape.manage.</code><code class="descname">TarDir</code><span class="sig-paren">(</span><em>cmd</em>, <em>ftar</em>, <em>fdir</em>, <em>clean=True</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.TarDir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Archive a folder and delete the folder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">TarDir</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ftar</span><span class="p">,</span> <span class="n">fdir</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>cmd</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of archiving/compression commands</p>
+</dd>
+<dt><em>ftar</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file to create</p>
+</dd>
+<dt><em>fdir</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of folder</p>
+</dd>
+<dt><em>clean</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Whether or not to delete folder afterwards</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.TarGroup">
+<code class="descclassname">cape.manage.</code><code class="descname">TarGroup</code><span class="sig-paren">(</span><em>cmd</em>, <em>ftar</em>, <em>fname</em>, <em>n=0</em>, <em>clean=False</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.TarGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Archive a group of files and delete the files</p>
+<p>Only the present folder will searched for file name matches</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">TarGroup</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ftar</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>cmd</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of archiving/compression commands</p>
+</dd>
+<dt><em>ftar</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file to create</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">dict</span></code> | <code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">File name pattern or list thereof to combine into archive</p>
+</dd>
+<dt><em>clean</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Whether or not to clean up after archiving</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Generic version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.TarLinks">
+<code class="descclassname">cape.manage.</code><code class="descname">TarLinks</code><span class="sig-paren">(</span><em>cmd</em>, <em>ext</em>, <em>clean=True</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.TarLinks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tar all links existing in the current folder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">TarLinks</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>cmd</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of archiving/compression commands</p>
+</dd>
+<dt><em>ftar</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file to create</p>
+</dd>
+<dt><em>clean</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Whether or not to clean up after archiving</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.Untar">
+<code class="descclassname">cape.manage.</code><code class="descname">Untar</code><span class="sig-paren">(</span><em>cmd</em>, <em>ftar</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.Untar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unarchive a tar ball and then delete it</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">Untar</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ftar</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>cmd</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of archiving/compression commands</p>
+</dd>
+<dt><em>ftar</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file to create</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">File name pattern or list thereof to combine into archive</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.isbrokenlink">
+<code class="descclassname">cape.manage.</code><code class="descname">isbrokenlink</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.isbrokenlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle to test if a file is a broken link</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">isbrokenlink</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of link</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>q</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Whether or not it is a link that is broken</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.isfile">
+<code class="descclassname">cape.manage.</code><code class="descname">isfile</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.isfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle to test if file <strong>or</strong> link</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>q</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Whether or not file both exists and is either a file or link</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.process_ArchiveFile">
+<code class="descclassname">cape.manage.</code><code class="descname">process_ArchiveFile</code><span class="sig-paren">(</span><em>f</em>, <em>n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.process_ArchiveFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a file glob description</p>
+<p>This can be either a file name, file name pattern, or dictionary of file
+name pattern and number of files to keep</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span><span class="p">,</span> <span class="n">nkeep</span> <span class="o">=</span> <span class="n">process_ArchiveFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span><span class="p">,</span> <span class="n">nkeep</span> <span class="o">=</span> <span class="n">process_ArchiveFile</span><span class="p">(</span><span class="n">fdict</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span><span class="p">,</span> <span class="n">nkeep</span> <span class="o">=</span> <span class="n">process_ArchiveFile</span><span class="p">({</span><span class="n">fname</span><span class="p">:</span> <span class="n">nkeep</span><span class="p">},</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">File name or file name pattern to delete/group/etc.</p>
+</dd>
+<dt><em>nkeep</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of matching files to keep</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Default number of files to keep</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">File name or file name pattern to delete/group/etc.</p>
+</dd>
+<dt><em>nkeep</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of matching files to keep</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.process_ArchiveGroup">
+<code class="descclassname">cape.manage.</code><code class="descname">process_ArchiveGroup</code><span class="sig-paren">(</span><em>grp</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.process_ArchiveGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process an archive group, which has a precise format</p>
+<p>It must be a dictionary with one entry</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ftar</span><span class="p">,</span> <span class="n">fpat</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">process_ArchiveGroup</span><span class="p">(</span><span class="n">grp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ftar</span><span class="p">,</span> <span class="n">fpat</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">process_Archivegroup</span><span class="p">({</span><span class="n">ftar</span><span class="p">:</span> <span class="n">fpat</span><span class="p">})</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>grp</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> len=1</dt>
+<dd><p class="first last">Single dictionary with name and pattern or list of patterns</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>ftar</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of archive to create without extension</p>
+</dd>
+<dt><em>fpat</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">File name pattern or list of file name patterns</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.sortfiles">
+<code class="descclassname">cape.manage.</code><code class="descname">sortfiles</code><span class="sig-paren">(</span><em>fglob</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.sortfiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort a glob of files based on the time of their last edit</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fsort</span> <span class="o">=</span> <span class="n">sortfiles</span><span class="p">(</span><span class="n">fglob</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fglob</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of file names</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fsort</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Above listed by <code class="xref py py-func docutils literal"><span class="pre">os.path.getmtime()</span></code></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.write_log">
+<code class="descclassname">cape.manage.</code><code class="descname">write_log</code><span class="sig-paren">(</span><em>txt</em>, <em>fname='archive.log'</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.write_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the date to the archive log</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">write_log</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s1">&#39;archive.log&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: {<code class="docutils literal"><span class="pre">&quot;archive.log&quot;</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of acrhive log file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-07-08 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.manage.write_log_date">
+<code class="descclassname">cape.manage.</code><code class="descname">write_log_date</code><span class="sig-paren">(</span><em>fname='archive.log'</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.manage.write_log_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the date to the archive log</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">write_log_date</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;archive.log&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: {<code class="docutils literal"><span class="pre">&quot;archive.log&quot;</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of acrhive log file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-07-08 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="namelist.html" title="4.3.12. Module to interface with Fortran namelists: cape.namelist"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="geom.html" title="4.3.10. Generic Cape Geometry Module: cape.geom"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyCart 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >4. Cape Module Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >4.3. The <code class="docutils literal"><span class="pre">cape</span></code> module</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014-2017, Derek J. Dalle.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

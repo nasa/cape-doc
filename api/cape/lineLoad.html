@@ -1,0 +1,1755 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>cape.lineLoad: Sectional loads databook &#8212; CAPE 0.9.2</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.manage: Manage CFD case folders" href="manage.html" />
+    <link rel="prev" title="cape.io: Common input/output library" href="io.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="manage.html" title="cape.manage: Manage CFD case folders"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="io.html" title="cape.io: Common input/output library"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 0.9.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The <code class="docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="io.html"
+                        title="previous chapter"><code class="docutils literal notranslate"><span class="pre">cape.io</span></code>: Common input/output library</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="manage.html"
+                        title="next chapter"><code class="docutils literal notranslate"><span class="pre">cape.manage</span></code>: Manage CFD case folders</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cape/lineLoad.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.lineLoad"></span><div class="section" id="cape-lineload-sectional-loads-databook">
+<h1><a class="reference internal" href="#module-cape.lineLoad" title="cape.lineLoad"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.lineLoad</span></code></a>: Sectional loads databook<a class="headerlink" href="#cape-lineload-sectional-loads-databook" title="Permalink to this headline">¶</a></h1>
+<p>This module contains functions for reading and processing sectional loads.
+This module is developed from <a class="reference internal" href="dataBook.html#module-cape.dataBook" title="cape.dataBook"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dataBook</span></code></a>, which is the overall
+databook interface.  It provides the primary class <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a>, which
+is a subclass of <a class="reference internal" href="dataBook.html#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.dataBook.DBBase</span></code></a>.  This class is an interface to
+all line load data for a specific surface component.</p>
+<p>Overall, this module provides three classes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a>: Line load database for one component</li>
+<li><a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseLL</span></code></a>: Line load data for one component of one CFD solution</li>
+<li><a class="reference internal" href="#cape.lineLoad.CaseSeam" title="cape.lineLoad.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseSeam</span></code></a>: Interface to “seam curves” to plot outline of surface</li>
+</ul>
+</div></blockquote>
+<p>In addition to a database interface, this module also creates line loads.
+Specific modifications to the generic template provided here are needed for
+each individual CFD solver:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="../pycart/lineLoad.html#module-cape.pycart.lineLoad" title="cape.pycart.lineLoad"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.lineLoad</span></code></a></li>
+<li><a class="reference internal" href="../pyfun/lineLoad.html#module-cape.pyfun.lineLoad" title="cape.pyfun.lineLoad"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.lineLoad</span></code></a></li>
+<li><a class="reference internal" href="../pyover/lineLoad.html#module-cape.pyover.lineLoad" title="cape.pyover.lineLoad"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.lineLoad</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>To calculate line loads, this module utilizes the Chimera Grid Tools executable
+called <code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code>.  This works by taking a Cart3D annotated surface
+triangulation (<code class="docutils literal notranslate"><span class="pre">triq</span></code> file), slicing the surface component into slices, and
+computing the loads on each slice.  In order to create this surface
+triangulation, some solvers require steps to process the native CFD output.
+Those steps are performed by the solver-specific <code class="xref py py-mod docutils literal notranslate"><span class="pre">lineLoad</span></code> modules.</p>
+<dl class="class">
+<dt id="cape.lineLoad.CaseLL">
+<em class="property">class </em><code class="descclassname">cape.lineLoad.</code><code class="descname">CaseLL</code><span class="sig-paren">(</span><em>comp</em>, <em>proj='LineLoad'</em>, <em>sec='dlds'</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface to individual sectional load</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span> <span class="o">=</span> <span class="n">CaseLL</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;LineLoad&#39;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="s1">&#39;slds&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of component</p>
+</dd>
+<dt><em>proj</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Prefix for sectional load output files</p>
+</dd>
+<dt><em>sec</em>: <code class="docutils literal notranslate"><span class="pre">&quot;clds&quot;</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;dlds&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;slds&quot;</span></code></dt>
+<dd><p class="first last">Cut type, cumulative, derivative, or sectional</p>
+</dd>
+<dt><em>ext</em>: <code class="docutils literal notranslate"><span class="pre">&quot;clds&quot;</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;dlds&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;slds&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;csv&quot;</span></code></dt>
+<dd><p class="first last">File extension</p>
+</dd>
+<dt><em>fdir</em> {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of sub folder to use</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Individual line load for one component from one case</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Second version, universal</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.Copy">
+<code class="descname">Copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.Copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a copy of a case line load object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL2</span> <span class="o">=</span> <span class="n">LL</span><span class="o">.</span><span class="n">Copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Single-case, single-component line load interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL2</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Copy of the line load interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.CorrectCA">
+<code class="descname">CorrectCA</code><span class="sig-paren">(</span><em>CA</em>, <em>CA1</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.CorrectCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correct <em>CA</em> using an unnormalized function</p>
+<p>This function takes a function with the same dimensions as <em>LL.CA</em> and
+adds a multiple of it so that the integrated axial force coefficient
+(<em>CA</em>) matches a target integrated value given by the user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">CorrectCA</span><span class="p">(</span><span class="n">CA</span><span class="p">,</span> <span class="n">CA1</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Instance of single-case line load interface</p>
+</dd>
+<dt><em>CA</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CA</em></p>
+</dd>
+<dt><em>CA1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<em>LL.x.size</em>)</dt>
+<dd><p class="first last">Basis function to correct <em>CA</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.CorrectCLL">
+<code class="descname">CorrectCLL</code><span class="sig-paren">(</span><em>CLL</em>, <em>CLL1</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.CorrectCLL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correct <em>CLL</em> using an unnormalized function</p>
+<p>This function takes a function with the same dimensions as <em>LL.CLL</em> and
+adds a multiple of it so that the integrated rolling moment coefficient
+(<em>CLL</em>) matches a target integrated value given by the user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">CorrectCLL</span><span class="p">(</span><span class="n">CLL</span><span class="p">,</span> <span class="n">CLL1</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Instance of single-case line load interface</p>
+</dd>
+<dt><em>CLL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CLL</em></p>
+</dd>
+<dt><em>CLL1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<em>LL.x.size</em>)</dt>
+<dd><p class="first last">Basis function to correct <em>CLL</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.CorrectCN">
+<code class="descname">CorrectCN</code><span class="sig-paren">(</span><em>CN</em>, <em>CLM</em>, <em>UCN</em>, <em>sig=None</em>, <em>xMRP=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.CorrectCN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correct <em>CN</em> and <em>CLM</em> given <em>n</em> unnormalized functions</p>
+<p>This function takes an <em>m</em> by <em>n</em> matrix where <em>m</em> is the size of
+<em>LL.CN</em>. It then calculates an increment to <em>LL.CN</em> that is a linear
+combination of the columns of that matrix <em>UCN</em> such that the
+integrated normal force coefficient (<em>CN</em>) and pitching moment
+coefficient (<em>CLM</em>) match target values provided by the user.  The
+increment is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\Delta C_N = \sum_{i=1}^n k_i\phi_i\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(\phi_i`\)</span> is the <em>i*th column of *UCN</em> scaled so that it
+has an L2 norm of 1.</p>
+<p>The weights of the linear coefficient are chosen in order to minimize
+the sum of an objective function subject to the integration constraints
+mentioned above.  This objective function is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\sum_{i=1}^n a_i k_i^2 / \sigma_i\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(a_i\)</span> is the maximum absolute value of column <em>i</em> of <em>UCN</em>
+and <span class="math notranslate nohighlight">\(\sigma_i\)</span> is the associated singular value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">CorrectCN</span><span class="p">(</span><span class="n">CN</span><span class="p">,</span> <span class="n">CLM</span><span class="p">,</span> <span class="n">UCN</span><span class="p">,</span> <span class="n">sig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xMRP</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Instance of single-case line load interface</p>
+</dd>
+<dt><em>CN</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CN</em></p>
+</dd>
+<dt><em>CLM</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CLM</em></p>
+</dd>
+<dt><em>UCN</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<em>LL.x.size</em>,*n*)</dt>
+<dd><p class="first last">Matrix of <em>CN</em> adjustment basis functions</p>
+</dd>
+<dt><em>sig</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<em>n</em>,)</dt>
+<dd><p class="first last">Array of singular values</p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last"><em>x</em>-coordinate of MRP divided by reference length</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-02-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.CorrectCN2">
+<code class="descname">CorrectCN2</code><span class="sig-paren">(</span><em>CN</em>, <em>CLM</em>, <em>CN1</em>, <em>CN2</em>, <em>xMRP=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.CorrectCN2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correct <em>CN</em> and <em>CLM</em> given two unnormalized functions</p>
+<p>This function takes two functions with the same dimensions as <em>LL.CN</em>
+and adds a linear combination of them so that the integrated normal
+force coefficient (<em>CN</em>) and pitching moment coefficient (<em>CLM</em>) match
+target integrated values given by the user.</p>
+<p>The user must specify two basis functions for correcting the <em>CN</em>
+sectional loads, and they must be linearly independent.  The
+corrections to <em>CLM</em> will be selected automatically to ensure
+consistency between the <em>CN</em> and <em>CLM</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">CorrectCN2</span><span class="p">(</span><span class="n">CN</span><span class="p">,</span> <span class="n">CLM</span><span class="p">,</span> <span class="n">CN1</span><span class="p">,</span> <span class="n">CN2</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Instance of single-case line load interface</p>
+</dd>
+<dt><em>CN</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CN</em></p>
+</dd>
+<dt><em>CLM</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CLM</em></p>
+</dd>
+<dt><em>CN1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<em>LL.x.size</em>)</dt>
+<dd><p class="first last">First <em>CN</em> sectional load correction basis function</p>
+</dd>
+<dt><em>CN2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<em>LL.x.size</em>)</dt>
+<dd><p class="first last">Second <em>CN</em> sectional load correction basis function</p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last"><em>x</em>-coordinate of MRP divided by reference length</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.CorrectCY">
+<code class="descname">CorrectCY</code><span class="sig-paren">(</span><em>CY</em>, <em>CLN</em>, <em>UCY</em>, <em>sig=None</em>, <em>xMRP=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.CorrectCY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correct <em>CY</em> and <em>CLN</em> given <em>n</em> unnormalized functions</p>
+<p>This function takes an <em>m</em> by <em>n</em> matrix where <em>m</em> is the size of
+<em>LL.CY</em>. It then calculates an increment to <em>LL.CY</em> that is a linear
+combination of the columns of that matrix <em>UCY</em> such that the
+integrated normal force coefficient (<em>CY</em>) and pitching moment
+coefficient (<em>CLN</em>) match target values provided by the user.  The
+increment is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\Delta C_Y = \sum_{i=1}^n k_i\phi_i\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(\phi_i`\)</span> is the <em>i*th column of *UCY</em> scaled so that it
+has an L2 norm of 1.</p>
+<p>The weights of the linear coefficient are chosen in order to minimize
+the sum of an objective function subject to the integration constraints
+mentioned above.  This objective function is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\sum_{i=1}^n a_i k_i^2 / \sigma_i\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(a_i\)</span> is the maximum absolute value of column <em>i</em> of <em>UCY</em>
+and <span class="math notranslate nohighlight">\(\sigma_i\)</span> is the associated singular value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">CorrectCY</span><span class="p">(</span><span class="n">CY</span><span class="p">,</span> <span class="n">CLN</span><span class="p">,</span> <span class="n">UCY</span><span class="p">,</span> <span class="n">sig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xMRP</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Instance of single-case line load interface</p>
+</dd>
+<dt><em>CY</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CY</em></p>
+</dd>
+<dt><em>CLN</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CLN</em></p>
+</dd>
+<dt><em>UCY</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<em>LL.x.size</em>,*n*)</dt>
+<dd><p class="first last">Matrix of <em>CY</em> adjustment basis functions</p>
+</dd>
+<dt><em>sig</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<em>n</em>,)</dt>
+<dd><p class="first last">Array of singular values</p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last"><em>x</em>-coordinate of MRP divided by reference length</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-02-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.CorrectCY2">
+<code class="descname">CorrectCY2</code><span class="sig-paren">(</span><em>CY</em>, <em>CLN</em>, <em>CY1</em>, <em>CY2</em>, <em>xMRP=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.CorrectCY2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correct <em>CY</em> and <em>CLN</em> given two unnormalized functions</p>
+<p>This function takes two functions with the same dimensions as <em>LL.CY</em>
+and adds a linear combination of them so that the integrated side
+force coefficient (<em>CY</em>) and yawing moment coefficient (<em>CLN</em>) match
+target integrated values given by the user.</p>
+<p>The user must specify two basis functions for correcting the <em>CY</em>
+sectional loads, and they must be linearly independent.  The
+corrections to <em>CLN</em> will be selected automatically to ensure
+consistency between the <em>CY</em> and <em>CLN</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">CorrectCY2</span><span class="p">(</span><span class="n">CY</span><span class="p">,</span> <span class="n">CLN</span><span class="p">,</span> <span class="n">CY1</span><span class="p">,</span> <span class="n">CY2</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Instance of single-case line load interface</p>
+</dd>
+<dt><em>CY</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CY</em></p>
+</dd>
+<dt><em>CLN</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CLN</em></p>
+</dd>
+<dt><em>CY1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<em>LL.x.size</em>)</dt>
+<dd><p class="first last">First <em>CY</em> sectional load correction basis function</p>
+</dd>
+<dt><em>CY2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<em>LL.x.size</em>)</dt>
+<dd><p class="first last">Second <em>CY</em> sectional load correction basis function</p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last"><em>x</em>-coordinate of MRP divided by reference length</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.CorrectLinear">
+<code class="descname">CorrectLinear</code><span class="sig-paren">(</span><em>CN</em>, <em>CLM</em>, <em>CY</em>, <em>CLN</em>, <em>xMRP=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.CorrectLinear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correct line loads to match target integrated values using lines</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL2</span> <span class="o">=</span> <span class="n">LL</span><span class="o">.</span><span class="n">CorrectLinear</span><span class="p">(</span><span class="n">CN</span><span class="p">,</span> <span class="n">CLM</span><span class="p">,</span> <span class="n">xMRP</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Instance of single-case line load interface</p>
+</dd>
+<dt><em>CN</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CN</em></p>
+</dd>
+<dt><em>CLM</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CLM</em></p>
+</dd>
+<dt><em>CY</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CY</em></p>
+</dd>
+<dt><em>CLN</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Target integrated value of <em>CLN</em></p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last"><em>x</em>-coordinate of MRP divided by reference length</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL2</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Line loads with integrated loads matching <em>CN</em> and <em>CLM</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.Plot">
+<code class="descname">Plot</code><span class="sig-paren">(</span><em>coeff</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.Plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a single line load</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.lineLoad.CaseLL</span></code></dt>
+<dd><p class="first last">Instance of data book line load interface</p>
+</dd>
+<dt><em>coeff</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of coefficient to plot</p>
+</dd>
+<dt><em>x</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt>
+<dd><p class="first last">Axis to use for independent axis</p>
+</dd>
+<dt><em>Seams</em>: {<code class="docutils literal notranslate"><span class="pre">[]</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <a class="reference internal" href="#cape.lineLoad.CaseSeam" title="cape.lineLoad.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseSeam</span></code></a>)</dt>
+<dd><p class="first last">List of seams to plot</p>
+</dd>
+<dt><em>SeamLocation</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;bottom&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;left&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;right&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;top&quot;</span></code></dt>
+<dd><p class="first last">Location on which to plot seams</p>
+</dd>
+<dt><em>Orientation</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;vertical&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;horizontal&quot;</span></code></dt>
+<dd><p class="first last">If not ‘vertical’, flip <em>x</em> and <em>y</em> axes</p>
+</dd>
+<dt><em>LineOptions</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options</p>
+</dd>
+<dt><em>SeamOptions</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options</p>
+</dd>
+<dt><em>Label</em>: {<em>LL.comp</em>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Plot label, <code class="docutils literal notranslate"><span class="pre">LineOptions['label']</span></code> supersedes this variable</p>
+</dd>
+<dt><em>XLabel</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x/Lref&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Label for x-axis</p>
+</dd>
+<dt><em>YLabel</em>: {<em>coeff</em>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Label for y-axis</p>
+</dd>
+<dt><em>Legend</em>: [ {True} | False ]</dt>
+<dd><p class="first last">Whether or not to use a legend</p>
+</dd>
+<dt><em>FigWidth</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure width</p>
+</dd>
+<dt><em>FigHeight</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure height</p>
+</dd>
+<dt><em>SubplotMargin</em>: {<code class="docutils literal notranslate"><span class="pre">0.015</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Margin between subplots</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.PlotSeam">
+<code class="descname">PlotSeam</code><span class="sig-paren">(</span><em>s='z'</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.PlotSeam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a set of seam curves</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">LL</span><span class="o">.</span><span class="n">PlotSeam</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Instance of data book line load interface</p>
+</dd>
+<dt><em>s</em>: <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code>}</dt>
+<dd><p class="first last">Type of slice to plot</p>
+</dd>
+<dt><em>x</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt>
+<dd><p class="first last">Axis to plot on x-axis</p>
+</dd>
+<dt><em>y</em>: <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt>
+<dd><p class="first last">Axis to plot on y-axis</p>
+</dd>
+<dt><em>LineOptions</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options</p>
+</dd>
+<dt><em>Label</em>: {<em>LL.comp</em>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Plot label, <code class="docutils literal notranslate"><span class="pre">LineOptions['label']</span></code> supersedes this variable</p>
+</dd>
+<dt><em>XLabel</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x/Lref&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Label for x-axis</p>
+</dd>
+<dt><em>XLabel</em>: {<em>coeff</em>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Label for y-axis</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.ReadCSV">
+<code class="descname">ReadCSV</code><span class="sig-paren">(</span><em>fname=None</em>, <em>delim='</em>, <em>'</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.ReadCSV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a sectional loads <code class="docutils literal notranslate"><span class="pre">csv</span></code> file from the data book</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">ReadCSV</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Single-case, single component, line load interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file to read</p>
+</dd>
+<dt><em>delim</em>: {<code class="docutils literal notranslate"><span class="pre">','</span></code>} | <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">'</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Text delimiter</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.ReadLDS">
+<code class="descname">ReadLDS</code><span class="sig-paren">(</span><em>fname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.ReadLDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a sectional loads <code class="docutils literal notranslate"><span class="pre">*.?lds</span></code> file from <cite>triloadCmd</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">ReadLDS</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Single-case, single component, line load interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file to read</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.ReadSeamCurves">
+<code class="descname">ReadSeamCurves</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.ReadSeamCurves" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read seam curves from a data book directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">ReadSeamCurves</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.lineLoad.CaseLL</span></code></dt>
+<dd><p class="first last">Instance of data book line load interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseLL.WriteCSV">
+<code class="descname">WriteCSV</code><span class="sig-paren">(</span><em>fname=None</em>, <em>delim='</em>, <em>'</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseLL.WriteCSV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a sectional loads <code class="docutils literal notranslate"><span class="pre">csv</span></code> file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">WriteCSV</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseLL</span></code></a></dt>
+<dd><p class="first last">Single-case, single component, line load interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file to write</p>
+</dd>
+<dt><em>delim</em>: {<code class="docutils literal notranslate"><span class="pre">','</span></code>} | <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">'</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Text delimiter</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cape.lineLoad.CaseSeam">
+<em class="property">class </em><code class="descclassname">cape.lineLoad.</code><code class="descname">CaseSeam</code><span class="sig-paren">(</span><em>fname</em>, <em>comp='entire'</em>, <em>proj='LineLoad'</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseSeam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Seam curve interface</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">CaseSeam</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="s1">&#39;entire&#39;</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;LineLoad&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file to read</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the component</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>S</em> <a class="reference internal" href="#cape.lineLoad.CaseSeam" title="cape.lineLoad.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseSeam</span></code></a></dt>
+<dd><p class="first last">Seam curve interface</p>
+</dd>
+<dt><em>S.ax</em>: <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt>
+<dd><p class="first last">Name of coordinate being held constant</p>
+</dd>
+<dt><em>S.x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | {<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>)}</dt>
+<dd><p class="first last">x-coordinate or list of seam x-coordinate vectors</p>
+</dd>
+<dt><em>S.y</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | {<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>)}</dt>
+<dd><p class="first last">y-coordinate or list of seam y-coordinate vectors</p>
+</dd>
+<dt><em>S.z</em>: {<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>)</dt>
+<dd><p class="first last">z-coordinate or list of seam z-coordinate vectors</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.lineLoad.CaseSeam.Plot">
+<code class="descname">Plot</code><span class="sig-paren">(</span><em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseSeam.Plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a set of seam curves</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>S</em> <a class="reference internal" href="#cape.lineLoad.CaseSeam" title="cape.lineLoad.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseSeam</span></code></a></dt>
+<dd><p class="first last">Seam curve interface</p>
+</dd>
+<dt><em>x</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt>
+<dd><p class="first last">Axis to plot on x-axis</p>
+</dd>
+<dt><em>y</em>: <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt>
+<dd><p class="first last">Axis to plot on y-axis</p>
+</dd>
+<dt><em>LineOptions</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options</p>
+</dd>
+<dt><em>Label</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Plot label, <code class="docutils literal notranslate"><span class="pre">LineOptions['label']</span></code> supersedes this variable</p>
+</dd>
+<dt><em>XLabel</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x/Lref&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Label for x-axis</p>
+</dd>
+<dt><em>XLabel</em>: {<em>coeff</em>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Label for y-axis</p>
+</dd>
+<dt><em>xpad</em>: {<code class="docutils literal notranslate"><span class="pre">0.03</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Relative margin to pad x-axis limits</p>
+</dd>
+<dt><em>ypad</em>: {<code class="docutils literal notranslate"><span class="pre">0.03</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Relative margin to pad y-axis limits</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseSeam.Read">
+<code class="descname">Read</code><span class="sig-paren">(</span><em>fname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseSeam.Read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a seam  <code class="docutils literal notranslate"><span class="pre">*.sm[yz]</span></code> file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>S</em> <a class="reference internal" href="#cape.lineLoad.CaseSeam" title="cape.lineLoad.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseSeam</span></code></a></dt>
+<dd><p class="first last">Seam curve interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file to read</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>S.n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of points in vector entries</p>
+</dd>
+<dt><em>S.x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>)</dt>
+<dd><p class="first last">List of <em>x</em> coordinates of seam curves</p>
+</dd>
+<dt><em>S.y</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>)</dt>
+<dd><p class="first last">Fixed <em>y</em> coordinate or list of seam curve <em>y</em> coordinates</p>
+</dd>
+<dt><em>S.z</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>)</dt>
+<dd><p class="first last">Fixed <em>z</em> coordinate or list of seam curve <em>z</em> coordinates</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added possibility of x-cuts</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.CaseSeam.Write">
+<code class="descname">Write</code><span class="sig-paren">(</span><em>fname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.CaseSeam.Write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a seam curve file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>S</em> <a class="reference internal" href="#cape.lineLoad.CaseSeam" title="cape.lineLoad.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.CaseSeam</span></code></a></dt>
+<dd><p class="first last">Seam curve interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file to read</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added possibility of x-cuts</li>
+<li>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Moved to seam class</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cape.lineLoad.DBLineLoad">
+<em class="property">class </em><code class="descclassname">cape.lineLoad.</code><code class="descname">DBLineLoad</code><span class="sig-paren">(</span><em>x</em>, <em>opts</em>, <em>comp</em>, <em>conf=None</em>, <em>RootDir=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Line load (sectional load) data book for one group</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span> <span class="o">=</span> <span class="n">DBLineLoad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">RootDir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targ</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>x</em>: <a class="reference internal" href="runmatrix.html#cape.runmatrix.RunMatrix" title="cape.runmatrix.RunMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></a></dt>
+<dd><p class="first last">RunMatrix/run matrix interface</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.Options</span></code></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of line load component</p>
+</dd>
+<dt><em>conf</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="config.html#cape.config.Config" title="cape.config.Config"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.Config</span></code></a></dt>
+<dd><p class="first last">Surface configuration interface</p>
+</dd>
+<dt><em>RootDir</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Root directory for the configuration</p>
+</dd>
+<dt><em>targ</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">If used, read target data book’s folder</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Instance of line load data book</p>
+</dd>
+<dt><em>DBL.nCut</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of <em>x</em>-cuts to make, from <em>opts</em></p>
+</dd>
+<dt><em>DBL.RefL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Reference length</p>
+</dd>
+<dt><em>DBL.MRP</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(3,)</dt>
+<dd><p class="first last">Moment reference center</p>
+</dd>
+<dt><em>DBL.x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(<em>nCut</em>,)</dt>
+<dd><p class="first last">Locations of <em>x</em>-cuts</p>
+</dd>
+<dt><em>DBL.CA</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(<em>nCut</em>,)</dt>
+<dd><p class="first last">Axial force sectional load, d(CA)/d(x/RefL))</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-05-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Moved to <a class="reference internal" href="index.html#module-cape" title="cape"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.CalculateTriloadTransformation">
+<code class="descname">CalculateTriloadTransformation</code><span class="sig-paren">(</span><em>i</em>, <em>topts</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.CalculateTriloadTransformation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write transformations to a <code class="docutils literal notranslate"><span class="pre">triload.i</span></code> input file</p>
+<p>Usually this just writes an <code class="docutils literal notranslate"><span class="pre">n</span></code> for “no”, but it can also write a 3x3
+transformation matrix if <code class="docutils literal notranslate"><span class="pre">&quot;Transformations&quot;</span></code> are defined for
+<em>DBL.comp</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">DBL</span><span class="o">.</span><span class="n">CalculateTriloadTransformation</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">topts</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Line load data book</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Case number</p>
+</dd>
+<dt><em>topts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of transformation options</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>R</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> shape=(3,3)</dt>
+<dd><p class="first last">Rotation matrix</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-04-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.GetCoeffPOD">
+<code class="descname">GetCoeffPOD</code><span class="sig-paren">(</span><em>coeff</em>, <em>n=2</em>, <em>f=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.GetCoeffPOD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Proper Orthogonal Decomposition of lineloads for one coeff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">DBL</span><span class="o">.</span><span class="n">GetPOD</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Line load data book</p>
+</dd>
+<dt><em>n</em>: {<code class="docutils literal notranslate"><span class="pre">2</span></code>} | positive <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of modes to keep</p>
+</dd>
+<dt><em>f</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | 0 &lt; <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> &lt;= 1</dt>
+<dd><p class="first last">Keep enough modes so that this fraction of energy is kept</p>
+</dd>
+<dt><em>cons</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Constraints for which cases to include in basis</p>
+</dd>
+<dt><em>I</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">List of cases to include in basis</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.GetCompID">
+<code class="descname">GetCompID</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.GetCompID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create list of component IDs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">GetCompID</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Instance of line load data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-12-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version, extracted from __init__</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.GetTriqFile">
+<code class="descname">GetTriqFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.GetTriqFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get most recent <code class="docutils literal notranslate"><span class="pre">triq</span></code> file and its associated iterations</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qtriq</span><span class="p">,</span> <span class="n">ftriq</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">i0</span><span class="p">,</span> <span class="n">i1</span> <span class="o">=</span> <span class="n">DBL</span><span class="o">.</span><span class="n">GetTriqFile</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.lineLoad.DBLineLoad</span></code></dt>
+<dd><p class="first last">Instance of line load data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>qtriq</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt>
+<dd><p class="first last">Whether or not to convert file from other format</p>
+</dd>
+<dt><em>ftriq</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of <code class="docutils literal notranslate"><span class="pre">triq</span></code> file</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of iterations included</p>
+</dd>
+<dt><em>i0</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">First iteration in the averaging</p>
+</dd>
+<dt><em>i1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Last iteration in the averaging</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added to the module</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.PreprocessTriq">
+<code class="descname">PreprocessTriq</code><span class="sig-paren">(</span><em>ftriq</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.PreprocessTriq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform any necessary preprocessing to create <code class="docutils literal notranslate"><span class="pre">triq</span></code> file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ftriq</span> <span class="o">=</span> <span class="n">DBL</span><span class="o">.</span><span class="n">PreprocessTriq</span><span class="p">(</span><span class="n">ftriq</span><span class="p">,</span> <span class="n">qpbs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Line load data book</p>
+</dd>
+<dt><em>ftriq</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of triq file</p>
+</dd>
+<dt><em>qpbs</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt>
+<dd><p class="first last">Whether or not to create a script and submit it</p>
+</dd>
+<dt><em>f</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt>
+<dd><p class="first last">File handle if writing PBS script</p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Case index</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-12-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added PBS</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.Read">
+<code class="descname">Read</code><span class="sig-paren">(</span><em>fname=None</em>, <em>keys=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.Read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a data book summary file for a single line load group</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">Read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Instance of line load data book</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of summary file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.ReadCase">
+<code class="descname">ReadCase</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.ReadCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read data from a case from the data book archive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">ReadCase</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Line load data book</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Case number from run matrix</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Case number from data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2017-04-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Alternate index inputs</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.ReadSeamCurves">
+<code class="descname">ReadSeamCurves</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.ReadSeamCurves" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read seam curves from a data book directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">ReadSeamCurves</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Line load data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version (<a class="reference internal" href="#cape.lineLoad.CaseLL" title="cape.lineLoad.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseLL</span></code></a>)</li>
+<li>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Adapted for <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.RunTriload">
+<code class="descname">RunTriload</code><span class="sig-paren">(</span><em>qtriq=False</em>, <em>ftriq=None</em>, <em>qpbs=False</em>, <em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.RunTriload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">triload</span></code> for a case</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">RunTriload</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Line load data book</p>
+</dd>
+<dt><em>qtriq</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt>
+<dd><p class="first last">Whether or not preprocessing is needed to create TRIQ file</p>
+</dd>
+<dt><em>ftriq</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of TRIQ file (if needed)</p>
+</dd>
+<dt><em>qpbs</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt>
+<dd><p class="first last">Whether or not to create a script and submit it</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-12-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: PBS added</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.UpdateCase">
+<code class="descname">UpdateCase</code><span class="sig-paren">(</span><em>i</em>, <em>qpbs=False</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.UpdateCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update one line load entry if necessary</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">DBL</span><span class="o">.</span><span class="n">UpdateLineLoadCase</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">qpbs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Line load data book</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Case number</p>
+</dd>
+<dt><em>qpbs</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt>
+<dd><p class="first last">Whether or not to submit as a script</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>n</em>: <code class="docutils literal notranslate"><span class="pre">0</span></code> | <code class="docutils literal notranslate"><span class="pre">1</span></code></dt>
+<dd><p class="first last">Number of cases updated or added</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Modified for generic module</li>
+<li>2016-12-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added PBS</li>
+<li>2017-04-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Removed PBS and added output</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.UpdateRunMatrix">
+<code class="descname">UpdateRunMatrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.UpdateRunMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Match the trajectory to the cases in the data book</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">UpdateRunMatrix</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Line load data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-05-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-08-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Copied from data book</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.Write">
+<code class="descname">Write</code><span class="sig-paren">(</span><em>fname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.Write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a single line load data book summary file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">Write</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pycart.lineLoad.DBLineLoad</span></code></dt>
+<dd><p class="first last">Instance of line load data book</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of summary file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.WriteSeamCurves">
+<code class="descname">WriteSeamCurves</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.WriteSeamCurves" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write seam curves to a common data book directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">WriteSeamCurves</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Line load data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.WriteTriloadInput">
+<code class="descname">WriteTriloadInput</code><span class="sig-paren">(</span><em>ftriq</em>, <em>i</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.WriteTriloadInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">triload.i</span></code> input file to <code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">WriteTriloadInput</span><span class="p">(</span><span class="n">ftriq</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Line load data book</p>
+</dd>
+<dt><em>ftriq</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the <code class="docutils literal notranslate"><span class="pre">triq</span></code> file to analyze</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Case number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><dl class="first docutils">
+<dt><em>mach</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Override Mach number</p>
+</dd>
+<dt><em>Re</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Override Reynolds number input</p>
+</dd>
+<dt><em>gamma</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Override ratio of specific heats</p>
+</dd>
+<dt><em>MRP</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Override the moment reference point from the JSON input file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2017-01-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Moved code to WriteTriloadInputBase</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.WriteTriloadInputBase">
+<code class="descname">WriteTriloadInputBase</code><span class="sig-paren">(</span><em>ftriq</em>, <em>i</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.WriteTriloadInputBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">triload.i</span></code> input file to <code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">WriteTriloadInput</span><span class="p">(</span><span class="n">ftriq</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Line load data book</p>
+</dd>
+<dt><em>ftriq</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the <code class="docutils literal notranslate"><span class="pre">triq</span></code> file to analyze</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Case number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><dl class="first docutils">
+<dt><em>mach</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Override Mach number</p>
+</dd>
+<dt><em>Re</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Override Reynolds number input</p>
+</dd>
+<dt><em>gamma</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Override ratio of specific heats</p>
+</dd>
+<dt><em>MRP</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Override the moment reference point from the JSON input file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.lineLoad.DBLineLoad.WriteTriloadTransformations">
+<code class="descname">WriteTriloadTransformations</code><span class="sig-paren">(</span><em>i</em>, <em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.DBLineLoad.WriteTriloadTransformations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write transformations to a <code class="docutils literal notranslate"><span class="pre">triload.i</span></code> input file</p>
+<p>Usually this just writes an <code class="docutils literal notranslate"><span class="pre">n</span></code> for “no”, but it can also write a 3x3
+transformation matrix if <code class="docutils literal notranslate"><span class="pre">&quot;Transformations&quot;</span></code> are defined for
+<em>DBL.comp</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">WriteTriloadTransformations</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.lineLoad.DBLineLoad" title="cape.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.lineLoad.DBLineLoad</span></code></a></dt>
+<dd><p class="first last">Line load data book</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Case number</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt>
+<dd><p class="first last">Open file handle from <a class="reference internal" href="#cape.lineLoad.DBLineLoad.WriteTriloadInputBase" title="cape.lineLoad.DBLineLoad.WriteTriloadInputBase"><code class="xref py py-func docutils literal notranslate"><span class="pre">WriteTriloadInputBase()</span></code></a></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-04-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.lineLoad.ImportPyPlot">
+<code class="descclassname">cape.lineLoad.</code><code class="descname">ImportPyPlot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.lineLoad.ImportPyPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> if not already loaded</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pyCart</span><span class="o">.</span><span class="n">dataBook</span><span class="o">.</span><span class="n">ImportPyPlot</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="manage.html" title="cape.manage: Manage CFD case folders"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="io.html" title="cape.io: Common input/output library"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 0.9.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >The <code class="docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 0.8 documentation, 2018.  Created using Sphinx 1.6.3.
+  </div>
+
+
+  </body>
+</html>

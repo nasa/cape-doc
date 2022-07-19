@@ -1,0 +1,757 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cape.attdb.dbfm: Aero Task Team Force &amp; Moment Databases &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.tnakit: Basic TNA Python tool kit" href="../tnakit/index.html" />
+    <link rel="prev" title="cape.attdb.rdbaero: Database Template for Aerospace Variables" href="rdbaero.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../tnakit/index.html" title="cape.tnakit: Basic TNA Python tool kit"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rdbaero.html" title="cape.attdb.rdbaero: Database Template for Aerospace Variables"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.dbfm</span></code>: Aero Task Team Force &amp; Moment Databases</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.attdb.dbfm"></span><div class="section" id="cape-attdb-dbfm-aero-task-team-force-moment-databases">
+<h1><a class="reference internal" href="#module-cape.attdb.dbfm" title="cape.attdb.dbfm"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.dbfm</span></code></a>: Aero Task Team Force &amp; Moment Databases<a class="headerlink" href="#cape-attdb-dbfm-aero-task-team-force-moment-databases" title="Permalink to this headline">¶</a></h1>
+<p>This module provides customizations of <a class="reference internal" href="rdb.html#module-cape.attdb.rdb" title="cape.attdb.rdb"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.rdb</span></code></a> that are
+especially useful for launch vehicle force &amp; moment databases.  The
+force &amp; moment coefficient names follow common missile naming
+conventions:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 30%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Symbol</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><em>CA</em></p></td>
+<td><p><span class="math notranslate nohighlight">\(C_A\)</span></p></td>
+<td><p>Axial force</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>CY</em></p></td>
+<td><p><span class="math notranslate nohighlight">\(C_Y\)</span></p></td>
+<td><p>Side force</p></td>
+</tr>
+<tr class="row-even"><td><p><em>CN</em></p></td>
+<td><p><span class="math notranslate nohighlight">\(C_N\)</span></p></td>
+<td><p>Normal force</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>CLL</em></p></td>
+<td><p><span class="math notranslate nohighlight">\(C_\ell\)</span></p></td>
+<td><p>Rolling moment</p></td>
+</tr>
+<tr class="row-even"><td><p><em>CLM</em></p></td>
+<td><p><span class="math notranslate nohighlight">\(C_m\)</span></p></td>
+<td><p>Pitching moment</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>CLN</em></p></td>
+<td><p><span class="math notranslate nohighlight">\(C_n\)</span></p></td>
+<td><p>Yawing moment</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.attdb.dbfm.</span></span><span class="sig-name descname"><span class="pre">DBFM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Database class for launch vehicle force &amp; moment</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">dbfm</span><span class="o">.</span><span class="n">DBFM</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>File name; extension is used to guess data format</p>
+</dd>
+<dt><em>csv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Explicit file name for <code class="xref py py-class docutils literal notranslate"><span class="pre">CSVFile</span></code> read</p>
+</dd>
+<dt><em>textdata</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Explicit file name for <code class="xref py py-class docutils literal notranslate"><span class="pre">TextDataFile</span></code></p>
+</dd>
+<dt><em>simplecsv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Explicit file name for <code class="xref py py-class docutils literal notranslate"><span class="pre">CSVSimple</span></code></p>
+</dd>
+<dt><em>xls</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>File name for <code class="xref py py-class docutils literal notranslate"><span class="pre">XLSFile</span></code></p>
+</dd>
+<dt><em>mat</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>File name for <code class="xref py py-class docutils literal notranslate"><span class="pre">MATFile</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>LV force &amp; moment database</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-03-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialization method</p>
+<dl class="field-list simple">
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-03-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2020-05-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Split <code class="xref py py-func docutils literal notranslate"><span class="pre">_make_dbfm()</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.create_fm_combo">
+<span class="sig-name descname"><span class="pre">create_fm_combo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.create_fm_combo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate and save combined F &amp; M on several components</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fm</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">create_fm_combo</span><span class="p">(</span><span class="n">comps</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with analysis tools</p>
+</dd>
+<dt><em>comps</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of components to combine</p>
+</dd>
+<dt><em>comp</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Optional name of output assembled component</p>
+</dd>
+<dt><em>Lref</em>: {<code class="docutils literal notranslate"><span class="pre">1.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Reference length</p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Moment reference point <em>x</em>-coordinate</p>
+</dd>
+<dt><em>yMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Moment reference point <em>y</em>-coordinate</p>
+</dd>
+<dt><em>zMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Moment reference point <em>z</em>-coordinate</p>
+</dd>
+<dt><em>CompFMCols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</dt><dd><p>Names for <em>CA</em>, <em>CY</em>, etc. for each <em>comp</em> (defaults
+to <code class="docutils literal notranslate"><span class="pre">&quot;&lt;comp&gt;.CA&quot;</span></code>, etc.)</p>
+</dd>
+<dt><em>CompX</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Force application point for each <em>comp</em></p>
+</dd>
+<dt><em>CompY</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Force application point for each <em>comp</em></p>
+</dd>
+<dt><em>Compz</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Force application point for each <em>comp</em></p>
+</dd>
+<dt><em>FMCols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Names of force &amp; moment columns for output</p>
+</dd>
+<dt><em>mask</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Mask or indices of which cases to include in POD
+calculation</p>
+</dd>
+<dt><em>method</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;trapz&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;left&quot;</span></code> | <strong>callable</strong></dt><dd><p>Integration method used to integrate columns</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fm</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>]</dt><dd><p>Integrated force/moment for each coefficient</p>
+</dd>
+<dt><em>fm[coeff]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Combined <em>coeff</em> for each <em>coeff</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-06-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.create_target_deltafm">
+<span class="sig-name descname"><span class="pre">create_target_deltafm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.create_target_deltafm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a target force and moment database</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dfm</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">create_target_fm</span><span class="p">(</span><span class="n">db2</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with force &amp; moment responses</p>
+</dd>
+<dt><em>db2</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with force &amp; moment responses</p>
+</dd>
+<dt><em>mask</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Mask of <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> or indices of which cases in <em>db</em>
+to evaluate; conditions in <em>db</em> used to evaluate <em>db2</em></p>
+</dd>
+<dt><em>DeltaCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Names of columns to save deltas as; default takes form
+of <code class="docutils literal notranslate"><span class="pre">&quot;CA.delta&quot;</span></code>, etc.</p>
+</dd>
+<dt><em>SourceCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Columns in <em>db</em> to compare to target</p>
+</dd>
+<dt><em>TargetCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Name of <em>db2</em> col for <em>CA</em>, <em>CY</em>, …, <em>CLN</em></p>
+</dd>
+<dt><em>Translators</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Alternate names of response arg columns; e.g. if
+<code class="docutils literal notranslate"><span class="pre">Translators[&quot;MACH&quot;]</span> <span class="pre">==</span> <span class="pre">&quot;mach&quot;</span></code>, that means
+<code class="docutils literal notranslate"><span class="pre">db2[&quot;MACH&quot;]</span></code> is analogous to <code class="docutils literal notranslate"><span class="pre">db[&quot;mach&quot;]</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>dfm</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>]</dt><dd><p>Differences between evaluated <em>TargetCols</em> in <em>db2</em>
+minus <em>SourceCols</em> looked up from <em>db</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-06-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.create_target_fm">
+<span class="sig-name descname"><span class="pre">create_target_fm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.create_target_fm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate and save a target force and moment database</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fm</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">create_target_fm</span><span class="p">(</span><span class="n">db2</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with force &amp; moment responses</p>
+</dd>
+<dt><em>db2</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with force &amp; moment responses</p>
+</dd>
+<dt><em>mask</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Mask of <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> or indices of which cases in <em>db</em>
+to evaluate; conditions in <em>db</em> used to evaluate <em>db2</em></p>
+</dd>
+<dt><em>TargetCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Name of <em>db2</em> col for <em>CA</em>, <em>CY</em>, …, <em>CLN</em></p>
+</dd>
+<dt><em>TargetSaveCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Names to use when saving evaluated forces; default is
+<code class="docutils literal notranslate"><span class="pre">&quot;CA.target&quot;</span></code>, etc.</p>
+</dd>
+<dt><em>Translators</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Alternate names of response arg columns; e.g. if
+<code class="docutils literal notranslate"><span class="pre">Translators[&quot;MACH&quot;]</span> <span class="pre">==</span> <span class="pre">&quot;mach&quot;</span></code>, that means
+<code class="docutils literal notranslate"><span class="pre">db2[&quot;MACH&quot;]</span></code> is analogous to <code class="docutils literal notranslate"><span class="pre">db[&quot;mach&quot;]</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fm</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>]</dt><dd><p>Evaluated force &amp; moment coefficients from <em>db2</em> at
+conditions described by <em>db</em> and <em>I</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.genr8_fm_combo">
+<span class="sig-name descname"><span class="pre">genr8_fm_combo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comps</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.genr8_fm_combo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate combined force &amp; moment on several components</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fm</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">genr8_fm_combo</span><span class="p">(</span><span class="n">comps</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with analysis tools</p>
+</dd>
+<dt><em>comps</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of components to combine</p>
+</dd>
+<dt><em>Lref</em>: {<code class="docutils literal notranslate"><span class="pre">1.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Reference length</p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Moment reference point <em>x</em>-coordinate</p>
+</dd>
+<dt><em>yMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Moment reference point <em>y</em>-coordinate</p>
+</dd>
+<dt><em>zMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Moment reference point <em>z</em>-coordinate</p>
+</dd>
+<dt><em>CompFMCols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</dt><dd><p>Names for <em>CA</em>, <em>CY</em>, etc. for each <em>comp</em> (defaults
+to <code class="docutils literal notranslate"><span class="pre">&quot;&lt;comp&gt;.CA&quot;</span></code>, etc.)</p>
+</dd>
+<dt><em>CompX</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Force application point for each <em>comp</em></p>
+</dd>
+<dt><em>CompY</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Force application point for each <em>comp</em></p>
+</dd>
+<dt><em>Compz</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Force application point for each <em>comp</em></p>
+</dd>
+<dt><em>mask</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Mask or indices of which cases to include in POD
+calculation</p>
+</dd>
+<dt><em>method</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;trapz&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;left&quot;</span></code> | <strong>callable</strong></dt><dd><p>Integration method used to integrate columns</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fm</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>]</dt><dd><p>Integrated force/moment for each coefficient</p>
+</dd>
+<dt><em>fm[coeff]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Combined <em>coeff</em> for each <em>coeff</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-06-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.genr8_target_deltafm">
+<span class="sig-name descname"><span class="pre">genr8_target_deltafm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.genr8_target_deltafm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a target force and moment database</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dfm</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">genr8_target_fm</span><span class="p">(</span><span class="n">db2</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with force &amp; moment responses</p>
+</dd>
+<dt><em>db2</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with force &amp; moment responses</p>
+</dd>
+<dt><em>mask</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Mask of <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> or indices of which cases in <em>db</em>
+to evaluate; conditions in <em>db</em> used to evaluate <em>db2</em></p>
+</dd>
+<dt><em>SourceCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Columns in <em>db</em> to compare to target</p>
+</dd>
+<dt><em>TargetCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Name of <em>db2</em> col for <em>CA</em>, <em>CY</em>, …, <em>CLN</em></p>
+</dd>
+<dt><em>Translators</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Alternate names of response arg columns; e.g. if
+<code class="docutils literal notranslate"><span class="pre">Translators[&quot;MACH&quot;]</span> <span class="pre">==</span> <span class="pre">&quot;mach&quot;</span></code>, that means
+<code class="docutils literal notranslate"><span class="pre">db2[&quot;MACH&quot;]</span></code> is analogous to <code class="docutils literal notranslate"><span class="pre">db[&quot;mach&quot;]</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>dfm</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>]</dt><dd><p>Differences between evaluated <em>TargetCols</em> in <em>db2</em>
+minus <em>SourceCols</em> looked up from <em>db</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-06-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.genr8_target_fm">
+<span class="sig-name descname"><span class="pre">genr8_target_fm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.genr8_target_fm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a target force and moment database</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fm</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">genr8_target_fm</span><span class="p">(</span><span class="n">db2</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with force &amp; moment responses</p>
+</dd>
+<dt><em>db2</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with force &amp; moment responses</p>
+</dd>
+<dt><em>mask</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Mask of <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> or indices of which cases in <em>db</em>
+to evaluate; conditions in <em>db</em> used to evaluate <em>db2</em></p>
+</dd>
+<dt><em>TargetCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Name of <em>db2</em> col for <em>CA</em>, <em>CY</em>, …, <em>CLN</em></p>
+</dd>
+<dt><em>Translators</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Alternate names of response arg columns; e.g. if
+<code class="docutils literal notranslate"><span class="pre">Translators[&quot;MACH&quot;]</span> <span class="pre">==</span> <span class="pre">&quot;mach&quot;</span></code>, that means
+<code class="docutils literal notranslate"><span class="pre">db2[&quot;MACH&quot;]</span></code> is analogous to <code class="docutils literal notranslate"><span class="pre">db[&quot;mach&quot;]</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fm</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>]</dt><dd><p>Evaluated force &amp; moment coefficients from <em>db2</em> at
+conditions described by <em>db</em> and <em>I</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.make_CLMX">
+<span class="sig-name descname"><span class="pre">make_CLMX</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.make_CLMX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build and save evaluators for <em>CLMX</em> cols</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">make_CLMX</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>LV force &amp; moment database</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-03-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.make_CLNX">
+<span class="sig-name descname"><span class="pre">make_CLNX</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.make_CLNX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build and save evaluators for <em>CLNX</em> cols</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">make_CLNX</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>LV force &amp; moment database</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-03-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.make_UCLMX">
+<span class="sig-name descname"><span class="pre">make_UCLMX</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.make_UCLMX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build and save evaluators for <em>UCLMX</em> cols</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">make_UCLMX</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>LV force &amp; moment database</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-05-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.make_UCLNX">
+<span class="sig-name descname"><span class="pre">make_UCLNX</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.make_UCLNX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build and save evaluators for <em>UCLNX</em> cols</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">make_UCLNX</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>LV force &amp; moment database</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-05-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.make_fm_combo">
+<span class="sig-name descname"><span class="pre">make_fm_combo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.make_fm_combo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get [and calculate] combined F &amp; M on several components</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fm</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">make_fm_combo</span><span class="p">(</span><span class="n">comps</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with analysis tools</p>
+</dd>
+<dt><em>comps</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of components to combine</p>
+</dd>
+<dt><em>comp</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Optional name of output assembled component</p>
+</dd>
+<dt><em>Lref</em>: {<code class="docutils literal notranslate"><span class="pre">1.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Reference length</p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Moment reference point <em>x</em>-coordinate</p>
+</dd>
+<dt><em>yMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Moment reference point <em>y</em>-coordinate</p>
+</dd>
+<dt><em>zMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Moment reference point <em>z</em>-coordinate</p>
+</dd>
+<dt><em>CompFMCols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</dt><dd><p>Names for <em>CA</em>, <em>CY</em>, etc. for each <em>comp</em> (defaults
+to <code class="docutils literal notranslate"><span class="pre">&quot;&lt;comp&gt;.CA&quot;</span></code>, etc.)</p>
+</dd>
+<dt><em>CompX</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Force application point for each <em>comp</em></p>
+</dd>
+<dt><em>CompY</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Force application point for each <em>comp</em></p>
+</dd>
+<dt><em>Compz</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Force application point for each <em>comp</em></p>
+</dd>
+<dt><em>FMCols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Names of force &amp; moment columns for output</p>
+</dd>
+<dt><em>mask</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Mask or indices of which cases to include in POD
+calculation</p>
+</dd>
+<dt><em>method</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;trapz&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;left&quot;</span></code> | <strong>callable</strong></dt><dd><p>Integration method used to integrate columns</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fm</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>]</dt><dd><p>Integrated force/moment for each coefficient</p>
+</dd>
+<dt><em>fm[coeff]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Combined <em>coeff</em> for each <em>coeff</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-06-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.make_target_deltafm">
+<span class="sig-name descname"><span class="pre">make_target_deltafm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.make_target_deltafm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a target force and moment database</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dfm</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">make_target_fm</span><span class="p">(</span><span class="n">db2</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with force &amp; moment responses</p>
+</dd>
+<dt><em>db2</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with force &amp; moment responses</p>
+</dd>
+<dt><em>mask</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Mask of <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> or indices of which cases in <em>db</em>
+to evaluate; conditions in <em>db</em> used to evaluate <em>db2</em></p>
+</dd>
+<dt><em>DeltaCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Names of columns to save deltas as; default takes form
+of <code class="docutils literal notranslate"><span class="pre">&quot;CA.delta&quot;</span></code>, etc.</p>
+</dd>
+<dt><em>SourceCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Columns in <em>db</em> to compare to target</p>
+</dd>
+<dt><em>TargetCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Name of <em>db2</em> col for <em>CA</em>, <em>CY</em>, …, <em>CLN</em></p>
+</dd>
+<dt><em>Translators</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Alternate names of response arg columns; e.g. if
+<code class="docutils literal notranslate"><span class="pre">Translators[&quot;MACH&quot;]</span> <span class="pre">==</span> <span class="pre">&quot;mach&quot;</span></code>, that means
+<code class="docutils literal notranslate"><span class="pre">db2[&quot;MACH&quot;]</span></code> is analogous to <code class="docutils literal notranslate"><span class="pre">db[&quot;mach&quot;]</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>dfm</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>]</dt><dd><p>Differences between evaluated <em>TargetCols</em> in <em>db2</em>
+minus <em>SourceCols</em> looked up from <em>db</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-06-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.dbfm.DBFM.make_target_fm">
+<span class="sig-name descname"><span class="pre">make_target_fm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.dbfm.DBFM.make_target_fm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate and save a target force and moment database</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fm</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">make_target_fm</span><span class="p">(</span><span class="n">db2</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with force &amp; moment responses</p>
+</dd>
+<dt><em>db2</em>: <a class="reference internal" href="#cape.attdb.dbfm.DBFM" title="cape.attdb.dbfm.DBFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.dbfm.DBFM</span></code></a></dt><dd><p>Database with force &amp; moment responses</p>
+</dd>
+<dt><em>mask</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Mask of <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> or indices of which cases in <em>db</em>
+to evaluate; conditions in <em>db</em> used to evaluate <em>db2</em></p>
+</dd>
+<dt><em>TargetCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Name of <em>db2</em> col for <em>CA</em>, <em>CY</em>, …, <em>CLN</em></p>
+</dd>
+<dt><em>TargetSaveCols</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Names to use when saving evaluated forces; default is
+<code class="docutils literal notranslate"><span class="pre">&quot;CA.target&quot;</span></code>, etc.</p>
+</dd>
+<dt><em>Translators</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Alternate names of response arg columns; e.g. if
+<code class="docutils literal notranslate"><span class="pre">Translators[&quot;MACH&quot;]</span> <span class="pre">==</span> <span class="pre">&quot;mach&quot;</span></code>, that means
+<code class="docutils literal notranslate"><span class="pre">db2[&quot;MACH&quot;]</span></code> is analogous to <code class="docutils literal notranslate"><span class="pre">db[&quot;mach&quot;]</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fm</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>]</dt><dd><p>Evaluated force &amp; moment coefficients from <em>db2</em> at
+conditions described by <em>db</em> and <em>I</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rdbaero.html"
+                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.rdbaero</span></code>: Database Template for Aerospace Variables</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../tnakit/index.html"
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit</span></code>: Basic TNA Python tool kit</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/attdb/dbfm.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../tnakit/index.html" title="cape.tnakit: Basic TNA Python tool kit"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rdbaero.html" title="cape.attdb.rdbaero: Database Template for Aerospace Variables"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.dbfm</span></code>: Aero Task Team Force &amp; Moment Databases</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

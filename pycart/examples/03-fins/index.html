@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4.1.3. Demo 3: Moving Fins &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="4.1.4. Demo 4: Business Jet, Data Book, and Automated Reports" href="../04-bJet/index.html" />
+    <link rel="prev" title="4.1.2. Demo 2: Closer Analysis of Simple Arrow Shape" href="../02-arrow/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../04-bJet/index.html" title="4.1.4. Demo 4: Business Jet, Data Book, and Automated Reports"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../02-arrow/index.html" title="4.1.2. Demo 2: Closer Analysis of Simple Arrow Shape"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.3. </span>Demo 3: Moving Fins</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="demo-3-moving-fins">
+<h1><span class="section-number">4.1.3. </span>Demo 3: Moving Fins<a class="headerlink" href="#demo-3-moving-fins" title="Permalink to this headline">¶</a></h1>
+<p>The following example demonstrates how to use pyCart and Cart3D to analyze a
+configuration with moving components.  The example is similar to
+<a class="reference internal" href="../02-arrow/index.html#pycart-ex-arrow"><span class="std std-ref">Demo 2: Closer Analysis of Simple Arrow Shape</span></a>, except that the fins go inside the body of the bullet.</p>
+<blockquote>
+<div><div class="figure align-default" id="id1">
+<a class="reference internal image-reference" href="../../../_images/fins01.png"><img alt="../../../_images/fins01.png" src="../../../_images/fins01.png" style="width: 4in;" /></a>
+<p class="caption"><span class="caption-number">Figure 4.3 </span><span class="caption-text">Example showing fin 4 deflected 15 degrees after intersecting with body</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+<p>This allows for the fins to be rotated about some hinge axis, and then once the
+fins are in the correct position, Cart3D’s <code class="docutils literal notranslate"><span class="pre">intersect</span></code> tool can be used to
+transform this self-intersecting surface into a single water-tight geometry.</p>
+<p>To get started, clone this repo and run the following easy commands:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/nasa-ddalle/pycart03-fins.git
+<span class="gp">$</span> <span class="nb">cd</span> pycart03-fins
+<span class="gp">$</span> ./copy-files.py
+<span class="gp">$</span> <span class="nb">cd</span> work/
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will copy all of the files into a newly created <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder. Follow
+the instructions below by entering that <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder; the purpose is that
+you can easily delete the <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder and restart the tutorial at any
+time.</p>
+<p>Let’s run a case to see how this works.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pycart -f fins.json -I 7
+Case Config/Run Directory                   Status  Iterations  Que CPU Time
+---- -------------------------------------- ------- ----------- --- --------
+0    poweroff_d2+05_d4-15/m1.75a1.0r30.0 ---     /           .
+  Group name: &#39;poweroff_d2+05.0d4-15.0&#39; (index 4)
+  Preparing surface triangulation...
+  Reading tri file(s) from root directory.
+     Writing triangulation: &#39;Components.tri&#39;
+     Writing triangulation: &#39;Components.c.tri&#39;
+ &gt; autoInputs -r 8 -t Components.tri -maxR 10
+ &gt; intersect -i Components.tri -o Components.o.tri
+     Writing triangulation: &#39;Components.i.tri&#39;
+ &gt; cubes -pre preSpec.c3d.cntl -maxR 10 -reorder -a 10 -b 2
+ &gt; mgPrep -n 3
+Using template for &#39;input.cntl&#39; file
+     Starting case &#39;poweroff_d2+05.0d4-15.0/m1.75a1.0r30.0&#39;.
+ &gt; flowCart -his -clic -N 200 -y_is_spanwise -limiter 2 -T -cfl 1.1 -mg 3 -binaryIO -tm 0
+
+Submitted or ran 1 job(s).
+
+---=1,
+</pre></div>
+</div>
+</div></blockquote>
+<p>The output is pretty similar to a case without the fin deflections, but there
+are a few differences that are helpful to explain. The first is the name of the
+case, <code class="docutils literal notranslate"><span class="pre">poweroff_d2+05_d4-15/m1.75a1.0r30.0</span></code>, which is especially different in
+that the name of the folder contains the fin deflections. That is all
+controlled in the pyCart input file <code class="docutils literal notranslate"><span class="pre">fins.json</span></code>, and we will discuss it
+shortly. This example is configured with the fin deflections in the folder name
+because each set of cases with same fin positions can use the same mesh.</p>
+<p>The next difference is that pyCart reports writing two triangulation files,
+<code class="docutils literal notranslate"><span class="pre">Components.tri</span></code> and <code class="docutils literal notranslate"><span class="pre">Components.c.tri</span></code>, instead of the usual
+<code class="docutils literal notranslate"><span class="pre">Components.i.tri</span></code>.  The reason for this pair of files is that
+<code class="docutils literal notranslate"><span class="pre">intersect</span></code> requires each body to have a single component ID, which destroys
+the surface component naming that is defined in our inputs (like splitting off
+the nose cap, body, and base of the bullet shape into separate components).  So
+<code class="docutils literal notranslate"><span class="pre">Components.tri</span></code> has only five components (the bullet shape and one for
+each fin) while <code class="docutils literal notranslate"><span class="pre">Components.c.tri</span></code> has seven components.</p>
+<p>Then <code class="docutils literal notranslate"><span class="pre">intersect</span></code> is run with the command run above, which generates
+<code class="docutils literal notranslate"><span class="pre">Components.o.tri</span></code>. This file also has only five component IDs, and these
+are mapped back into the original component ID numbering by comparing to
+<code class="docutils literal notranslate"><span class="pre">Components.c.tri</span></code> to generate the final triangulation
+<code class="docutils literal notranslate"><span class="pre">Components.i.tri</span></code> with its seven component IDs.</p>
+<p>Otherwise, the solution proceeds in the same manner as a non-intersecting case.
+Let’s take a closer look at the <code class="docutils literal notranslate"><span class="pre">&quot;Mesh&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;RunMatrix&quot;</span></code> sections of the
+pyCart input file <code class="docutils literal notranslate"><span class="pre">fins.json</span></code> to explain how this was set up.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Mesh&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Intersect</span>
+    <span class="s2">&quot;intersect&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="c1">// Surface triangulation</span>
+    <span class="s2">&quot;TriFile&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s2">&quot;inputs/bullet.tri&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;inputs/fin1.tri&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;inputs/fin2.tri&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;inputs/fin3.tri&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;inputs/fin4.tri&quot;</span>
+    <span class="p">]</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;Mesh&quot;</span></code> section is relatively simple but contains a little bit more
+information than the default section. The individual water-tight volumes are
+split into separate <code class="docutils literal notranslate"><span class="pre">tri</span></code> files, which provides pyCart two layers of
+information about how to split up the surface. Each <code class="docutils literal notranslate"><span class="pre">tri</span></code> file may contain
+multiple component IDs (in this case, only <code class="docutils literal notranslate"><span class="pre">bullet.tri</span></code> contains more
+than one component ID), but each file should contain a single closed surface.
+Then pyCart combines all these triangulations before intersecting them. If
+<em>intersect</em> is not set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, using multiple triangulation files has
+little effect.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// RunMatrix (i.e. run matrix) description</span>
+<span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Global run matrix definitions</span>
+    <span class="s2">&quot;Keys&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;Mach&quot;</span><span class="p">,</span> <span class="s2">&quot;alpha_t&quot;</span><span class="p">,</span> <span class="s2">&quot;phi&quot;</span><span class="p">,</span> <span class="s2">&quot;d2&quot;</span><span class="p">,</span> <span class="s2">&quot;d4&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;File&quot;</span><span class="o">:</span> <span class="s2">&quot;inputs/matrix.csv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GroupMesh&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">&quot;GroupPrefix&quot;</span><span class="o">:</span> <span class="s2">&quot;poweroff&quot;</span><span class="p">,</span>
+    <span class="c1">// Customized key definitions</span>
+    <span class="s2">&quot;Definitions&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="c1">// Rotate fin 2</span>
+        <span class="s2">&quot;d2&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;Group&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;rotation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CompID&quot;</span><span class="o">:</span> <span class="s2">&quot;fin2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Vector&quot;</span><span class="o">:</span> <span class="p">[[</span><span class="mf">7.2</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">7.2</span><span class="p">,</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">]],</span>
+            <span class="o">++</span><span class="s2">&quot;Value&quot;</span><span class="o">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Format&quot;</span><span class="o">:</span> <span class="s2">&quot;%+03i_&quot;</span>
+        <span class="p">},</span>
+        <span class="c1">// Rotate fin 4</span>
+        <span class="s2">&quot;d4&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;Group&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;rotation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CompID&quot;</span><span class="o">:</span> <span class="s2">&quot;fin4&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Vector&quot;</span><span class="o">:</span> <span class="p">[[</span><span class="mf">7.2</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">7.2</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">]],</span>
+            <span class="s2">&quot;Value&quot;</span><span class="o">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Format&quot;</span><span class="o">:</span> <span class="s2">&quot;%+03i&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;RunMatrix&quot;</span></code> section, which defines the run matrix input variables, is
+more interesting, so let’s go through the settings one-by-one. The <em>Keys</em> input
+sets the list of input variables. The first three are common variables for many
+configurations and as such are automatically recognized by pyCart. The <em>File</em>
+parameter simply points to a file that contains the values of each input
+variable at which to run the configuration.</p>
+<p>Setting <em>GroupMesh</em> to true tells pyCart that the run matrix can be split into
+groups of cases such that each case in one group can use the same mesh, and
+<em>GroupPrefix</em> sets the base name of the group folders.</p>
+<p>The last parameter, <em>Definitions</em>, is the interesting part of this example.
+Because <em>Mach</em>, <em>alpha_t</em>, and <em>phi</em> are such common input variables (called
+“trajectory keys” in CAPE terminology) that we can rely on the default
+definitions.  (Default trajectory key definitions can be altered by editing the
+file <code class="docutils literal notranslate"><span class="pre">$CAPE/pycart/options/pyCart.default.json</span></code>.)  The other two parameters
+are fin rotations, which require customization.</p>
+<p>The trajectory key <em>d2</em> is set up to rotate fin #2. We set <em>Group</em> to <code class="docutils literal notranslate"><span class="pre">true</span></code>
+because cases with the same fin deflections can use the same mesh. The <em>Type</em>
+is set to <code class="docutils literal notranslate"><span class="pre">&quot;rotation&quot;</span></code>, which pyCart recognizes and reduces some of our work
+in defining it here. We set <em>CompID</em> to <code class="docutils literal notranslate"><span class="pre">&quot;fin2&quot;</span></code>, which tells pyCart to
+rotate any triangles in the component defined as <code class="docutils literal notranslate"><span class="pre">&quot;fin2&quot;</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">Config.xml</span></code> file. Then <em>Vector</em> gives a list of two points that define a
+vector about which to rotate the points.</p>
+<p>Finally, <em>Format</em> sets a <code class="docutils literal notranslate"><span class="pre">printf</span></code> style format string for how the value is
+printed in the folder name.  It’s set to integer in this example, which would
+create problems for fin deflection angles like <code class="docutils literal notranslate"><span class="pre">2.1</span></code>.  Anyway, this example
+shows how to set up general component rotations very quickly.</p>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../02-arrow/index.html"
+                        title="previous chapter"><span class="section-number">4.1.2. </span>Demo 2: Closer Analysis of Simple Arrow Shape</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../04-bJet/index.html"
+                        title="next chapter"><span class="section-number">4.1.4. </span>Demo 4: Business Jet, Data Book, and Automated Reports</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/pycart/examples/03-fins/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../04-bJet/index.html" title="4.1.4. Demo 4: Business Jet, Data Book, and Automated Reports"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../02-arrow/index.html" title="4.1.2. Demo 2: Closer Analysis of Simple Arrow Shape"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.3. </span>Demo 3: Moving Fins</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,478 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cape.plt: Python interface to Tecplot PLT files &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.runmatrix: Run matrix interface" href="runmatrix.html" />
+    <link rel="prev" title="cape.plot3d: Python interface to Plot3D files" href="plot3d.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="runmatrix.html" title="cape.runmatrix: Run matrix interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="plot3d.html" title="cape.plot3d: Python interface to Plot3D files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.plt</span></code>: Python interface to Tecplot PLT files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.plt"></span><div class="section" id="cape-plt-python-interface-to-tecplot-plt-files">
+<h1><a class="reference internal" href="#module-cape.plt" title="cape.plt"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.plt</span></code></a>: Python interface to Tecplot PLT files<a class="headerlink" href="#cape-plt-python-interface-to-tecplot-plt-files" title="Permalink to this headline">¶</a></h1>
+<p>This module provides the class <a class="reference internal" href="#cape.plt.Plt" title="cape.plt.Plt"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.plt.Plt</span></code></a>, which intends to read and
+write Tecplot binary or ASCII PLT files for surface grid solutions.  It does
+not use the TecIO library to avoid causing unnecessary dependencies for the
+software.</p>
+<p>This class cannot read any generic <code class="docutils literal notranslate"><span class="pre">.plt</span></code> file; it focuses on surface grids
+with a mix of triangles and quads.  In particular it is closely paired with
+the <a class="reference internal" href="tri.html#module-cape.tri" title="cape.tri"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tri</span></code></a> triangulation module.  The initial driving cause for
+creating this module was to read FUN3D boundary solution files and convert them
+to annotated Cart3D <code class="docutils literal notranslate"><span class="pre">triq</span></code> format for input to <code class="docutils literal notranslate"><span class="pre">triload</span></code> and other
+post-processing based on the <a class="reference internal" href="tri.html#module-cape.tri" title="cape.tri"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tri</span></code></a> module.</p>
+<p>See also:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="tri.html#module-cape.tri" title="cape.tri"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tri</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pyfun/plt.html#module-cape.pyfun.plt" title="cape.pyfun.plt"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.plt</span></code></a></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">pc_Tri2Plt</span></code></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">pc_Plt2Tri</span></code></p></li>
+</ul>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.plt.Plt">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.plt.</span></span><span class="sig-name descname"><span class="pre">Plt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">triq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.plt.Plt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for Tecplot PLT files</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">Plt</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">triq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of binary PLT file to read</p>
+</dd>
+<dt><em>dat</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of ASCII file to read</p>
+</dd>
+<dt><em>triq</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="tri.html#cape.tri.Triq" title="cape.tri.Triq"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.tri.Triq</span></code></a></dt><dd><p>Annotated triangulation interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>plt</em>: <a class="reference internal" href="#cape.plt.Plt" title="cape.plt.Plt"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.plt.Plt</span></code></a></dt><dd><p>Tecplot PLT interface</p>
+</dd>
+<dt><em>plt.nVar</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of variables</p>
+</dd>
+<dt><em>plt.Vars</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of of variable names</p>
+</dd>
+<dt><em>plt.nZone</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of zones</p>
+</dd>
+<dt><em>plt.Zone</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Name of each zone</p>
+</dd>
+<dt><em>plt.nPt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <em>nZone</em>)</dt><dd><p>Number of points in each zone</p>
+</dd>
+<dt><em>plt.nElem</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <em>nZone</em>)</dt><dd><p>Number of elements in each zone</p>
+</dd>
+<dt><em>plt.Tris</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<em>N</em>,4))</dt><dd><p>List of triangle node indices for each zone</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-11-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2017-08-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added ASCII input capability</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.plt.Plt.ConvertTriq">
+<span class="sig-name descname"><span class="pre">ConvertTriq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">triq</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.plt.Plt.ConvertTriq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a PLT object by reading data from a Tri/Triq object</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ConvertTriq</span><span class="p">(</span><span class="n">triq</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>plt</em>: <a class="reference internal" href="#cape.plt.Plt" title="cape.plt.Plt"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.plt.Plt</span></code></a></dt><dd><p>Tecplot PLT interface</p>
+</dd>
+<dt><em>triq</em>: <a class="reference internal" href="tri.html#cape.tri.Triq" title="cape.tri.Triq"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.tri.Triq</span></code></a></dt><dd><p>Surface triangulation with or without solution (<em>triq.q</em>)</p>
+</dd>
+<dt><em>CompIDs</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>)</dt><dd><p>List of CompIDs to consider</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.plt.Plt.CreateTri">
+<span class="sig-name descname"><span class="pre">CreateTri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.plt.Plt.CreateTri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Cart3D triangulation (<code class="docutils literal notranslate"><span class="pre">.tri</span></code>) file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tri</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">CreateTri</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>plt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.plt.Plt</span></code></dt><dd><p>Tecplot PLT interface</p>
+</dd>
+<dt><em>CompID</em>: {<code class="docutils literal notranslate"><span class="pre">range(len(plt.nZone))</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Optional list of zone numbers to use</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>tri</em>: <a class="reference internal" href="tri.html#cape.tri.Tri" title="cape.tri.Tri"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.tri.Tri</span></code></a></dt><dd><p>Cart3D triangulation interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2021-01-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; fork CreateTriq()</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.plt.Plt.CreateTriq">
+<span class="sig-name descname"><span class="pre">CreateTriq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.plt.Plt.CreateTriq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Cart3D annotated triangulation (<code class="docutils literal notranslate"><span class="pre">triq</span></code>) interface</p>
+<p>The primary purpose is creating a properly-formatted triangulation for
+calculating line loads with the Chimera Grid Tools function
+<code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code>, which requires the five fundamental states plus the
+pressure coefficient for inviscid sectional loads.  For complete
+sectional loads including viscous contributions, the Tecplot interface
+must also have the skin friction coefficients.</p>
+<p>The <em>triq</em> interface will have either 6 or 9 states, depending on
+whether or not the viscous coefficients are present.</p>
+<p>Alternatively, if the optional input <em>triload</em> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the <em>triq</em>
+output will have whatever states are present in <em>plt</em>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">triq</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">CreateTriq</span><span class="p">(</span><span class="n">mach</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">triload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>plt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.plt.Plt</span></code></dt><dd><p>Tecplot PLT interface</p>
+</dd>
+<dt><em>mach</em>: {<code class="docutils literal notranslate"><span class="pre">1.0</span></code>} | positive <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Freestream Mach number for skin friction coeff conversion</p>
+</dd>
+<dt><em>CompID</em>: {<code class="docutils literal notranslate"><span class="pre">range(len(plt.nZone))</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Optional list of zone numbers to use</p>
+</dd>
+<dt><em>triload</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to write a triq tailored for <code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code></p>
+</dd>
+<dt><em>avg</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Use time-averaged states if available</p>
+</dd>
+<dt><em>rms</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Use root-mean-square variation instead of nominal value</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>triq</em>: <a class="reference internal" href="tri.html#cape.tri.Triq" title="cape.tri.Triq"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.tri.Triq</span></code></a></dt><dd><p>Annotated Cart3D triangulation interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.plt.Plt.Read">
+<span class="sig-name descname"><span class="pre">Read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.plt.Plt.Read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a Fun3D boundary Tecplot binary file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>plt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.plt.Plt</span></code></dt><dd><p>Tecplot PLT interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-11-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.plt.Plt.ReadDat">
+<span class="sig-name descname"><span class="pre">ReadDat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.plt.Plt.ReadDat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an ASCII Tecplot data file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ReadData</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>plt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.plt.Plt</span></code></dt><dd><p>Tecplot PLT interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-08-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.plt.Plt.Write">
+<span class="sig-name descname"><span class="pre">Write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.plt.Plt.Write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a Fun3D boundary Tecplot binary file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">Vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>plt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.plt.Plt</span></code></dt><dd><p>Tecplot PLT interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+<dt><em>Vars</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of variables (by default, use all variables)</p>
+</dd>
+<dt><em>CompID</em>: {<code class="docutils literal notranslate"><span class="pre">range(len(plt.nZone))</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Optional list of zone numbers to use</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-03-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2017-05-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added variable list</p></li>
+<li><p>2017-12-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <em>CompID</em> input</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.plt.Plt.WriteDat">
+<span class="sig-name descname"><span class="pre">WriteDat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.plt.Plt.WriteDat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write Tecplot PLT file to ASCII format (<code class="docutils literal notranslate"><span class="pre">.dat</span></code>)</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">WriteDat</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">Vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>plt</em>: <a class="reference internal" href="#cape.plt.Plt" title="cape.plt.Plt"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.plt.Plt</span></code></a></dt><dd><p>Tecplot PLT interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of DAT file to write</p>
+</dd>
+<dt><em>Vars</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of variables (by default, use all variables)</p>
+</dd>
+<dt><em>CompID</em>: {<code class="docutils literal notranslate"><span class="pre">range(len(plt.nZone))</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Optional list of zone numbers to use</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2017-05-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added variable list</p></li>
+<li><p>2017-12-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <em>CompID</em> input</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.plt.Plt2Triq">
+<span class="sig-prename descclassname"><span class="pre">cape.plt.</span></span><span class="sig-name descname"><span class="pre">Plt2Triq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fplt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftriq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.plt.Plt2Triq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Tecplot PLT file to a Cart3D annotated triangulation (TRIQ)</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Plt2Triq</span><span class="p">(</span><span class="n">fplt</span><span class="p">,</span> <span class="n">ftriq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fplt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of Tecplot PLT file</p>
+</dd>
+<dt><em>ftriq</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of output file (default: replace extension with <code class="docutils literal notranslate"><span class="pre">.triq</span></code>)</p>
+</dd>
+<dt><em>mach</em>: {<code class="docutils literal notranslate"><span class="pre">1.0</span></code>} | positive <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Freestream Mach number for skin friction coeff conversion</p>
+</dd>
+<dt><em>triload</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to write a triq tailored for <code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code></p>
+</dd>
+<dt><em>avg</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Use time-averaged states if available</p>
+</dd>
+<dt><em>rms</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Use root-mean-square variation instead of nominal value</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.plt.getind">
+<span class="sig-prename descclassname"><span class="pre">cape.plt.</span></span><span class="sig-name descname"><span class="pre">getind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.plt.getind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an index of a variable in a list if possible</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">getind</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>V</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of headers</p>
+</dd>
+<dt><em>k</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Header name</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | {<code class="docutils literal notranslate"><span class="pre">None</span></code>}</dt><dd><p>Default index if <em>k</em> not in <em>V</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Index of <em>k</em> in <em>V</em> if possible</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="plot3d.html"
+                        title="previous chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.plot3d</span></code>: Python interface to Plot3D files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="runmatrix.html"
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.runmatrix</span></code>: Run matrix interface</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cape/plt.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="runmatrix.html" title="cape.runmatrix: Run matrix interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="plot3d.html" title="cape.plot3d: Python interface to Plot3D files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.plt</span></code>: Python interface to Tecplot PLT files</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,498 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4.1.4. Demo 4: Business Jet, Data Book, and Automated Reports &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="4.1.5. Demo 5: Mesh Adaptation on a Business Jet" href="../05-adapt_bJet/index.html" />
+    <link rel="prev" title="4.1.3. Demo 3: Moving Fins" href="../03-fins/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../05-adapt_bJet/index.html" title="4.1.5. Demo 5: Mesh Adaptation on a Business Jet"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../03-fins/index.html" title="4.1.3. Demo 3: Moving Fins"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.4. </span>Demo 4: Business Jet, Data Book, and Automated Reports</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="demo-4-business-jet-data-book-and-automated-reports">
+<span id="demo-pycart-bjet"></span><h1><span class="section-number">4.1.4. </span>Demo 4: Business Jet, Data Book, and Automated Reports<a class="headerlink" href="#demo-4-business-jet-data-book-and-automated-reports" title="Permalink to this headline">¶</a></h1>
+<p>The following example uses a more complex geometry to demonstrate Cart3D’s
+capabilities and the ease with which complex geometries can be analyzed. To get
+started, clone this repo and run the following easy commands:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/nasa-ddalle/pycart04-bJet.git
+<span class="gp">$</span> <span class="nb">cd</span> pycart04-bJet
+<span class="gp">$</span> ./copy-files.py
+<span class="gp">$</span> <span class="nb">cd</span> work/
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will copy all of the files into a newly created <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder. Follow
+the instructions below by entering that <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder; the purpose is that
+you can easily delete the <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder and restart the tutorial at any
+time.</p>
+<p>Let’s run the first case.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pycart -n 1
+Case Config/Run Directory   Status  Iterations  Que CPU Time
+---- ---------------------- ------- ----------- --- --------
+0    poweroff/m0.84a0.0b0.0 ---     /           .
+  Case name: &#39;poweroff/m0.84a0.0b0.0&#39; (index 0)
+  Preparing surface triangulation...
+  Reading tri file(s) from root directory.
+     Writing triangulation: &#39;Components.i.tri&#39;
+ &gt; autoInputs -r 8 -t Components.i.tri -maxR 11 -nDiv 4
+ &gt; cubes -pre preSpec.c3d.cntl -maxR 11 -reorder -a 10 -b 2
+ &gt; mgPrep -n 3
+     Starting case &#39;poweroff/m0.84a0.0b0.0&#39;.
+ &gt; flowCart -his -clic -N 200 -y_is_spanwise -limiter 2 -T -cfl 1.1 -mg 3 -tm 0
+ &gt; flowCart -his -clic -restart -N 300 -y_is_spanwise -limiter 2 -T -cfl 1.1 -mg 3 -tm 1
+
+Submitted or ran 1 job(s).
+
+---=1,
+</pre></div>
+</div>
+</div></blockquote>
+<p>A sample graphic of the surface pressure made with ParaView is shown below.</p>
+<blockquote>
+<div><div class="figure align-default" id="id1">
+<a class="reference internal image-reference" href="../../../_images/bJet01.png"><img alt="../../../_images/bJet01.png" src="../../../_images/bJet01.png" style="width: 5in;" /></a>
+<p class="caption"><span class="caption-number">Figure 4.4 </span><span class="caption-text">Business jet triangulation colored by pressure coefficient from
+<code class="docutils literal notranslate"><span class="pre">poweroff/m0.84a0.0b0.0</span></code> solution</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+<div class="section" id="phase-control">
+<h2><span class="section-number">4.1.4.1. </span>Phase Control<a class="headerlink" href="#phase-control" title="Permalink to this headline">¶</a></h2>
+<p>This is an example with more complex geometry, obviously, but it also is an
+example of a two-phase solution procedure.  This can be seen in the sample
+output above because there are two <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> commands. The following is a
+snippet from the <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code> file.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;RunControl&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Run sequence</span>
+    <span class="s2">&quot;PhaseSequence&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">0</span><span class="p">,</span> <span class="mf">1</span><span class="p">],</span>
+    <span class="s2">&quot;PhaseIters&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">0</span><span class="p">,</span> <span class="mf">300</span><span class="p">],</span>
+    <span class="c1">// Number of threads</span>
+    <span class="s2">&quot;nProc&quot;</span><span class="o">:</span> <span class="mf">4</span><span class="p">,</span>
+
+    <span class="c1">// flowCart settings</span>
+    <span class="s2">&quot;flowCart&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;it_fc&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">200</span><span class="p">,</span> <span class="mf">100</span><span class="p">],</span>
+        <span class="s2">&quot;first_order&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span> <span class="mf">0</span><span class="p">],</span>
+        <span class="s2">&quot;cfl&quot;</span><span class="o">:</span> <span class="mf">1.1</span><span class="p">,</span>
+        <span class="s2">&quot;mg_fc&quot;</span><span class="o">:</span> <span class="mf">3</span><span class="p">,</span>
+        <span class="s2">&quot;limiter&quot;</span><span class="o">:</span> <span class="mf">2</span><span class="p">,</span>
+        <span class="s2">&quot;tm&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">0</span><span class="p">,</span> <span class="mf">1</span><span class="p">],</span>
+        <span class="s2">&quot;y_is_spanwise&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="s2">&quot;binaryIO&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="s2">&quot;tecO&quot;</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+
+    <span class="c1">// Parameters for autoInputs</span>
+    <span class="s2">&quot;autoInputs&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;r&quot;</span><span class="o">:</span> <span class="mf">8</span><span class="p">,</span>
+        <span class="s2">&quot;nDiv&quot;</span><span class="o">:</span> <span class="mf">4</span>
+    <span class="p">},</span>
+
+    <span class="c1">// Parameters for cubes</span>
+    <span class="s2">&quot;cubes&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;maxR&quot;</span><span class="o">:</span> <span class="mf">11</span><span class="p">,</span>
+        <span class="s2">&quot;pre&quot;</span><span class="o">:</span> <span class="s2">&quot;preSpec.c3d.cntl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cubes_a&quot;</span><span class="o">:</span> <span class="mf">10</span><span class="p">,</span>
+        <span class="s2">&quot;cubes_b&quot;</span><span class="o">:</span> <span class="mf">2</span><span class="p">,</span>
+        <span class="s2">&quot;reorder&quot;</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In this <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> section is the option <code class="docutils literal notranslate"><span class="pre">&quot;PhaseSequence&quot;:</span> <span class="pre">[0,</span> <span class="pre">1]</span></code>,
+which tells pyCart to run phase 0 followed by phase 1.  Phase 0 is run exactly
+once because <em>PhaseIters[0]</em> is <code class="docutils literal notranslate"><span class="pre">0</span></code>, and phase 1 is repeated until at least
+<em>PhaseIters[1]</em> total (i.e., including previous phases) iterations have been
+completed.</p>
+<p>The <em>it_fc</em> option inside the <code class="docutils literal notranslate"><span class="pre">&quot;flowCart&quot;</span></code> section specifies how many
+iterations in each call to <code class="docutils literal notranslate"><span class="pre">flowCart</span></code>.  In this case, <em>it_fc[0]</em> is <code class="docutils literal notranslate"><span class="pre">200</span></code>,
+so phase 0 runs for 200 iterations, and hence the <code class="docutils literal notranslate"><span class="pre">flowCart</span> <span class="pre">-N</span> <span class="pre">200</span></code> command
+above.  Since <em>it_fc[1]</em> is 100, phase 1 runs <code class="docutils literal notranslate"><span class="pre">flowCart</span> <span class="pre">-restart</span> <span class="pre">-N</span> <span class="pre">300</span></code>,
+where <em>N</em> is the <strong>total</strong> number of iterations at which <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> exits.
+The dual nature of the <em>first_order</em> option means that phase 0 is run in
+first-order mode while subsequent phases will all be second-order.  All the
+other options in the <code class="docutils literal notranslate"><span class="pre">&quot;flowCart&quot;</span></code> section that are not specified as a list
+use the same option for all phases.</p>
+</div>
+<div class="section" id="configuration">
+<h2><span class="section-number">4.1.4.2. </span>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>Let’s also look at the <code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code> section of <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Describe the reference values and config.</span>
+<span class="s2">&quot;Config&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Defer to a file for most things.</span>
+    <span class="s2">&quot;File&quot;</span><span class="o">:</span> <span class="s2">&quot;Config.xml&quot;</span><span class="p">,</span>
+    <span class="c1">// Which forces should be reported</span>
+    <span class="s2">&quot;Force&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;fuselage&quot;</span><span class="p">,</span> <span class="s2">&quot;wing&quot;</span><span class="p">,</span> <span class="s2">&quot;htail&quot;</span><span class="p">,</span> <span class="s2">&quot;vtail&quot;</span><span class="p">,</span> <span class="s2">&quot;engines&quot;</span><span class="p">],</span>
+    <span class="c1">// Reference values</span>
+    <span class="s2">&quot;RefArea&quot;</span><span class="o">:</span> <span class="mf">1005.3</span><span class="p">,</span>
+    <span class="s2">&quot;RefLength&quot;</span><span class="o">:</span> <span class="mf">66.3</span><span class="p">,</span>
+    <span class="c1">// The moment point can be specified as a dictionary of components.</span>
+    <span class="s2">&quot;Points&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;MRP&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]},</span>
+    <span class="s2">&quot;RefPoint&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;fuselage&quot;</span><span class="o">:</span> <span class="s2">&quot;MRP&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;wing&quot;</span><span class="o">:</span>     <span class="s2">&quot;MRP&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;htail&quot;</span><span class="o">:</span>    <span class="s2">&quot;MRP&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vtail&quot;</span><span class="o">:</span>    <span class="s2">&quot;MRP&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;engines&quot;</span><span class="o">:</span>  <span class="s2">&quot;MRP&quot;</span>
+    <span class="p">}</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <em>Force</em> section lists out the components for which iterative force
+histories are reported while running <code class="docutils literal notranslate"><span class="pre">flowCart</span></code>. Similarly, the <em>RefPoint</em>
+section specifies which components will also have aerodynamic moments reported.
+An interesting feature demonstrated in this example is how the moment reference
+point is not defined directly for each component. Instead, a common reference
+point is defined in the <em>Points</em> variable, and pyCart automatically refers to
+this point when creating Cart3D’s standard <code class="docutils literal notranslate"><span class="pre">input.cntl</span></code> input file. This
+saves a little bit of effort if a reference point happens to move a little bit,
+but it is also useful in cases where reference points may shift from case to
+case—for example when studying a separation problem or moving fins.</p>
+</div>
+<div class="section" id="database-management">
+<h2><span class="section-number">4.1.4.3. </span>Database Management<a class="headerlink" href="#database-management" title="Permalink to this headline">¶</a></h2>
+<p>Let’s also look at some of pyCart’s database management capabilities.  In
+particular, we’ll look at automated calculation of mean values and standard
+deviations of aerodynamic forces and moments.</p>
+<p>Much like the <code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code>, section, the data book, which is controlled by the
+<code class="docutils literal notranslate"><span class="pre">&quot;DataBook&quot;</span></code> section of <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>, needs a list of components to
+keep track of.  In the JSON file snippet below taken from the
+<code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code> file from the business jet example, we’re tracking five
+components, and we are recording both the forces and moments for each.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;DataBook&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// List of components to place in data book</span>
+    <span class="s2">&quot;Components&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;fuselage&quot;</span><span class="p">,</span> <span class="s2">&quot;wing&quot;</span><span class="p">,</span> <span class="s2">&quot;htail&quot;</span><span class="p">,</span> <span class="s2">&quot;vtail&quot;</span><span class="p">,</span> <span class="s2">&quot;engines&quot;</span><span class="p">],</span>
+    <span class="c1">// Number of iterations to use for statistics.</span>
+    <span class="s2">&quot;nStats&quot;</span><span class="o">:</span> <span class="mf">50</span><span class="p">,</span>
+    <span class="s2">&quot;nMin&quot;</span><span class="o">:</span> <span class="mf">200</span><span class="p">,</span>
+    <span class="c1">// Place to put the data book</span>
+    <span class="s2">&quot;Folder&quot;</span><span class="o">:</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+    <span class="c1">// Information about each component.</span>
+    <span class="s2">&quot;fuselage&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;FM&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;wing&quot;</span><span class="o">:</span>     <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;FM&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;htail&quot;</span><span class="o">:</span>    <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;FM&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;vtail&quot;</span><span class="o">:</span>    <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;FM&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;engines&quot;</span><span class="o">:</span>  <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;FM&quot;</span><span class="p">}</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">{&quot;Type&quot;:</span> <span class="pre">&quot;FM&quot;}</span></code> specifier just means that its a default force &amp; moment
+component. Another common value of <em>Type</em> is <code class="docutils literal notranslate"><span class="pre">&quot;Force&quot;</span></code>, which just ignores
+any moment histories. These are pretty vanilla data book component definitions;
+it is also possible to specify a transformation if you want to resolve the
+forces and/or moments in a different coordinate system or scale some of the
+results.</p>
+<p>Two other important parameters are <em>nStats</em> and <em>nMin</em>. The <em>nMin</em> parameter in
+this case means that only iterations after iteration 200 can be used to compute
+the mean value and standard deviation in the database. Using this <em>nMin</em>
+parameter is a good error-prevention technique because it automatically leaves
+holes in the database for cases that have not run sufficiently far. The
+<em>nStats</em> parameter means that pyCart will use the last 50 iterations available
+to compute the mean.</p>
+<p>To create or update the data book, run the following command.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pycart --aero
+poweroff/m0.84a0.0b0.0
+  Adding new databook entry at iteration 300.
+poweroff/m0.84a2.0b0.0
+poweroff/m0.88a0.0b0.0
+poweroff/m0.88a2.0b0.0
+</pre></div>
+</div>
+</div></blockquote>
+<p>In this case, <code class="docutils literal notranslate"><span class="pre">pycart</span></code> runs through the run matrix (it is possible to
+restrict this command to a subset of cases just like any <code class="docutils literal notranslate"><span class="pre">pycart</span></code> command)
+and checks if any case meets the criteria to be entered into the databook.
+Every case must be run at least <em>nMin</em> + <em>nStats</em> iterations. This creates a
+few files in the <code class="docutils literal notranslate"><span class="pre">data/</span></code> folder. Specifically, there is a <code class="docutils literal notranslate"><span class="pre">aero_$COMP.csv</span></code>
+file for each <em>COMP</em> in the <code class="docutils literal notranslate"><span class="pre">&quot;Components&quot;</span></code> field. As an example, the contents
+of <code class="docutils literal notranslate"><span class="pre">aero_fuselage.csv</span></code> are the following.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span># aero data for &#39;fuselage&#39; extracted on 2016-01-27 16:38:05
+#
+# Reference Area = 1.005300E+03
+# Reference Length = 6.630000E+01
+# Nominal moment reference point:
+# XMRP = 0.000000E+00
+# YMRP = 0.000000E+00
+# ZMRP = 0.000000E+00
+#
+# Mach,alpha,beta,config,Label,CA,CY,CN,CLL,CLM,CLN,CA_min,CA_max,
+    CA_std,CA_err,CY_min,CY_max,CY_std,CY_err,CN_min,CN_max,CN_std,
+    CN_err,CLL_min,CLL_max,CLL_std,CLL_err,CLM_min,CLM_max,CLM_std,
+    CLM_err,CLN_min,CLN_max,CLN_std,CLN_err,nOrders,nIter,nStats
+0.84,0.0,0.0,poweroff,,8.93902000E-03,-4.91405000E-03,9.77648294E-06,
+    1.94313000E-06,-4.68098922E-06,-1.51877000E-03,8.93902000E-03,
+    8.93902000E-03,6.93889390E-18,0.00000000E+00,-4.91405000E-03,
+    -4.91405000E-03,2.60208521E-18,0.00000000E+00,9.77640000E-06,
+    9.77653000E-06,3.80553837E-11,1.36840069E-11,1.94313000E-06,
+    1.94313000E-06,0.00000000E+00,0.00000000E+00,-4.68100000E-06,
+    -4.68098000E-06,6.52089771E-12,2.16772288E-12,-1.51877000E-03,
+    -1.51877000E-03,1.30104261E-18,8.03348895E-20,6.7302,300,50
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is a fairly self-explanatory file in which lines starting with <code class="docutils literal notranslate"><span class="pre">#</span></code> are
+comments. The indentations shown in the sample are line continuations; the
+actual contents of the file contains two very long lines.</p>
+</div>
+<div class="section" id="automated-reports">
+<h2><span class="section-number">4.1.4.4. </span>Automated Reports<a class="headerlink" href="#automated-reports" title="Permalink to this headline">¶</a></h2>
+<p>This business jet also contains a demo of pyCart’s automated report capability.
+Calling <code class="docutils literal notranslate"><span class="pre">pyCart</span> <span class="pre">--report</span></code> results in a multi-page PDF created using LaTeX.
+There are two modes for these reports: one creates various figures for each
+case in the run matrix, and the other creates various plots for groups of
+cases.  The example below shows the set of plots for the one case we’ve run in
+this example.</p>
+<blockquote>
+<div><div class="figure align-default">
+<a class="reference internal image-reference" href="../../../_images/report-case.png"><img alt="../../../_images/report-case.png" src="../../../_images/report-case.png" style="width: 5.5in;" /></a>
+</div>
+<p>Example report page for case <code class="docutils literal notranslate"><span class="pre">poweroff/m0.84a0.0b0.0</span></code></p>
+</div></blockquote>
+<p>This is the second page of the report generated from the command below.
+Unfortunately, this command relies on having a relatively up-to-date and
+complete PDFLaTeX compiler; without these dependencies, the following command
+will fail (although it will still generate the individual figures as separate
+files).</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pycart -I 0 --report
+</pre></div>
+</div>
+</div></blockquote>
+<p>It contains two tables; one of these summarizes the run conditions (i.e., the
+values of the run matrix input variables), and the other presents selected
+force and moment results.  Then there is a set of nine plots that show selected
+quantities at each iteration.  A higher-resolution view of the residual history
+plot is below.</p>
+<blockquote>
+<div><div class="figure align-default">
+<a class="reference internal image-reference" href="../../../_images/L1.png"><img alt="../../../_images/L1.png" src="../../../_images/L1.png" style="width: 3.5in;" /></a>
+</div>
+<p>L1 density residual history for <code class="docutils literal notranslate"><span class="pre">poweroff/m0.84a0.0b0.0</span></code></p>
+</div></blockquote>
+<p>The settings for this automated report are specified in the <code class="docutils literal notranslate"><span class="pre">&quot;Report&quot;</span></code>
+section of <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Report&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Definition of the report</span>
+    <span class="s2">&quot;case&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Title&quot;</span><span class="o">:</span> <span class="s2">&quot;Cart3D Force, Moment, \\&amp; Residual Report&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Author&quot;</span><span class="o">:</span> <span class="s2">&quot;pyCart User Manual&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Figures&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;Summary&quot;</span><span class="p">,</span> <span class="s2">&quot;History&quot;</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="c1">// Definitions of figures</span>
+    <span class="s2">&quot;Figures&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Summary&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;Conditions&quot;</span><span class="p">,</span> <span class="s2">&quot;Forces&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;Alignment&quot;</span><span class="o">:</span> <span class="s2">&quot;left&quot;</span>
+        <span class="p">},</span>
+        <span class="c1">// Force convergence figure</span>
+        <span class="s2">&quot;History&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span> <span class="p">[</span>
+                <span class="s2">&quot;wing_CA&quot;</span><span class="p">,</span>  <span class="s2">&quot;wing_CY&quot;</span><span class="p">,</span>  <span class="s2">&quot;wing_CN&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;wing_CLL&quot;</span><span class="p">,</span> <span class="s2">&quot;wing_CLN&quot;</span><span class="p">,</span> <span class="s2">&quot;wing_CLM&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;L1&quot;</span><span class="p">,</span>       <span class="s2">&quot;htail_CY&quot;</span><span class="p">,</span> <span class="s2">&quot;htail_CLN&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;Header&quot;</span><span class="o">:</span> <span class="s2">&quot;Force, moment, and residual histories&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Alignment&quot;</span><span class="o">:</span> <span class="s2">&quot;center&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="c1">// Set options for specific subfigures</span>
+    <span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The logic for this section is split into definitions for one or several types
+of report that contains at least a title and list of figures, a list of figure
+definitions, and a list of subfigure definitions. Any key of the parent
+<code class="docutils literal notranslate"><span class="pre">&quot;Report&quot;</span></code> that is not either <code class="docutils literal notranslate"><span class="pre">&quot;Reports&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;Figures&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;Subfigures&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;Sweeps&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;Archive&quot;</span></code> is interpreted as a definition for a type of
+report. In this case, there is one report type called <code class="docutils literal notranslate"><span class="pre">&quot;case&quot;</span></code> (using report
+names that start with a lower-case letter is a good convention). The <code class="docutils literal notranslate"><span class="pre">&quot;case&quot;</span></code>
+report has two figures, titled <code class="docutils literal notranslate"><span class="pre">&quot;Summary&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;History&quot;</span></code>.</p>
+<p>Then scrolling down to the <code class="docutils literal notranslate"><span class="pre">&quot;Figures&quot;</span></code> section, we see the list of subfigures
+in each. A subfigure is an individual table or plot along with some formatting
+options and a caption.  The following example shows a selection of these
+subfigure definitions that give an idea of their format.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Iterative history of component &quot;wing&quot;</span>
+    <span class="s2">&quot;wing&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;PlotCoeff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Component&quot;</span><span class="o">:</span> <span class="s2">&quot;wing&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Width&quot;</span><span class="o">:</span> <span class="mf">0.33</span><span class="p">,</span>
+        <span class="s2">&quot;Delta&quot;</span><span class="o">:</span> <span class="mf">0.02</span><span class="p">,</span>
+        <span class="s2">&quot;Format&quot;</span><span class="o">:</span> <span class="s2">&quot;png&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;wing_CA&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;wing&quot;</span><span class="p">,</span> <span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span> <span class="s2">&quot;Delta&quot;</span><span class="o">:</span> <span class="mf">0.005</span><span class="p">},</span>
+    <span class="s2">&quot;wing_CY&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;wing&quot;</span><span class="p">,</span> <span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span> <span class="s2">&quot;CY&quot;</span><span class="p">},</span>
+    <span class="p">...</span>
+    <span class="c1">// Residual plot</span>
+    <span class="s2">&quot;L1&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;PlotL1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Caption&quot;</span><span class="o">:</span> <span class="s2">&quot;Total L1 density residual&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Width&quot;</span><span class="o">:</span> <span class="mf">0.33</span><span class="p">,</span>
+        <span class="s2">&quot;Format&quot;</span><span class="o">:</span> <span class="s2">&quot;png&quot;</span>
+    <span class="p">},</span>
+    <span class="c1">// Conditions table</span>
+    <span class="s2">&quot;Conditions&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;Conditions&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Header&quot;</span><span class="o">:</span> <span class="s2">&quot;Conditions&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Position&quot;</span><span class="o">:</span> <span class="s2">&quot;t&quot;</span>
+    <span class="p">},</span>
+    <span class="c1">// Force and moment results table</span>
+    <span class="s2">&quot;Forces&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;Summary&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Header&quot;</span><span class="o">:</span> <span class="s2">&quot;Force \\&amp; moment summary&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Position&quot;</span><span class="o">:</span> <span class="s2">&quot;t&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Iteration&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+        <span class="s2">&quot;Components&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;wing&quot;</span><span class="p">,</span> <span class="s2">&quot;htail&quot;</span><span class="p">,</span> <span class="s2">&quot;fuselage&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;Coefficients&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;CA&quot;</span><span class="p">,</span> <span class="s2">&quot;CY&quot;</span><span class="p">,</span> <span class="s2">&quot;CN&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;CA&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;CY&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;CN&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>There are several predefined types of subfigures, including <code class="docutils literal notranslate"><span class="pre">&quot;PlotCoeff&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;PlotL1&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;Conditions&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;Summary&quot;</span></code>.  The main subfigure type is
+<code class="docutils literal notranslate"><span class="pre">&quot;PlotCoeff&quot;</span></code>, which plots the iterative history of one of the six force or
+moment coefficients on a specified component.  Another useful feature is the
+ability to cascade options by using a previous subfigure definition as the
+<code class="docutils literal notranslate"><span class="pre">&quot;Type&quot;</span></code> of a later one.  This reduces the number of lines required to define
+groups of plots that have similar options.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;Conditions&quot;</span></code> subfigure type makes a table listing the values of each
+trajectory key for the case in question,  The <code class="docutils literal notranslate"><span class="pre">&quot;SkipVars&quot;</span></code> option allows the
+user to omit any subset of these variables from the table.  The <code class="docutils literal notranslate"><span class="pre">&quot;Summary&quot;</span></code>
+type makes a table of force &amp; moment statistics.  Each value in the
+<code class="docutils literal notranslate"><span class="pre">&quot;Summary&quot;</span></code> table is computed according to the statistics options from the
+<code class="docutils literal notranslate"><span class="pre">&quot;DataBook&quot;</span></code> section described above.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4.1.4. Demo 4: Business Jet, Data Book, and Automated Reports</a><ul>
+<li><a class="reference internal" href="#phase-control">4.1.4.1. Phase Control</a></li>
+<li><a class="reference internal" href="#configuration">4.1.4.2. Configuration</a></li>
+<li><a class="reference internal" href="#database-management">4.1.4.3. Database Management</a></li>
+<li><a class="reference internal" href="#automated-reports">4.1.4.4. Automated Reports</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../03-fins/index.html"
+                        title="previous chapter"><span class="section-number">4.1.3. </span>Demo 3: Moving Fins</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../05-adapt_bJet/index.html"
+                        title="next chapter"><span class="section-number">4.1.5. </span>Demo 5: Mesh Adaptation on a Business Jet</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/pycart/examples/04-bJet/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../05-adapt_bJet/index.html" title="4.1.5. Demo 5: Mesh Adaptation on a Business Jet"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../03-fins/index.html" title="4.1.3. Demo 3: Moving Fins"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.4. </span>Demo 4: Business Jet, Data Book, and Automated Reports</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

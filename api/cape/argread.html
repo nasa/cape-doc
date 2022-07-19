@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cape.argread: Command-Line Argument Processor &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.atm Atmosphere Models" href="atm.html" />
+    <link rel="prev" title="cape.filecntl.tex: Interface to LaTeX files" href="filecntl/tex.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atm.html" title="cape.atm Atmosphere Models"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="filecntl/tex.html" title="cape.filecntl.tex: Interface to LaTeX files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.argread</span></code>: Command-Line Argument Processor</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.argread"></span><div class="section" id="cape-argread-command-line-argument-processor">
+<h1><a class="reference internal" href="#module-cape.argread" title="cape.argread"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.argread</span></code></a>: Command-Line Argument Processor<a class="headerlink" href="#cape-argread-command-line-argument-processor" title="Permalink to this headline">¶</a></h1>
+<p>Parse command-line inputs based on one of two methods.  The first method
+counts both “-” and “–” as prefixes for keyword names; this is common
+among many advanced programs.  For example, the two following examples
+would be treated as equivalent (assuming it is called by some script
+<code class="docutils literal notranslate"><span class="pre">`myScript.py</span></code>.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> myScript.py --v --i test.txt
+<span class="gp">$</span> myScript.py -v -i test.txt
+</pre></div>
+</div>
+</div></blockquote>
+<p>The second method assumes single-hyphen options are single-character
+flags that can be combined.  This is common in many built-in Unix/Linux
+utilities. Consider how <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-lh</span></code> is interpreted.  The following two
+examples would be interpreted equivalently.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> myScript.py -v -i
+<span class="gp">$</span> myScript.py -vi
+</pre></div>
+</div>
+</div></blockquote>
+<p>A third method is provided to have similar behavior to the Unix <code class="docutils literal notranslate"><span class="pre">tar</span></code>
+command. In this case, the following two commands will be different.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> myScript.py -cf mytar.tar
+<span class="gp">$</span> myScript.py --cf mytar.tar
+</pre></div>
+</div>
+</div></blockquote>
+<p>The first example sets <em>c</em> to <code class="docutils literal notranslate"><span class="pre">True</span></code> and <em>f</em> to <code class="docutils literal notranslate"><span class="pre">&quot;mytar.tar&quot;</span></code>; the
+second command sets <em>cf</em> to <code class="docutils literal notranslate"><span class="pre">&quot;mytar.tar&quot;</span></code>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.argread.readflags">
+<span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">readflags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.readflags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse args where <code class="docutils literal notranslate"><span class="pre">-cj</span></code> becomes <code class="docutils literal notranslate"><span class="pre">c=True,</span> <span class="pre">j=True</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">readflags</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>argv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of args other than <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>a</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of positional args</p>
+</dd>
+<dt><em>kw</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</dt><dd><p>Keyword arguments</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-12-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.argread.readflagstar">
+<span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">readflagstar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.readflagstar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse args where <code class="docutils literal notranslate"><span class="pre">-cf</span> <span class="pre">a</span></code> becomes <code class="docutils literal notranslate"><span class="pre">c=True,</span> <span class="pre">f=&quot;a&quot;</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">readflags</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>argv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of args other than <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>a</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of positional args</p>
+</dd>
+<dt><em>kw</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</dt><dd><p>Keyword arguments</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-12-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.argread.readkeys">
+<span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">readkeys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.readkeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse args where <code class="docutils literal notranslate"><span class="pre">-cj</span></code> becomes <code class="docutils literal notranslate"><span class="pre">cj=True</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">readkeys</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>argv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of args other than <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>a</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of positional args</p>
+</dd>
+<dt><em>kw</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</dt><dd><p>Keyword arguments</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-12-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="filecntl/tex.html"
+                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.tex</span></code>: Interface to LaTeX files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="atm.html"
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.atm</span></code> Atmosphere Models</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cape/argread.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atm.html" title="cape.atm Atmosphere Models"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="filecntl/tex.html" title="cape.filecntl.tex: Interface to LaTeX files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.argread</span></code>: Command-Line Argument Processor</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

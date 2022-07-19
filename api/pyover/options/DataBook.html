@@ -1,0 +1,493 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cape.pyover.options.DataBook: Data book options &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.pyover.options.Report: pyOver Report Options" href="Report.html" />
+    <link rel="prev" title="cape.pyover.options.gridSystem: OVERFLOW grid namelist options" href="gridSystem.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Report.html" title="cape.pyover.options.Report: pyOver Report Options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gridSystem.html" title="cape.pyover.options.gridSystem: OVERFLOW grid namelist options"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options</span></code>: OVERFLOW and pyOver Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options.DataBook</span></code>: Data book options</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.pyover.options.DataBook"></span><div class="section" id="cape-pyover-options-databook-data-book-options">
+<h1><a class="reference internal" href="#module-cape.pyover.options.DataBook" title="cape.pyover.options.DataBook"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options.DataBook</span></code></a>: Data book options<a class="headerlink" href="#cape-pyover-options-databook-data-book-options" title="Permalink to this headline">¶</a></h1>
+<p>This module contains the interface for data book options for pyOver and 
+OVERFLOW. The classes in this module are subclassed as</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.DataBook.DataBook</span></code> -&gt;
+<a class="reference internal" href="../../cape/cfdx/options/DataBook.html#cape.cfdx.options.DataBook.DataBook" title="cape.cfdx.options.DataBook.DataBook"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.DataBook.DataBook</span></code></a></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.DataBook.DBTarget</span></code> -&gt;
+<a class="reference internal" href="../../cape/cfdx/options/DataBook.html#cape.cfdx.options.DataBook.DBTarget" title="cape.cfdx.options.DataBook.DBTarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.DataBook.DBTarget</span></code></a></p></li>
+</ul>
+</div></blockquote>
+<p>The OVERFLOW-specific options for these classes are limited, but a few methods
+are modified in order to change default data book component types and the
+columns of data available for each.  In particular, may special options for
+<code class="docutils literal notranslate"><span class="pre">usurp</span></code> or <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> are specified, which is needed to extract a surface
+triangulation from an OVERFLOW solution.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyover.options.DataBook.DataBook">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.pyover.options.DataBook.</span></span><span class="sig-name descname"><span class="pre">DataBook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.DataBook.DataBook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary-based interface for DataBook specifications</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span> <span class="o">=</span> <span class="n">DataBook</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs</dt>
+<dd class="field-even"><p><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.dataBook.DataBook</span></code></p>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-12-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Subclassed from CAPE</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.options.DataBook.DataBook.get_DataBook_QIn">
+<span class="sig-name descname"><span class="pre">get_DataBook_QIn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.DataBook.DataBook.get_DataBook_QIn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input <code class="docutils literal notranslate"><span class="pre">q</span></code> file for a databook component</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fq</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_DataBook_QIn</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of line load data book component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fq</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;q.pyover.p3d&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of input Overflow solution file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-01-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.options.DataBook.DataBook.get_DataBook_QOut">
+<span class="sig-name descname"><span class="pre">get_DataBook_QOut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.DataBook.DataBook.get_DataBook_QOut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the preprocessed <code class="docutils literal notranslate"><span class="pre">q</span></code> file for a databook component</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fq</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_DataBook_QOut</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of line load data book component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fq</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;q.pyover.srf&quot;</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of output Overflow solution file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-01-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.options.DataBook.DataBook.get_DataBook_QSurf">
+<span class="sig-name descname"><span class="pre">get_DataBook_QSurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.DataBook.DataBook.get_DataBook_QSurf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the preprocessed <code class="docutils literal notranslate"><span class="pre">q.srf</span></code> file name for a databook component</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fq</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_DataBook_QSurf</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of line load data book component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fq</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;q.pyover.srf&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of output Overflow surface solution file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-01-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.options.DataBook.DataBook.get_DataBook_XIn">
+<span class="sig-name descname"><span class="pre">get_DataBook_XIn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.DataBook.DataBook.get_DataBook_XIn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input <code class="docutils literal notranslate"><span class="pre">x</span></code> file for a databook component</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fx</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_DataBook_XIn</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of line load data book component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fx</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x.pyover.p3d&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of input Overflow grid file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-01-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.options.DataBook.DataBook.get_DataBook_XOut">
+<span class="sig-name descname"><span class="pre">get_DataBook_XOut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.DataBook.DataBook.get_DataBook_XOut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input <code class="docutils literal notranslate"><span class="pre">x</span></code> file for a databook component</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fx</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_DataBook_XOut</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of line load data book component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fx</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;x.pyover.srf&quot;</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of output Overflow grid file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-01-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.options.DataBook.DataBook.get_DataBook_XSurf">
+<span class="sig-name descname"><span class="pre">get_DataBook_XSurf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.DataBook.DataBook.get_DataBook_XSurf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input <code class="docutils literal notranslate"><span class="pre">x.srf</span></code> file for a databook component</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fx</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_DataBook_XSurf</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of line load data book component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fx</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;x.pyover.srf&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of output Overflow grid file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-01-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.options.DataBook.DataBook.get_DataBook_fomo">
+<span class="sig-name descname"><span class="pre">get_DataBook_fomo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.DataBook.DataBook.get_DataBook_fomo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> output files</p>
+<p>If each of the following files is found, there is no need to run
+<code class="docutils literal notranslate"><span class="pre">mixsur</span></code>, and files are linked instead.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">grid.i.tri</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grid.bnd</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grid.ib</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grid.ibi</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grid.map</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grid.nsf</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grid.ptv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mixsur.fmp</span></code></p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fdir</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_DataBook_fomo</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of line load data book component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fdir</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Path to <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> output files</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-01-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.options.DataBook.DataBook.get_DataBook_mixsur">
+<span class="sig-name descname"><span class="pre">get_DataBook_mixsur</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.DataBook.DataBook.get_DataBook_mixsur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> or <code class="docutils literal notranslate"><span class="pre">overint</span></code> input file for a databook component</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_DataBook_mixsur</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of line load data book component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> input file template</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.options.DataBook.DataBook.get_DataBook_splitmq">
+<span class="sig-name descname"><span class="pre">get_DataBook_splitmq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.DataBook.DataBook.get_DataBook_splitmq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the <code class="docutils literal notranslate"><span class="pre">splitmq</span></code> input file for a databook component</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_DataBook_splitmq</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of line load data book component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">splitmq</span></code> input file template</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.options.DataBook.DataBook.get_DataBook_usurp">
+<span class="sig-name descname"><span class="pre">get_DataBook_usurp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.DataBook.DataBook.get_DataBook_usurp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> input file for use with <code class="docutils literal notranslate"><span class="pre">usurp</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_DataBook_usurp</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of line load data book component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> input file template</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-04-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyover.options.DataBook.DBTarget">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.pyover.options.DataBook.</span></span><span class="sig-name descname"><span class="pre">DBTarget</span></span><a class="headerlink" href="#cape.pyover.options.DataBook.DBTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary-based interface for databook targets</p>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gridSystem.html"
+                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options.gridSystem</span></code>: OVERFLOW grid namelist options</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Report.html"
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options.Report</span></code>: pyOver Report Options</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/pyover/options/DataBook.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Report.html" title="cape.pyover.options.Report: pyOver Report Options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gridSystem.html" title="cape.pyover.options.gridSystem: OVERFLOW grid namelist options"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options</span></code>: OVERFLOW and pyOver Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options.DataBook</span></code>: Data book options</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

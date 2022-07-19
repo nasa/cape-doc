@@ -1,0 +1,477 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4.1.6. Data Book Definitions &mdash; pyCart 0.8 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="pyCart 0.8 documentation" href="../../index.html" />
+    <link rel="up" title="4.1. Baseline JSON Settings for cape" href="index.html" />
+    <link rel="next" title="4.1.7. Automated Report Generation with LaTeX" href="Report.html" />
+    <link rel="prev" title="4.1.5. Solution Configuration &amp; Component Names" href="Config.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Report.html" title="4.1.7. Automated Report Generation with LaTeX"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Config.html" title="4.1.5. Solution Configuration &amp; Component Names"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyCart 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >4. Cape Module Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">4.1. Baseline JSON Settings for <code class="docutils literal"><span class="pre">cape</span></code></a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4.1.6. Data Book Definitions</a><ul>
+<li><a class="reference internal" href="#general-data-book-definitions">4.1.6.1. General Data Book Definitions</a></li>
+<li><a class="reference internal" href="#data-book-component-definitions">4.1.6.2. Data Book Component Definitions</a><ul>
+<li><a class="reference internal" href="#data-book-transformations">4.1.6.2.1. Data Book Transformations</a></li>
+<li><a class="reference internal" href="#data-book-component-target-definitions">4.1.6.2.2. Data Book Component Target Definitions</a></li>
+<li><a class="reference internal" href="#force-and-moment-data-book-components">4.1.6.2.3. Force and Moment Data Book Components</a></li>
+<li><a class="reference internal" href="#point-sensor-data-book-components">4.1.6.2.4. Point Sensor Data Book Components</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#target-or-comparison-data-sources">4.1.6.3. Target or Comparison Data Sources</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Config.html"
+                        title="previous chapter">4.1.5. Solution Configuration &amp; Component Names</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Report.html"
+                        title="next chapter">4.1.7. Automated Report Generation with LaTeX</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/cape/json/DataBook.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="data-book-definitions">
+<span id="cape-json-databook"></span><h1>4.1.6. Data Book Definitions<a class="headerlink" href="#data-book-definitions" title="Permalink to this headline">¶</a></h1>
+<p>The data book defines quantities that Cape tracks as results.  It also allows
+for the definition of &#8220;Target&#8221; data for comparison to any CFD results.  Data
+book components can be integrated forces and moments, point sensors, line loads,
+or potentially other subjects.  The following JSON example shows some of the
+capabilities.</p>
+<blockquote>
+<div><div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="s2">&quot;DataBook&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// List of components or data book items</span>
+    <span class="s2">&quot;Components&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;fuselage&quot;</span><span class="p">,</span> <span class="s2">&quot;wing&quot;</span><span class="p">,</span> <span class="s2">&quot;tail&quot;</span><span class="p">,</span> <span class="s2">&quot;engines&quot;</span><span class="p">,</span> <span class="s2">&quot;P1&quot;</span><span class="p">],</span>
+    <span class="c1">// Number of iterations to use for statistics</span>
+    <span class="s2">&quot;nStats&quot;</span><span class="o">:</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="s2">&quot;nMin&quot;</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="c1">// Place to put the data book</span>
+    <span class="s2">&quot;Folder&quot;</span><span class="o">:</span> <span class="s2">&quot;data&quot;</span>
+    <span class="c1">// Sorting order</span>
+    <span class="s2">&quot;Sort&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">],</span>
+    <span class="c1">// Information for each component</span>
+    <span class="s2">&quot;fuselage&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;FM&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Targets&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;CA&quot;</span><span class="o">:</span> <span class="s2">&quot;WT/CAFC&quot;</span><span class="p">,</span> <span class="s2">&quot;CY&quot;</span><span class="o">:</span> <span class="s2">&quot;WT/CY&quot;</span><span class="p">,</span> <span class="s2">&quot;CN&quot;</span><span class="o">:</span> <span class="s2">&quot;WT/CN&quot;</span><span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;wing&quot;</span><span class="o">:</span>     <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;FM&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;tail&quot;</span><span class="o">:</span>     <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;FM&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;engines&quot;</span><span class="o">:</span>  <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;Force&quot;</span><span class="p">},</span>
+    <span class="c1">// Information for a point sensor</span>
+    <span class="s2">&quot;P1&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;PointSensor&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Points&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;P101&quot;</span><span class="p">,</span> <span class="s2">&quot;P102&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;nStats&quot;</span><span class="o">:</span> <span class="mi">20</span>
+    <span class="p">},</span>
+    <span class="c1">// Target data from a wind tunnel</span>
+    <span class="s2">&quot;Targets&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;WT&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;File&quot;</span><span class="o">:</span> <span class="s2">&quot;data/wt.csv&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Trajectory&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;mach&quot;</span><span class="o">:</span> <span class="s2">&quot;Mach&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;Tolerances&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;mach&quot;</span><span class="o">:</span> <span class="mf">0.02</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="o">:</span> <span class="mf">0.25</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="o">:</span> <span class="mf">0.1</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Links to default options for each specific solver are found below.</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="../../pycart/json/DataBook.html#pycart-json-databook"><span>Cart3D</span></a></li>
+<li><a class="reference internal" href="../../pyfun/json/DataBook.html#pyfun-json-databook"><span>FUN3D</span></a></li>
+<li><a class="reference internal" href="../../pyover/json/DataBook.html#pyover-json-databook"><span>OVERFLOW</span></a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="general-data-book-definitions">
+<h2>4.1.6.1. General Data Book Definitions<a class="headerlink" href="#general-data-book-definitions" title="Permalink to this headline">¶</a></h2>
+<p>The following dictionary of options describes the general definitions of the
+data book.  These are applicable to any data book for any of the solvers.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><em>Components</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of components to analyze and create data book entries for</dd>
+<dt><em>nStats</em>: [ {<code class="docutils literal"><span class="pre">1</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">int</span></code> ]</dt>
+<dd>Number of iterations to use for computing statistics (such as mean,
+iterative history min and max, and standard deviation)</dd>
+<dt><em>nMin</em>: [ {<code class="docutils literal"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">int</span></code> ]</dt>
+<dd>Minimum iteration number allowed for inclusion in results and
+statistics; a case must have at least <code class="docutils literal"><span class="pre">nMin+nStats</span></code> iterations for
+inclusion in the data book</dd>
+<dt><em>nMaxStats</em>: [ {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">int</span></code> ]</dt>
+<dd>Optional parameter for maximum number of iterations for inclusion in
+statistics; Cape will use <code class="docutils literal"><span class="pre">nStats&lt;=n&lt;=nMaxStats</span></code> iterations based on
+its estimate of resulting iterative uncertainty</dd>
+<dt><em>Folder</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd>Location in which to store data book (relative to JSON root)</dd>
+<dt><em>Sort</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>Trajectory key(s) on which to sort data book (in reverse order if a
+<code class="xref py py-class docutils literal"><span class="pre">list</span></code>); ignored if not the name of a trajectory variable</dd>
+</dl>
+</div></blockquote>
+<p>Each component in <em>Components</em> can be either a force, moment, force &amp; moment,
+point sensor, or alternative data type defined for specific solvers.  For each
+force and/or moment component, a file such as <code class="file docutils literal"><span class="pre">aero_fuselage.csv</span></code>,
+<code class="file docutils literal"><span class="pre">aero_wing.csv</span></code>, etc. is created in the location specified by <em>Folder</em>.
+The <em>Folder</em> is created if necessary when reading/writing the data book.</p>
+<p>Point sensor components create files such as <code class="file docutils literal"><span class="pre">pt_P101.csv</span></code> and
+<code class="file docutils literal"><span class="pre">pt_P102.csv</span></code> in the same directory.</p>
+<p>The <em>Sort</em> option, if specified, is used by Cape to sort he lines of the data
+book files before writing to file.  Without a <em>Sort</em> key, lines in the data book
+files are written in the order in which they were processed.</p>
+</div>
+<div class="section" id="data-book-component-definitions">
+<span id="cape-json-dbcomp"></span><h2>4.1.6.2. Data Book Component Definitions<a class="headerlink" href="#data-book-component-definitions" title="Permalink to this headline">¶</a></h2>
+<p>Each data book component has at least the following possible options.
+Additional components may have more options that are not defined in this
+universal context.</p>
+<p>The values for <em>nStats</em>, <em>nMin</em>, and <em>nMaxStats</em> are optional and will default
+to those from the general data book.  This capability enables users to specify
+different values of these parameters for different components.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><em>comp</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first">Definition for individual component <em>comp</em></p>
+<dl class="last docutils">
+<dt><em>Type</em>: {<code class="docutils literal"><span class="pre">&quot;FM&quot;</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd>Type of component being tracked</dd>
+<dt><em>Coefficients</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of coefficients for this component</dd>
+<dt><em>Transformations</em>: {<code class="docutils literal"><span class="pre">[]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">dict</span></code>)</dt>
+<dd>List of transformation dictionaries</dd>
+<dt><em>Targets</em>: {<code class="docutils literal"><span class="pre">{}</span></code>} | <code class="docutils literal"><span class="pre">T</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>Dictionary of column names for target values</dd>
+<dt><em>nStats</em>: [ {<code class="docutils literal"><span class="pre">1</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">int</span></code> ]</dt>
+<dd>Number of iterations to use for computing statistics</dd>
+<dt><em>nMin</em>: [ {<code class="docutils literal"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">int</span></code> ]</dt>
+<dd>Minimum iteration number allowed for inclusion in results</dd>
+<dt><em>nMaxStats</em>: [ {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">int</span></code> ]</dt>
+<dd>Maximum number of iterations for inclusion in statistics</dd>
+<dt><em>CA</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;min&quot;,&quot;max&quot;,&quot;std&quot;,&quot;err&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of statistical properties for coefficient <em>CA</em></dd>
+<dt><em>Cp</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;std&quot;,&quot;min&quot;,&quot;max&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of statistical properties for coefficient <em>Cp</em></dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p>Each coefficient can have a list of statistical properties defined for it.  The
+example above only lists <em>CA</em> and <em>Cp</em>, but this may be defined for any
+coefficient defined in the <em>Coefficients</em> section.</p>
+<div class="section" id="data-book-transformations">
+<span id="cape-json-dbtransformation"></span><h3>4.1.6.2.1. Data Book Transformations<a class="headerlink" href="#data-book-transformations" title="Permalink to this headline">¶</a></h3>
+<p>Each data book may have a list of transformations.  This may be useful, for
+example, if a component has been rotated with respect to the CFD axes, and the
+forces and moments, which have been recorded in the CFD axes, need to be
+transformed to reflect the correct values in the body frame of the rotated
+component.  Another example is that moment coefficients are often recorded about
+the opposite-direction <em>x</em> and <em>z</em> axes, and so it is necessary to multiply the
+values of <em>CLL</em> and <em>CLN</em> by <code class="docutils literal"><span class="pre">-1</span></code>.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><em>Transformations</em>: <code class="docutils literal"><span class="pre">[E]</span></code> | <code class="docutils literal"><span class="pre">[S]</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">dict</span></code>)</dt>
+<dd><p class="first">List of data transformations</p>
+<dl class="last docutils">
+<dt><em>E</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first">Definition for an Euler 3-2-1 transformation</p>
+<dl class="last docutils">
+<dt><em>Type</em>: <code class="docutils literal"><span class="pre">&quot;Euler321&quot;</span></code></dt>
+<dd>Specify the transformation type</dd>
+<dt><em>phi</em>: {<code class="docutils literal"><span class="pre">&quot;phi&quot;</span></code>} | <code class="docutils literal"><span class="pre">&quot;-phi&quot;</span></code> | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd>Name of the trajectory variable to use for the roll angle
+transformation value</dd>
+<dt><em>theta</em>: {<code class="docutils literal"><span class="pre">&quot;theta&quot;</span></code>} | <code class="docutils literal"><span class="pre">&quot;-theta&quot;</span></code> | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd>Name of the trajectory variable to use for the pitch angle
+transformation value</dd>
+<dt><em>psi</em>: {<code class="docutils literal"><span class="pre">&quot;psi&quot;</span></code>} | <code class="docutils literal"><span class="pre">&quot;-psi&quot;</span></code> | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd>Name of the trajectory variable to use for the yaw angle
+transformation value</dd>
+</dl>
+</dd>
+<dt><em>S</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first">Definition for coefficient scaling</p>
+<dl class="last docutils">
+<dt><em>Type</em>: <code class="docutils literal"><span class="pre">&quot;ScaleCoeffs&quot;</span></code></dt>
+<dd>Specify the transformation type</dd>
+<dt><em>CA</em>: {<code class="docutils literal"><span class="pre">1.0</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd>Scale factor by which to multiply <em>CA</em> values</dd>
+<dt><em>CY</em>: {<code class="docutils literal"><span class="pre">1.0</span></code>} | <code class="docutils literal"><span class="pre">-1.0</span></code> | <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd>Scale factor by which to multiply <em>CY</em> values</dd>
+<dt><em>CLL</em>: <code class="docutils literal"><span class="pre">1.0</span></code> | {<code class="docutils literal"><span class="pre">-1.0</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd>Scale factor by which to multiply <em>CLL</em> values</dd>
+<dt><em>CLN</em>: <code class="docutils literal"><span class="pre">1.0</span></code> | {<code class="docutils literal"><span class="pre">-1.0</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd>Scale factor by which to multiply <em>CLN</em> values</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="data-book-component-target-definitions">
+<span id="cape-json-dbcomptarget"></span><h3>4.1.6.2.2. Data Book Component Target Definitions<a class="headerlink" href="#data-book-component-target-definitions" title="Permalink to this headline">¶</a></h3>
+<p>Defining target values for a data book component is relatively straightforward.
+The target data book, defined below, may use column names differing from <em>CA</em>,
+<em>CY</em>, etc., and this section is used to specify what columns to use.  By
+default, Cape will try to compare to a target value from the first target
+defined; to be more explicit, one can use a forward slash to specify both which
+target to use and which column within that target.  For example, to use a column
+named <em>CAFC</em> in target <em>WT</em> use <code class="docutils literal"><span class="pre">&quot;WT/CAFC&quot;</span></code> in the JSON file.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><em>Targets</em>: {<code class="docutils literal"><span class="pre">{}</span></code>} | <code class="docutils literal"><span class="pre">T</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first">Dictionary of column names for target values</p>
+<dl class="last docutils">
+<dt><em>T</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first">Dictionary of target values</p>
+<dl class="last docutils">
+<dt><em>CA</em>: {<code class="docutils literal"><span class="pre">&quot;CA&quot;</span></code>} | <code class="docutils literal"><span class="pre">targ/col</span></code> | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd>Name of column for target <em>CA</em> value; column <em>col</em> from
+target <em>targ</em> where <em>targ</em> defaults to first column if this
+field does not contain a forward slash</dd>
+<dt><em>Cp</em>: {<code class="docutils literal"><span class="pre">&quot;Cp&quot;</span></code>} | <code class="docutils literal"><span class="pre">targ/col</span></code> | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd>Name of column for target <em>Cp</em> value; column <em>col</em> from
+target <em>targ</em> where <em>targ</em> defaults to first column if this
+field does not contain a forward slash</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="force-and-moment-data-book-components">
+<span id="cape-json-dbcompfm"></span><h3>4.1.6.2.3. Force and Moment Data Book Components<a class="headerlink" href="#force-and-moment-data-book-components" title="Permalink to this headline">¶</a></h3>
+<p>The following dictionary fills in some of the values applicable to force and
+moment objects.  It is a more specific version of the <a class="reference internal" href="#cape-json-dbcomp"><span>more general
+dictionary</span></a>.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><em>comp</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first">Definition for individual component <em>comp</em></p>
+<dl class="last docutils">
+<dt><em>Type</em>: {<code class="docutils literal"><span class="pre">&quot;FM&quot;</span></code>} | <code class="docutils literal"><span class="pre">&quot;Force&quot;</span></code> | <code class="docutils literal"><span class="pre">&quot;Moment&quot;</span></code></dt>
+<dd>Type of component being tracked</dd>
+<dt><em>Coefficients</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of coefficients for this component</dd>
+<dt><em>Transformations</em>: {<code class="docutils literal"><span class="pre">[S]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">dict</span></code>)</dt>
+<dd><p class="first">List of transformation dictionaries</p>
+<dl class="last docutils">
+<dt><em>S</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first">Transformation dictionary</p>
+<dl class="last docutils">
+<dt><em>Type</em>: {<code class="docutils literal"><span class="pre">&quot;ScaleCoeffs&quot;</span></code>} | <code class="docutils literal"><span class="pre">&quot;Euler321&quot;</span></code></dt>
+<dd>Transformation type</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt><em>Targets</em>: {<code class="docutils literal"><span class="pre">{}</span></code>} | <code class="docutils literal"><span class="pre">T</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>Dictionary of column names for target values</dd>
+<dt><em>CA</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;min&quot;,&quot;max&quot;,&quot;std&quot;,&quot;err&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of statistical properties for axial force coefficient</dd>
+<dt><em>CY</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;min&quot;,&quot;max&quot;,&quot;std&quot;,&quot;err&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of statistical properties for lateral force coefficient</dd>
+<dt><em>CN</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;min&quot;,&quot;max&quot;,&quot;std&quot;,&quot;err&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of statistical properties for normal force coefficient</dd>
+<dt><em>CLL</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;min&quot;,&quot;max&quot;,&quot;std&quot;,&quot;err&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of statistical properties for rolling moment coefficient</dd>
+<dt><em>CLM</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;min&quot;,&quot;max&quot;,&quot;std&quot;,&quot;err&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of statistical properties for pitching moment coefficient</dd>
+<dt><em>CLN</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;min&quot;,&quot;max&quot;,&quot;std&quot;,&quot;err&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of statistical properties for yawing moment coefficient</dd>
+<dt><em>CL</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;min&quot;,&quot;max&quot;,&quot;std&quot;,&quot;err&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of statistical properties for lift coefficient</dd>
+<dt><em>CD</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;min&quot;,&quot;max&quot;,&quot;std&quot;,&quot;err&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of statistical properties for drag coefficient</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="point-sensor-data-book-components">
+<span id="cape-json-dbcomppointsensor"></span><h3>4.1.6.2.4. Point Sensor Data Book Components<a class="headerlink" href="#point-sensor-data-book-components" title="Permalink to this headline">¶</a></h3>
+<p>The following dictionary fills in some of the values applicable to point sensor
+objects.  It is a more specific version of the <a class="reference internal" href="#cape-json-dbcomp"><span>more general
+dictionary</span></a>.  Furthermore, the list of available coefficients
+and their particular interpretation varies from solver to solver.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><em>comp</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first">Definition for individual component <em>comp</em></p>
+<dl class="last docutils">
+<dt><em>Type</em>: {<code class="docutils literal"><span class="pre">&quot;FM&quot;</span></code>} | <code class="docutils literal"><span class="pre">&quot;Force&quot;</span></code> | <code class="docutils literal"><span class="pre">&quot;Moment&quot;</span></code></dt>
+<dd>Type of component being tracked</dd>
+<dt><em>Coefficients</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of coefficients for this component</dd>
+<dt><em>Targets</em>: {<code class="docutils literal"><span class="pre">{}</span></code>} | <code class="docutils literal"><span class="pre">T</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>Dictionary of column names for target values</dd>
+<dt><em>Cp</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;std&quot;,&quot;min&quot;,&quot;max&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of statistical properties for pressure coefficient</dd>
+<dt><em>M</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;std&quot;,&quot;min&quot;,&quot;max&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of statistical properties for Mach number</dd>
+<dt><em>rho</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;std&quot;,&quot;min&quot;,&quot;max&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>Statistical properties for density or nondimensional density</dd>
+<dt><em>p</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;std&quot;,&quot;min&quot;,&quot;max&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>Statistical properties for pressure or nondimensional pressure</dd>
+<dt><em>T</em>: {<code class="docutils literal"><span class="pre">[&quot;mu&quot;,&quot;std&quot;,&quot;min&quot;,&quot;max&quot;]</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>Statistical properties for temperature or nondimensional temperature</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="target-or-comparison-data-sources">
+<span id="cape-json-dbtarget"></span><h2>4.1.6.3. Target or Comparison Data Sources<a class="headerlink" href="#target-or-comparison-data-sources" title="Permalink to this headline">¶</a></h2>
+<p>The <em>Targets</em> key is an optional parameter that points to another data source
+(or multiple other data sources) for use as a reference value both in the data
+book files and plots. Each &#8220;Target&#8221; is read from a single file that contains
+columns used to map points in that file to run matrix conditions and one or more
+force/moment coefficients for one or more components in the data book. The list
+of <em>Targets</em> parameters is given below.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><em>Targets</em>: {<code class="docutils literal"><span class="pre">{}</span></code>} | <code class="docutils literal"><span class="pre">{targ:</span> <span class="pre">T}</span></code> | <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal"><span class="pre">dict</span></code>)</dt>
+<dd><p class="first">List of target dict descriptions</p>
+<dl class="last docutils">
+<dt><em>targ</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd>Name of target</dd>
+<dt><em>T</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first">Individual target description</p>
+<dl class="last docutils">
+<dt><em>Label</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd>Label to be used for this data source, e.g. in plot legends;
+defaults to value of <em>Name</em> option</dd>
+<dt><em>File</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd>File name of the data source</dd>
+<dt><em>Delimiter</em>: {<code class="docutils literal"><span class="pre">&quot;,</span> <span class="pre">&quot;</span></code>} | <code class="docutils literal"><span class="pre">&quot;,&quot;</span></code> | <code class="docutils literal"><span class="pre">&quot;</span> <span class="pre">&quot;</span></code> | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd>Delimiter to be used when reading/writing data book files</dd>
+<dt><em>Comment</em>: {<code class="docutils literal"><span class="pre">&quot;#&quot;</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd>Character used to denote comment line in source file</dd>
+<dt><em>Components</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>List of components to which this target file applies; default is
+all components in the data book</dd>
+<dt><em>Trajectory</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd>Dictionary of column names for trajectory variables to be used
+for comparing trajectory cases to target data points.  Any case
+that has matching values for all keys listed in this
+<code class="xref py py-class docutils literal"><span class="pre">dict</span></code> will be considered to be at matching conditions</dd>
+<dt><em>Tolerances</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal"><span class="pre">float</span></code>)</dt>
+<dd>Dictionary of tolerances for matching rows of the target to data
+book points.  For example, including <code class="docutils literal"><span class="pre">&quot;mach&quot;:</span> <span class="pre">0.02&quot;</span></code> means the
+target data point can differ in Mach number from the Cape data
+book point by up to 0.02 (inclusive)</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Report.html" title="4.1.7. Automated Report Generation with LaTeX"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Config.html" title="4.1.5. Solution Configuration &amp; Component Names"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyCart 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >4. Cape Module Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >4.1. Baseline JSON Settings for <code class="docutils literal"><span class="pre">cape</span></code></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014-2017, Derek J. Dalle.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

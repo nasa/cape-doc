@@ -1,0 +1,254 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Testing cape.argread: Command-Line Argument Parsing &#8212; CAPE 0.9.2</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Testing cape.atm: Standard Atmospheric Models" href="atm.html" />
+    <link rel="prev" title="Testing cape API case subset commands" href="subset.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atm.html" title="Testing cape.atm: Standard Atmospheric Models"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="subset.html" title="Testing cape API case subset commands"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 0.9.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Testing <code class="docutils literal notranslate"><span class="pre">cape</span></code></a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Testing <code class="docutils literal notranslate"><span class="pre">cape.argread</span></code>: Command-Line Argument Parsing</a><ul>
+<li><a class="reference internal" href="#basic-keys">Basic Keys</a></li>
+<li><a class="reference internal" href="#read-as-flags">Read As Flags</a></li>
+<li><a class="reference internal" href="#read-flags-like-tar-command">Read Flags like <code class="docutils literal notranslate"><span class="pre">tar</span></code> Command</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="subset.html"
+                        title="previous chapter">Testing <code class="docutils literal notranslate"><span class="pre">cape</span></code> API case subset commands</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="atm.html"
+                        title="next chapter">Testing <code class="docutils literal notranslate"><span class="pre">cape.atm</span></code>: Standard Atmospheric Models</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/test/cape/argread.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="testing-cape-argread-command-line-argument-parsing">
+<span id="test-cape-argread"></span><h1>Testing <a class="reference internal" href="../../api/cape/argread.html#module-cape.argread" title="cape.argread"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.argread</span></code></a>: Command-Line Argument Parsing<a class="headerlink" href="#testing-cape-argread-command-line-argument-parsing" title="Permalink to this headline">¶</a></h1>
+<p>This section tests the CAPE module for parsing command-line inputs.  For
+instance the command</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cape -c --filter b2
+</pre></div>
+</div>
+</div></blockquote>
+<p>would be parsed into a dictionary</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="s2">&quot;filter&quot;</span><span class="p">:</span> <span class="s2">&quot;b2&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>A typical command-line parsing call is shown below.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">cape.argread</span>
+
+<span class="c1"># Parse inputs</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">argread</span><span class="o">.</span><span class="n">readkeys</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="section" id="basic-keys">
+<span id="test-readkeys"></span><h2>Basic Keys<a class="headerlink" href="#basic-keys" title="Permalink to this headline">¶</a></h2>
+<p>A basic call that contains an argument and both kinds of options</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List of arguments</span>
+<span class="n">argv</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cape&#39;</span><span class="p">,</span> <span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;--filter&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">]</span>
+
+<span class="c1"># Process it</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">argread</span><span class="o">.</span><span class="n">readkeys</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+<span class="c1"># Print results</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;run&#39;]
+{&#39;filter&#39;: &#39;b2&#39;, &#39;c&#39;: True, &#39;_old&#39;: []}
+</pre></div>
+</div>
+<p>Now let’s try that again without the double dash.  The results should be
+unchanged.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List of arguments</span>
+<span class="n">argv</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cape&#39;</span><span class="p">,</span> <span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;-filter&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">]</span>
+
+<span class="c1"># Process it</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">argread</span><span class="o">.</span><span class="n">readkeys</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+<span class="c1"># Print results</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;run&#39;]
+{&#39;filter&#39;: &#39;b2&#39;, &#39;c&#39;: True, &#39;_old&#39;: []}
+</pre></div>
+</div>
+<p>Finally, let’s repeat an input.  In practice the only good use for this in CAPE
+is to use <code class="docutils literal notranslate"><span class="pre">-x</span></code> multiple times to apply more than one global scripts.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List of arguments</span>
+<span class="n">argv</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cape&#39;</span><span class="p">,</span> <span class="s1">&#39;--aero&#39;</span><span class="p">,</span> <span class="s1">&#39;body&#39;</span><span class="p">,</span> <span class="s1">&#39;--aero&#39;</span><span class="p">,</span> <span class="s1">&#39;base&#39;</span><span class="p">,</span> <span class="s1">&#39;--aero&#39;</span><span class="p">,</span> <span class="s1">&#39;fin&#39;</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">]</span>
+
+<span class="c1"># Process it</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">argread</span><span class="o">.</span><span class="n">readkeys</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+<span class="c1"># Print results</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[]
+{&#39;c&#39;: True, &#39;aero&#39;: &#39;fin&#39;, &#39;_old&#39;: [{&#39;aero&#39;: &#39;body&#39;}, {&#39;aero&#39;: &#39;base&#39;}]}
+</pre></div>
+</div>
+</div>
+<div class="section" id="read-as-flags">
+<span id="test-readflags"></span><h2>Read As Flags<a class="headerlink" href="#read-as-flags" title="Permalink to this headline">¶</a></h2>
+<p>A basic call that contains an argument and both kinds of options</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List of arguments</span>
+<span class="n">argv</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cape&#39;</span><span class="p">,</span> <span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;--filter&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">]</span>
+
+<span class="c1"># Process it</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">argread</span><span class="o">.</span><span class="n">readflags</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+<span class="c1"># Print results</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;run&#39;]
+{&#39;filter&#39;: &#39;b2&#39;, &#39;c&#39;: True, &#39;_old&#39;: []}
+</pre></div>
+</div>
+<p>Now let’s try that again without the double dash.  The <code class="docutils literal notranslate"><span class="pre">-fr</span></code> flag should be
+interpreted as <code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">-r</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List of arguments</span>
+<span class="n">argv</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cape&#39;</span><span class="p">,</span> <span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;-fr&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">]</span>
+
+<span class="c1"># Process it</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">argread</span><span class="o">.</span><span class="n">readflags</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+<span class="c1"># Print results</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;run&#39;, &#39;b2&#39;]
+{&#39;c&#39;: True, &#39;r&#39;: True, &#39;_old&#39;: [], &#39;f&#39;: True}
+</pre></div>
+</div>
+</div>
+<div class="section" id="read-flags-like-tar-command">
+<span id="test-readflagstar"></span><h2>Read Flags like <code class="docutils literal notranslate"><span class="pre">tar</span></code> Command<a class="headerlink" href="#read-flags-like-tar-command" title="Permalink to this headline">¶</a></h2>
+<p>This command is like <code class="xref py py-func docutils literal notranslate"><span class="pre">readflags()</span></code>, but the last flag can take a following
+argument when only one hyphen is used.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List of arguments</span>
+<span class="n">argv</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cape&#39;</span><span class="p">,</span> <span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;-fr&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">]</span>
+
+<span class="c1"># Process it</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">argread</span><span class="o">.</span><span class="n">readflagstar</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+<span class="c1"># Print results</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;run&#39;]
+{&#39;c&#39;: True, &#39;r&#39;: &#39;b2&#39;, &#39;_old&#39;: [], &#39;f&#39;: True}
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atm.html" title="Testing cape.atm: Standard Atmospheric Models"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="subset.html" title="Testing cape API case subset commands"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 0.9.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Testing <code class="docutils literal notranslate"><span class="pre">cape</span></code></a> &#187;</li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 0.8 documentation, 2018.  Created using Sphinx 1.6.3.
+  </div>
+
+
+  </body>
+</html>

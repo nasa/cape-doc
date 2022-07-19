@@ -1,0 +1,433 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4.3.22. Options Module: cape.options &mdash; pyCart 0.8 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="pyCart 0.8 documentation" href="../../../index.html" />
+    <link rel="up" title="4.3. The cape module" href="../index.html" />
+    <link rel="next" title="4.3.22.1. Interface to basic run control options" href="runControl.html" />
+    <link rel="prev" title="4.3.21. Cape utilities: cape.util" href="../util.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="runControl.html" title="4.3.22.1. Interface to basic run control options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../util.html" title="4.3.21. Cape utilities: cape.util"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyCart 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >4. Cape Module Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">4.3. The <code class="docutils literal"><span class="pre">cape</span></code> module</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../util.html"
+                        title="previous chapter">4.3.21. Cape utilities: <code class="docutils literal"><span class="pre">cape.util</span></code></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="runControl.html"
+                        title="next chapter">4.3.22.1. Interface to basic run control options</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/cape/cape/options/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-cape.options">
+<span id="options-module-cape-options"></span><h1>4.3.22. Options Module: <a class="reference internal" href="#module-cape.options" title="cape.options"><code class="xref py py-mod docutils literal"><span class="pre">cape.options</span></code></a><a class="headerlink" href="#module-cape.options" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-cape.options" title="cape.options"><code class="xref py py-mod docutils literal"><span class="pre">cape.options</span></code></a> provides tools to read, access, modify, and write
+settings for <a class="reference internal" href="../index.html#module-cape" title="cape"><code class="xref py py-mod docutils literal"><span class="pre">cape</span></code></a>. The class is based off of the built-int <code class="xref py py-class docutils literal"><span class="pre">dict</span></code>
+class, so its default behavior, such as <code class="docutils literal"><span class="pre">opts['RunControl']</span></code> or
+<code class="docutils literal"><span class="pre">opts.get('RunControl')</span></code> are also present. In addition, many convenience
+methods, such as <code class="docutils literal"><span class="pre">opts.set_PhaseIters(n)</span></code>, which sets the number of iterations
+to run, are provided.</p>
+<p>In addition, this module controls default values of each pyCart
+parameter in a two-step process.  The precedence used to determine what the
+value of a given parameter should be is below.</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Values directly specified in the input file, <code class="file docutils literal"><span class="pre">cape.json</span></code></p>
+</li>
+<li><dl class="first docutils">
+<dt>Values specified in the default control file,</dt>
+<dd><p class="first last"><code class="file docutils literal"><span class="pre">$CAPE/settings/cape.default.json</span></code></p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Hard-coded defaults from this module</p>
+</li>
+</ul>
+</div></blockquote>
+<p>The strategy for the <a class="reference internal" href="#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a> class, or the derived
+<code class="xref py py-class docutils literal"><span class="pre">pyCart.options.Options</span></code>, <code class="xref py py-class docutils literal"><span class="pre">pyFun.options.Options</span></code>, or
+<code class="xref py py-class docutils literal"><span class="pre">pyOver.options.Options</span></code> classes, is that the user may get the options
+either from the parent options class or the subclass.  For example, both of the
+following commands get the option of whether or not to submit PBS jobs.</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">opts</span><span class="o">.</span><span class="n">get_qsub</span><span class="p">()</span>
+<span class="n">opts</span><span class="p">[</span><span class="s1">&#39;RunControl&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_qsub</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Furthermore, there is a control to get options specifically for phase <em>j</em>.  Each
+option can be called either with or without the phase number, for instance
+<code class="docutils literal"><span class="pre">opts.get_qsub()</span></code> or <code class="docutils literal"><span class="pre">opts.get_qsub(j)</span></code>.  If the option has different
+settings for each phase, this will return entry number <em>j</em> (0-based indexing) of
+the option (if <em>j</em> is greater than the length of the list, the last entry in the
+list is returned); but if the entry is a scalar, that scalar is returned
+regardless of the value of <em>j</em>.</p>
+<p>Finally, this module is very closely tied with 
+<a class="reference internal" href="../../json/index.html#cape-json"><span>the JSON section</span></a>, which often contains more useful
+descriptions.</p>
+<dl class="class">
+<dt id="cape.options.Options">
+<em class="property">class </em><code class="descclassname">cape.options.</code><code class="descname">Options</code><span class="sig-paren">(</span><em>fname=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.Options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Options structure, subclass of <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">File to be read as a JSON file with comments</p>
+</dd>
+<dt><em>kw</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary to be transformed into <a class="reference internal" href="#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-07-28 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.options.Options.AddPythonPath">
+<code class="descname">AddPythonPath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.Options.AddPythonPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add requested locations to the Python path</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">AddPythonPath</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-10-08 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.Options.get_ShellCmds">
+<code class="descname">get_ShellCmds</code><span class="sig-paren">(</span><em>typ=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.Options.get_ShellCmds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get shell commands, if any</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cmds</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_ShellCmds</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>typ</em>: {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="docutils literal"><span class="pre">&quot;batch&quot;</span></code> | <code class="docutils literal"><span class="pre">&quot;post&quot;</span></code></dt>
+<dd><p class="first last">Add additional commands for batch or post-processing jobs</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>cmds</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of initialization commands</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-11-08 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Moved to &#8220;RunControl&#8221;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.Options.get_dmask">
+<code class="descname">get_dmask</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.Options.get_dmask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the permissions to assign to new folders</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dmask</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_dmask</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em> <code class="xref py py-class docutils literal"><span class="pre">pyCart.options.Options</span></code></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>umask</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">File permissions mask</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-27 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.Options.get_nSubmit">
+<code class="descname">get_nSubmit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.Options.get_nSubmit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum number of jobs to submit at one time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nSub</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_nSubmit</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal"><span class="pre">pyCart.options.Options</span></code></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nSub</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Maximum number of jobs to submit</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-01-24 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.Options.get_umask">
+<code class="descname">get_umask</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.Options.get_umask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current file permissions mask</p>
+<p>The default value is the read from the system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">umask</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_umask</span><span class="p">(</span><span class="n">umask</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em> <code class="xref py py-class docutils literal"><span class="pre">pyCart.options.Options</span></code></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>umask</em>: <code class="xref py py-class docutils literal"><span class="pre">oct</span></code></dt>
+<dd><p class="first last">File permissions mask</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-27 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.Options.mkdir">
+<code class="descname">mkdir</code><span class="sig-paren">(</span><em>fdir</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.Options.mkdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a directory with the correct permissions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">fdir</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>fdir</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Directory to create</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-27 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="runControl.html">4.3.22.1. Interface to basic run control options</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="runControl.html#module-for-environment-variables">4.3.22.1.1. Module for environment variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runControl.html#overall-run-control-and-system-options">4.3.22.1.2. Overall run control and system options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ulimit.html">4.3.22.2. Interface to system resource options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aflr3.html">4.3.22.3. AFLR3 volume mesh generation options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intersect.html">4.3.22.4. Cart3D triangulation intersect options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Archive.html">4.3.22.5. Interface to case archiving options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pbs.html">4.3.22.6. Interface for PBS script options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Config.html">4.3.22.7. Geometry configuration options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DataBook.html">4.3.22.8. Data book options module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Report.html">4.3.22.9. Automated report options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">4.3.22.10. Utilities for Cape options module</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="runControl.html" title="4.3.22.1. Interface to basic run control options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../util.html" title="4.3.21. Cape utilities: cape.util"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyCart 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >4. Cape Module Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >4.3. The <code class="docutils literal"><span class="pre">cape</span></code> module</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014-2017, Derek J. Dalle.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

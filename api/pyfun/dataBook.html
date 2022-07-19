@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cape.pyfun.dataBook: pyFun data book module &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pyfun.lineLoad: Sectional loads module" href="lineLoad.html" />
+    <link rel="prev" title="cape.pyfun.cmd: Create commands for FUN3D executables" href="cmd.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lineLoad.html" title="cape.pyfun.lineLoad: Sectional loads module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cmd.html" title="cape.pyfun.cmd: Create commands for FUN3D executables"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.dataBook</span></code>: pyFun data book module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.pyfun.dataBook"></span><div class="section" id="cape-pyfun-databook-pyfun-data-book-module">
+<h1><a class="reference internal" href="#module-cape.pyfun.dataBook" title="cape.pyfun.dataBook"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.dataBook</span></code></a>: pyFun data book module<a class="headerlink" href="#cape-pyfun-databook-pyfun-data-book-module" title="Permalink to this headline">¶</a></h1>
+<p>This module contains functions for reading and processing forces,
+moments, and other statistics from cases in a trajectory.  Data books
+are usually created by using the
+<a class="reference internal" href="fun3d.html#cape.pyfun.cntl.Cntl.ReadDataBook" title="cape.pyfun.cntl.Cntl.ReadDataBook"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl.ReadDataBook()</span></code></a> function.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read FUN3D control instance</span>
+<span class="n">cntl</span> <span class="o">=</span> <span class="n">pyFun</span><span class="o">.</span><span class="n">Cntl</span><span class="p">(</span><span class="s2">&quot;pyFun.json&quot;</span><span class="p">)</span>
+<span class="c1"># Read the data book</span>
+<span class="n">cntl</span><span class="o">.</span><span class="n">ReadDataBook</span><span class="p">()</span>
+<span class="c1"># Get a handle</span>
+<span class="n">DB</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">DataBook</span>
+
+<span class="c1"># Read a line load component</span>
+<span class="n">DB</span><span class="o">.</span><span class="n">ReadLineLoad</span><span class="p">(</span><span class="s2">&quot;CORE_LL&quot;</span><span class="p">)</span>
+<span class="n">DBL</span> <span class="o">=</span> <span class="n">DB</span><span class="o">.</span><span class="n">LineLoads</span><span class="p">[</span><span class="s2">&quot;CORE_LL&quot;</span><span class="p">]</span>
+<span class="c1"># Read a target</span>
+<span class="n">DB</span><span class="o">.</span><span class="n">ReadTarget</span><span class="p">(</span><span class="s2">&quot;t97&quot;</span><span class="p">)</span>
+<span class="n">DBT</span> <span class="o">=</span> <span class="n">DB</span><span class="o">.</span><span class="n">Targets</span><span class="p">[</span><span class="s2">&quot;t97&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Data books can be created without an overall control structure, but it
+requires creating a run matrix object using
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.runmatrix.RunMatrix</span></code>, so it is a more involved process.</p>
+<p>Data book modules are also invoked during update and reporting
+command-line calls.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pyfun --aero
+<span class="gp">$</span> pyfun --ll
+<span class="gp">$</span> pyfun --pt
+<span class="gp">$</span> pyfun --triqfm
+<span class="gp">$</span> pyfun --report
+</pre></div>
+</div>
+</div></blockquote>
+<p>The available components mirror those described on the template data
+book modules, <a class="reference internal" href="../cape/cfdx/dataBook.html#module-cape.cfdx.dataBook" title="cape.cfdx.dataBook"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.dataBook</span></code></a>, <a class="reference internal" href="../cape/cfdx/lineLoad.html#module-cape.cfdx.lineLoad" title="cape.cfdx.lineLoad"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.lineLoad</span></code></a>, and
+<a class="reference internal" href="../cape/cfdx/pointSensor.html#module-cape.cfdx.pointSensor" title="cape.cfdx.pointSensor"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.pointSensor</span></code></a>.  However, some data book types may not be
+implemented for all CFD solvers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See Also</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../cape/cfdx/dataBook.html#module-cape.cfdx.dataBook" title="cape.cfdx.dataBook"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.dataBook</span></code></a></p></li>
+<li><p><a class="reference internal" href="../cape/cfdx/lineLoad.html#module-cape.cfdx.lineLoad" title="cape.cfdx.lineLoad"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.lineLoad</span></code></a></p></li>
+<li><p><a class="reference internal" href="../cape/cfdx/pointSensor.html#module-cape.cfdx.pointSensor" title="cape.cfdx.pointSensor"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.pointSensor</span></code></a></p></li>
+<li><p><a class="reference internal" href="lineLoad.html#module-cape.pyfun.lineLoad" title="cape.pyfun.lineLoad"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.lineLoad</span></code></a></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.options.DataBook</span></code></p></li>
+<li><p><a class="reference internal" href="options/DataBook.html#module-cape.pyfun.options.DataBook" title="cape.pyfun.options.DataBook"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.options.DataBook</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="global-pyfun-data-book-pyfun-databook-databook">
+<h2>Global pyFun data book: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.dataBook.DataBook</span></code><a class="headerlink" href="#global-pyfun-data-book-pyfun-databook-databook" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="py class">
+<dt class="sig sig-object py" id="cape.pyfun.dataBook.DataBook">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.pyfun.dataBook.</span></span><span class="sig-name descname"><span class="pre">DataBook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cntl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RootDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.dataBook.DataBook" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides an interface to the data book for a given
+CFD run matrix.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DB</span> <span class="o">=</span> <span class="n">pyFun</span><span class="o">.</span><span class="n">dataBook</span><span class="o">.</span><span class="n">DataBook</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.runmatrix.RunMatrix</span></code></dt><dd><p>The current pyFun trajectory (i.e. run matrix)</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.options.Options</span></code></dt><dd><p>Global pyFun options instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>DB</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.dataBook.DataBook</span></code></dt><dd><p>Instance of the pyFun data book class</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Started</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="individual-data-books">
+<h2>Individual data books<a class="headerlink" href="#individual-data-books" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="py class">
+<dt class="sig sig-object py" id="cape.pyfun.dataBook.DBComp">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.pyfun.dataBook.</span></span><span class="sig-name descname"><span class="pre">DBComp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cntl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.dataBook.DBComp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Individual component data book</p>
+<p>This class is derived from <a class="reference internal" href="../cape/cfdx/dataBook.html#cape.cfdx.dataBook.DBBase" title="cape.cfdx.dataBook.DBBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.dataBook.DBBase</span></code></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBc</span> <span class="o">=</span> <span class="n">DBComp</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">cntl</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of the component</p>
+</dd>
+<dt><em>x</em>: <a class="reference internal" href="../cape/runmatrix.html#cape.runmatrix.RunMatrix" title="cape.runmatrix.RunMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></a></dt><dd><p>RunMatrix for processing variable types</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></dt><dd><p>Global pyCart options instance</p>
+</dd>
+<dt><em>targ</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>If used, read a duplicate data book as a target named
+<em>targ</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>DBc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.dataBook.DBComp</span></code></dt><dd><p>An individual component data book</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-09-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyfun.dataBook.DBTarget">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.pyfun.dataBook.</span></span><span class="sig-name descname"><span class="pre">DBTarget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RootDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.dataBook.DBTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to handle data from data book target files</p>
+<p>There are more constraints on target files than the files that data
+book creates, and raw data books created by pyCart are not valid
+target files.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBT</span> <span class="o">=</span> <span class="n">DBTarget</span><span class="p">(</span><span class="n">targ</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>targ</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.options.DataBook.DBTarget</span></code></dt><dd><p>Instance of a target source options interface</p>
+</dd>
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.runmatrix.RunMatrix</span></code></dt><dd><p>Run matrix interface</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.options.Options</span></code></dt><dd><p>Global pyCart options instance to determine which fields
+are useful</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>DBT</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.dataBook.DBTarget</span></code></dt><dd><p>Instance of the pyCart data book target data carrier</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-12-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Started</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="data-book-classes-for-individual-cases">
+<h2>Data book classes for individual cases<a class="headerlink" href="#data-book-classes-for-individual-cases" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="py class">
+<dt class="sig sig-object py" id="cape.pyfun.dataBook.CaseFM">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.pyfun.dataBook.</span></span><span class="sig-name descname"><span class="pre">CaseFM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.dataBook.CaseFM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterative force &amp; moment histories for one case, one component</p>
+<p>This class contains methods for reading data about an the history
+of an individual component for a single case.  It reads the Tecplot
+file <code class="file docutils literal notranslate"><span class="pre">$proj_fm_$comp.dat</span></code> where <em>proj</em> is the lower-case root
+project name and <em>comp</em> is the name of the component.  From this
+file it determines which coefficients are recorded automatically.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FM</span> <span class="o">=</span> <span class="n">CaseFM</span><span class="p">(</span><span class="n">proj</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>proj</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Root name of the project</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component to process</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>FM</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.aero.FM</span></code></dt><dd><p>Instance of the force and moment class</p>
+</dd>
+<dt><em>FM.C</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of coefficients</p>
+</dd>
+<dt><em>FM.i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt><dd><p>List of iteration numbers</p>
+</dd>
+<dt><em>FM.CA</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt><dd><p>Axial force coefficient at each iteration</p>
+</dd>
+<dt><em>FM.CY</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt><dd><p>Lateral force coefficient at each iteration</p>
+</dd>
+<dt><em>FM.CN</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt><dd><p>Normal force coefficient at each iteration</p>
+</dd>
+<dt><em>FM.CLL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt><dd><p>Rolling moment coefficient at each iteration</p>
+</dd>
+<dt><em>FM.CLM</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt><dd><p>Pitching moment coefficient at each iteration</p>
+</dd>
+<dt><em>FM.CLN</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt><dd><p>Yaw moment coefficient at each iteration</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-11-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Starter version</p></li>
+<li><p>2014-12-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Copied from previous <cite>aero.FM</cite></p></li>
+<li><p>2015-10-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Self-contained version</p></li>
+<li><dl class="simple">
+<dt>2016-05-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Handles adaptive;</dt><dd><p><code class="docutils literal notranslate"><span class="pre">pyfun00,pyfun01,...</span></code></p>
+</dd>
+</dl>
+</li>
+<li><p>2016-10-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Catching iteration resets</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyfun.dataBook.CaseResid">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.pyfun.dataBook.</span></span><span class="sig-name descname"><span class="pre">CaseResid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.dataBook.CaseResid" title="Permalink to this definition">¶</a></dt>
+<dd><p>FUN3D iterative history class</p>
+<p>This class provides an interface to residuals, CPU time, and
+similar data for a given case</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">pyFun</span><span class="o">.</span><span class="n">dataBook</span><span class="o">.</span><span class="n">CaseResid</span><span class="p">(</span><span class="n">proj</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>proj</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Project root name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>hist</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.dataBook.CaseResid</span></code></dt><dd><p>Instance of the run history class</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2016-10-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Catching iteration resets</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="other-cape-pyfun-databook-methods">
+<h2>Other <a class="reference internal" href="#module-cape.pyfun.dataBook" title="cape.pyfun.dataBook"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.dataBook</span></code></a> methods<a class="headerlink" href="#other-cape-pyfun-databook-methods" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.dataBook</span></code>: pyFun data book module</a><ul>
+<li><a class="reference internal" href="#global-pyfun-data-book-pyfun-databook-databook">Global pyFun data book: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.dataBook.DataBook</span></code></a></li>
+<li><a class="reference internal" href="#individual-data-books">Individual data books</a></li>
+<li><a class="reference internal" href="#data-book-classes-for-individual-cases">Data book classes for individual cases</a></li>
+<li><a class="reference internal" href="#other-cape-pyfun-databook-methods">Other <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.dataBook</span></code> methods</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cmd.html"
+                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.cmd</span></code>: Create commands for FUN3D executables</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="lineLoad.html"
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.lineLoad</span></code>: Sectional loads module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pyfun/dataBook.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lineLoad.html" title="cape.pyfun.lineLoad: Sectional loads module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cmd.html" title="cape.pyfun.cmd: Create commands for FUN3D executables"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.dataBook</span></code>: pyFun data book module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

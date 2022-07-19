@@ -1,0 +1,559 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cape.cgns: CGNS File Interface &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.cntl: Base module for CFD operations and processing" href="cntl.html" />
+    <link rel="prev" title="cape.atm Atmosphere Models" href="atm.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cntl.html" title="cape.cntl: Base module for CFD operations and processing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="atm.html" title="cape.atm Atmosphere Models"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cgns</span></code>: CGNS File Interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.cgns"></span><div class="section" id="cape-cgns-cgns-file-interface">
+<h1><a class="reference internal" href="#module-cape.cgns" title="cape.cgns"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cgns</span></code></a>: CGNS File Interface<a class="headerlink" href="#cape-cgns-cgns-file-interface" title="Permalink to this headline">¶</a></h1>
+<p>This module provides a class for reading CGNS files of certain types
+that have been implemented.  The main purpose is to read surface
+triangulations with quads and convert it into a <a class="reference internal" href="tri.html#cape.tri.Tri" title="cape.tri.Tri"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.tri.Tri</span></code></a>
+object.  However, the class provided in this module,
+<a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a>, must be converted into a <a class="reference internal" href="tri.html#cape.tri.Tri" title="cape.tri.Tri"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.tri.Tri</span></code></a>
+or other object externally.  This module merely reads the file, reads
+the data from each node, and constructs a sub-node table.</p>
+<p>In order to create a triangulation interface from a CGNS file, see
+<a class="reference internal" href="tri.html#cape.tri.Tri" title="cape.tri.Tri"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.tri.Tri</span></code></a>, and use the <em>cgns</em> keyword argument.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cgns.ADFAddress2Pos">
+<span class="sig-prename descclassname"><span class="pre">cape.cgns.</span></span><span class="sig-name descname"><span class="pre">ADFAddress2Pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.ADFAddress2Pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert ADF 12-byte code into position index</p>
+<p>This is a hex code with but skipping the 8th character</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pos</span> <span class="o">=</span> <span class="n">ADFAddress2Pos</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>addr</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>12-character string hex code</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>pos</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Position in file in bytes</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-03-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.cgns.CGNS">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.cgns.</span></span><span class="sig-name descname"><span class="pre">CGNS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.CGNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface to CGNS files</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cgns</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">cgns</span><span class="o">.</span><span class="n">CGNS</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of CGNS file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cgns</em>: <a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a></dt><dd><p>CGNS file interface</p>
+</dd>
+<dt><em>cgns.nNode</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of nodes read</p>
+</dd>
+<dt><em>cgns.NodeNames</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Names of each node</p>
+</dd>
+<dt><em>cgns.NodeLabels</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Labels for each node (often a data type holder)</p>
+</dd>
+<dt><em>cgns.NodeAddresses</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>File position of the beginning of each node</p>
+</dd>
+<dt><em>cgns.DataTypes</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>Data type for each node</p>
+</dd>
+<dt><em>cgns.Data</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Data set for each node</p>
+</dd>
+<dt><em>cgns.SubNodeTables</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code>]</dt><dd><p>List of any child nodes for each node</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-03-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cgns.CGNS.GetCompIDInfo">
+<span class="sig-name descname"><span class="pre">GetCompIDInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.CGNS.GetCompIDInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the info for a named zone with type <em>Elements_t</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ka</span><span class="p">,</span> <span class="n">kb</span><span class="p">,</span> <span class="n">Elems</span> <span class="o">=</span> <span class="n">cgns</span><span class="o">.</span><span class="n">GetCompIDInfo</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ka</span><span class="p">,</span> <span class="n">kb</span><span class="p">,</span> <span class="n">Elems</span> <span class="o">=</span> <span class="n">cgns</span><span class="o">.</span><span class="n">GetCompIDInfo</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cgns</em>: <a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a></dt><dd><p>CGNS file interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component to read</p>
+</dd>
+<dt><em>addr</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Address of the node within the file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl>
+<dt><em>ka</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Element index of the first element in <em>comp</em> (1-based)</p>
+</dd>
+<dt><em>kb</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Element index of the last element in <em>comp</em> (1-based)</p>
+</dd>
+<dt><em>Elems</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><ul class="simple">
+<li><p><em>shape</em>: (<em>nElem</em>, <em>nVert</em>)</p></li>
+</ul>
+<p>Array of vertex indices for each element</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-03-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cgns.CGNS.GetNodeByAddress">
+<span class="sig-name descname"><span class="pre">GetNodeByAddress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.CGNS.GetNodeByAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get index of node by explicit address (unique identifier)</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="o">=</span> <span class="n">cgns</span><span class="o">.</span><span class="n">GetNodeByAddress</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cgns</em>: <a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a></dt><dd><p>CGNS file interface</p>
+</dd>
+<dt><em>addr</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Address of the beginning of the node</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>k</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Node index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-03-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cgns.CGNS.GetNodeIndex">
+<span class="sig-name descname"><span class="pre">GetNodeIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.CGNS.GetNodeIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get index of a node by name and label or address</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">K</span> <span class="o">=</span> <span class="n">cgns</span><span class="o">.</span><span class="n">GetNodeIndex</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">K</span> <span class="o">=</span> <span class="n">cgns</span><span class="o">.</span><span class="n">GetNodeIndex</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">K</span> <span class="o">=</span> <span class="n">cgns</span><span class="o">.</span><span class="n">GetNodeIndex</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">K</span> <span class="o">=</span> <span class="n">cgns</span><span class="o">.</span><span class="n">GetNodeIndex</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cgns</em>: <a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a></dt><dd><p>CGNS file interface</p>
+</dd>
+<dt><em>name</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Node name</p>
+</dd>
+<dt><em>label</em>: { <code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Node label</p>
+</dd>
+<dt><em>addr</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Address of the beginning of the node</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>k</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>Node index list</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-03-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cgns.CGNS.GetSubNodeByLabel">
+<span class="sig-name descname"><span class="pre">GetSubNodeByLabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.CGNS.GetSubNodeByLabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get subnode by desired type</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="n">cgns</span><span class="o">.</span><span class="n">GetSubNodeByLabel</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cgns</em>: <a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a></dt><dd><p>CGNS file interface</p>
+</dd>
+<dt><em>k</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Node index (0-based)</p>
+</dd>
+<dt><em>label</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Desired label</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>J</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of such subnodes</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-03-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cgns.CGNS.GetSubNodeByName">
+<span class="sig-name descname"><span class="pre">GetSubNodeByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.CGNS.GetSubNodeByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get subnode by desired name</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="n">cgns</span><span class="o">.</span><span class="n">GetSubNodeByName</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cgns</em>: <a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a></dt><dd><p>CGNS file interface</p>
+</dd>
+<dt><em>k</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Node index (0-based)</p>
+</dd>
+<dt><em>name</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Desired name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>J</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of such subnodes</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-03-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cgns.CGNS.ReadADF">
+<span class="sig-name descname"><span class="pre">ReadADF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.CGNS.ReadADF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read open CGNS/ADF file, currently at position 0</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cgns</span><span class="o">.</span><span class="n">ReadADF</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cgns</em>: <a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a></dt><dd><p>CGNS file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file currently at the beginning of <em>NoDe</em> field</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2018-03-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cgns.CGNS.ReadADFData">
+<span class="sig-name descname"><span class="pre">ReadADFData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.CGNS.ReadADFData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read one <em>DaTa</em> entry from an open CGNS/ADF file</p>
+<p>The next four bytes must be the string <code class="docutils literal notranslate"><span class="pre">&quot;DaTa&quot;</span></code>, and the
+following 12 bytes must give the address of the end of the field
+as a hex code string.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">cgns</span><span class="o">.</span><span class="n">ReadADFData</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cgns</em>: <a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a></dt><dd><p>CGNS file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file currently at the beginning of <em>DaTa</em> field</p>
+</dd>
+<dt><em>dt</em>: <code class="docutils literal notranslate"><span class="pre">&quot;MT&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;C1&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;I4&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;R4&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;R8&quot;</span></code></dt><dd><p>Data type, two-digit code</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>data</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Data read from file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-03-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cgns.CGNS.ReadADFFree">
+<span class="sig-name descname"><span class="pre">ReadADFFree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.CGNS.ReadADFFree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read one <em>FreE</em> entry from an open CGNS/ADF file</p>
+<p>The next 4 bytes must be the string <code class="docutils literal notranslate"><span class="pre">&quot;FreE&quot;</span></code>, and the
+following 12 bytes must give the address of the end of the field
+as a hex code string.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cgns</span><span class="o">.</span><span class="n">ReadADFFreE</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cgns</em>: <a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a></dt><dd><p>CGNS file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file currently at the beginning of <em>DaTa</em> field</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2018-03-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cgns.CGNS.ReadADFNode">
+<span class="sig-name descname"><span class="pre">ReadADFNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.CGNS.ReadADFNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a (new) node from an open CGNS/ADF file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cgns</span><span class="o">.</span><span class="n">ReadADFNode</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cgns</em>: <a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a></dt><dd><p>CGNS file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file currently at the beginning of <em>NoDe</em> field</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2018-03-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cgns.CGNS.ReadADFSubNodeTable">
+<span class="sig-name descname"><span class="pre">ReadADFSubNodeTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.CGNS.ReadADFSubNodeTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read one <em>SNTb</em> entry from an open CGNS/ADF file</p>
+<p>The next four bytes must be the string <code class="docutils literal notranslate"><span class="pre">&quot;SNTb&quot;</span></code>, and the
+following 12 bytes must give the address of the end of the field
+as a hex code string.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sntb</span> <span class="o">=</span> <span class="n">cgns</span><span class="o">.</span><span class="n">ReadADFSubNodeTable</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cgns</em>: <a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a></dt><dd><p>CGNS file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file currently at the beginning of <em>DaTa</em> field</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>sntb</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.array</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]</dt><dd><p>List of name and begin addresses of any subnodes</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-03-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cgns.CGNS.ReadADFZs">
+<span class="sig-name descname"><span class="pre">ReadADFZs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cgns.CGNS.ReadADFZs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read strings like “zzzzzzzzzzzz” until a relevant char</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cgns</span><span class="o">.</span><span class="n">ReadADFZs</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cgns</em>: <a class="reference internal" href="#cape.cgns.CGNS" title="cape.cgns.CGNS"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cgns.CGNS</span></code></a></dt><dd><p>CGNS file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file currently at the beginning of <em>DaTa</em> field</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2018-03-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="atm.html"
+                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.atm</span></code> Atmosphere Models</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cntl.html"
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cntl</span></code>: Base module for CFD operations and processing</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cape/cgns.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cntl.html" title="cape.cntl: Base module for CFD operations and processing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="atm.html" title="cape.atm Atmosphere Models"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cgns</span></code>: CGNS File Interface</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

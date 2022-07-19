@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>7.13. Extract TRI file nodes on STEP curves:: pc_StepTri2Crv.py &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7.14. Calculate Forces and Moments on a TRIQ File: pc_TriqFM.py" href="TriqFM.html" />
+    <link rel="prev" title="7.12. Convert STEP File to Plot3D Multiple Curve File: pc_Step2Crv.py" href="Step2Crv.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="TriqFM.html" title="7.14. Calculate Forces and Moments on a TRIQ File: pc_TriqFM.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Step2Crv.html" title="7.12. Convert STEP File to Plot3D Multiple Curve File: pc_Step2Crv.py"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">7. </span>Script Library</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Step2Crv.html"
+                        title="previous chapter"><span class="section-number">7.12. </span>Convert STEP File to Plot3D Multiple Curve File: <code class="docutils literal notranslate"><span class="pre">pc_Step2Crv.py</span></code></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="TriqFM.html"
+                        title="next chapter"><span class="section-number">7.14. </span>Calculate Forces and Moments on a TRIQ File: <code class="docutils literal notranslate"><span class="pre">pc_TriqFM.py</span></code></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/script/StepTri2Crv.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-pc_StepTri2Crv"></span><div class="section" id="extract-tri-file-nodes-on-step-curves-pc-steptri2crv-py">
+<h1><span class="section-number">7.13. </span>Extract TRI file nodes on STEP curves:: <code class="docutils literal notranslate"><span class="pre">pc_StepTri2Crv.py</span></code><a class="headerlink" href="#extract-tri-file-nodes-on-step-curves-pc-steptri2crv-py" title="Permalink to this headline">¶</a></h1>
+<p>Convert a STEP file to a Plot3D multiple curve file by sampling curves from the
+STEP file at nodes from a surface triangulation.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pc_StepTri2Crv.py <span class="o">[</span>OPTIONS<span class="o">]</span>
+<span class="gp">$</span> pc_StepTri2Crv.py PRE <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><p><em>PRE</em>: Use <code class="docutils literal notranslate"><span class="pre">$PRE.stp</span></code> and <code class="docutils literal notranslate"><span class="pre">$PRE.i.tri</span></code> as input files</p>
+</dd>
+<dt class="field-odd">Options</dt>
+<dd class="field-odd"><dl class="option-list">
+<dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
+<dd><p>Display this help message and exit</p>
+</dd>
+<dt><kbd><span class="option">--stp <var>STP</var></span></kbd></dt>
+<dd><p>Use <em>STP</em> as input STEP file</p>
+</dd>
+<dt><kbd><span class="option">--tri <var>TRI</var></span></kbd></dt>
+<dd><p>Use <em>TRI</em> as input triangulation file</p>
+</dd>
+<dt><kbd><span class="option">--crv <var>CRV</var></span></kbd></dt>
+<dd><p>Use <em>CRV</em> as name of created output file</p>
+</dd>
+<dt><kbd><span class="option">--ascii</span></kbd></dt>
+<dd><p>Write text curves file instead of binary</p>
+</dd>
+<dt><kbd><span class="option">--lr8</span></kbd></dt>
+<dd><p>Write double-precision little-endian curves (overrides later options)</p>
+</dd>
+<dt><kbd><span class="option">--r8</span></kbd></dt>
+<dd><p>Write double-precision big-endian curves (overrides later options)</p>
+</dd>
+<dt><kbd><span class="option">--lr4</span></kbd></dt>
+<dd><p>Write single-precision little-endian curves (overrides later options)</p>
+</dd>
+<dt><kbd><span class="option">--r4</span></kbd></dt>
+<dd><p>Write single-precision big-endian curves (overrides later options)</p>
+</dd>
+<dt><kbd><span class="option">--atol <var>ATOL</var></span></kbd></dt>
+<dd><p>Maximum angle between node vector and curve tangent [60]</p>
+</dd>
+<dt><kbd><span class="option">--dtol <var>DTOL</var></span></kbd></dt>
+<dd><p>Max distance from node to curve as a fraction of edge length [0.05]</p>
+</dd>
+<dt><kbd><span class="option">-n <var>N</var></span></kbd></dt>
+<dd><p>Use a minimum of <em>N</em> segments per curve (defaults to <code class="docutils literal notranslate"><span class="pre">3</span></code>)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>-ds DS</dt><dd><p>Use a maximum arc length of <em>DS</em> on each curve</p>
+</dd>
+<dt>-dth THETA</dt><dd><p>Make sure maximum turning angle is below <em>THETA</em></p>
+</dd>
+<dt>-da PHI</dt><dd><p>Make sure maximum turning angle times length of adjoining segments is
+less than or equal to <em>PHI</em></p>
+</dd>
+</dl>
+<dl class="option-list">
+<dt><kbd><span class="option">--endian <var>BO</var></span></kbd></dt>
+<dd><p>Use non-default byte order, “big” or “little”</p>
+</dd>
+<dt><kbd><span class="option">--sp</span></kbd></dt>
+<dd><p>Write single-precision curve file (default is double)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-09-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Methods</strong>:</p>
+<p>This script can also be imported as a module if the <code class="file docutils literal notranslate"><span class="pre">scriptlib/</span></code>
+folder is on the Python path.  If so, the following methods are created.</p>
+<dl class="function">
+<dt id="pc_StepTri2Crv.StepTri2Crv">
+<code class="sig-prename descclassname">pc_StepTri2Crv.</code><code class="sig-name descname">StepTri2Crv</code><span class="sig-paren">(</span><em class="sig-param">*a</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#pc_StepTri2Crv.StepTri2Crv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read curves from a STEP file and use these to subset nodes from a surface
+triangulation.  Each curve is written as a series of points, and the
+combined output is written to a Plot3D multiple curve file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">StepTri2Crv</span><span class="p">(</span><span class="n">fpre</span><span class="p">,</span> <span class="n">stp</span><span class="o">=</span><span class="n">fstp</span><span class="p">,</span> <span class="n">tri</span><span class="o">=</span><span class="n">ftri</span><span class="p">,</span> <span class="n">o</span><span class="o">=</span><span class="n">fcrv</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fpre</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Set default file names as $fpre.stp, $fpre.i.tri, and $fpre.crv</p>
+</dd>
+<dt><em>fstp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of input STEP file</p>
+</dd>
+<dt><em>ftri</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of input TRI file</p>
+</dd>
+<dt><em>fcrv</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of output file (defaults to value of <em>fstp</em> but with <code class="docutils literal notranslate"><span class="pre">.crv</span></code>
+as the extension in the place of <code class="docutils literal notranslate"><span class="pre">.stp</span></code> or <code class="docutils literal notranslate"><span class="pre">.step</span></code>)</p>
+</dd>
+<dt><em>sp</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Write curves as single-precision file</p>
+</dd>
+<dt><em>ascii</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Write curves as text file</p>
+</dd>
+<dt><em>endian</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;big&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;little&quot;</span></code></dt><dd><p>Byte order</p>
+</dd>
+<dt><em>r4</em>, <em>b4</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Write single-precision big-endian</p>
+</dd>
+<dt><em>r8</em>, <em>b8</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Write double-precision big-endian</p>
+</dd>
+<dt><em>lr4</em>, <em>lb4</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Write single-precision little-endian</p>
+</dd>
+<dt><em>lr8</em>, <em>lb8</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Write double-precision little-endian</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-09-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="TriqFM.html" title="7.14. Calculate Forces and Moments on a TRIQ File: pc_TriqFM.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Step2Crv.html" title="7.12. Convert STEP File to Plot3D Multiple Curve File: pc_Step2Crv.py"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">7. </span>Script Library</a> &#187;</li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0 documentation, 2019.
+  </div>
+
+
+  </body>
+</html>

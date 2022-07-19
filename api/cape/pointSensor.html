@@ -1,0 +1,979 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>cape.pointSensor: Point sensor databook &#8212; CAPE 0.9.2</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.report: Automated report interface" href="report.html" />
+    <link rel="prev" title="cape.plt: Python interface to Tecplot PLT files" href="plt.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="report.html" title="cape.report: Automated report interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="plt.html" title="cape.plt: Python interface to Tecplot PLT files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 0.9.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The <code class="docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">cape.pointSensor</span></code>: Point sensor databook</a><ul>
+<li><a class="reference internal" href="#point-sensor-group-data-book">Point sensor group data book</a></li>
+<li><a class="reference internal" href="#individual-point-sensor-data-books">Individual point sensor data books</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="plt.html"
+                        title="previous chapter"><code class="docutils literal notranslate"><span class="pre">cape.plt</span></code>: Python interface to Tecplot PLT files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="report.html"
+                        title="next chapter"><code class="docutils literal notranslate"><span class="pre">cape.report</span></code>: Automated report interface</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cape/pointSensor.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.pointSensor"></span><div class="section" id="cape-pointsensor-point-sensor-databook">
+<h1><a class="reference internal" href="#module-cape.pointSensor" title="cape.pointSensor"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pointSensor</span></code></a>: Point sensor databook<a class="headerlink" href="#cape-pointsensor-point-sensor-databook" title="Permalink to this headline">¶</a></h1>
+<p>This module contains a class for reading and averaging point sensors or
+extracting point sensor data from a CFD solution file. It is not included in
+the <a class="reference internal" href="dataBook.html#module-cape.dataBook" title="cape.dataBook"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dataBook</span></code></a> module in order to give finer import control when used
+in other modules.</p>
+<p>Point sensors are often defined in two regions of the main Cape JSON file read
+by <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.Options</span></code> or <a class="reference internal" href="cntl.html#cape.cntl.Cntl" title="cape.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cntl.Cntl</span></code></a>.  Usually the
+coordinates of the points are defined in the <code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code> section while the
+groups and other databook attributes are defined in the <code class="docutils literal notranslate"><span class="pre">&quot;DataBook&quot;</span></code> section.</p>
+<p>The database components are split into groups, so the <code class="docutils literal notranslate"><span class="pre">&quot;DataBook&quot;</span></code> section of
+the JSON file may have a point sensor group called <code class="docutils literal notranslate"><span class="pre">&quot;P1&quot;</span></code> that includes
+points <code class="docutils literal notranslate"><span class="pre">&quot;p1&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;p2&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;p3&quot;</span></code>.  To explain this example further, the
+following JSON snippets could be used to define these three points in one
+group.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;Config&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Points&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;p1&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">2.5000</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">],</span> 
+            <span class="s2">&quot;p2&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">2.5000</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">],</span>
+            <span class="s2">&quot;p3&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">3.5000</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;DataBook&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;P1&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;TriqPoint&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Points&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;p1&quot;</span><span class="p">,</span> <span class="s2">&quot;p2&quot;</span><span class="p">,</span> <span class="s2">&quot;p3&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>If a data book is read in as <em>DB</em>, the point sensor group <em>DBP</em> for group
+<code class="docutils literal notranslate"><span class="pre">&quot;P1&quot;</span></code> and the point sensor <em>p1</em> are obtained using the commands below.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Point</span> <span class="n">sensor</span> <span class="n">group</span>
+<span class="n">DBP</span> <span class="o">=</span> <span class="n">DB</span><span class="o">.</span><span class="n">PointSensors</span><span class="p">[</span><span class="s2">&quot;P1&quot;</span><span class="p">]</span>
+<span class="o">//</span> <span class="n">Individual</span> <span class="n">point</span> <span class="n">sensor</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">DBP</span><span class="p">[</span><span class="s2">&quot;p1&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The same snippet could also be interpreted as a Python <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> and used
+as raw inputs without using <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.Options</span></code>.  Note that each
+point sensor group can be one of two point sensor types:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">&quot;Point&quot;</span></code>: Point sensor data explicitly provided by CFD solver</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;TriqPoint&quot;</span></code>: Surface point sensor extracted from CFD solution</li>
+</ul>
+</div></blockquote>
+<p>In many cases, the <code class="docutils literal notranslate"><span class="pre">&quot;Point&quot;</span></code> type is not fully implemented.  It is a very
+sensitive method since it requires the user to specify the points before
+running the CFD case (whereas <code class="docutils literal notranslate"><span class="pre">&quot;TriqPoint&quot;</span></code> just requires a surface solution
+output), but it is the only way to extract point iterative histories.</p>
+<div class="section" id="point-sensor-group-data-book">
+<h2>Point sensor group data book<a class="headerlink" href="#point-sensor-group-data-book" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="class">
+<dt id="cape.pointSensor.DBPointSensorGroup">
+<em class="property">class </em><code class="descclassname">cape.pointSensor.</code><code class="descname">DBPointSensorGroup</code><span class="sig-paren">(</span><em>x</em>, <em>opts</em>, <em>name</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensorGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Point sensor group data book</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBPG</span> <span class="o">=</span> <span class="n">DBPointSensorGroup</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>x</em>: <a class="reference internal" href="runmatrix.html#cape.runmatrix.RunMatrix" title="cape.runmatrix.RunMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></a></dt>
+<dd><p class="first last">RunMatrix/run matrix interface</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.Options</span></code></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>name</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Name of data book item (defaults to <em>pt</em>)</p>
+</dd>
+<dt><em>pts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">List of points to read, by default all points in the group</p>
+</dd>
+<dt><em>RootDir</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Project root directory absolute path, default is <em>PWD</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBPG</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensorGroup" title="cape.pointSensor.DBPointSensorGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensorGroup</span></code></a></dt>
+<dd><p class="first last">A point sensor group data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-12-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensorGroup.DeleteCases">
+<code class="descname">DeleteCases</code><span class="sig-paren">(</span><em>I</em>, <em>pt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensorGroup.DeleteCases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete list of cases from point sensor data book</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBPG</span><span class="o">.</span><span class="n">Delete</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBPG</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensorGroup" title="cape.pointSensor.DBPointSensorGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensorGroup</span></code></a></dt>
+<dd><p class="first last">Point sensor group data book</p>
+</dd>
+<dt><em>I</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">List of trajectory indices</p>
+</dd>
+<dt><em>pt</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Point name or list of point names</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-10-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensorGroup.DeleteCasesComp">
+<code class="descname">DeleteCasesComp</code><span class="sig-paren">(</span><em>I</em>, <em>pt</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensorGroup.DeleteCasesComp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete list of cases from data book</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">DBPG</span><span class="o">.</span><span class="n">Delete</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">pt</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBPG</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensorGroup" title="cape.pointSensor.DBPointSensorGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensorGroup</span></code></a></dt>
+<dd><p class="first last">Point sensor group data book</p>
+</dd>
+<dt><em>I</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">List of trajectory indices or update all cases in trajectory</p>
+</dd>
+<dt><em>pt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of point sensor</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of deleted entries</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-03-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2017-04-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Split by component</li>
+<li>2017-10-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: From <a class="reference internal" href="dataBook.html#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.dataBook.DataBook</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensorGroup.ProcessComps">
+<code class="descname">ProcessComps</code><span class="sig-paren">(</span><em>pt=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensorGroup.ProcessComps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process list of points</p>
+<p>This performs several conversions:</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><em>comp</em></th>
+<th class="head">Output</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DBPG.pts</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">pt.split(',')</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">pt</span></code></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBPG</span><span class="o">.</span><span class="n">ProcessComps</span><span class="p">(</span><span class="n">pt</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <a class="reference internal" href="dataBook.html#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.dataBook.DataBook</span></code></a></dt>
+<dd><p class="first last">Point sensor group data book</p>
+</dd>
+<dt><em>pt</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Point name or list of point names</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-10-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensorGroup.ReadCasePoint">
+<code class="descname">ReadCasePoint</code><span class="sig-paren">(</span><em>pt</em>, <em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensorGroup.ReadCasePoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read point data from current run folder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">P</span> <span class="o">=</span> <span class="n">DBPG</span><span class="o">.</span><span class="n">ReadCasePoint</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBPG</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointGroup</span></code></dt>
+<dd><p class="first last">Point sensor group data book</p>
+</dd>
+<dt><em>pt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of point to read</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Case index</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>P</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of state variables as requested from the point</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-10-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensorGroup.ReadPointSensor">
+<code class="descname">ReadPointSensor</code><span class="sig-paren">(</span><em>pt</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensorGroup.ReadPointSensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a point sensor</p>
+<p>This function needs to be customized for each derived class so that the
+correct class is used for each of the member data books</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBPG</span><span class="o">.</span><span class="n">ReadPointSensor</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBPG</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensorGroup" title="cape.pointSensor.DBPointSensorGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensorGroup</span></code></a></dt>
+<dd><p class="first last">A point sensor group data book</p>
+</dd>
+<dt><em>pt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the point to read</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-10-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensorGroup.Sort">
+<code class="descname">Sort</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensorGroup.Sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort point sensor group</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBPG</span><span class="o">.</span><span class="n">Sort</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBPG</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensorGroup" title="cape.pointSensor.DBPointSensorGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensorGroup</span></code></a></dt>
+<dd><p class="first last">A point sensor group data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensorGroup.Update">
+<code class="descname">Update</code><span class="sig-paren">(</span><em>I=None</em>, <em>pt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensorGroup.Update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the data book for a list of cases from the run matrix</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBPG</span><span class="o">.</span><span class="n">Update</span><span class="p">(</span><span class="n">I</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBPG</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.dataBook.DBPointGroup</span></code></dt>
+<dd><p class="first last">Point sensor group data book</p>
+</dd>
+<dt><em>I</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">List of trajectory indices or update all cases in trajectory</p>
+</dd>
+<dt><em>pt</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Point name or list of point names</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-10-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensorGroup.UpdateCase">
+<code class="descname">UpdateCase</code><span class="sig-paren">(</span><em>i</em>, <em>pt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensorGroup.UpdateCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update all points for one case</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">DBPG</span><span class="o">.</span><span class="n">UpdateCase</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBPG</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.dataBook.DBPointGroup</span></code></dt>
+<dd><p class="first last">Point sensor group data book</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Case index</p>
+</dd>
+<dt><em>pt</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Point name or list of point names</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>n</em>: <code class="docutils literal notranslate"><span class="pre">0</span></code> | <code class="docutils literal notranslate"><span class="pre">1</span></code></dt>
+<dd><p class="first last">How many updates were made</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-10-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensorGroup.UpdateCaseComp">
+<code class="descname">UpdateCaseComp</code><span class="sig-paren">(</span><em>i</em>, <em>pt</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensorGroup.UpdateCaseComp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update or add a case to a point data book</p>
+<p>The history of a run directory is processed if either one of three
+criteria are met.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>The case is not already in the data book</li>
+<li>The most recent iteration is greater than the data book value</li>
+<li>The number of iterations used to create statistics has changed</li>
+</ol>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">DBPG</span><span class="o">.</span><span class="n">UpdateCaseComp</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">pt</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBPG</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensorGroup" title="cape.pointSensor.DBPointSensorGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensorGroup</span></code></a></dt>
+<dd><p class="first last">Point sensor group data book</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">RunMatrix index</p>
+</dd>
+<dt><em>pt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of point</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>n</em>: <code class="docutils literal notranslate"><span class="pre">0</span></code> | <code class="docutils literal notranslate"><span class="pre">1</span></code></dt>
+<dd><p class="first last">How many updates were made</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2017-04-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Modified to work one component</li>
+<li>2017-04-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added output</li>
+<li>2017-10-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: From <a class="reference internal" href="dataBook.html#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.dataBook.DataBook</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensorGroup.UpdateRunMatrix">
+<code class="descname">UpdateRunMatrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensorGroup.UpdateRunMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Match the trajectory to the cases in the data book</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBPG</span><span class="o">.</span><span class="n">UpdateRunMatrix</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBPG</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensorGroup" title="cape.pointSensor.DBPointSensorGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensorGroup</span></code></a></dt>
+<dd><p class="first last">A point sensor group data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-05-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensorGroup.Write">
+<code class="descname">Write</code><span class="sig-paren">(</span><em>merge=False</em>, <em>unlock=True</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensorGroup.Write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write to file each point sensor data book in a group</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBPG</span><span class="o">.</span><span class="n">Write</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBPG</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensorGroup" title="cape.pointSensor.DBPointSensorGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensorGroup</span></code></a></dt>
+<dd><p class="first last">A point sensor group data book</p>
+</dd>
+<dt><em>merge</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt>
+<dd><p class="first last">Whether or not to attempt a merger before writing</p>
+</dd>
+<dt><em>unlock</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt>
+<dd><p class="first last">Whether or not to delete any lock files</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-12-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cape.pointSensor.DBTriqPointGroup">
+<em class="property">class </em><code class="descclassname">cape.pointSensor.</code><code class="descname">DBTriqPointGroup</code><span class="sig-paren">(</span><em>x</em>, <em>opts</em>, <em>name</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBTriqPointGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post-processed point sensor group data book</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBPG</span> <span class="o">=</span> <span class="n">DBTriqPointGroup</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">pts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">RootDir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>x</em>: <a class="reference internal" href="runmatrix.html#cape.runmatrix.RunMatrix" title="cape.runmatrix.RunMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></a></dt>
+<dd><p class="first last">RunMatrix/run matrix interface</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.Options</span></code></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>name</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Name of data book group</p>
+</dd>
+<dt><em>pts</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of points to read; defaults to all points in thegroup</p>
+</dd>
+<dt><em>RootDir</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Project root directory absolute path, default is <em>PWD</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBPG</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensorGroup" title="cape.pointSensor.DBPointSensorGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensorGroup</span></code></a></dt>
+<dd><p class="first last">A point sensor group data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-10-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="individual-point-sensor-data-books">
+<h2>Individual point sensor data books<a class="headerlink" href="#individual-point-sensor-data-books" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="class">
+<dt id="cape.pointSensor.DBPointSensor">
+<em class="property">class </em><code class="descclassname">cape.pointSensor.</code><code class="descname">DBPointSensor</code><span class="sig-paren">(</span><em>x</em>, <em>opts</em>, <em>pt</em>, <em>name=None</em>, <em>check=False</em>, <em>lock=False</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Point sensor data book</p>
+<p>Plotting methods are inherited from <a class="reference internal" href="dataBook.html#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.dataBook.DBBase</span></code></a>,
+including <a class="reference internal" href="dataBook.html#cape.dataBook.DBBase.PlotHist" title="cape.dataBook.DBBase.PlotHist"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.dataBook.DBBase.PlotHist()</span></code></a> for plotting historgrams of
+point sensor results in particular.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBP</span> <span class="o">=</span> <span class="n">DBPointSensor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>x</em>: <a class="reference internal" href="runmatrix.html#cape.runmatrix.RunMatrix" title="cape.runmatrix.RunMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></a></dt>
+<dd><p class="first last">RunMatrix/run matrix interface</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.Options</span></code></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>pt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of point</p>
+</dd>
+<dt><em>name</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Name of data book item (defaults to <em>pt</em>)</p>
+</dd>
+<dt><em>RootDir</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Project root directory absolute path, default is <em>PWD</em></p>
+</dd>
+<dt><em>check</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt>
+<dd><p class="first last">Whether or not to check LOCK status</p>
+</dd>
+<dt><em>lock</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt>
+<dd><p class="first last">If <code class="docutils literal notranslate"><span class="pre">True</span></code>, create a LOCK file</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBP</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.pointSensor.DBPointSensor</span></code></dt>
+<dd><p class="first last">An individual point sensor data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-12-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Started</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensor.ReadCopy">
+<code class="descname">ReadCopy</code><span class="sig-paren">(</span><em>check=False</em>, <em>lock=False</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensor.ReadCopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a copied database object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBP1</span> <span class="o">=</span> <span class="n">DBP</span><span class="o">.</span><span class="n">ReadCopy</span><span class="p">(</span><span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBP</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensor" title="cape.pointSensor.DBPointSensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensor</span></code></a></dt>
+<dd><p class="first last">Data book base object</p>
+</dd>
+<dt><em>check</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt>
+<dd><p class="first last">Whether or not to check LOCK status</p>
+</dd>
+<dt><em>lock</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt>
+<dd><p class="first last">If <code class="docutils literal notranslate"><span class="pre">True</span></code>, wait if the LOCK file exists</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBP1</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensor" title="cape.pointSensor.DBPointSensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensor</span></code></a></dt>
+<dd><p class="first last">Copy of data book object</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-06-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2017-10-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: From <a class="reference internal" href="dataBook.html#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.dataBook.DBBase</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.pointSensor.DBPointSensor.UpdateCase">
+<code class="descname">UpdateCase</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBPointSensor.UpdateCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare to update one point sensor case if necessary</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBP</span><span class="o">.</span><span class="n">UpdateCase</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBP</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensor" title="cape.pointSensor.DBPointSensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensor</span></code></a></dt>
+<dd><p class="first last">An individual point sensor data book</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Case index</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-12-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cape.pointSensor.DBTriqPoint">
+<em class="property">class </em><code class="descclassname">cape.pointSensor.</code><code class="descname">DBTriqPoint</code><span class="sig-paren">(</span><em>x</em>, <em>opts</em>, <em>pt</em>, <em>name=None</em>, <em>check=False</em>, <em>lock=False</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBTriqPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>TriQ point sensor data book</p>
+<p>Plotting methods are inherited from <a class="reference internal" href="dataBook.html#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.dataBook.DBBase</span></code></a>,
+including <a class="reference internal" href="dataBook.html#cape.dataBook.DBBase.PlotHist" title="cape.dataBook.DBBase.PlotHist"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.dataBook.DBBase.PlotHist()</span></code></a> for plotting historgrams of
+point sensor results in particular.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBP</span> <span class="o">=</span> <span class="n">DBTriqPoint</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>x</em>: <a class="reference internal" href="runmatrix.html#cape.runmatrix.RunMatrix" title="cape.runmatrix.RunMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></a></dt>
+<dd><p class="first last">RunMatrix/run matrix interface</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.Options</span></code></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>pt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of point</p>
+</dd>
+<dt><em>name</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Name of data book item (defaults to <em>pt</em>)</p>
+</dd>
+<dt><em>RootDir</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Project root directory absolute path, default is <em>PWD</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBP</em>: <a class="reference internal" href="#cape.pointSensor.DBPointSensor" title="cape.pointSensor.DBPointSensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBPointSensor</span></code></a></dt>
+<dd><p class="first last">An individual point sensor data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-12-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Started</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.pointSensor.DBTriqPoint.ReadCopy">
+<code class="descname">ReadCopy</code><span class="sig-paren">(</span><em>check=False</em>, <em>lock=False</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBTriqPoint.ReadCopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a copied database object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBP1</span> <span class="o">=</span> <span class="n">DBP</span><span class="o">.</span><span class="n">ReadCopy</span><span class="p">(</span><span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBP</em>: <a class="reference internal" href="#cape.pointSensor.DBTriqPoint" title="cape.pointSensor.DBTriqPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBTriqPoint</span></code></a></dt>
+<dd><p class="first last">Data book base object</p>
+</dd>
+<dt><em>check</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt>
+<dd><p class="first last">Whether or not to check LOCK status</p>
+</dd>
+<dt><em>lock</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt>
+<dd><p class="first last">If <code class="docutils literal notranslate"><span class="pre">True</span></code>, wait if the LOCK file exists</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBP1</em>: <a class="reference internal" href="#cape.pointSensor.DBTriqPoint" title="cape.pointSensor.DBTriqPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBTriqPoint</span></code></a></dt>
+<dd><p class="first last">Copy of data book object</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2017-06-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2017-10-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: From <a class="reference internal" href="dataBook.html#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.dataBook.DBBase</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.pointSensor.DBTriqPoint.UpdateCase">
+<code class="descname">UpdateCase</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pointSensor.DBTriqPoint.UpdateCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare to update one point sensor case if necessary</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBP</span><span class="o">.</span><span class="n">UpdateCase</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBP</em>: <a class="reference internal" href="#cape.pointSensor.DBTriqPoint" title="cape.pointSensor.DBTriqPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pointSensor.DBTriqPoint</span></code></a></dt>
+<dd><p class="first last">An individual point sensor data book</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Case index</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-12-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="report.html" title="cape.report: Automated report interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="plt.html" title="cape.plt: Python interface to Tecplot PLT files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 0.9.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >The <code class="docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 0.8 documentation, 2018.  Created using Sphinx 1.6.3.
+  </div>
+
+
+  </body>
+</html>

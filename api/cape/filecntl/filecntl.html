@@ -1,0 +1,1478 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cape.filecntl.filecntl: File control base module &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.filecntl.namelist: Fortran namelists module" href="namelist.html" />
+    <link rel="prev" title="cape.filecntl: Interfaces for text control files" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="namelist.html" title="cape.filecntl.namelist: Fortran namelists module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.filecntl: Interfaces for text control files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl</span></code>: Interfaces for text control files</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.filecntl</span></code>: File control base module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.filecntl.filecntl"></span><div class="section" id="cape-filecntl-filecntl-file-control-base-module">
+<h1><a class="reference internal" href="#module-cape.filecntl.filecntl" title="cape.filecntl.filecntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.filecntl</span></code></a>: File control base module<a class="headerlink" href="#cape-filecntl-filecntl-file-control-base-module" title="Permalink to this headline">¶</a></h1>
+<p>This provides common methods to control objects for various specific
+files.  This includes various methods for reading files, splitting it
+into sections, and replacing lines based on patterns or regular
+expressions.</p>
+<p>File manipulation classes for specific files (such as
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.inputCntl.InputCntl</span></code> for Cart3D <code class="docutils literal notranslate"><span class="pre">input.cntl</span></code> files) are built
+off of this module and its main class. A possibly incomplete list of class
+built on this class is given below.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../../pycart/inputCntl.html#cape.pycart.inputCntl.InputCntl" title="cape.pycart.inputCntl.InputCntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.inputCntl.InputCntl</span></code></a></p></li>
+<li><p><a class="reference internal" href="namelist.html#cape.filecntl.namelist.Namelist" title="cape.filecntl.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.namelist.Namelist</span></code></a></p></li>
+<li><p><a class="reference internal" href="namelist2.html#cape.filecntl.namelist2.Namelist2" title="cape.filecntl.namelist2.Namelist2"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.namelist2.Namelist2</span></code></a></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.tex.Tex</span></code></p></li>
+<li><p><a class="reference internal" href="../../pyfun/namelist.html#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.namelist.Namelist</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../pyfun/mapbc.html#cape.pyfun.mapbc.MapBC" title="cape.pyfun.mapbc.MapBC"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.mapbc.MapBC</span></code></a></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">caep.pyover.overNamelist.OverNamelist</span></code></p></li>
+</ul>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.filecntl.filecntl.</span></span><span class="sig-name descname"><span class="pre">FileCntl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base file control class</p>
+<p>The lines of the file can be split into sections based on a regular
+expression (see <code class="xref py py-func docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl.SplitToSections()</span></code>);
+most methods will keep the overall line list and the section
+breakout consistent.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">filecntl</span><span class="o">.</span><span class="n">FileCntl</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read from and manipulate</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Data members</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>FC.fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file instance was read from</p>
+</dd>
+<dt><em>FC.lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of all lines in the file (to use for replacement)</p>
+</dd>
+<dt><em>FC.SectionNames</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of section titles if present</p>
+</dd>
+<dt><em>FC.Section</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>])</dt><dd><p>Dictionary of the lines in each section, if present</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.AppendLine">
+<span class="sig-name descname"><span class="pre">AppendLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.AppendLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a line of text to <em>FC.lines</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">AppendLine</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to add</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.AppendLineToSection">
+<span class="sig-name descname"><span class="pre">AppendLineToSection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.AppendLineToSection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a line of text to a section</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">AppendLineToSection</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.fileCntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to update</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to add</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.AssertSection">
+<span class="sig-name descname"><span class="pre">AssertSection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.AssertSection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assert that a certain section is present</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">AssertSection</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance, defaults to <em>FC.fname</em></p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to check for</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.CountEmptyEnd">
+<span class="sig-name descname"><span class="pre">CountEmptyEnd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.CountEmptyEnd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count empty lines at the end of a list of lines</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">CountEmptyEnd</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of lines in section or file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of trailing empty lines</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-04-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.CountEmptyStart">
+<span class="sig-name descname"><span class="pre">CountEmptyStart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.CountEmptyStart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count empty lines at the start of a list of lines</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">CountEmptyStart</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of lines in section or file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of trailing empty lines</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-04-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.DeleteLineInSectionStartsWith">
+<span class="sig-name descname"><span class="pre">DeleteLineInSectionStartsWith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.DeleteLineInSectionStartsWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete lines based on start text and section name</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">DeleteLineInSectionStartsWith</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">DeleteLineInSectionStartsWith</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to search</p>
+</dd>
+<dt><em>start</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Line-starting string to search for</p>
+</dd>
+<dt><em>count</em>: {<code class="docutils literal notranslate"><span class="pre">1</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Maximum number of lines to delete</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of deletions made</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Effects</dt>
+<dd class="field-even"><p>Lines in <em>FC.Section[sec]</em> may be removed if they start with
+<em>start</em>.</p>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.DeleteLineStartsWith">
+<span class="sig-name descname"><span class="pre">DeleteLineStartsWith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.DeleteLineStartsWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete lines that start with given text up to <em>count</em> times</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">DeleteLineStartsWith</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">DeleteLineStartsWith</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>start</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Line-starting string to search for</p>
+</dd>
+<dt><em>count</em>: {<code class="docutils literal notranslate"><span class="pre">1</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Maximum number of lines to delete</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of deletions made</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Effects</dt>
+<dd class="field-even"><p>Lines in <em>FC.lines</em> that start with <em>start</em> are removed</p>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.GetIndexInSectionSearch">
+<span class="sig-name descname"><span class="pre">GetIndexInSectionSearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.GetIndexInSectionSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find lines in a given section that start with a regex</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetIndexInSectionSearch</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">reg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetIndexInSectionSearch</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to search in</p>
+</dd>
+<dt><em>reg</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression to match beginning of line</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Maximum number of matches to search for</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of indices of lines in section that match pattern</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-02-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.GetIndexInSectionStartsWith">
+<span class="sig-name descname"><span class="pre">GetIndexInSectionStartsWith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.GetIndexInSectionStartsWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find lines in a given section with given start string</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetIndexInSectionStartsWith</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetIndexInSectionStartsWith</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to search in</p>
+</dd>
+<dt><em>start</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Line start target</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Maximum number of matches to search for</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of indices of lines in section that match pattern</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-02-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.GetIndexSearch">
+<span class="sig-name descname"><span class="pre">GetIndexSearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.GetIndexSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find lines that start with a given regular expression</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetIndexSearch</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetIndexSearch</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>reg</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression to match beginning of line</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Maximum number of matches to search for</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of lines that match pattern</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-02-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.GetIndexStartsWith">
+<span class="sig-name descname"><span class="pre">GetIndexStartsWith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.GetIndexStartsWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find indices of lines that start with a given literal pattern</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetIndexStartsWith</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetIndexStartsWith</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>start</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Line start target</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Maximum number of matches to search for</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of lines that match pattern</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-02-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.GetLineInSectionSearch">
+<span class="sig-name descname"><span class="pre">GetLineInSectionSearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.GetLineInSectionSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find lines in a given section that start specified regex</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetLineInSectionSearch</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">reg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetLineInSectionSearch</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.fileCntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to search in</p>
+</dd>
+<dt><em>reg</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression to match beginning of line</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Maximum number of matches to search for</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of lines that match pattern</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.GetLineInSectionStartsWith">
+<span class="sig-name descname"><span class="pre">GetLineInSectionStartsWith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.GetLineInSectionStartsWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find lines in a given section that start specified target</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetLineInSectionStartsWith</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetLineInSectionStartsWith</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to search in</p>
+</dd>
+<dt><em>start</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Target line start</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Maximum number of matches to search for</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of lines that match pattern</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.GetLineSearch">
+<span class="sig-name descname"><span class="pre">GetLineSearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.GetLineSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find lines that start with a given regular expression</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetLineSearch</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetLineSearch</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>reg</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression to match beginning of line</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Maximum number of matches to search for</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of lines that match pattern</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.GetLineStartsWith">
+<span class="sig-name descname"><span class="pre">GetLineStartsWith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.GetLineStartsWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find lines that start with a given literal pattern</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetLineStartsWith</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">GetLineStartsWith</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>start</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to test as match for beginning of each line</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Maximum number of matches to search for</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of lines that match pattern</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.InsertLine">
+<span class="sig-name descname"><span class="pre">InsertLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.InsertLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a line of text somewhere into the text</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">InsertLine</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index to which to insert the line</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to add</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.InsertLineToSection">
+<span class="sig-name descname"><span class="pre">InsertLineToSection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.InsertLineToSection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a line of text somewhere into the text of a section</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">InsertLineToSection</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to update</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index to which to insert the line</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to add</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><p>A line is inserted to <em>FC.Section[sec]</em></p>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.PrependLine">
+<span class="sig-name descname"><span class="pre">PrependLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.PrependLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepend a line of text to <em>FC.lines</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">PrependLine</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to add</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.PrependLineToSection">
+<span class="sig-name descname"><span class="pre">PrependLineToSection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.PrependLineToSection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepend a line of text to a section</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">PrependLineToSection</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to update</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to add</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.Read">
+<span class="sig-name descname"><span class="pre">Read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.Read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read text from file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read from</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>FC.lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>List of lines in file is created</p>
+</dd>
+<dt><em>FC._updated_sections</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></dt><dd><p>Whether section breakouts have been updated</p>
+</dd>
+<dt><em>FC._updated_lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></dt><dd><p>Flag for update status of global lines</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.ReplaceLineInSectionSearch">
+<span class="sig-name descname"><span class="pre">ReplaceLineInSectionSearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.ReplaceLineInSectionSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all lines in a certain section that start with a specified regular
+expression and replace the entire lines with the specified text.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineInSectionSearch</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineInSectionSearch</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to search in</p>
+</dd>
+<dt><em>reg</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression to search for at beginning of each line</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to replace every match with</p>
+</dd>
+<dt><em>lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>List of strings to match first <code class="docutils literal notranslate"><span class="pre">len(lines)</span></code> matches with</p>
+</dd>
+<dt><em>imin</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Do not make replacements for matches with index &lt; <em>imin</em></p>
+</dd>
+<dt><em>nmax</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; 0</dt><dd><p>Make at most <em>nmax</em> substitutions</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of matches found</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Effects</dt>
+<dd class="field-even"><p>Some lines in <em>FC.Section[sec]</em> may be replaced.</p>
+</dd>
+<dt class="field-odd">See also</dt>
+<dd class="field-odd"><p>This function is similar to
+<code class="xref py py-func docutils literal notranslate"><span class="pre">pyCart.fileCntl.FileCntl.ReplaceLineSearch()</span></code> except that
+the search is restricted to a specified section.</p>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.ReplaceLineInSectionStartsWith">
+<span class="sig-name descname"><span class="pre">ReplaceLineInSectionStartsWith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.ReplaceLineInSectionStartsWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make replacements within section based on starting string</p>
+<p>Find all lines in a certain section that start with a specified
+literal string and replace the entire line with the specified text.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineInSectionStartsWith</span><span class="p">(</span>
+<span class="go">    , start, line, **kw)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineInSectionStartsWith</span><span class="p">(</span>
+<span class="go">    sec, start, lines, **kw)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to search in</p>
+</dd>
+<dt><em>start</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to test as literal match for line start</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to replace every match with</p>
+</dd>
+<dt><em>lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>List of replacement strings</p>
+</dd>
+<dt><em>imin</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Do not make replacements for matches with index &lt; <em>imin</em></p>
+</dd>
+<dt><em>nmax</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; 0</dt><dd><p>Make at most <em>nmax</em> substitutions</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of matches found</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Effects</dt>
+<dd class="field-even"><p>Some lines in <em>FC.Section[sec]</em> may be replaced.</p>
+</dd>
+<dt class="field-odd">See also</dt>
+<dd class="field-odd"><p>This function is similar to
+<code class="xref py py-func docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl.ReplaceLineStartsWith()</span></code> except
+that the search is restricted to a specified section.</p>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.ReplaceLineSearch">
+<span class="sig-name descname"><span class="pre">ReplaceLineSearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.ReplaceLineSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace lines based on initial regular expression</p>
+<p>Find all lines that begin with a certain regular expression and
+replace them with another string.  Note that the entire line is
+replaced, not just the regular expression.</p>
+<p>Leading spaces are ignored during the match tests.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineSearch</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">imin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineSearch</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">imin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>reg</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Target regular expression for line starts</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to replace every match with</p>
+</dd>
+<dt><em>lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Multiple replacements</p>
+</dd>
+<dt><em>imin</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Do not make replacements for matches with index &lt; <em>imin</em></p>
+</dd>
+<dt><em>nmax</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; 0</dt><dd><p>Make at most <em>nmax</em> substitutions</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of matches found</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Effects</dt>
+<dd class="field-even"><p><em>FC.lines</em>: Some of the lines may be affected
+<em>FC._updated_lines</em>: Set to <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+<dt class="field-odd">Examples</dt>
+<dd class="field-odd"><p>Suppose that <em>FC</em> has the following two lines.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">Mach</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">8.00</span>&#160;&#160; <span class="pre">#</span> <span class="pre">some</span> <span class="pre">comment\n</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">Mach</span>&#160;&#160;&#160; <span class="pre">4\n</span></code></p>
+</div></blockquote>
+<p>Then this example will replace <em>both</em> lines with
+<code class="docutils literal notranslate"><span class="pre">Mach</span> <span class="pre">2.0</span></code></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineSearch</span><span class="p">(</span><span class="s1">&#39;Mach\s+[0-9.]+&#39;</span><span class="p">,</span> <span class="s1">&#39;Mach 2.0&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This example replaces each line with a different value for
+the Mach number.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineSearch</span><span class="p">(</span><span class="s1">&#39;Mach\s+[0-9.]+&#39;</span><span class="p">,</span>
+<span class="go">    [&#39;Mach 2.0&#39;, &#39;Mach 2.5&#39;])</span>
+</pre></div>
+</div>
+<p>Finally, this example is different from the first example in
+that it will replace the first line and then quit before it
+can find the second match.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineSearch</span><span class="p">(</span><span class="s1">&#39;Mach\s+[0-9.]+&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Mach 2.0&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.ReplaceLineStartsWith">
+<span class="sig-name descname"><span class="pre">ReplaceLineStartsWith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.ReplaceLineStartsWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace lines starting with fixed text</p>
+<p>Find all lines that begin with a certain string and replace them
+with another string.  Note that the entire line is replaced, not
+just the initial string.</p>
+<p>Leading spaces are ignored during the match tests.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineStartsWith</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">imin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineStartsWith</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">imin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>start</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to test as literal match for beginning of line</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to replace every match with</p>
+</dd>
+<dt><em>lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>List of strings for replacements</p>
+</dd>
+<dt><em>imin</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Do not make replacements for matches with index &lt; <em>imin</em></p>
+</dd>
+<dt><em>nmax</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; 0</dt><dd><p>Make at most <em>nmax</em> substitutions</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of matches found</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Effects</dt>
+<dd class="field-even"><p><em>FC.lines</em>: Some of the lines may be affected
+<em>FC._updated_lines</em>: Set to <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+<dt class="field-odd">Examples</dt>
+<dd class="field-odd"><p>Suppose that <em>FC</em> has the following two lines.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">Mach</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">8.00</span>&#160;&#160; <span class="pre">#</span> <span class="pre">some</span> <span class="pre">comment\n</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">Mach</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Mach_TMP\n</span></code></p>
+</div></blockquote>
+<p>Then this example will replace <em>both</em> lines with the string
+<code class="docutils literal notranslate"><span class="pre">Mach</span> <span class="pre">4.0</span></code></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineStartsWith</span><span class="p">(</span><span class="s1">&#39;Mach&#39;</span><span class="p">,</span> <span class="s1">&#39;Mach 4.0&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This example replaces each line with a different value for
+the Mach number.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineStartsWith</span><span class="p">(</span>
+<span class="go">    &#39;Mach&#39;, [&#39;Mach 2.0&#39;, &#39;Mach 4.0&#39;]</span>
+</pre></div>
+</div>
+<p>Finally, this example is different from the first example in
+that it will replace the first line and then quit before it
+can find the second match.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceLineStartsWith</span><span class="p">(</span><span class="s1">&#39;Mach&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Mach 4.0&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2019-06-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <em>imin</em> and <em>nmax</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.ReplaceOrAddLineSearch">
+<span class="sig-name descname"><span class="pre">ReplaceOrAddLineSearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.ReplaceOrAddLineSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace a line that starts with a given regular expression or add the
+line if no matches are found.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceOrAddLineSearch</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceOrAddLineSearch</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.fileCntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>reg</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression to match beginning of line</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to replace first match with</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Location to add line (by default it is appended)</p>
+</dd>
+<dt><em>imin</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Do not make replacements for matches with index &lt; <em>imin</em></p>
+</dd>
+<dt><em>nmax</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; 0</dt><dd><p>Make at most <em>nmax</em> substitutions</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><p>Replaces line in section <em>FC.lines</em> or adds it if not found</p>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.ReplaceOrAddLineStartsWith">
+<span class="sig-name descname"><span class="pre">ReplaceOrAddLineStartsWith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.ReplaceOrAddLineStartsWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace a line or add a new one</p>
+<p>Replace a line that starts with a given literal string or add
+the line if no matches are found.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceOrAddLineStartsWith</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceOrAddLineStartsWith</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>start</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Target beginning of line to replace</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to replace every match with</p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Location to add line, negative ok, (default is append)</p>
+</dd>
+<dt><em>imin</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Do not make replacements for matches with index &lt; <em>imin</em></p>
+</dd>
+<dt><em>nmax</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; 0</dt><dd><p>Make at most <em>nmax</em> substitutions</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><p>Replaces line in section <em>FC.lines</em> or adds it if not found</p>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.ReplaceOrAddLineToSectionSearch">
+<span class="sig-name descname"><span class="pre">ReplaceOrAddLineToSectionSearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.ReplaceOrAddLineToSectionSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace a line in a specified section</p>
+<p>Replace a line in a specified section that starts with a given
+regular  expression or add the line to the section if no matches
+are found.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceOrAddLineToSectionStartsWith</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceOrAddLineToSectionStartsWith</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span>
+<span class="go">    i=None, **kw)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to search in</p>
+</dd>
+<dt><em>reg</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression to match beginning of line</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to replace every match with</p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal notranslate"><span class="pre">`None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Location to add line (by default it is appended)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><p>Replaces line in <em>FC.Section[sec]</em> or adds it if not found</p>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.ReplaceOrAddLineToSectionStartsWith">
+<span class="sig-name descname"><span class="pre">ReplaceOrAddLineToSectionStartsWith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.ReplaceOrAddLineToSectionStartsWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace a line or add a new one (within section)</p>
+<p>Replace a line in a specified section that starts with a given
+literal  string or add the line to the section if no matches
+are found.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceOrAddLineToSectionStartsWith</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">ReplaceOrAddLineToSectionStartsWith</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span>
+<span class="go">    i=None, **kw)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section to search in</p>
+</dd>
+<dt><em>start</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Target line start for replacement</p>
+</dd>
+<dt><em>line</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>String to replace every match with</p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Location to add line (by default it is appended)</p>
+</dd>
+<dt><em>imin</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Do not make replacements for matches with index &lt; <em>imin</em></p>
+</dd>
+<dt><em>nmax</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; 0</dt><dd><p>Make at most <em>nmax</em> substitutions</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><p>Replaces line in <em>FC.Section[sec]</em> or adds it if not found</p>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.SplitToBlocks">
+<span class="sig-name descname"><span class="pre">SplitToBlocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\\$__([\\w_]+)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ngr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.SplitToBlocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split lines into sections based on start and end</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">SplitToBlocks</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">SplitToBlocks</span><span class="p">(</span><span class="n">reg</span><span class="o">=</span><span class="s2">&quot;\$__([\w_]+)&quot;</span><span class="p">,</span> <span class="n">ngr</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>reg</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression for recognizing the start of a new
+section. By default this looks for sections that start
+with <code class="docutils literal notranslate"><span class="pre">&quot;$__&quot;</span></code> as inCart3D <code class="docutils literal notranslate"><span class="pre">input.cntl</span></code> files.  The
+regular expression must also include a group (meaning
+content between parentheses) to capture the <em>name</em> of
+the section.  Thus the default value of
+<code class="docutils literal notranslate"><span class="pre">&quot;\$__([\w_]+)&quot;</span></code> finds any name that consists of word
+characters and/or underscores.</p>
+</dd>
+<dt><em>ngr</em>: {<code class="docutils literal notranslate"><span class="pre">1</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Group number from which to take name of section.  This
+is always <code class="docutils literal notranslate"><span class="pre">1</span></code> unless the section-starting regular
+expression has more than one explicit group.  Note that
+using <code class="docutils literal notranslate"><span class="pre">1</span></code> instead of <code class="docutils literal notranslate"><span class="pre">0</span></code> means that an explicit
+group using parentheses is required. A string can be
+used if the groups have names in the regular expression
+<em>reg</em>.</p>
+</dd>
+<dt><em>begin</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether section regular expression must begin line</p>
+</dd>
+<dt><em>endreg</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Optional regular expression for end of section.  If
+used, some lines will end up in sections called
+<code class="docutils literal notranslate"><span class="pre">&quot;_inter1&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;_inter2&quot;</span></code>, etc.</p>
+</dd>
+<dt><em>endbegin</em>: {<em>begin</em>} | <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether section-end regular expression must begin line</p>
+</dd>
+<dt><em>endngr</em>: {<em>ngr</em>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Group number of name for title of end-of-section regex</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>FC.SectionNames</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>List of section names is created (includes “_header”)</p>
+</dd>
+<dt><em>FC.Section</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of section line lists is created</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.SplitToSections">
+<span class="sig-name descname"><span class="pre">SplitToSections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\\$__([\\w_]+)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ngr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">begin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.SplitToSections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split into sections based on starting regular expression</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">SplitToSections</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">SplitToSections</span><span class="p">(</span><span class="n">reg</span><span class="o">=</span><span class="s2">&quot;\$__([\w_]+)&quot;</span><span class="p">,</span> <span class="n">ngr</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+<dt><em>reg</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression for recognizing the start of a new
+section. By default this looks for sections that start
+with <code class="docutils literal notranslate"><span class="pre">&quot;$__&quot;</span></code> as in Cart3D <code class="docutils literal notranslate"><span class="pre">input.cntl</span></code> files.  The
+regular expression must also include a group (meaning
+content between parentheses) to capture the <em>name</em> of
+the section.  Thus the default value of
+<code class="docutils literal notranslate"><span class="pre">&quot;\$__([\w_]+)&quot;</span></code> finds any name that consists of word
+characters and/or underscores.</p>
+</dd>
+<dt><em>ngr</em>: {<code class="docutils literal notranslate"><span class="pre">1</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Group number from which to take name of section.  This
+is always <code class="docutils literal notranslate"><span class="pre">1</span></code> unless the section-starting regular
+expression has more than one explicit group.  Note that
+using <code class="docutils literal notranslate"><span class="pre">1</span></code> instead of <code class="docutils literal notranslate"><span class="pre">0</span></code> means that an explicit
+group using parentheses is required.  A string can be
+used if the groups have names in the regular expression
+<em>reg</em>.</p>
+</dd>
+<dt><em>begin</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether section regular expression must begin line</p>
+</dd>
+<dt><em>endreg</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Optional regular expression for end of section.  If
+used, some lines will end up in sections called
+<code class="docutils literal notranslate"><span class="pre">&quot;_inter1&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;_inter2&quot;</span></code>, etc.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>FC.SectionNames</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>List of section names is created (includes “_header”)</p>
+</dd>
+<dt><em>FC.Section</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of section line lists is created</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.UpdateLines">
+<span class="sig-name descname"><span class="pre">UpdateLines</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.UpdateLines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the global file text list from current section content</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">UpdateLines</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code> | derivative</dt><dd><p>File control instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>FC.lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Lines are rewritten to match the sequence of lines from
+the sections</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.UpdateSections">
+<span class="sig-name descname"><span class="pre">UpdateSections</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.UpdateSections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remake the section split if necessary</p>
+<p>This runs <a class="reference internal" href="#cape.filecntl.filecntl.FileCntl.SplitToSections" title="cape.filecntl.filecntl.FileCntl.SplitToSections"><code class="xref py py-func docutils literal notranslate"><span class="pre">SplitToSections()</span></code></a> is run if
+<em>FC._updated_lines</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">UpdateSections</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.Write">
+<span class="sig-name descname"><span class="pre">Write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.Write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write to text file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">Write</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance, defaults to <em>FC.fname</em></p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to write to</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2015-11-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Moved contents to <code class="xref py py-func docutils literal notranslate"><span class="pre">_Write()</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.filecntl.FileCntl.WriteEx">
+<span class="sig-name descname"><span class="pre">WriteEx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.filecntl.FileCntl.WriteEx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write to text file as an executable script</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">WriteEx</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FC</span><span class="o">.</span><span class="n">WriteEx</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>FC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code></dt><dd><p>File control instance, defaults to <em>FC.fname</em></p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to write to</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl</span></code>: Interfaces for text control files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="namelist.html"
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.namelist</span></code>: Fortran namelists module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/cape/filecntl/filecntl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="namelist.html" title="cape.filecntl.namelist: Fortran namelists module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.filecntl: Interfaces for text control files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl</span></code>: Interfaces for text control files</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.filecntl</span></code>: File control base module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

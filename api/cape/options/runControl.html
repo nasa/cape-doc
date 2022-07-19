@@ -1,0 +1,765 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>cape.options.runControl: Primary case control options &#8212; CAPE 0.9.2</title>
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.options.ulimit: System resource options" href="ulimit.html" />
+    <link rel="prev" title="cape.options: Options module" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ulimit.html" title="cape.options.ulimit: System resource options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.options: Options module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 0.9.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="docutils literal notranslate"><span class="pre">cape.options</span></code>: Options module</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">cape.options.runControl</span></code>: Primary case control options</a><ul>
+<li><a class="reference internal" href="#environment-variables">Environment variables</a></li>
+<li><a class="reference internal" href="#overall-run-control-and-system-options">Overall run control and system options</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter"><code class="docutils literal notranslate"><span class="pre">cape.options</span></code>: Options module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ulimit.html"
+                        title="next chapter"><code class="docutils literal notranslate"><span class="pre">cape.options.ulimit</span></code>: System resource options</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/cape/options/runControl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.options.runControl"></span><div class="section" id="cape-options-runcontrol-primary-case-control-options">
+<h1><a class="reference internal" href="#module-cape.options.runControl" title="cape.options.runControl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.options.runControl</span></code></a>: Primary case control options<a class="headerlink" href="#cape-options-runcontrol-primary-case-control-options" title="Permalink to this headline">¶</a></h1>
+<p>This module provides a class to access (or set) options pertaining to the basic
+execution of the code.  For example, it specifies how many iterations to run,
+whether or not to use an MPI version of a solver, and whether or not to submit
+the job to a PBS queue.</p>
+<p>It also contains command-line options that are given to each binary that is
+utilized for a a solver, and it also contains archiving options.  This entire
+section is written to the file <code class="docutils literal notranslate"><span class="pre">case.json</span></code> within each run folder.</p>
+<div class="section" id="environment-variables">
+<h2>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cape.options.runControl.Environ">
+<em class="property">class </em><code class="descclassname">cape.options.runControl.</code><code class="descname">Environ</code><a class="headerlink" href="#cape.options.runControl.Environ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for environment variables</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span> <span class="o">=</span> <span class="n">Environ</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>kw</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of environment variables</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.options.runControl.Environ" title="cape.options.runControl.Environ"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.runControl.Environ</span></code></a></dt>
+<dd><p class="first last">System environment variable options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-11-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.options.runControl.Environ.get_Environ">
+<code class="descname">get_Environ</code><span class="sig-paren">(</span><em>key</em>, <em>i=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.Environ.get_Environ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an environment variable setting by name of environment variable</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_Environ</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the environment variable</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>val</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Value to set the environment variable to</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-11-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.runControl.Environ.set_Environ">
+<code class="descname">set_Environ</code><span class="sig-paren">(</span><em>key</em>, <em>val</em>, <em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.Environ.set_Environ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set an environment variable setting by name of environment variable</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_Environ</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the environment variable</p>
+</dd>
+<dt><em>val</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Value to set the environment variable to</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-11-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="overall-run-control-and-system-options">
+<h2>Overall run control and system options<a class="headerlink" href="#overall-run-control-and-system-options" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cape.options.runControl.RunControl">
+<em class="property">class </em><code class="descclassname">cape.options.runControl.</code><code class="descname">RunControl</code><span class="sig-paren">(</span><em>fname=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary-based interface for generic code run control</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span> <span class="o">=</span> <span class="n">RunControl</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>kw</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of run control options</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.options.runControl.RunControl" title="cape.options.runControl.RunControl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.runControl.RunControl</span></code></a></dt>
+<dd><p class="first last">Basic control options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.options.runControl.RunControl.get_Continue">
+<code class="descname">get_Continue</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl.get_Continue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if restarts of the same run input should be resubmitted</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><p class="first">&gt;&gt; cont = opts.get_Continue(i=None)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>cont</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>)</dt>
+<dd><p class="first last">Whether or not to continue restarts of same input sequence
+without resubmitting</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-11-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.runControl.RunControl.get_Environ">
+<code class="descname">get_Environ</code><span class="sig-paren">(</span><em>key</em>, <em>i=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl.get_Environ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an environment variable setting by name of environment variable</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_Environ</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the environment variable</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>val</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Value to set the environment variable to</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-11-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.runControl.RunControl.get_MPI">
+<code class="descname">get_MPI</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl.get_MPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether or not to use MPI version</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MPI</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_mpi</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Run sequence index</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>MPI</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Whether or not to use MPI</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-10-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.runControl.RunControl.get_PhaseIters">
+<code class="descname">get_PhaseIters</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl.get_PhaseIters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the break points for run <em>i</em>.  Input <em>i</em> will be repeated until the
+cumulative iteration count is greater than or equal to <em>PhaseIters[i]</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PhaseIters</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_PhaseIters</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>PhaseIters</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list`(:class:`int</span></code>)</dt>
+<dd><p class="first last">Sequence of iteration break points</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-10-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.runControl.RunControl.get_PhaseSequence">
+<code class="descname">get_PhaseSequence</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl.get_PhaseSequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the input sequence for <cite>flowCart</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PhaseSeq</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_PhaseSequence</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>PhaseSeq</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">Sequence of input run index(es)</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-10-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-11-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: InputSeq -&gt; PhaseSeq</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.runControl.RunControl.get_Resubmit">
+<code class="descname">get_Resubmit</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl.get_Resubmit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether or not a job should restart or resubmit itself</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">resub</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_Resubmit</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>resub</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>)</dt>
+<dd><p class="first last">Whether or not to resubmit/restart a case</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-10-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.runControl.RunControl.get_mpicmd">
+<code class="descname">get_mpicmd</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl.get_mpicmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return either <code class="docutils literal notranslate"><span class="pre">'mpirun'</span></code> or <code class="docutils literal notranslate"><span class="pre">'mpiexec</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mpicmd</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_mpicmd</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="../../pyCart/options/index.html#pyCart.options.Options" title="pyCart.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>mpicmd</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">System command to call MPI</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-10-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.runControl.RunControl.get_nIter">
+<code class="descname">get_nIter</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl.get_nIter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of iterations for run sequence <em>i</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nIter</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_nIter</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Run sequence index</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nIter</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">Number of iterations to run</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-10-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.runControl.RunControl.get_nProc">
+<code class="descname">get_nProc</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl.get_nProc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of threads to use</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nProc</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_nProc</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nProc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list`(:class:`int</span></code>)</dt>
+<dd><p class="first last">Number of threads for <cite>flowCart</cite></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-08-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2014-10-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Switched to “nProc”</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.runControl.RunControl.get_nSeq">
+<code class="descname">get_nSeq</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl.get_nSeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of input sets in the sequence</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nSeq</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_nSeq</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nSeq</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of input sets in the sequence</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-10-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-02-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <em>nPhase</em> override</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.runControl.RunControl.get_qsub">
+<code class="descname">get_qsub</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl.get_qsub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether or not to submit jobs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qsub</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_qsub</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="../../pyCart/options/index.html#pyCart.options.Options" title="pyCart.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>qsub</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">list`(:class:`bool</span></code>)</dt>
+<dd><p class="first last">Whether or not to submit case to PBS</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-10-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.options.runControl.RunControl.get_ulimit">
+<code class="descname">get_ulimit</code><span class="sig-paren">(</span><em>u</em>, <em>i=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.options.runControl.RunControl.get_ulimit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a resource limit (<code class="docutils literal notranslate"><span class="pre">ulimit</span></code>) setting by its command-line flag</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_ulimit</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>opts</em>: <a class="reference internal" href="index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>u</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the <code class="docutils literal notranslate"><span class="pre">ulimit</span></code> flag</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Phase number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>l</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Value of the resource limit</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-11-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ulimit.html" title="cape.options.ulimit: System resource options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.options: Options module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 0.9.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="docutils literal notranslate"><span class="pre">cape.options</span></code>: Options module</a> &#187;</li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 0.8 documentation, 2018.  Created using Sphinx 1.6.3.
+  </div>
+
+
+  </body>
+</html>

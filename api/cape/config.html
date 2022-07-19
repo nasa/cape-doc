@@ -1,0 +1,1555 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cape.config: Surface configuration module &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.convert: Unit and angle conversion utilities" href="convert.html" />
+    <link rel="prev" title="cape.cntl: Base module for CFD operations and processing" href="cntl.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="convert.html" title="cape.convert: Unit and angle conversion utilities"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cntl.html" title="cape.cntl: Base module for CFD operations and processing"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.config</span></code>: Surface configuration module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.config"></span><div class="section" id="cape-config-surface-configuration-module">
+<h1><a class="reference internal" href="#module-cape.config" title="cape.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.config</span></code></a>: Surface configuration module<a class="headerlink" href="#cape-config-surface-configuration-module" title="Permalink to this headline">¶</a></h1>
+<p>This is a module to interact with Cart3D’s <code class="docutils literal notranslate"><span class="pre">Config.xml</span></code> or similar
+files whose primary purpose is to describe and label surface geometry.
+In general, it can be used to create groups of surfaces using an XML,
+JSON, or MIXSUR file format.  This originates from a Cart3D/OVERFLOW
+convention, but it can be used with other modules as well.  Presently
+there are three classes, which each interface with a specific type of
+file:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 24%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Common File</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigXML</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Config.xml</span></code></p></td>
+<td><p>GMP component XML file</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigJSON</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Config.json</span></code></p></td>
+<td><p>Cape JSON surf config file</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cape.config.ConfigMIXSUR" title="cape.config.ConfigMIXSUR"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigMIXSUR</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mixsur.i</span></code></p></td>
+<td><p>CGT input families stream</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>It is typical for a surface definition, whether a triangulation, system
+of overset structured grids, or mixed quads and triangles, to have each
+surface polygon to have a numbered component ID.  This allows a user to
+group triangles and quads or other polygons together in some relevant
+way.  For example, the user may tag each polygon on the left wing with
+the component ID of <code class="docutils literal notranslate"><span class="pre">12</span></code>, and the entire surface is broken out in a
+similar fashion.</p>
+<p>The <a class="reference internal" href="#module-cape.config" title="cape.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.config</span></code></a> module allows the user to do two main things:
+give meaningful names to these component IDs and group component IDs
+together. For example, it is usually much more convenient to refer to
+<code class="docutils literal notranslate"><span class="pre">&quot;left_wing&quot;</span></code> than remember to put <code class="docutils literal notranslate"><span class="pre">&quot;12&quot;</span></code> in all the data books,
+reports, etc. In addition, a user usually wants to know the integrated
+force on the entire airplane (or whatever other type of configuration is
+under investigation), so it is useful to make another component called
+<code class="docutils literal notranslate"><span class="pre">&quot;vehicle&quot;</span></code> that contains <code class="docutils literal notranslate"><span class="pre">&quot;left_wing&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;right_wing&quot;</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">&quot;fuselage&quot;</span></code>. The user specifies this in the XML file using the
+following syntax.</p>
+<blockquote>
+<div><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;</span>
+<span class="nt">&lt;Configuration</span> <span class="na">Name=</span><span class="s">&quot;airplane&quot;</span> <span class="na">Source=</span><span class="s">&quot;Components.i.tri&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;Component</span> <span class="na">Name=</span><span class="s">&quot;vehicle&quot;</span> <span class="na">Type=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/Component&gt;</span>
+
+<span class="nt">&lt;Component</span> <span class="na">Name=</span><span class="s">&quot;fuselage&quot;</span> <span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;Data&gt;</span> Face Label=1 <span class="nt">&lt;/Data&gt;</span> <span class="nt">&lt;/Component&gt;</span>
+
+<span class="nt">&lt;Component</span> <span class="na">Name=</span><span class="s">&quot;right_wing&quot;</span> <span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;Data&gt;</span> Face Label=11 <span class="nt">&lt;/Data&gt;</span> <span class="nt">&lt;/Component&gt;</span>
+
+<span class="nt">&lt;Component</span> <span class="na">Name=</span><span class="s">&quot;left_wing&quot;</span> <span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;Data&gt;</span> Face Label=12 <span class="nt">&lt;/Data&gt;</span> <span class="nt">&lt;/Component&gt;</span>
+
+<span class="nt">&lt;/Configuration&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <em>Source</em> attribute of the first tag is not that important; it’s
+placed there based on a Cart3D template. The choice of encoding is not
+crucial but does affect the validity of the XML file, which some
+applications may check.</p>
+<p>The major limitation of the XML format is that a component may not have
+multiple parents. A parent may have parent, allowing the user to
+subdivide groups into smaller groups, but the user may not, for example,
+split the vehicle into left half and right half and also create
+components for forward half and aft half.</p>
+<p>An alternative version of the same is to use the JSON configuration
+format developed for Cape.  It allows mixed parents like the
+forward/aft, left/right example described above, and it also allows the
+users to specify boundary conditions within the config file, which can
+consolidate information about your surface that would otherwise require
+multiple files.  The version of the above configuration in JSON form is
+below.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;Tree&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;vehicle&quot;</span><span class="o">:</span> <span class="p">[</span>
+            <span class="s2">&quot;fuselage&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;right_wing&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;left_wing&quot;</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;Properties&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;fuselage&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;CompID&quot;</span><span class="o">:</span> <span class="mf">1</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;right_wing&quot;</span><span class="o">:</span> <span class="mf">11</span><span class="p">,</span>
+        <span class="s2">&quot;left_wing&quot;</span><span class="o">:</span> <span class="mf">12</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;Properties&quot;</span></code> section allows generic options, for example those
+in the table below.  If the <em>Properties</em> for a face is not a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, it must be an <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, which is assumed to be the
+<em>CompID</em> parameter for that face.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Component Property</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><em>CompID</em></p></td>
+<td><p>Surface component integer</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>Parent</em></p></td>
+<td><p>Name of principal parent if ambiguous</p></td>
+</tr>
+<tr class="row-even"><td><p><em>fun3d_bc</em></p></td>
+<td><p>Boundary condition for FUN3D</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>aflr3_bc</em></p></td>
+<td><p>Boundary condition for AFLR3</p></td>
+</tr>
+<tr class="row-even"><td><p><em>blds</em></p></td>
+<td><p>Initial BL spacing, AFLR3</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>bldel</em></p></td>
+<td><p>Prism layer height, AFLR3</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Finally, the <a class="reference internal" href="#cape.config.ConfigMIXSUR" title="cape.config.ConfigMIXSUR"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigMIXSUR</span></code></a> file interprets the streams that are
+often given as inputs to the Chimera Grid Tools executables <code class="docutils literal notranslate"><span class="pre">mixsur</span></code>
+or <code class="docutils literal notranslate"><span class="pre">usurp</span></code>.  These functions are used to divide an overset structured
+grid system into surface components and can also be used to create
+unique surface triangulations.  These input streams are often saved as a
+file, by convention <code class="docutils literal notranslate"><span class="pre">mixsur.i</span></code>, and read into the CGT executable using
+a call such as <code class="docutils literal notranslate"><span class="pre">mixsur</span> <span class="pre">&lt;</span> <span class="pre">mixsur.i</span></code>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.config.ConfigXML">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.config.</span></span><span class="sig-name descname"><span class="pre">ConfigXML</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Config.xml'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface to Cart3D <code class="docutils literal notranslate"><span class="pre">Config.xml</span></code> files</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">ConfigXML</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;Config.xml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of configuration file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.AppendParent">
+<span class="sig-name descname"><span class="pre">AppendParent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.AppendParent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a component ID to a parent container and its parents</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">AppendParent</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">compID</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>c</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.Element</span></code></dt><dd><p>XML interface to element with tag <code class="docutils literal notranslate"><span class="pre">'Component'</span></code></p>
+</dd>
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Component ID number to add to parents’ lists</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary with <em>compID</em> appended in appropriate places</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.Copy">
+<span class="sig-name descname"><span class="pre">Copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.Copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy a configuration interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg2</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">Copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cfg2</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>Copy of input</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-11-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.GetCompID">
+<span class="sig-name descname"><span class="pre">GetCompID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">face</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.GetCompID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of component IDs from generic input</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compID</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">GetCompID</span><span class="p">(</span><span class="n">face</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>face</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Component number, name, or list thereof</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of component IDs</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.GetCompName">
+<span class="sig-name descname"><span class="pre">GetCompName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.GetCompName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of a component by its number</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">face</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">GetCompName</span><span class="p">(</span><span class="n">compID</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Component ID number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>face</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of so-numbered component, if any</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.GetPropCompID">
+<span class="sig-name descname"><span class="pre">GetPropCompID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.GetPropCompID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a <em>CompID</em> from the “Properties” section w/o recursion</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compID</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">GetPropCompID</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML-based configuration interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Full list of component IDs in <em>c</em> and its children</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.ProcessStruc">
+<span class="sig-name descname"><span class="pre">ProcessStruc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.ProcessStruc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a GMP component of type <code class="docutils literal notranslate"><span class="pre">'struc'</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">ProcessStruc</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>c</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.Element</span></code></dt><dd><p>XML interface to element with tag <code class="docutils literal notranslate"><span class="pre">&quot;Component&quot;</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-09-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1</dt><dd><ul>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">Element.getchildren()</span></code> removed in Python 3.9</p></li>
+<li><p><em>c</em> is iterable</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.ProcessStrucData">
+<span class="sig-name descname"><span class="pre">ProcessStrucData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.ProcessStrucData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a GMP data element with text for “Grid List”</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compID</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">ProcessStrucData</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>d</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.Element</span></code></dt><dd><p>XML interface to element with tag <code class="docutils literal notranslate"><span class="pre">'Data'</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>Grid numbers “Grid List”</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg.faces[comp]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>Gets set to <em>compID</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.ProcessTransform">
+<span class="sig-name descname"><span class="pre">ProcessTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.ProcessTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a GMP transformation</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">ProcessTransform</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>t</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.Element</span></code></dt><dd><p>XML interface to element with tag <code class="docutils literal notranslate"><span class="pre">'Transform'</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2021-09-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; iterate <em>t</em> directly</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.ProcessTri">
+<span class="sig-name descname"><span class="pre">ProcessTri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.ProcessTri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a GMP component of type <code class="docutils literal notranslate"><span class="pre">&quot;tri&quot;</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">ProcessTri</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>c</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.Element</span></code></dt><dd><p>XML interface to element with tag <code class="docutils literal notranslate"><span class="pre">&quot;Component&quot;</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-09-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1</dt><dd><ul>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">Element.getchildren()</span></code> removed in Python 3.9</p></li>
+<li><p><em>c</em> is iterable</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.ProcessTriData">
+<span class="sig-name descname"><span class="pre">ProcessTriData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.ProcessTriData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a GMP data element with text for “Face Label”</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compID</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">ProcessTriData</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>d</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.Element</span></code></dt><dd><p>XML interface to element with tag <code class="docutils literal notranslate"><span class="pre">'Data'</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Component ID number from “Face Label”</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg.faces[comp]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Gets set to <em>compID</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.RestrictCompID">
+<span class="sig-name descname"><span class="pre">RestrictCompID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compIDs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.RestrictCompID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restrict component IDs in <em>cfg.faces</em> to manual list</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">RestrictCompID</span><span class="p">(</span><span class="n">compIDs</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML-based configuration interface</p>
+</dd>
+<dt><em>compIDs</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of relevant component IDs</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-11-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.SetRotation">
+<span class="sig-name descname"><span class="pre">SetRotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.SetRotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify or add a rotation for component <em>comp</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">SetRotation</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component</p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index of the rotation</p>
+</dd>
+<dt><em>Center</em>: {<code class="docutils literal notranslate"><span class="pre">[0.0,0.0,0.0]</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Point about which to rotate</p>
+</dd>
+<dt><em>Axis</em>: {<code class="docutils literal notranslate"><span class="pre">[0.0,</span> <span class="pre">1.0,</span> <span class="pre">0.0]</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Axis about which to rotate</p>
+</dd>
+<dt><em>Angle</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Angle for rotation</p>
+</dd>
+<dt><em>Frame</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;Body&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Rotation type, body frame or Overflow frame</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.SetTranslation">
+<span class="sig-name descname"><span class="pre">SetTranslation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.SetTranslation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify or add a translation for component <em>comp</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">SetTranslation</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component</p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index of the rotation</p>
+</dd>
+<dt><em>Displacement</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Vector to move component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.Write">
+<span class="sig-name descname"><span class="pre">Write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.Write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the configuration to file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to write</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.WriteComponent">
+<span class="sig-name descname"><span class="pre">WriteComponent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.WriteComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a “Component” element to file</p>
+<p>Data (either “Face Label” or “Grid List”) is written, and any
+transformations are also written.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">WriteComponent</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File handle open for writing</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component to write</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2017-08-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1, skip negative IDs</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.WriteComponentData">
+<span class="sig-name descname"><span class="pre">WriteComponentData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.WriteComponentData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a “Data” element to file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">WriteComponentData</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component to write</p>
+</dd>
+<dt><em>label</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;Face</span> <span class="pre">Label&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;Grid</span> <span class="pre">List&quot;</span></code></dt><dd><p>Label used to specify data</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.WriteComponentTransform">
+<span class="sig-name descname"><span class="pre">WriteComponentTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.WriteComponentTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a “Transform” element to file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">WriteComponentData</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component to write</p>
+</dd>
+<dt><em>label</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;Face</span> <span class="pre">Label&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;Grid</span> <span class="pre">List&quot;</span></code></dt><dd><p>Label used to specify data</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigXML.WriteXML">
+<span class="sig-name descname"><span class="pre">WriteXML</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigXML.WriteXML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the configuration to file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">WriteXML</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to write</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.config.</span></span><span class="sig-name descname"><span class="pre">ConfigJSON</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Config.json'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON" title="Permalink to this definition">¶</a></dt>
+<dd><p>JSON-based surface configuration interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">ConfigJSON</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s2">&quot;Config.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;Config.json&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of JSON file from which to read tree and properties</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg.faces</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>Dict of the component ID or IDs in each named face</p>
+</dd>
+<dt><em>cfg.comps</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of components with no children</p>
+</dd>
+<dt><em>cfg.parents</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</dt><dd><p>List of parent(s) by name for each component</p>
+</dd>
+<dt><em>cfg.IDs</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of unique component ID numbers</p>
+</dd>
+<dt><em>cfg.name</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Optional string to identify what is being represented</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.AppendChild">
+<span class="sig-name descname"><span class="pre">AppendChild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.AppendChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process one component of the tree and recurse</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compID</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">AppendChild</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration interface</p>
+</dd>
+<dt><em>c</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component in “Tree” section</p>
+</dd>
+<dt><em>parent</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of parent component when called recursively</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>Full list of component IDs in <em>c</em> and its children</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.Copy">
+<span class="sig-name descname"><span class="pre">Copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.Copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy a configuration interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg2</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">Copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cfg2</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>Copy of input</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-11-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.GetCompID">
+<span class="sig-name descname"><span class="pre">GetCompID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">face</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.GetCompID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of component IDs from generic input</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compID</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">GetCompID</span><span class="p">(</span><span class="n">face</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>face</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Component number, name, or list thereof</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of component IDs</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (<a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigXML</span></code></a>)</p></li>
+<li><p>2016-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.GetCompName">
+<span class="sig-name descname"><span class="pre">GetCompName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.GetCompName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of a component by its number</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">face</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">GetCompName</span><span class="p">(</span><span class="n">compID</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Component ID number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>face</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of so-numbered component, if any</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.GetPropCompID">
+<span class="sig-name descname"><span class="pre">GetPropCompID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.GetPropCompID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a <em>CompID</em> from the “Properties” section</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compID</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">GetPropCompID</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration interface</p>
+</dd>
+<dt><em>c</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component in “Tree” section</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Full list of component IDs in <em>c</em> and its children</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.GetProperty">
+<span class="sig-name descname"><span class="pre">GetProperty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vdef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.GetProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a cascading property from a component or its parents</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vdef</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component to query</p>
+</dd>
+<dt><em>k</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of property to query</p>
+</dd>
+<dt><em>name</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name to filter if <em>k</em> has multiple values; defaults to
+<em>cfg.name</em> if applicable</p>
+</dd>
+<dt><em>vdef</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <strong>any</strong></dt><dd><p>Default value</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>: <em>vdef</em> | <strong>any</strong></dt><dd><p>Value of <em>k</em> from <em>comp</em> with fallback to parents</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2022-03-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0; add <em>name</em></p></li>
+<li><p>2022-04-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.1; add <em>vdef</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.GetTriFaces">
+<span class="sig-name descname"><span class="pre">GetTriFaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.GetTriFaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get names of faces that are of type “tri” (not containers)</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">comps</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">GetTriFaces</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>comps</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of lowest-level component names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-11-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.RenumberCompID">
+<span class="sig-name descname"><span class="pre">RenumberCompID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">face</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.RenumberCompID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renumber the component ID number</p>
+<p>This affects <em>cfg.faces</em> for <em>face</em> and each of its parents, and
+it also resets the component ID number in <em>cfg.props</em>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">RenumberCompID</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="n">compID</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration</p>
+</dd>
+<dt><em>face</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component to rename</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-11-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.RenumberCompIDParent">
+<span class="sig-name descname"><span class="pre">RenumberCompIDParent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">face</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.RenumberCompIDParent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively renumber the parents of <em>face</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">RenumberCompIDParent</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="n">compi</span><span class="p">,</span> <span class="n">compo</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration</p>
+</dd>
+<dt><em>face</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component whose parents should be renumbered</p>
+</dd>
+<dt><em>compi</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Incoming component ID number</p>
+</dd>
+<dt><em>compo</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Outgoing component ID number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-11-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.ResetCompIDs">
+<span class="sig-name descname"><span class="pre">ResetCompIDs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.ResetCompIDs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renumber component IDs 1 to <em>n</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">comps</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">ResetCompIDs</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-11-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.RestrictCompID">
+<span class="sig-name descname"><span class="pre">RestrictCompID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compIDs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.RestrictCompID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restrict component IDs in <em>cfg.faces</em> to manual list</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">RestrictCompID</span><span class="p">(</span><span class="n">compIDs</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration interface</p>
+</dd>
+<dt><em>compIDs</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of relevant component IDs</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-11-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.SortCompIDs">
+<span class="sig-name descname"><span class="pre">SortCompIDs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.SortCompIDs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get ordered list of components</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">comps</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SortCompIDs</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>comps</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of components</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-11-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.WriteAFLR3BC">
+<span class="sig-name descname"><span class="pre">WriteAFLR3BC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.WriteAFLR3BC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a file that list AFLR3 boundary conditions for components</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">WriteAFLR3BC</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration instance</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of AFLR3 boundary condition file to write</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-05-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.WriteFun3DMapBC">
+<span class="sig-name descname"><span class="pre">WriteFun3DMapBC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.WriteFun3DMapBC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a Fun3D “.mapbc” file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">WriteFun3DMapBC</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration instance</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of mapbc file to write</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-11-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigJSON.WriteXML">
+<span class="sig-name descname"><span class="pre">WriteXML</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Config.xml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigJSON.WriteXML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a GMP-type <code class="docutils literal notranslate"><span class="pre">Config.xml</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">WriteXML</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s2">&quot;Config.xml&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigJSON" title="cape.config.ConfigJSON"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigJSON</span></code></a></dt><dd><p>JSON-based configuration instance</p>
+</dd>
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;Config.xml&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to write</p>
+</dd>
+<dt><em>name</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of the configuration, defaults to <em>cfg.name</em></p>
+</dd>
+<dt><em>source</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;Components.i.tri&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of the “source” tri file, has no effect</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-11-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.config.ConfigMIXSUR">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.config.</span></span><span class="sig-name descname"><span class="pre">ConfigMIXSUR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mixsur.i'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usurp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigMIXSUR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to build a surf configuration from a <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">ConfigMIXSUR</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s2">&quot;mixsur.i&quot;</span><span class="p">,</span> <span class="n">usurp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inptus</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;mixsur.i&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> input file</p>
+</dd>
+<dt><em>usurp</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to number components as with <code class="docutils literal notranslate"><span class="pre">usurp</span></code> output</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigMIXSUR" title="cape.config.ConfigMIXSUR"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigMIXSUR</span></code></a></dt><dd><p><code class="docutils literal notranslate"><span class="pre">mixsur</span></code>-based configuration interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg.faces</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>)</dt><dd><p>Dict of component ID or IDs in each named face</p>
+</dd>
+<dt><em>cfg.comps</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of components with no children</p>
+</dd>
+<dt><em>cfg.parents</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>))</dt><dd><p>List of parent(s) by name for each component</p>
+</dd>
+<dt><em>cfg.IDs</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of unique component ID numbers</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigMIXSUR.Copy">
+<span class="sig-name descname"><span class="pre">Copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigMIXSUR.Copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy a configuration interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg2</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">Copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cfg2</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>Copy of input</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-11-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigMIXSUR.FindParents">
+<span class="sig-name descname"><span class="pre">FindParents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">face</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigMIXSUR.FindParents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the parents of a single face</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">FindParents</span><span class="p">(</span><span class="n">face</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigMIXSUR" title="cape.config.ConfigMIXSUR"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigMIXSUR</span></code></a></dt><dd><p>Configuration interface for <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> triangulations</p>
+</dd>
+<dt><em>face</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of face to check</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigMIXSUR.GetCompID">
+<span class="sig-name descname"><span class="pre">GetCompID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">face</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigMIXSUR.GetCompID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of component IDs from generic input</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compID</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">GetCompID</span><span class="p">(</span><span class="n">face</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigMIXSUR" title="cape.config.ConfigMIXSUR"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigMIXSUR</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>face</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Component number, name, or list thereof</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of component IDs</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (<a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigXML</span></code></a>)</p></li>
+<li><p>2016-12-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigMIXSUR.GetCompName">
+<span class="sig-name descname"><span class="pre">GetCompName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigMIXSUR.GetCompName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of a component by its number</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">face</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">GetCompName</span><span class="p">(</span><span class="n">compID</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigXML" title="cape.config.ConfigXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigXML</span></code></a></dt><dd><p>XML surface config instance</p>
+</dd>
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Component ID number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>face</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of so-numbered component, if any</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.config.ConfigMIXSUR.readline">
+<span class="sig-name descname"><span class="pre">readline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.config.ConfigMIXSUR.readline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a non-blank line from a CGT-like input file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">V</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">readline</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cfg</em>: <a class="reference internal" href="#cape.config.ConfigMIXSUR" title="cape.config.ConfigMIXSUR"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.ConfigMIXSUR</span></code></a></dt><dd><p>Configuration interface for <code class="docutils literal notranslate"><span class="pre">mixsur</span></code></p>
+</dd>
+<dt><em>f</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File handle; defaults to <em>cfg.f</em></p>
+</dd>
+<dt><em>n</em>: {<code class="docutils literal notranslate"><span class="pre">100</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; 0</dt><dd><p>Maximum number of lines to check</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>V</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of substrings split by commas or spaces</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cntl.html"
+                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cntl</span></code>: Base module for CFD operations and processing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="convert.html"
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.convert</span></code>: Unit and angle conversion utilities</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cape/config.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="convert.html" title="cape.convert: Unit and angle conversion utilities"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cntl.html" title="cape.cntl: Base module for CFD operations and processing"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.config</span></code>: Surface configuration module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

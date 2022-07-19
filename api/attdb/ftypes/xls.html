@@ -1,0 +1,524 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>cape.attdb.ftypes.xls: Excel spreadsheet data interface &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.attdb.rdbnull: Template ATTDB database" href="../rdbnull.html" />
+    <link rel="prev" title="cape.attdb.ftypes.textdata: Generic textual data interface" href="textdata.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../rdbnull.html" title="cape.attdb.rdbnull: Template ATTDB database"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="textdata.html" title="cape.attdb.ftypes.textdata: Generic textual data interface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Output-Based “Response” Database Package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code>: Data file type interfaces</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="textdata.html"
+                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.textdata</span></code>: Generic textual data interface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../rdbnull.html"
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.rdbnull</span></code>: Template ATTDB database</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/attdb/ftypes/xls.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.attdb.ftypes.xls"></span><div class="section" id="cape-attdb-ftypes-xls-excel-spreadsheet-data-interface">
+<h1><a class="reference internal" href="#module-cape.attdb.ftypes.xls" title="cape.attdb.ftypes.xls"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.xls</span></code></a>: Excel spreadsheet data interface<a class="headerlink" href="#cape-attdb-ftypes-xls-excel-spreadsheet-data-interface" title="Permalink to this headline">¶</a></h1>
+<p>This module provides a class <a class="reference internal" href="#cape.attdb.ftypes.xls.XLSFile" title="cape.attdb.ftypes.xls.XLSFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XLSFile</span></code></a> for reading and writing
+tabular data from Excel-like spreadsheets with the file extension
+<code class="docutils literal notranslate"><span class="pre">.xls</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code>.  It relies on two third-party libraries readily
+available from the Python Package Index (PyPI):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">xlrd</span></code> for reading spreadsheets</p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">xlsxwriter</span></code> for writing them</p></li>
+</ul>
+</div></blockquote>
+<p>These can be readily installed on any machine with both Python and
+access to the internet (even without elevated privileges) using the
+commands below:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install --user xlrd
+<span class="gp">$</span> pip install --user xlsxwriter
+</pre></div>
+</div>
+</div></blockquote>
+<p>Because CAPE may also be used on machines without regular access to the
+internet, this module does not raise an <code class="docutils literal notranslate"><span class="pre">ImportError</span></code> in the case that
+these third-party modules are not available.  However, the module will
+provide no functionality if these modules are not available.</p>
+<dl class="class">
+<dt id="cape.attdb.ftypes.xls.XLSFile">
+<em class="property">class </em><code class="sig-prename descclassname">cape.attdb.ftypes.xls.</code><code class="sig-name descname">XLSFile</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">sheet=None</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.xls.XLSFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for reading <code class="docutils literal notranslate"><span class="pre">.xls</span></code> and <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> files</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">XLSFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sheet</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">XLSFile</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span> <span class="n">sheet</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">XLSFile</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">.xls</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> file to read</p>
+</dd>
+<dt><em>sheet</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Worksheet name or number</p>
+</dd>
+<dt><em>wb</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xlrd.book.Book</span></code></dt><dd><p>Open workbook (spreadsheet file)</p>
+</dd>
+<dt><em>ws</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xlrd.sheet.Sheet</span></code></dt><dd><p>Direct access to a worksheet</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.xls.XLSFile" title="cape.attdb.ftypes.xls.XLSFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.xls.XLSFile</span></code></a></dt><dd><p>XLS file interface</p>
+</dd>
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of columns read</p>
+</dd>
+<dt><em>db.opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Options for this interface</p>
+</dd>
+<dt><em>db[col]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Numeric array or list of strings for each column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="cape.attdb.ftypes.xls.XLSFile.get_autoskip">
+<code class="sig-name descname">get_autoskip</code><span class="sig-paren">(</span><em class="sig-param">ws</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.xls.XLSFile.get_autoskip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatically determine number of rows and columns to skip</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">get_autoskip</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.xls.XLSFile" title="cape.attdb.ftypes.xls.XLSFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.xls.XLSFile</span></code></a></dt><dd><p>XLS file interface</p>
+</dd>
+<dt><em>ws</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xlrd.sheet.Sheet</span></code></dt><dd><p>Direct access to a worksheet</p>
+</dd>
+<dt><em>skiprows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of rows to skip before reading data</p>
+</dd>
+<dt><em>subcols</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of cols to skip right of first col (for arrays)</p>
+</dd>
+<dt><em>subrows</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of rows below header row to skip</p>
+</dd>
+<dt><em>skipcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of columns to skip before first data column</p>
+</dd>
+<dt><em>maxcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; <em>skipcols</em></dt><dd><p>Maximum column number of data</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Saves <em>SkipCols</em>, <em>SkipRows</em>, etc. as scalar keys</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Split from <a class="reference internal" href="#cape.attdb.ftypes.xls.XLSFile.read_xls_header" title="cape.attdb.ftypes.xls.XLSFile.read_xls_header"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_xls_header()</span></code></a></p></li>
+<li><p>2020-01-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Moved everything to smaller funcs</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.attdb.ftypes.xls.XLSFile.process_kw_xlsread">
+<code class="sig-name descname">process_kw_xlsread</code><span class="sig-paren">(</span><em class="sig-param">kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.xls.XLSFile.process_kw_xlsread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process all options related to reading XLS worksheet</p>
+<p>The mentioned options will be removed from <em>kw</em>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kwread</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">process_kw_xlsread</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.xls.XLSFile" title="cape.attdb.ftypes.xls.XLSFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.xls.XLSFile</span></code></a></dt><dd><p>XLS file interface</p>
+</dd>
+<dt><em>kw</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Keyword arguments from parent function</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Keys</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>SkipRows</em>, <em>skiprows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of rows to skip before reading data</p>
+</dd>
+<dt><em>SubRows</em>, <em>subrows</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; 0</dt><dd><p>Number of rows below header row to skip</p>
+</dd>
+<dt><em>SkipCols</em>, <em>skipcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of columns to skip before first data column</p>
+</dd>
+<dt><em>MaxRows</em>, <em>maxrows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; <em>skiprows</em></dt><dd><p>Maximum row number of data</p>
+</dd>
+<dt><em>MaxCols</em>, <em>maxcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; <em>skipcols</em></dt><dd><p>Maximum column number of data</p>
+</dd>
+<dt><em>warn</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to warn about unused keyword args</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>kwread</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of options mentioned above</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-12-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.attdb.ftypes.xls.XLSFile.process_xls_opt">
+<code class="sig-name descname">process_xls_opt</code><span class="sig-paren">(</span><em class="sig-param">K</em>, <em class="sig-param">kw</em>, <em class="sig-param">vdef=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.xls.XLSFile.process_xls_opt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process an option for reading XLS files</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">process_xls_opt</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">kw</span><span class="p">,</span> <span class="n">vdef</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">process_xls_opt</span><span class="p">([</span><span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">],</span> <span class="n">kw</span><span class="p">,</span> <span class="n">vdef</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.xls.XLSFile" title="cape.attdb.ftypes.xls.XLSFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.xls.XLSFile</span></code></a></dt><dd><p>XLS file interface</p>
+</dd>
+<dt><em>K</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of key names</p>
+</dd>
+<dt><em>kw</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Keyword options to parent function call</p>
+</dd>
+<dt><em>vdef</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></dt><dd><p>Default value if not found in <em>kw</em> or <em>db.opts</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>: {<em>kw[k1]</em>} | <em>kw[k2]</em> | <em>db.opts[k1]</em> | <em>vdef</em></dt><dd><p>Appropriate option by cascading preference</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.attdb.ftypes.xls.XLSFile.read_xls">
+<code class="sig-name descname">read_xls</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">sheet=None</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.xls.XLSFile.read_xls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an <code class="docutils literal notranslate"><span class="pre">.xls</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_xls</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sheet</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_xls</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span> <span class="n">sheet</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_xls</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_xls</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.xls.XLSFile" title="cape.attdb.ftypes.xls.XLSFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.xls.XLSFile</span></code></a></dt><dd><p>XLS file interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">.xls</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> file to read</p>
+</dd>
+<dt><em>sheet</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Worksheet name or number</p>
+</dd>
+<dt><em>wb</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xlrd.book.Book</span></code></dt><dd><p>Open workbook (spreadsheet file)</p>
+</dd>
+<dt><em>ws</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xlrd.sheet.Sheet</span></code></dt><dd><p>Direct access to a worksheet</p>
+</dd>
+<dt><em>skiprows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of rows to skip before reading data</p>
+</dd>
+<dt><em>subrows</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; 0</dt><dd><p>Number of rows below header row to skip</p>
+</dd>
+<dt><em>skipcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of columns to skip before first data column</p>
+</dd>
+<dt><em>maxrows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; <em>skiprows</em></dt><dd><p>Maximum row number of data</p>
+</dd>
+<dt><em>maxcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; <em>skipcols</em></dt><dd><p>Maximum column number of data</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-12-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2019-12-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Support “array” worksheets</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.attdb.ftypes.xls.XLSFile.read_xls_coldata">
+<code class="sig-name descname">read_xls_coldata</code><span class="sig-paren">(</span><em class="sig-param">ws</em>, <em class="sig-param">cols</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.xls.XLSFile.read_xls_coldata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read column data from one <code class="docutils literal notranslate"><span class="pre">.xls</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> worksheet</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_xls_coldata</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.xls.XLSFile" title="cape.attdb.ftypes.xls.XLSFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.xls.XLSFile</span></code></a></dt><dd><p>XLS file interface</p>
+</dd>
+<dt><em>ws</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xlrd.sheet.Sheet</span></code></dt><dd><p>Direct access to a worksheet</p>
+</dd>
+<dt><em>cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names to process</p>
+</dd>
+<dt><em>skiprows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of rows to skip before reading data</p>
+</dd>
+<dt><em>subrows</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; 0</dt><dd><p>Number of rows below header row to skip</p>
+</dd>
+<dt><em>skipcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of columns to skip before first data column</p>
+</dd>
+<dt><em>maxcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; <em>skipcols</em></dt><dd><p>Maximum column number of data</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db[col]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Column of data read from each column</p>
+</dd>
+<dt><em>db._n[col]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Length of each column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.attdb.ftypes.xls.XLSFile.read_xls_header">
+<code class="sig-name descname">read_xls_header</code><span class="sig-paren">(</span><em class="sig-param">ws</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.xls.XLSFile.read_xls_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read header row from a worksheet</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">read_xls_header</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.xls.XLSFile" title="cape.attdb.ftypes.xls.XLSFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.xls.XLSFile</span></code></a></dt><dd><p>XLS file interface</p>
+</dd>
+<dt><em>ws</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xlrd.sheet.Sheet</span></code></dt><dd><p>Direct access to a worksheet</p>
+</dd>
+<dt><em>colspec</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>List of column names <em>col</em> or <code class="docutils literal notranslate"><span class="pre">(col,</span> <span class="pre">colwidth)</span></code>;
+using this option preempts reading column names
+from header row</p>
+</dd>
+<dt><em>skiprows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of rows to skip before reading data</p>
+</dd>
+<dt><em>subrows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of rows below header row to skip</p>
+</dd>
+<dt><em>skipcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of columns to skip before first data column</p>
+</dd>
+<dt><em>maxcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; <em>skipcols</em></dt><dd><p>Maximum column number of data</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names if read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2020-01-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Full scalar/array support</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.attdb.ftypes.xls.XLSFile.read_xls_workbook">
+<code class="sig-name descname">read_xls_workbook</code><span class="sig-paren">(</span><em class="sig-param">wb</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.xls.XLSFile.read_xls_workbook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read <code class="docutils literal notranslate"><span class="pre">.xls</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> workbook with multiple worksheets</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_xls_workbook</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.xls.XLSFile" title="cape.attdb.ftypes.xls.XLSFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.xls.XLSFile</span></code></a></dt><dd><p>XLS file interface</p>
+</dd>
+<dt><em>wb</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xlrd.Book</span></code></dt><dd><p>Direct access to a workbook</p>
+</dd>
+<dt><em>ndim</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="docutils literal notranslate"><span class="pre">1</span></code></dt><dd><p>Dimensionality of one row of data column(s) to read</p>
+</dd>
+<dt><em>skiprows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of rows to skip before reading data</p>
+</dd>
+<dt><em>subrows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of rows below header row to skip</p>
+</dd>
+<dt><em>skipcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of columns to skip before first data column</p>
+</dd>
+<dt><em>maxrows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; <em>skiprows</em></dt><dd><p>Maximum row number of data</p>
+</dd>
+<dt><em>maxcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; <em>skipcols</em></dt><dd><p>Maximum column number of data</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-01-08 <code class="docutils literal notranslate"><span class="pre">&#64;jmeeroff</span></code> : First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.attdb.ftypes.xls.XLSFile.read_xls_worksheet">
+<code class="sig-name descname">read_xls_worksheet</code><span class="sig-paren">(</span><em class="sig-param">ws</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.xls.XLSFile.read_xls_worksheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read one worksheet of an <code class="docutils literal notranslate"><span class="pre">.xls</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_xls_worksheet</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.xls.XLSFile" title="cape.attdb.ftypes.xls.XLSFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.xls.XLSFile</span></code></a></dt><dd><p>XLS file interface</p>
+</dd>
+<dt><em>ws</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xlrd.sheet.Sheet</span></code></dt><dd><p>Direct access to a worksheet</p>
+</dd>
+<dt><em>ndim</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <code class="docutils literal notranslate"><span class="pre">1</span></code></dt><dd><p>Dimensionality of one row of data column(s) to read</p>
+</dd>
+<dt><em>skiprows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of rows to skip before reading data</p>
+</dd>
+<dt><em>subrows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of rows below header row to skip</p>
+</dd>
+<dt><em>skipcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of columns to skip before first data column</p>
+</dd>
+<dt><em>maxrows</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; <em>skiprows</em></dt><dd><p>Maximum row number of data</p>
+</dd>
+<dt><em>maxcols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt; <em>skipcols</em></dt><dd><p>Maximum column number of data</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-12-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2019-12-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Support “array” worksheets</p></li>
+<li><p>2020-01-10 <code class="docutils literal notranslate"><span class="pre">&#64;jmeeroff</span></code>: Array read as fallback</p></li>
+<li><p>2020-01-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Unified two worksheet methods</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../rdbnull.html" title="cape.attdb.rdbnull: Template ATTDB database"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="textdata.html" title="cape.attdb.ftypes.textdata: Generic textual data interface"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Output-Based “Response” Database Package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code>: Data file type interfaces</a> &#187;</li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0 documentation, 2019.
+  </div>
+
+
+  </body>
+</html>

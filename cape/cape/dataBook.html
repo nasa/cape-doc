@@ -1,0 +1,2997 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4.3.8. Data book Module: cape.dataBook &mdash; pyCart 0.8 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="pyCart 0.8 documentation" href="../../index.html" />
+    <link rel="up" title="4.3. The cape module" href="index.html" />
+    <link rel="next" title="4.3.9. File control base module: cape.fileCntl" href="fileCntl.html" />
+    <link rel="prev" title="4.3.7. Conversion tools for Cape" href="convert.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fileCntl.html" title="4.3.9. File control base module: cape.fileCntl"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="convert.html" title="4.3.7. Conversion tools for Cape"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyCart 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >4. Cape Module Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">4.3. The <code class="docutils literal"><span class="pre">cape</span></code> module</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4.3.8. Data book Module: <code class="docutils literal"><span class="pre">cape.dataBook</span></code></a><ul>
+<li><a class="reference internal" href="#global-data-book-container-class">4.3.8.1. Global data book container class</a></li>
+<li><a class="reference internal" href="#individual-data-books">4.3.8.2. Individual data books</a></li>
+<li><a class="reference internal" href="#data-book-classes-for-individual-cases">4.3.8.3. Data book classes for individual cases</a></li>
+<li><a class="reference internal" href="#other-cape-databook-methods">4.3.8.4. Other <code class="docutils literal"><span class="pre">cape.dataBook</span></code> methods</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="convert.html"
+                        title="previous chapter">4.3.7. Conversion tools for Cape</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fileCntl.html"
+                        title="next chapter">4.3.9. File control base module: <code class="docutils literal"><span class="pre">cape.fileCntl</span></code></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/cape/cape/dataBook.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.dataBook"></span><div class="section" id="data-book-module-cape-databook">
+<h1>4.3.8. Data book Module: <a class="reference internal" href="#module-cape.dataBook" title="cape.dataBook"><code class="xref py py-mod docutils literal"><span class="pre">cape.dataBook</span></code></a><a class="headerlink" href="#data-book-module-cape-databook" title="Permalink to this headline">¶</a></h1>
+<p>This module contains functions for reading and processing forces, moments, and
+other statistics from cases in a trajectory.</p>
+<p>It contains a parent class <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a> that provides a
+common interface to all of the requested force, moment, point sensor, etc.
+quantities that have been saved in the data book. Informing <a class="reference internal" href="index.html#module-cape" title="cape"><code class="xref py py-mod docutils literal"><span class="pre">cape</span></code></a> which
+quantities to track, and how to statistically process them, is done using the
+<code class="docutils literal"><span class="pre">&quot;DataBook&quot;</span></code> section of the JSON file, and the various data book options are
+handled within the API using the <code class="xref py py-mod docutils literal"><span class="pre">cape.options.dataBook</span></code> module.</p>
+<p>The master data book class <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a> is based on the
+built-in <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> class with keys pointing to force and moment data books
+for individual components.  For example, if the JSON file tells Cape to track
+the forces and/or moments on a component called <code class="docutils literal"><span class="pre">&quot;body&quot;</span></code>, and the data book is
+the variable <em>DB</em>, then the forces and moment data book is <code class="docutils literal"><span class="pre">DB[&quot;body&quot;]</span></code>.  This
+force and moment data book contains statistically averaged forces and moments
+and other statistical quantities for every case in the run matrix.  The class of
+the force and moment data book is <a class="reference internal" href="#cape.dataBook.DBComp" title="cape.dataBook.DBComp"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBComp</span></code></a>.</p>
+<p>The data book also has the capability to store &#8220;target&#8221; data books so that the
+user can compare results of the current CFD solutions to previous results or
+experimental data. These are stored in <code class="docutils literal"><span class="pre">DB[&quot;Targets&quot;]</span></code> and use the
+<a class="reference internal" href="#cape.dataBook.DBTarget" title="cape.dataBook.DBTarget"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBTarget</span></code></a> class. Other types of data books can also be
+created, such as the <a class="reference internal" href="pointSensor.html#cape.pointSensor.DBPointSensor" title="cape.pointSensor.DBPointSensor"><code class="xref py py-class docutils literal"><span class="pre">cape.pointSensor.DBPointSensor</span></code></a> class for tracking
+statistical properties at individual points in the solution field. Data books
+for tracking results of groups of cases are built off of the
+<a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a> class, which contains many common tools such as
+plotting.</p>
+<p>The <a class="reference internal" href="#module-cape.dataBook" title="cape.dataBook"><code class="xref py py-mod docutils literal"><span class="pre">cape.dataBook</span></code></a> module also contains modules for processing results
+within individual case folders.  This includes the <a class="reference internal" href="#cape.dataBook.CaseFM" title="cape.dataBook.CaseFM"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseFM</span></code></a>
+module for reading iterative force/moment histories and the
+<a class="reference internal" href="#cape.dataBook.CaseResid" title="cape.dataBook.CaseResid"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseResid</span></code></a> for iterative histories of residuals.</p>
+<div class="section" id="global-data-book-container-class">
+<h2>4.3.8.1. Global data book container class<a class="headerlink" href="#global-data-book-container-class" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="class">
+<dt id="cape.dataBook.DataBook">
+<em class="property">class </em><code class="descclassname">cape.dataBook.</code><code class="descname">DataBook</code><span class="sig-paren">(</span><em>x</em>, <em>opts</em>, <em>RootDir=None</em>, <em>targ=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DataBook" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides an interface to the data book for a given CFD run
+matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DB</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">dataBook</span><span class="o">.</span><span class="n">DataBook</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">RootDir</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">targ</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>x</em>: <a class="reference internal" href="trajectory.html#cape.trajectory.Trajectory" title="cape.trajectory.Trajectory"><code class="xref py py-class docutils literal"><span class="pre">cape.trajectory.Trajectory</span></code></a></dt>
+<dd><p class="first last">The current Cape trajectory (i.e. run matrix)</p>
+</dd>
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Global Cape options instance</p>
+</dd>
+<dt><em>RootDir</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Root directory, defaults to <code class="docutils literal"><span class="pre">os.getcwd()</span></code></p>
+</dd>
+<dt><em>targ</em>: {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">If used, read a duplicate data book as a target named <em>targ</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a></dt>
+<dd><p class="first last">Instance of the Cape data book class</p>
+</dd>
+<dt><em>DB.x</em>: <a class="reference internal" href="trajectory.html#cape.trajectory.Trajectory" title="cape.trajectory.Trajectory"><code class="xref py py-class docutils literal"><span class="pre">cape.trajectory.Trajectory</span></code></a></dt>
+<dd><p class="first last">Run matrix of rows saved in the data book (differs from input <em>x</em>)</p>
+</dd>
+<dt><em>DB[comp]</em>: <a class="reference internal" href="#cape.dataBook.DBComp" title="cape.dataBook.DBComp"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBComp</span></code></a></dt>
+<dd><p class="first last">Component data book for component <em>comp</em></p>
+</dd>
+<dt><em>DB.Components</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of force/moment components</p>
+</dd>
+<dt><em>DB.Targets</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of <a class="reference internal" href="#cape.dataBook.DBTarget" title="cape.dataBook.DBTarget"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBTarget</span></code></a> target data books</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-20 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Started</li>
+<li>2015-01-10 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.dataBook.DataBook.GetDBMatch">
+<code class="descname">GetDBMatch</code><span class="sig-paren">(</span><em>h</em>, <em>ftarg</em>, <em>tol=0.0</em>, <em>tols={}</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DataBook.GetDBMatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get index of a target match (if any) for one data book entry</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">DB</span><span class="o">.</span><span class="n">GetDBMatch</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">ftarg</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">tols</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a></dt>
+<dd><p class="first last">Instance of a data book class</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> or <code class="docutils literal"><span class="pre">np.nan</span></code></dt>
+<dd><p class="first last">Data book target index</p>
+</dd>
+<dt><em>ftarg</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the target and column</p>
+</dd>
+<dt><em>tol</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Tolerance for matching all keys (<code class="docutils literal"><span class="pre">0.0</span></code> enforces equality)</p>
+</dd>
+<dt><em>tols</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of specific tolerances for each key</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>i</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Data book index</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-08-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DataBook.GetTargetByName">
+<code class="descname">GetTargetByName</code><span class="sig-paren">(</span><em>targ</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DataBook.GetTargetByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a target handle by name of the target</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBT</span> <span class="o">=</span> <span class="n">DB</span><span class="o">.</span><span class="n">GetTargetByName</span><span class="p">(</span><span class="n">targ</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a></dt>
+<dd><p class="first last">Instance of the pyCart data book class</p>
+</dd>
+<dt><em>targ</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of target to find</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBT</em>: <a class="reference internal" href="#cape.dataBook.DBTarget" title="cape.dataBook.DBTarget"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBTarget</span></code></a></dt>
+<dd><p class="first last">Instance of the pyCart data book target class</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-06-04 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DataBook.GetTargetMatch">
+<code class="descname">GetTargetMatch</code><span class="sig-paren">(</span><em>i</em>, <em>ftarg</em>, <em>tol=0.0</em>, <em>tols={}</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DataBook.GetTargetMatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get index of a target match (if any) for one data book entry</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span> <span class="o">=</span> <span class="n">DB</span><span class="o">.</span><span class="n">GetTargetMatch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">ftarg</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">tols</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a></dt>
+<dd><p class="first last">Instance of data book class</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Data book index</p>
+</dd>
+<dt><em>ftarg</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the target and column</p>
+</dd>
+<dt><em>tol</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Tolerance for matching all keys (<code class="docutils literal"><span class="pre">0.0</span></code> enforces equality)</p>
+</dd>
+<dt><em>tols</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of specific tolerances for each key</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code> or <code class="docutils literal"><span class="pre">np.nan</span></code></dt>
+<dd><p class="first last">Data book target index</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-08-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DataBook.GetTargetMatches">
+<code class="descname">GetTargetMatches</code><span class="sig-paren">(</span><em>ftarg</em>, <em>tol=0.0</em>, <em>tols={}</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DataBook.GetTargetMatches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get vectors of indices matching targets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">I</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">DB</span><span class="o">.</span><span class="n">GetTargetMatches</span><span class="p">(</span><span class="n">ftarg</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">tols</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a></dt>
+<dd><p class="first last">Instance of data book class</p>
+</dd>
+<dt><em>ftarg</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the target and column</p>
+</dd>
+<dt><em>tol</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Tolerance for matching all keys (<code class="docutils literal"><span class="pre">0.0</span></code> enforces equality)</p>
+</dd>
+<dt><em>tols</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of specific tolerances for each key</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>I</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></dt>
+<dd><p class="first last">Array of data book indices with matches</p>
+</dd>
+<dt><em>J</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></dt>
+<dd><p class="first last">Array of target indices for each data book index</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-08-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DataBook.InitDBComp">
+<code class="descname">InitDBComp</code><span class="sig-paren">(</span><em>comp</em>, <em>x</em>, <em>opts</em>, <em>targ=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DataBook.InitDBComp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize data book for one component</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DB</span><span class="o">.</span><span class="n">InitDBComp</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">targ</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <code class="xref py py-class docutils literal"><span class="pre">pyCart.dataBook.DataBook</span></code></dt>
+<dd><p class="first last">Instance of the pyCart data book class</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of component</p>
+</dd>
+<dt><em>x</em>: <a class="reference internal" href="../../pycart/pyCart/trajectory.html#pyCart.trajectory.Trajectory" title="pyCart.trajectory.Trajectory"><code class="xref py py-class docutils literal"><span class="pre">pyCart.trajectory.Trajectory</span></code></a></dt>
+<dd><p class="first last">The current pyCart trajectory (i.e. run matrix)</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal"><span class="pre">pyCart.options.Options</span></code></dt>
+<dd><p class="first last">Global pyCart options instance</p>
+</dd>
+<dt><em>targ</em>: {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">If used, read a duplicate data book as a target named <em>targ</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-11-10 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DataBook.MatchTrajectory">
+<code class="descname">MatchTrajectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DataBook.MatchTrajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restrict the data book object to points in the trajectory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DB</span><span class="o">.</span><span class="n">MatchTrajectory</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a></dt>
+<dd><p class="first last">Instance of the Cape data book class</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-05-28 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DataBook.PlotCoeff">
+<code class="descname">PlotCoeff</code><span class="sig-paren">(</span><em>comp</em>, <em>coeff</em>, <em>I</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DataBook.PlotCoeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a sweep of one coefficients over several cases</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">DB</span><span class="o">.</span><span class="n">PlotCoeff</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a></dt>
+<dd><p class="first last">Instance of the data book class</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Component whose coefficient is being plotted</p>
+</dd>
+<dt><em>coeff</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Coefficient being plotted</p>
+</dd>
+<dt><em>I</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">List of indexes of cases to include in sweep</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><dl class="first docutils">
+<dt><em>x</em>: [ {None} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code> ]</dt>
+<dd><p class="first last">Trajectory key for <em>x</em> axis (or plot against index if <code class="docutils literal"><span class="pre">None</span></code>)</p>
+</dd>
+<dt><em>Label</em>: [ {<em>comp</em>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code> ]</dt>
+<dd><p class="first last">Manually specified label</p>
+</dd>
+<dt><em>Legend</em>: [ {True} | False ]</dt>
+<dd><p class="first last">Whether or not to use a legend</p>
+</dd>
+<dt><em>StDev</em>: [ {None} | <code class="xref py py-class docutils literal"><span class="pre">float</span></code> ]</dt>
+<dd><p class="first last">Multiple of iterative history standard deviation to plot</p>
+</dd>
+<dt><em>MinMax</em>: [ {False} | True ]</dt>
+<dd><p class="first last">Whether to plot minimum and maximum over iterative history</p>
+</dd>
+<dt><em>Uncertainty</em>: [ {False} | True ]</dt>
+<dd><p class="first last">Whether to plot direct uncertainty</p>
+</dd>
+<dt><em>LineOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Plot options for the primary line(s)</p>
+</dd>
+<dt><em>StDevOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options for the standard deviation plot</p>
+</dd>
+<dt><em>MinMaxOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options for the min/max plot</p>
+</dd>
+<dt><em>UncertaintyOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options for the uncertainty plot</p>
+</dd>
+<dt><em>FigWidth</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Width of figure in inches</p>
+</dd>
+<dt><em>FigHeight</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Height of figure in inches</p>
+</dd>
+<dt><em>PlotTypeStDev</em>: [ {&#8216;FillBetween&#8217;} | &#8216;ErrorBar&#8217; ]</dt>
+<dd><p class="first last">Plot function to use for standard deviation plot</p>
+</dd>
+<dt><em>PlotTypeMinMax</em>: [ {&#8216;FillBetween&#8217;} | &#8216;ErrorBar&#8217; ]</dt>
+<dd><p class="first last">Plot function to use for min/max plot</p>
+</dd>
+<dt><em>PlotTypeUncertainty</em>: [ &#8216;FillBetween&#8217; | {&#8216;ErrorBar&#8217;} ]</dt>
+<dd><p class="first last">Plot function to use for uncertainty plot</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">See also:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference internal" href="#cape.dataBook.DBBase.PlotCoeff" title="cape.dataBook.DBBase.PlotCoeff"><code class="xref py py-func docutils literal"><span class="pre">cape.dataBook.DBBase.PlotCoeff()</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-05-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-12-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added error bars</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DataBook.ReadTarget">
+<code class="descname">ReadTarget</code><span class="sig-paren">(</span><em>targ</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DataBook.ReadTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a data book target if it is not already present</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DB</span><span class="o">.</span><span class="n">ReadTarget</span><span class="p">(</span><span class="n">targ</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a></dt>
+<dd><p class="first last">Instance of the Cape data book class</p>
+</dd>
+<dt><em>targ</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Target name</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-16 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DataBook.Sort">
+<code class="descname">Sort</code><span class="sig-paren">(</span><em>key=None</em>, <em>I=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DataBook.Sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort a data book according to either a key or an index</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DB</span><span class="o">.</span><span class="n">Sort</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DB</span><span class="o">.</span><span class="n">Sort</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DB</span><span class="o">.</span><span class="n">Sort</span><span class="p">(</span><span class="n">I</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a></dt>
+<dd><p class="first last">Instance of the Cape data book class</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Name of trajectory key or list of keys on which to sort</p>
+</dd>
+<dt><em>I</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">List of indices; must have same size as data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-06-19 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: New multi-key sort</li>
+<li>2016-01-13 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added checks to allow incomplete comps</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DataBook.UpdateTrajectory">
+<code class="descname">UpdateTrajectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DataBook.UpdateTrajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Match the trajectory to the cases in the data book</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DB</span><span class="o">.</span><span class="n">UpdateTrajectory</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a></dt>
+<dd><p class="first last">Instance of the Cape data book class</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-05-22 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DataBook.Write">
+<code class="descname">Write</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DataBook.Write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the current data book in Python memory to file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DB</span><span class="o">.</span><span class="n">Write</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DB</em>: <a class="reference internal" href="#cape.dataBook.DataBook" title="cape.dataBook.DataBook"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBook</span></code></a></dt>
+<dd><p class="first last">Instance of the Cape data book class</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-22 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-06-19 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: New multi-key sort</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="individual-data-books">
+<h2>4.3.8.2. Individual data books<a class="headerlink" href="#individual-data-books" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="class">
+<dt id="cape.dataBook.DBBase">
+<em class="property">class </em><code class="descclassname">cape.dataBook.</code><code class="descname">DBBase</code><span class="sig-paren">(</span><em>comp</em>, <em>x</em>, <em>opts</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Individual item data book basis class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBi</span> <span class="o">=</span> <span class="n">DBBase</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>comp</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the component or other item name</p>
+</dd>
+<dt><em>x</em>: <a class="reference internal" href="trajectory.html#cape.trajectory.Trajectory" title="cape.trajectory.Trajectory"><code class="xref py py-class docutils literal"><span class="pre">cape.trajectory.Trajectory</span></code></a></dt>
+<dd><p class="first last">Trajectory/run matrix interface</p>
+</dd>
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBi</em>: <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a></dt>
+<dd><p class="first last">An individual item data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-22 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-12-04 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Forked from <a class="reference internal" href="#cape.dataBook.DBComp" title="cape.dataBook.DBComp"><code class="xref py py-class docutils literal"><span class="pre">DBComp</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.dataBook.DBBase.ArgSort">
+<code class="descname">ArgSort</code><span class="sig-paren">(</span><em>key=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBBase.ArgSort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return indices that would sort a data book by a trajectory key</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">I</span> <span class="o">=</span> <span class="n">DBi</span><span class="o">.</span><span class="n">ArgSort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBi</em>: <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a></dt>
+<dd><p class="first last">An individual item data book</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of trajectory key to use for sorting; default is first key</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>I</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">List of indices; must have same size as data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBBase.EstimateLineCount">
+<code class="descname">EstimateLineCount</code><span class="sig-paren">(</span><em>fname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBBase.EstimateLineCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a conservative (high) estimate of the number of lines in a file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="p">,</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">DBP</span><span class="o">.</span><span class="n">EstimateLineCount</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBP</em>: <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a></dt>
+<dd><p class="first last">Data book base object</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of data file to read</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Conservative estimate of length of file</p>
+</dd>
+<dt><em>pos</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Position of first data character</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-15 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBBase.FindMatch">
+<code class="descname">FindMatch</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBBase.FindMatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find an entry by run matrix (trajectory) variables</p>
+<p>It is assumed that exact matches can be found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span> <span class="o">=</span> <span class="n">DBi</span><span class="o">.</span><span class="n">FindMatch</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBi</em>: <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a></dt>
+<dd><p class="first last">An individual item data book</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Index of the case from the trajectory to try match</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">Array of index that matches the trajectory case or <code class="docutils literal"><span class="pre">NaN</span></code></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-22 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBBase.GetTrajectoryIndex">
+<code class="descname">GetTrajectoryIndex</code><span class="sig-paren">(</span><em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBBase.GetTrajectoryIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find an entry in the run matrix (trajectory)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">DBi</span><span class="o">.</span><span class="n">GetTrajectoryIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBi</em>: <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a></dt>
+<dd><p class="first last">An individual item data book</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Index of the case from the databook to try match</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>i</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Trajectory index or <code class="docutils literal"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-05-28 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBBase.PlotCoeff">
+<code class="descname">PlotCoeff</code><span class="sig-paren">(</span><em>coeff</em>, <em>I</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBBase.PlotCoeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a sweep of one coefficient over several cases</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">DBi</span><span class="o">.</span><span class="n">PlotCoeff</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBi</em>: <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a></dt>
+<dd><p class="first last">An individual item data book</p>
+</dd>
+<dt><em>coeff</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Coefficient being plotted</p>
+</dd>
+<dt><em>I</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">List of indexes of cases to include in sweep</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first simple">
+<li>See <a class="reference internal" href="#cape.dataBook.DBBase.PlotCoeffBase" title="cape.dataBook.DBBase.PlotCoeffBase"><code class="xref py py-func docutils literal"><span class="pre">cape.dataBook.DBBase.PlotCoeffBase()</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-05-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-12-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added error bars</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBBase.PlotCoeffBase">
+<code class="descname">PlotCoeffBase</code><span class="sig-paren">(</span><em>coeff</em>, <em>I</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBBase.PlotCoeffBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a sweep of one coefficient or quantity over several cases</p>
+<p>This is the base method upon which data book sweep plotting is built.
+Other methods may call this one with modifications to the default
+settings.  For example <a class="reference internal" href="#cape.dataBook.DBTarget.PlotCoeff" title="cape.dataBook.DBTarget.PlotCoeff"><code class="xref py py-func docutils literal"><span class="pre">cape.dataBook.DBTarget.PlotCoeff()</span></code></a> changes
+the default <em>LineOptions</em> to show a red line instead of the standard
+black line.  All settings can still be overruled by explicit inputs to
+either this function or any of its children.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">DBi</span><span class="o">.</span><span class="n">PlotCoeffBase</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBi</em>: <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a></dt>
+<dd><p class="first last">An individual item data book</p>
+</dd>
+<dt><em>coeff</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Coefficient being plotted</p>
+</dd>
+<dt><em>I</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">List of indexes of cases to include in sweep</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><dl class="first docutils">
+<dt><em>x</em>: [ {None} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code> ]</dt>
+<dd><p class="first last">Trajectory key for <em>x</em> axis (or plot against index if <code class="docutils literal"><span class="pre">None</span></code>)</p>
+</dd>
+<dt><em>Label</em>: [ {<em>comp</em>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code> ]</dt>
+<dd><p class="first last">Manually specified label</p>
+</dd>
+<dt><em>Legend</em>: [ {True} | False ]</dt>
+<dd><p class="first last">Whether or not to use a legend</p>
+</dd>
+<dt><em>StDev</em>: [ {None} | <code class="xref py py-class docutils literal"><span class="pre">float</span></code> ]</dt>
+<dd><p class="first last">Multiple of iterative history standard deviation to plot</p>
+</dd>
+<dt><em>MinMax</em>: [ {False} | True ]</dt>
+<dd><p class="first last">Whether to plot minimum and maximum over iterative history</p>
+</dd>
+<dt><em>Uncertainty</em>: [ {False} | True ]</dt>
+<dd><p class="first last">Whether to plot direct uncertainty</p>
+</dd>
+<dt><em>LineOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Plot options for the primary line(s)</p>
+</dd>
+<dt><em>StDevOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options for the standard deviation plot</p>
+</dd>
+<dt><em>MinMaxOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options for the min/max plot</p>
+</dd>
+<dt><em>UncertaintyOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options for the uncertainty plot</p>
+</dd>
+<dt><em>FigWidth</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Width of figure in inches</p>
+</dd>
+<dt><em>FigHeight</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Height of figure in inches</p>
+</dd>
+<dt><em>PlotTypeStDev</em>: [ {&#8216;FillBetween&#8217;} | &#8216;ErrorBar&#8217; ]</dt>
+<dd><p class="first last">Plot function to use for standard deviation plot</p>
+</dd>
+<dt><em>PlotTypeMinMax</em>: [ {&#8216;FillBetween&#8217;} | &#8216;ErrorBar&#8217; ]</dt>
+<dd><p class="first last">Plot function to use for min/max plot</p>
+</dd>
+<dt><em>PlotTypeUncertainty</em>: [ &#8216;FillBetween&#8217; | {&#8216;ErrorBar&#8217;} ]</dt>
+<dd><p class="first last">Plot function to use for uncertainty plot</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-05-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-12-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added error bars</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBBase.ProcessColumns">
+<code class="descname">ProcessColumns</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBBase.ProcessColumns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process column names</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBi</span><span class="o">.</span><span class="n">ProcessColumns</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBi</em>: <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a></dt>
+<dd><p class="first last">Data book base object</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Effects:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBi.xCols</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of trajectory keys</p>
+</dd>
+<dt><em>DBi.fCols</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of floating point data columns</p>
+</dd>
+<dt><em>DBi.iCols</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of integer data columns</p>
+</dd>
+<dt><em>DBi.cols</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Total list of columns</p>
+</dd>
+<dt><em>DBi.nxCol</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of trajectory keys</p>
+</dd>
+<dt><em>DBi.nfCol</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of floating point keys</p>
+</dd>
+<dt><em>DBi.niCol</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of integer data columns</p>
+</dd>
+<dt><em>DBi.nCol</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Total number of columns</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-15 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBBase.ProcessConverters">
+<code class="descname">ProcessConverters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBBase.ProcessConverters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the list of converters to read and write each column</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBP</span><span class="o">.</span><span class="n">ProcessConverters</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBP</em>: <code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DataBookBase</span></code></dt>
+<dd><p class="first last">Data book base object</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Effects:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBP.rconv</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">function</span></code>)</dt>
+<dd><p class="first last">List of read converters</p>
+</dd>
+<dt><em>DBP.wflag</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (%i | %.12g | %s)</dt>
+<dd><p class="first last">List of write flags</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-03-15 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBBase.Read">
+<code class="descname">Read</code><span class="sig-paren">(</span><em>fname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBBase.Read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a data book statistics file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBP</span><span class="o">.</span><span class="n">Read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DBP</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBP</em>: <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a></dt>
+<dd><p class="first last">Data book base object</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of data file to read</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-12-04 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBBase.Sort">
+<code class="descname">Sort</code><span class="sig-paren">(</span><em>key=None</em>, <em>I=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBBase.Sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort a data book according to either a key or an index</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBi</span><span class="o">.</span><span class="n">Sort</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DBi</span><span class="o">.</span><span class="n">Sort</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DBi</span><span class="o">.</span><span class="n">Sort</span><span class="p">(</span><span class="n">I</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBi</em>: <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a></dt>
+<dd><p class="first last">An individual item data book</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of trajectory key to use for sorting; default is first key</p>
+</dd>
+<dt><em>I</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">List of indices; must have same size as data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBBase.Write">
+<code class="descname">Write</code><span class="sig-paren">(</span><em>fname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBBase.Write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a single point sensor data book summary file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBi</span><span class="o">.</span><span class="n">Write</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DBi</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBi</em>: <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a></dt>
+<dd><p class="first last">An individual item data book</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of data file to read</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-12-04 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cape.dataBook.DBComp">
+<em class="property">class </em><code class="descclassname">cape.dataBook.</code><code class="descname">DBComp</code><span class="sig-paren">(</span><em>comp</em>, <em>x</em>, <em>opts</em>, <em>targ=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBComp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Individual component data book</p>
+<p>This class is derived from <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBi</span> <span class="o">=</span> <span class="n">DBComp</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>comp</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the component</p>
+</dd>
+<dt><em>x</em>: <a class="reference internal" href="trajectory.html#cape.trajectory.Trajectory" title="cape.trajectory.Trajectory"><code class="xref py py-class docutils literal"><span class="pre">cape.trajectory.Trajectory</span></code></a></dt>
+<dd><p class="first last">Trajectory for processing variable types</p>
+</dd>
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Global pyCart options instance</p>
+</dd>
+<dt><em>targ</em>: {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">If used, read a duplicate data book as a target named <em>targ</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBi</em>: <code class="xref py py-class docutils literal"><span class="pre">pyCart.dataBook.DBComp</span></code></dt>
+<dd><p class="first last">An individual component data book</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-20 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Started</li>
+<li>2014-12-22 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2016-06-27 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added target option for using other folders</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.dataBook.DBComp.PlotCoeff">
+<code class="descname">PlotCoeff</code><span class="sig-paren">(</span><em>coeff</em>, <em>I</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBComp.PlotCoeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a sweep of one coefficient over several cases</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">DBi</span><span class="o">.</span><span class="n">PlotCoeff</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBi</em>: <a class="reference internal" href="#cape.dataBook.DBBase" title="cape.dataBook.DBBase"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBBase</span></code></a></dt>
+<dd><p class="first last">An individual item data book</p>
+</dd>
+<dt><em>coeff</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Coefficient being plotted</p>
+</dd>
+<dt><em>I</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">List of indexes of cases to include in sweep</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first simple">
+<li>See <a class="reference internal" href="#cape.dataBook.DBBase.PlotCoeffBase" title="cape.dataBook.DBBase.PlotCoeffBase"><code class="xref py py-func docutils literal"><span class="pre">cape.dataBook.DBBase.PlotCoeffBase()</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-05-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-12-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added error bars</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cape.dataBook.DBTarget">
+<em class="property">class </em><code class="descclassname">cape.dataBook.</code><code class="descname">DBTarget</code><span class="sig-paren">(</span><em>targ</em>, <em>x</em>, <em>opts</em>, <em>RootDir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to handle data from data book target files.  There are more
+constraints on target files than the files that data book creates, and raw
+data books created by pyCart are not valid target files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBT</span> <span class="o">=</span> <span class="n">DBTarget</span><span class="p">(</span><span class="n">targ</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">RootDir</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>targ</em>: <a class="reference internal" href="options/DataBook.html#cape.options.DataBook.DBTarget" title="cape.options.DataBook.DBTarget"><code class="xref py py-class docutils literal"><span class="pre">cape.options.DataBook.DBTarget</span></code></a></dt>
+<dd><p class="first last">Instance of a target source options interface</p>
+</dd>
+<dt><em>x</em>: <a class="reference internal" href="../../pycart/pyCart/trajectory.html#pyCart.trajectory.Trajectory" title="pyCart.trajectory.Trajectory"><code class="xref py py-class docutils literal"><span class="pre">pyCart.trajectory.Trajectory</span></code></a></dt>
+<dd><p class="first last">Run matrix interface</p>
+</dd>
+<dt><em>opts</em>: <a class="reference internal" href="options/index.html#cape.options.Options" title="cape.options.Options"><code class="xref py py-class docutils literal"><span class="pre">cape.options.Options</span></code></a></dt>
+<dd><p class="first last">Options interface</p>
+</dd>
+<dt><em>RootDir</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Root directory, defaults to <code class="docutils literal"><span class="pre">os.getcwd()</span></code></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBT</em>: <a class="reference internal" href="#cape.dataBook.DBTarget" title="cape.dataBook.DBTarget"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBTarget</span></code></a></dt>
+<dd><p class="first last">Instance of the Cape data book target class</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-20 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Started</li>
+<li>2015-01-10 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-12-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added uncertainties</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.dataBook.DBTarget.CheckColumn">
+<code class="descname">CheckColumn</code><span class="sig-paren">(</span><em>ctargs</em>, <em>pt</em>, <em>cf</em>, <em>sfx</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBTarget.CheckColumn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check a data book target column name and its consistency</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fi</span> <span class="o">=</span> <span class="n">DBT</span><span class="o">.</span><span class="n">CheckColumn</span><span class="p">(</span><span class="n">ctargs</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBT</em>: <a class="reference internal" href="#cape.dataBook.DBTarget" title="cape.dataBook.DBTarget"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBTarget</span></code></a></dt>
+<dd><p class="first last">Instance of the data book target class</p>
+</dd>
+<dt><em>ctargs</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of target column names for each coefficient</p>
+</dd>
+<dt><em>pt</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of subcomponent (short for &#8216;point&#8217;)</p>
+</dd>
+<dt><em>c</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the coefficient in question, including suffix</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>fi</em>: <code class="docutils literal"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of the column in data book if present</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-12-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBTarget.PlotCoeff">
+<code class="descname">PlotCoeff</code><span class="sig-paren">(</span><em>comp</em>, <em>coeff</em>, <em>I</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBTarget.PlotCoeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a sweep of one coefficient over several cases</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">DBT</span><span class="o">.</span><span class="n">PlotCoeff</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBT</em>: <a class="reference internal" href="#cape.dataBook.DBTarget" title="cape.dataBook.DBTarget"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBTarget</span></code></a></dt>
+<dd><p class="first last">Instance of the Cape data book target class</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Component whose coefficient is being plotted</p>
+</dd>
+<dt><em>coeff</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Coefficient being plotted</p>
+</dd>
+<dt><em>I</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">int</span></code>)</dt>
+<dd><p class="first last">List of indexes of cases to include in sweep</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><dl class="first docutils">
+<dt><em>x</em>: [ {None} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code> ]</dt>
+<dd><p class="first last">Trajectory key for <em>x</em> axis (or plot against index if <code class="docutils literal"><span class="pre">None</span></code>)</p>
+</dd>
+<dt><em>Label</em>: [ {<em>comp</em>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code> ]</dt>
+<dd><p class="first last">Manually specified label</p>
+</dd>
+<dt><em>Legend</em>: [ {True} | False ]</dt>
+<dd><p class="first last">Whether or not to use a legend</p>
+</dd>
+<dt><em>StDev</em>: [ {None} | <code class="xref py py-class docutils literal"><span class="pre">float</span></code> ]</dt>
+<dd><p class="first last">Multiple of iterative history standard deviation to plot</p>
+</dd>
+<dt><em>MinMax</em>: [ {False} | True ]</dt>
+<dd><p class="first last">Whether to plot minimum and maximum over iterative history</p>
+</dd>
+<dt><em>Uncertainty</em>: [ {False} | True ]</dt>
+<dd><p class="first last">Whether to plot direct uncertainty</p>
+</dd>
+<dt><em>LineOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Plot options for the primary line(s)</p>
+</dd>
+<dt><em>StDevOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options for the standard deviation plot</p>
+</dd>
+<dt><em>MinMaxOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options for the min/max plot</p>
+</dd>
+<dt><em>UncertaintyOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options for the uncertainty plot</p>
+</dd>
+<dt><em>FigWidth</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Width of figure in inches</p>
+</dd>
+<dt><em>FigHeight</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Height of figure in inches</p>
+</dd>
+<dt><em>PlotTypeStDev</em>: [ {&#8216;FillBetween&#8217;} | &#8216;ErrorBar&#8217; ]</dt>
+<dd><p class="first last">Plot function to use for standard deviation plot</p>
+</dd>
+<dt><em>PlotTypeMinMax</em>: [ {&#8216;FillBetween&#8217;} | &#8216;ErrorBar&#8217; ]</dt>
+<dd><p class="first last">Plot function to use for min/max plot</p>
+</dd>
+<dt><em>PlotTypeUncertainty</em>: [ &#8216;FillBetween&#8217; | {&#8216;ErrorBar&#8217;} ]</dt>
+<dd><p class="first last">Plot function to use for uncertainty plot</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-05-30 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-12-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added uncertainties</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBTarget.ProcessColumns">
+<code class="descname">ProcessColumns</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBTarget.ProcessColumns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process data columns and split into dictionary keys</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBT</span><span class="o">.</span><span class="n">ProcessColumns</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBT</em>: <a class="reference internal" href="#cape.dataBook.DBTarget" title="cape.dataBook.DBTarget"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBTarget</span></code></a></dt>
+<dd><p class="first last">Instance of the data book target class</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-06-03 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Copied from <code class="xref py py-func docutils literal"><span class="pre">__init__()</span></code> method</li>
+<li>2015-12-14 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added support for point sensors</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBTarget.ReadAllData">
+<code class="descname">ReadAllData</code><span class="sig-paren">(</span><em>fname</em>, <em>delimiter='</em>, <em>'</em>, <em>skiprows=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBTarget.ReadAllData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read target data file all at once</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBT</span><span class="o">.</span><span class="n">ReadAllData</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBT</em>: <a class="reference internal" href="#cape.dataBook.DBTarget" title="cape.dataBook.DBTarget"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBTarget</span></code></a></dt>
+<dd><p class="first last">Instance of the Cape data book target class</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file to read</p>
+</dd>
+<dt><em>delimiter</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Data delimiter character(s)</p>
+</dd>
+<dt><em>skiprows</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of header rows to skip</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-07 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBTarget.ReadData">
+<code class="descname">ReadData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBTarget.ReadData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read data file according to stored options</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBT</span><span class="o">.</span><span class="n">ReadData</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBT</em>: <a class="reference internal" href="#cape.dataBook.DBTarget" title="cape.dataBook.DBTarget"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBTarget</span></code></a></dt>
+<dd><p class="first last">Instance of the data book target class</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-06-03 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Copied from <code class="xref py py-func docutils literal"><span class="pre">__init__()</span></code> method</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBTarget.ReadDataByColumn">
+<code class="descname">ReadDataByColumn</code><span class="sig-paren">(</span><em>fname</em>, <em>delimiter='</em>, <em>'</em>, <em>skiprows=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBTarget.ReadDataByColumn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read target data one column at a time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBT</span><span class="o">.</span><span class="n">ReadDataByColumn</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBT</em>: <a class="reference internal" href="#cape.dataBook.DBTarget" title="cape.dataBook.DBTarget"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBTarget</span></code></a></dt>
+<dd><p class="first last">Instance of the Cape data book target class</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of file to read</p>
+</dd>
+<dt><em>delimiter</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Data delimiter character(s)</p>
+</dd>
+<dt><em>skiprows</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of header rows to skip</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-09-07 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.DBTarget.UpdateTrajectory">
+<code class="descname">UpdateTrajectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.DBTarget.UpdateTrajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Match the trajectory to the cases in the data book</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBT</span><span class="o">.</span><span class="n">UpdateTrajectory</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>DBT</em>: <a class="reference internal" href="#cape.dataBook.DBTarget" title="cape.dataBook.DBTarget"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.DBTarget</span></code></a></dt>
+<dd><p class="first last">Instance of the data book target class</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-06-03 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="data-book-classes-for-individual-cases">
+<h2>4.3.8.3. Data book classes for individual cases<a class="headerlink" href="#data-book-classes-for-individual-cases" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="class">
+<dt id="cape.dataBook.CaseData">
+<em class="property">class </em><code class="descclassname">cape.dataBook.</code><code class="descname">CaseData</code><a class="headerlink" href="#cape.dataBook.CaseData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for case iterative histories</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FM</span> <span class="o">=</span> <span class="n">CaseData</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <a class="reference internal" href="#cape.dataBook.CaseData" title="cape.dataBook.CaseData"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseData</span></code></a></dt>
+<dd><p class="first last">Base iterative history class</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-12-07 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.dataBook.CaseData.ExtractValue">
+<code class="descname">ExtractValue</code><span class="sig-paren">(</span><em>c</em>, <em>col=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseData.ExtractValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the iterative history for one coefficient/state</p>
+<p>This function may be customized for some modules</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">FM</span><span class="o">.</span><span class="n">Extractvalue</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">FM</span><span class="o">.</span><span class="n">ExtractValue</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <a class="reference internal" href="#cape.dataBook.CaseData" title="cape.dataBook.CaseData"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseData</span></code></a></dt>
+<dd><p class="first last">Case component history class</p>
+</dd>
+<dt><em>c</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> </dt>
+<dd><p class="first last">Name of state</p>
+</dd>
+<dt><em>col</em>: {<code class="docutils literal"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Column number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>C</em>: <code class="xref py py-class docutils literal"><span class="pre">np.ndarray</span></code></dt>
+<dd><p class="first last">Array of values for <em>c</em> at each iteration or sample interval</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-12-07 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseData.GetIterationIndex">
+<code class="descname">GetIterationIndex</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseData.GetIterationIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return index of a particular iteration in <em>FM.i</em></p>
+<p>If the iteration <em>i</em> is not present in the history, the index of the
+last available iteration less than or equal to <em>i</em> is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span> <span class="o">=</span> <span class="n">FM</span><span class="o">.</span><span class="n">GetIterationIndex</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <a class="reference internal" href="#cape.dataBook.CaseData" title="cape.dataBook.CaseData"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseData</span></code></a></dt>
+<dd><p class="first last">Case component history class</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Iteration number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Index of last iteration in <em>FM.i</em> less than or equal to <em>i</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-03-06 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-12-07 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Copied from <a class="reference internal" href="#cape.dataBook.CaseFM" title="cape.dataBook.CaseFM"><code class="xref py py-class docutils literal"><span class="pre">CaseFM</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseData.PlotValue">
+<code class="descname">PlotValue</code><span class="sig-paren">(</span><em>c</em>, <em>col=None</em>, <em>n=None</em>, <em>nAvg=100</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseData.PlotValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot an iterative history of some value named <em>c</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">FM</span><span class="o">.</span><span class="n">PlotValue</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nAvg</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <a class="reference internal" href="#cape.dataBook.CaseData" title="cape.dataBook.CaseData"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseData</span></code></a></dt>
+<dd><p class="first last">Case component history class</p>
+</dd>
+<dt><em>c</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of coefficient to plot, e.g. <code class="docutils literal"><span class="pre">'CA'</span></code></p>
+</dd>
+<dt><em>col</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">int</span></code> | <code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd><p class="first last">Select a column by name or index</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Only show the last <em>n</em> iterations</p>
+</dd>
+<dt><em>nAvg</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Use the last <em>nAvg</em> iterations to compute an average</p>
+</dd>
+<dt><em>d</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Delta in the coefficient to show expected range</p>
+</dd>
+<dt><em>k</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Multiple of iterative standard deviation to plot</p>
+</dd>
+<dt><em>u</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Multiple of sampling error standard deviation to plot</p>
+</dd>
+<dt><em>eps</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Fixed sampling error, default uses <code class="xref py py-func docutils literal"><span class="pre">SigmaMean()</span></code></p>
+</dd>
+<dt><em>nLast</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Last iteration to use (defaults to last iteration available)</p>
+</dd>
+<dt><em>nFirst</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">First iteration to plot</p>
+</dd>
+<dt><em>FigWidth</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure width</p>
+</dd>
+<dt><em>FigHeight</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure height</p>
+</dd>
+<dt><em>LineOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of additional options for line plot</p>
+</dd>
+<dt><em>StDevOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options passed to <code class="xref py py-func docutils literal"><span class="pre">plt.fill_between()</span></code> for stdev plot</p>
+</dd>
+<dt><em>ErrPltOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options passed to <code class="xref py py-func docutils literal"><span class="pre">plt.fill_between()</span></code> for uncertainty plot</p>
+</dd>
+<dt><em>DeltaOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options passed to <code class="xref py py-func docutils literal"><span class="pre">plt.plot()</span></code> for reference range plot</p>
+</dd>
+<dt><em>MeanOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options passed to <code class="xref py py-func docutils literal"><span class="pre">plt.plot()</span></code> for mean line</p>
+</dd>
+<dt><em>ShowMu</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Option to print value of mean</p>
+</dd>
+<dt><em>ShowSigma</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Option to print value of standard deviation</p>
+</dd>
+<dt><em>ShowEpsilon</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Option to print value of sampling error</p>
+</dd>
+<dt><em>ShowDelta</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Option to print reference value</p>
+</dd>
+<dt><em>MuFormat</em>: {<code class="docutils literal"><span class="pre">&quot;%.4f&quot;</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Format for text label of the mean value</p>
+</dd>
+<dt><em>DeltaFormat</em>: {<code class="docutils literal"><span class="pre">&quot;%.4f&quot;</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Format for text label of the reference value <em>d</em></p>
+</dd>
+<dt><em>SigmaFormat</em>: {<code class="docutils literal"><span class="pre">&quot;%.4f&quot;</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Format for text label of the iterative standard deviation</p>
+</dd>
+<dt><em>EpsilonFormat</em>: {<code class="docutils literal"><span class="pre">&quot;%.4f&quot;</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Format for text label of the sampling error</p>
+</dd>
+<dt><em>XLabel</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Specified label for <em>x</em>-axis, default is <code class="docutils literal"><span class="pre">Iteration</span> <span class="pre">Number</span></code></p>
+</dd>
+<dt><em>YLabel</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Specified label for <em>y</em>-axis, default is <em>c</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of figure/plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-11-12 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2014-12-09 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Transferred to <code class="xref py py-class docutils literal"><span class="pre">AeroPlot</span></code></li>
+<li>2015-02-15 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Transferred to <code class="xref py py-class docutils literal"><span class="pre">dataBook.Aero</span></code></li>
+<li>2015-03-04 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added <em>nStart</em> and <em>nLast</em></li>
+<li>2015-12-07 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Moved to basis class</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseData.PlotValueHist">
+<code class="descname">PlotValueHist</code><span class="sig-paren">(</span><em>c</em>, <em>nAvg=100</em>, <em>nLast=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseData.PlotValueHist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a histogram of the iterative history of some value <em>c</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">FM</span><span class="o">.</span><span class="n">PlotValueHist</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nAvg</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <a class="reference internal" href="#cape.dataBook.CaseData" title="cape.dataBook.CaseData"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseData</span></code></a></dt>
+<dd><p class="first last">Instance of the component force history class</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of component to plot</p>
+</dd>
+<dt><em>c</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of coefficient to plot, e.g. <code class="docutils literal"><span class="pre">'CA'</span></code></p>
+</dd>
+<dt><em>nAvg</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Use the last <em>nAvg</em> iterations to compute an average</p>
+</dd>
+<dt><em>nBins</em>: {<code class="docutils literal"><span class="pre">20</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of bins in histogram, also can be set in <em>HistOptions</em></p>
+</dd>
+<dt><em>nLast</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Last iteration to use (defaults to last iteration available)</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><dl class="first docutils">
+<dt><em>FigWidth</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure width</p>
+</dd>
+<dt><em>FigHeight</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure height</p>
+</dd>
+<dt><em>Label</em>: [ {<em>comp</em>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code> ]</dt>
+<dd><p class="first last">Manually specified label</p>
+</dd>
+<dt><em>TargetValue</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">float</span></code>)</dt>
+<dd><p class="first last">Target or list of target values</p>
+</dd>
+<dt><em>TargetLabel</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">Legend label(s) for target(s)</p>
+</dd>
+<dt><em>StDev</em>: [ {None} | <code class="xref py py-class docutils literal"><span class="pre">float</span></code> ]</dt>
+<dd><p class="first last">Multiple of iterative history standard deviation to plot</p>
+</dd>
+<dt><em>HistOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Plot options for the primary histogram</p>
+</dd>
+<dt><em>StDevOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of plot options for the standard deviation plot</p>
+</dd>
+<dt><em>DeltaOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options passed to <code class="xref py py-func docutils literal"><span class="pre">plt.plot()</span></code> for reference range plot</p>
+</dd>
+<dt><em>MeanOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options passed to <code class="xref py py-func docutils literal"><span class="pre">plt.plot()</span></code> for mean line</p>
+</dd>
+<dt><em>TargetOptions</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Options passed to <code class="xref py py-func docutils literal"><span class="pre">plt.plot()</span></code> for target value lines</p>
+</dd>
+<dt><em>OutlierSigma</em>: {<code class="docutils literal"><span class="pre">7.0</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Standard deviation multiplier for determining outliers</p>
+</dd>
+<dt><em>ShowMu</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Option to print value of mean</p>
+</dd>
+<dt><em>ShowSigma</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Option to print value of standard deviation</p>
+</dd>
+<dt><em>ShowEpsilon</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Option to print value of sampling error</p>
+</dd>
+<dt><em>ShowDelta</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Option to print reference value</p>
+</dd>
+<dt><em>ShowTarget</em>: <code class="xref py py-class docutils literal"><span class="pre">bool</span></code></dt>
+<dd><p class="first last">Option to show target value</p>
+</dd>
+<dt><em>MuFormat</em>: {<code class="docutils literal"><span class="pre">&quot;%.4f&quot;</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Format for text label of the mean value</p>
+</dd>
+<dt><em>DeltaFormat</em>: {<code class="docutils literal"><span class="pre">&quot;%.4f&quot;</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Format for text label of the reference value <em>d</em></p>
+</dd>
+<dt><em>SigmaFormat</em>: {<code class="docutils literal"><span class="pre">&quot;%.4f&quot;</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Format for text label of the iterative standard deviation</p>
+</dd>
+<dt><em>TargetFormat</em>: {<code class="docutils literal"><span class="pre">&quot;%.4f&quot;</span></code>} | <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Format for text label of the target value</p>
+</dd>
+<dt><em>XLabel</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Specified label for <em>x</em>-axis, default is <code class="docutils literal"><span class="pre">Iteration</span> <span class="pre">Number</span></code></p>
+</dd>
+<dt><em>YLabel</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Specified label for <em>y</em>-axis, default is <em>c</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of figure/plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-02-15 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-03-06 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added <em>nLast</em> and fixed documentation</li>
+<li>2015-03-06 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Copied to <a class="reference internal" href="#cape.dataBook.CaseFM" title="cape.dataBook.CaseFM"><code class="xref py py-class docutils literal"><span class="pre">CaseFM</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cape.dataBook.CaseFM">
+<em class="property">class </em><code class="descclassname">cape.dataBook.</code><code class="descname">CaseFM</code><span class="sig-paren">(</span><em>comp</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseFM" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class contains methods for reading data about an the histroy of an
+individual component for a single case.  The list of available components
+comes from a <code class="file docutils literal"><span class="pre">loadsCC.dat</span></code> file if one exists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FM</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">dataBook</span><span class="o">.</span><span class="n">CaseFM</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">MRP</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>C</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of coefficients to initialize</p>
+</dd>
+<dt><em>MRP</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">float</span></code>) shape=(3,)</dt>
+<dd><p class="first last">Moment reference point</p>
+</dd>
+<dt><em>A</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> shape=(<em>N</em>,4) or shape=(<em>N</em>,7)</dt>
+<dd><p class="first last">Matrix of forces and/or moments at <em>N</em> iterations</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <code class="xref py py-class docutils literal"><span class="pre">cape.aero.FM</span></code></dt>
+<dd><p class="first last">Instance of the force and moment class</p>
+</dd>
+<dt><em>FM.C</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">str</span></code>)</dt>
+<dd><p class="first last">List of coefficients</p>
+</dd>
+<dt><em>FM.MRP</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">float</span></code>) shape=(3,)</dt>
+<dd><p class="first last">Moment reference point</p>
+</dd>
+<dt><em>FM.i</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt>
+<dd><p class="first last">List of iteration numbers</p>
+</dd>
+<dt><em>FM.CA</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt>
+<dd><p class="first last">Axial force coefficient at each iteration</p>
+</dd>
+<dt><em>FM.CY</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt>
+<dd><p class="first last">Lateral force coefficient at each iteration</p>
+</dd>
+<dt><em>FM.CN</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt>
+<dd><p class="first last">Normal force coefficient at each iteration</p>
+</dd>
+<dt><em>FM.CLL</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt>
+<dd><p class="first last">Rolling moment coefficient at each iteration</p>
+</dd>
+<dt><em>FM.CLM</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt>
+<dd><p class="first last">Pitching moment coefficient at each iteration</p>
+</dd>
+<dt><em>FM.CLN</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> shape=(0,)</dt>
+<dd><p class="first last">Yaw moment coefficient at each iteration</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-11-12 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Starter version</li>
+<li>2014-12-21 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Copied from previous <cite>aero.FM</cite></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.dataBook.CaseFM.AddData">
+<code class="descname">AddData</code><span class="sig-paren">(</span><em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseFM.AddData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add iterative force and/or moment history for a component</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FM</span><span class="o">.</span><span class="n">AddData</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <a class="reference internal" href="#cape.dataBook.CaseFM" title="cape.dataBook.CaseFM"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseFM</span></code></a></dt>
+<dd><p class="first last">Instance of the force and moment class</p>
+</dd>
+<dt><em>A</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> shape=(<em>N</em>,4) or shape=(<em>N</em>,7)</dt>
+<dd><p class="first last">Matrix of forces and/or moments at <em>N</em> iterations</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-11-12 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-10-16 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Version 2.0, complete rewrite</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseFM.GetStats">
+<code class="descname">GetStats</code><span class="sig-paren">(</span><em>nStats=100</em>, <em>nMax=None</em>, <em>nLast=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseFM.GetStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get mean, min, max, and standard deviation for all coefficients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">FM</span><span class="o">.</span><span class="n">GetStats</span><span class="p">(</span><span class="n">nStats</span><span class="p">,</span> <span class="n">nMax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nLast</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <a class="reference internal" href="#cape.dataBook.CaseFM" title="cape.dataBook.CaseFM"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseFM</span></code></a></dt>
+<dd><p class="first last">Instance of the force and moment class</p>
+</dd>
+<dt><em>nStats</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Minimum number of iterations in window to use for statistics</p>
+</dd>
+<dt><em>nMax</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Maximum number of iterations to use for statistics</p>
+</dd>
+<dt><em>nLast</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Last iteration to use for statistics</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>s</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal"><span class="pre">float</span></code>)</dt>
+<dd><p class="first last">Dictionary of mean, min, max, std for each coefficient</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-02-28 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-03-04 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added last iteration capability</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseFM.GetStatsN">
+<code class="descname">GetStatsN</code><span class="sig-paren">(</span><em>nStats=100</em>, <em>nLast=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseFM.GetStatsN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get mean, min, max, and standard deviation for all coefficients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">FM</span><span class="o">.</span><span class="n">GetStatsN</span><span class="p">(</span><span class="n">nStats</span><span class="p">,</span> <span class="n">nFirst</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nLast</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <a class="reference internal" href="#cape.dataBook.CaseFM" title="cape.dataBook.CaseFM"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseFM</span></code></a></dt>
+<dd><p class="first last">Instance of the force and moment class</p>
+</dd>
+<dt><em>nStats</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of iterations in window to use for statistics</p>
+</dd>
+<dt><em>nLast</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Last iteration to use for statistics</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>s</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal"><span class="pre">float</span></code>)</dt>
+<dd><p class="first last">Dictionary of mean, min, max, std for each coefficient</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-09 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-02-28 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Renamed from <a class="reference internal" href="#cape.dataBook.CaseFM.GetStats" title="cape.dataBook.CaseFM.GetStats"><code class="xref py py-func docutils literal"><span class="pre">GetStats()</span></code></a></li>
+<li>2015-03-04 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added last iteration capability</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseFM.PlotCoeff">
+<code class="descname">PlotCoeff</code><span class="sig-paren">(</span><em>c</em>, <em>n=None</em>, <em>nAvg=100</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseFM.PlotCoeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a single coefficient history</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">FM</span><span class="o">.</span><span class="n">PlotCoeff</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nAvg</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <a class="reference internal" href="#cape.dataBook.CaseFM" title="cape.dataBook.CaseFM"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseFM</span></code></a></dt>
+<dd><p class="first last">Instance of the component force history class</p>
+</dd>
+<dt><em>c</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of coefficient to plot, e.g. <code class="docutils literal"><span class="pre">'CA'</span></code></p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Only show the last <em>n</em> iterations</p>
+</dd>
+<dt><em>nAvg</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Use the last <em>nAvg</em> iterations to compute an average</p>
+</dd>
+<dt><em>d</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Delta in the coefficient to show expected range</p>
+</dd>
+<dt><em>nLast</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Last iteration to use (defaults to last iteration available)</p>
+</dd>
+<dt><em>nFirst</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">First iteration to plot</p>
+</dd>
+<dt><em>FigWidth</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure width</p>
+</dd>
+<dt><em>FigHeight</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure height</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of figure/plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-11-12 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2014-12-09 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Transferred to <code class="xref py py-class docutils literal"><span class="pre">AeroPlot</span></code></li>
+<li>2015-02-15 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Transferred to <code class="xref py py-class docutils literal"><span class="pre">dataBook.Aero</span></code></li>
+<li>2015-03-04 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added <em>nStart</em> and <em>nLast</em></li>
+<li>2015-12-07 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Moved content to base class</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseFM.PlotCoeffHist">
+<code class="descname">PlotCoeffHist</code><span class="sig-paren">(</span><em>c</em>, <em>nAvg=100</em>, <em>nBin=20</em>, <em>nLast=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseFM.PlotCoeffHist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a single coefficient histogram</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">FM</span><span class="o">.</span><span class="n">PlotCoeffHist</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nAvg</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <a class="reference internal" href="#cape.dataBook.CaseFM" title="cape.dataBook.CaseFM"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseFM</span></code></a></dt>
+<dd><p class="first last">Instance of the component force history class</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of component to plot</p>
+</dd>
+<dt><em>c</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of coefficient to plot, e.g. <code class="docutils literal"><span class="pre">'CA'</span></code></p>
+</dd>
+<dt><em>nAvg</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Use the last <em>nAvg</em> iterations to compute an average</p>
+</dd>
+<dt><em>nBin</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of bins to plot</p>
+</dd>
+<dt><em>nLast</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Last iteration to use (defaults to last iteration available)</p>
+</dd>
+<dt><em>FigWidth</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure width</p>
+</dd>
+<dt><em>FigHeight</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure height</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword arguments:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first simple">
+<li>See <a class="reference internal" href="#cape.dataBook.CaseData.PlotValueHist" title="cape.dataBook.CaseData.PlotValueHist"><code class="xref py py-func docutils literal"><span class="pre">cape.dataBook.CaseData.PlotValueHist()</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of figure/plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-02-15 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2015-03-06 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added <em>nLast</em> and fixed documentation</li>
+<li>2015-03-06 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Copied to <a class="reference internal" href="#cape.dataBook.CaseFM" title="cape.dataBook.CaseFM"><code class="xref py py-class docutils literal"><span class="pre">CaseFM</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseFM.ShiftMRP">
+<code class="descname">ShiftMRP</code><span class="sig-paren">(</span><em>Lref</em>, <em>x</em>, <em>xi=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseFM.ShiftMRP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shift the moment reference point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FM</span><span class="o">.</span><span class="n">ShiftMRP</span><span class="p">(</span><span class="n">Lref</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">xi</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <a class="reference internal" href="#cape.dataBook.CaseFM" title="cape.dataBook.CaseFM"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseFM</span></code></a></dt>
+<dd><p class="first last">Instance of the force and moment class</p>
+</dd>
+<dt><em>Lref</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Reference length</p>
+</dd>
+<dt><em>x</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">float</span></code>)</dt>
+<dd><p class="first last">Target moment reference point</p>
+</dd>
+<dt><em>xi</em>: <code class="xref py py-class docutils literal"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal"><span class="pre">float</span></code>)</dt>
+<dd><p class="first last">Current moment reference point (default: <em>self.MRP</em>)</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-03-02 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseFM.TransformFM">
+<code class="descname">TransformFM</code><span class="sig-paren">(</span><em>topts</em>, <em>x</em>, <em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseFM.TransformFM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform a force and moment history</p>
+<p>Available transformations and their parameters are listed below.</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8220;Euler321&#8221;: &#8220;psi&#8221;, &#8220;theta&#8221;, &#8220;phi&#8221;</li>
+<li>&#8220;ScaleCoeffs&#8221;: &#8220;CA&#8221;, &#8220;CY&#8221;, &#8220;CN&#8221;, &#8220;CLL&#8221;, &#8220;CLM&#8221;, &#8220;CLN&#8221;</li>
+</ul>
+</div></blockquote>
+<p>Trajectory variables are used to specify values to use for the
+transformation variables.  For example,</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">topts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span> <span class="s2">&quot;Euler321&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;psi&quot;</span><span class="p">:</span> <span class="s2">&quot;Psi&quot;</span><span class="p">,</span> <span class="s2">&quot;theta&quot;</span><span class="p">:</span> <span class="s2">&quot;Theta&quot;</span><span class="p">,</span> <span class="s2">&quot;phi&quot;</span><span class="p">:</span> <span class="s2">&quot;Phi&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>will cause this function to perform a reverse Euler 3-2-1 transformation
+using <em>x.Psi[i]</em>, <em>x.Theta[i]</em>, and <em>x.Phi[i]</em> as the angles.</p>
+<p>Coefficient scaling can be used to fix incorrect reference areas or flip
+axes.  The default is actually to flip <em>CLL</em> and <em>CLN</em> due to the
+transformation from CFD axes to standard flight dynamics axes.</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tops</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span> <span class="s2">&quot;ScaleCoeffs&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CLL&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;CLN&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FM</span><span class="o">.</span><span class="n">TransformFM</span><span class="p">(</span><span class="n">topts</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>FM</em>: <a class="reference internal" href="#cape.dataBook.CaseFM" title="cape.dataBook.CaseFM"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseFM</span></code></a></dt>
+<dd><p class="first last">Instance of the force and moment class</p>
+</dd>
+<dt><em>topts</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of options for the transformation</p>
+</dd>
+<dt><em>x</em>: <a class="reference internal" href="trajectory.html#cape.trajectory.Trajectory" title="cape.trajectory.Trajectory"><code class="xref py py-class docutils literal"><span class="pre">cape.trajectory.Trajectory</span></code></a></dt>
+<dd><p class="first last">The run matrix used for this analysis</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">The index of the case to transform in the current run matrix</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-22 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cape.dataBook.CaseResid">
+<em class="property">class </em><code class="descclassname">cape.dataBook.</code><code class="descname">CaseResid</code><a class="headerlink" href="#cape.dataBook.CaseResid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterative history class</p>
+<p>This class provides an interface to residuals, CPU time, and similar data
+for a given run directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">dataBook</span><span class="o">.</span><span class="n">CaseResid</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>hist</em>: <a class="reference internal" href="#cape.dataBook.CaseResid" title="cape.dataBook.CaseResid"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseResid</span></code></a></dt>
+<dd><p class="first last">Instance of the run history class</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-11-12 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Starter version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cape.dataBook.CaseResid.GetIterationIndex">
+<code class="descname">GetIterationIndex</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseResid.GetIterationIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return index of a particular iteration in <em>hist.i</em></p>
+<p>If the iteration <em>i</em> is not present in the history, the index of the
+last available iteration less than or equal to <em>i</em> is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">GetIterationIndex</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>hist</em>: <a class="reference internal" href="#cape.dataBook.CaseResid" title="cape.dataBook.CaseResid"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseResid</span></code></a></dt>
+<dd><p class="first last">Instance of the residual history class</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Iteration number</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>j</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Index of last iteration in <em>FM.i</em> less than or equal to <em>i</em></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-03-06 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseResid.GetNOrders">
+<code class="descname">GetNOrders</code><span class="sig-paren">(</span><em>nStats=1</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseResid.GetNOrders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of orders of magnitude of residual drop</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nOrders</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">GetNOrders</span><span class="p">(</span><span class="n">nStats</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>hist</em>: <code class="xref py py-class docutils literal"><span class="pre">pyCart.dataBook.CaseResid</span></code></dt>
+<dd><p class="first last">Instance of the DataBook residual history</p>
+</dd>
+<dt><em>nStats</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of iterations to use for averaging the final residual</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nOrders</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Number of orders of magnitude of residual drop</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-01-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First versoin</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseResid.GetNOrdersUnsteady">
+<code class="descname">GetNOrdersUnsteady</code><span class="sig-paren">(</span><em>n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseResid.GetNOrdersUnsteady" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of orders of magnitude of unsteady residual drop for each
+of the last <em>n</em> unsteady iteration cycles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nOrders</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">GetNOrders</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>hist</em>: <code class="xref py py-class docutils literal"><span class="pre">pyCart.dataBook.CaseResid</span></code></dt>
+<dd><p class="first last">Instance of the DataBook residual history</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Number of iterations to analyze</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>nOrders</em>: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> (<code class="xref py py-class docutils literal"><span class="pre">float</span></code>), shape=(n,)</dt>
+<dd><p class="first last">Number of orders of magnitude of unsteady residual drop</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-01-01 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First versoin</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseResid.PlotL1">
+<code class="descname">PlotL1</code><span class="sig-paren">(</span><em>n=None</em>, <em>nFirst=None</em>, <em>nLast=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseResid.PlotL1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the L1 residual</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">PlotL1</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nFirst</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nLast</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>hist</em>: <a class="reference internal" href="#cape.dataBook.CaseResid" title="cape.dataBook.CaseResid"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseResid</span></code></a></dt>
+<dd><p class="first last">Instance of the DataBook residual history</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Only show the last <em>n</em> iterations</p>
+</dd>
+<dt><em>nFirst</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Plot starting at iteration <em>nStart</em></p>
+</dd>
+<dt><em>nLast</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Plot up to iteration <em>nLast</em></p>
+</dd>
+<dt><em>FigWidth</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure width</p>
+</dd>
+<dt><em>FigHeight</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure height</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of figure/plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-11-12 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2014-12-09 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Moved to <code class="xref py py-class docutils literal"><span class="pre">AeroPlot</span></code></li>
+<li>2015-02-15 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Transferred to <code class="xref py py-class docutils literal"><span class="pre">dataBook.Aero</span></code></li>
+<li>2015-03-04 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added <em>nStart</em> and <em>nLast</em></li>
+<li>2015-10-21 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Referred to <a class="reference internal" href="#cape.dataBook.CaseResid.PlotResid" title="cape.dataBook.CaseResid.PlotResid"><code class="xref py py-func docutils literal"><span class="pre">PlotResid()</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseResid.PlotL2">
+<code class="descname">PlotL2</code><span class="sig-paren">(</span><em>n=None</em>, <em>nFirst=None</em>, <em>nLast=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseResid.PlotL2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the L2 residual</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">PlotL2</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nFirst</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nLast</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>hist</em>: <a class="reference internal" href="#cape.dataBook.CaseResid" title="cape.dataBook.CaseResid"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseResid</span></code></a></dt>
+<dd><p class="first last">Instance of the DataBook residual history</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Only show the last <em>n</em> iterations</p>
+</dd>
+<dt><em>nFirst</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Plot starting at iteration <em>nStart</em></p>
+</dd>
+<dt><em>nLast</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Plot up to iteration <em>nLast</em></p>
+</dd>
+<dt><em>FigWidth</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure width</p>
+</dd>
+<dt><em>FigHeight</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure height</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of figure/plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-11-12 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2014-12-09 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Moved to <code class="xref py py-class docutils literal"><span class="pre">AeroPlot</span></code></li>
+<li>2015-02-15 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Transferred to <code class="xref py py-class docutils literal"><span class="pre">dataBook.Aero</span></code></li>
+<li>2015-03-04 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added <em>nStart</em> and <em>nLast</em></li>
+<li>2015-10-21 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Referred to <a class="reference internal" href="#cape.dataBook.CaseResid.PlotResid" title="cape.dataBook.CaseResid.PlotResid"><code class="xref py py-func docutils literal"><span class="pre">PlotResid()</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseResid.PlotLInf">
+<code class="descname">PlotLInf</code><span class="sig-paren">(</span><em>n=None</em>, <em>nFirst=None</em>, <em>nLast=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseResid.PlotLInf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the L-infinity residual</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">PlotLInf</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nFirst</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nLast</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>hist</em>: <a class="reference internal" href="#cape.dataBook.CaseResid" title="cape.dataBook.CaseResid"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseResid</span></code></a></dt>
+<dd><p class="first last">Instance of the DataBook residual history</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Only show the last <em>n</em> iterations</p>
+</dd>
+<dt><em>nFirst</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Plot starting at iteration <em>nStart</em></p>
+</dd>
+<dt><em>nLast</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Plot up to iteration <em>nLast</em></p>
+</dd>
+<dt><em>FigWidth</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure width</p>
+</dd>
+<dt><em>FigHeight</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure height</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of figure/plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2016-02-04 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Copied from <a class="reference internal" href="#cape.dataBook.CaseResid.PlotL2" title="cape.dataBook.CaseResid.PlotL2"><code class="xref py py-func docutils literal"><span class="pre">PlotL2()</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cape.dataBook.CaseResid.PlotResid">
+<code class="descname">PlotResid</code><span class="sig-paren">(</span><em>c='L1Resid'</em>, <em>n=None</em>, <em>nFirst=None</em>, <em>nLast=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.CaseResid.PlotResid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a residual by name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">PlotResid</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="s1">&#39;L1Resid&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>hist</em>: <a class="reference internal" href="#cape.dataBook.CaseResid" title="cape.dataBook.CaseResid"><code class="xref py py-class docutils literal"><span class="pre">cape.dataBook.CaseResid</span></code></a></dt>
+<dd><p class="first last">Instance of the DataBook residual history</p>
+</dd>
+<dt><em>c</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Name of coefficient to plot</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Only show the last <em>n</em> iterations</p>
+</dd>
+<dt><em>nFirst</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Plot starting at iteration <em>nStart</em></p>
+</dd>
+<dt><em>nLast</em>: <code class="xref py py-class docutils literal"><span class="pre">int</span></code></dt>
+<dd><p class="first last">Plot up to iteration <em>nLast</em></p>
+</dd>
+<dt><em>FigWidth</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure width</p>
+</dd>
+<dt><em>FigHeight</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Figure height</p>
+</dd>
+<dt><em>YLabel</em>: <code class="xref py py-class docutils literal"><span class="pre">str</span></code></dt>
+<dd><p class="first last">Label for <em>y</em>-axis</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>h</em>: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></dt>
+<dd><p class="first last">Dictionary of figure/plot handles</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-11-12 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+<li>2014-12-09 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Moved to <code class="xref py py-class docutils literal"><span class="pre">AeroPlot</span></code></li>
+<li>2015-02-15 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Transferred to <code class="xref py py-class docutils literal"><span class="pre">dataBook.Aero</span></code></li>
+<li>2015-03-04 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Added <em>nStart</em> and <em>nLast</em></li>
+<li>2015-10-21 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: Copied from <a class="reference internal" href="#cape.dataBook.CaseResid.PlotL1" title="cape.dataBook.CaseResid.PlotL1"><code class="xref py py-func docutils literal"><span class="pre">PlotL1()</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="other-cape-databook-methods">
+<h2>4.3.8.4. Other <a class="reference internal" href="#module-cape.dataBook" title="cape.dataBook"><code class="xref py py-mod docutils literal"><span class="pre">cape.dataBook</span></code></a> methods<a class="headerlink" href="#other-cape-databook-methods" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="cape.dataBook.ImportPyPlot">
+<code class="descclassname">cape.dataBook.</code><code class="descname">ImportPyPlot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.ImportPyPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import <code class="xref py py-mod docutils literal"><span class="pre">matplotlib.pyplot</span></code> if not already loaded</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pyCart</span><span class="o">.</span><span class="n">dataBook</span><span class="o">.</span><span class="n">ImportPyPlot</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2014-12-27 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.dataBook.get_xlim">
+<code class="descclassname">cape.dataBook.</code><code class="descname">get_xlim</code><span class="sig-paren">(</span><em>ha</em>, <em>pad=0.050000000000000003</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.get_xlim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate appropriate <em>x</em>-limits to include all lines in a plot</p>
+<p>Plotted objects in the classes <code class="xref py py-class docutils literal"><span class="pre">matplotlib.lines.Lines2D</span></code> are
+checked.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">get_xlim</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>ha</em>: <code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code></dt>
+<dd><p class="first last">Axis handle</p>
+</dd>
+<dt><em>pad</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Extra padding to min and max values to plot.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>xmin</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Minimum <em>x</em> coordinate including padding</p>
+</dd>
+<dt><em>xmax</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Maximum <em>x</em> coordinate including padding</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-07-06 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cape.dataBook.get_ylim">
+<code class="descclassname">cape.dataBook.</code><code class="descname">get_ylim</code><span class="sig-paren">(</span><em>ha</em>, <em>pad=0.050000000000000003</em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dataBook.get_ylim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate appropriate <em>y</em>-limits to include all lines in a plot</p>
+<p>Plotted objects in the classes <code class="xref py py-class docutils literal"><span class="pre">matplotlib.lines.Lines2D</span></code> and
+<code class="xref py py-class docutils literal"><span class="pre">matplotlib.collections.PolyCollection</span></code> are checked.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Call:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">get_ylim</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Inputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>ha</em>: <code class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code></dt>
+<dd><p class="first last">Axis handle</p>
+</dd>
+<dt><em>pad</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Extra padding to min and max values to plot.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Outputs:</th><td class="field-body"><dl class="first docutils">
+<dt><em>ymin</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Minimum <em>y</em> coordinate including padding</p>
+</dd>
+<dt><em>ymax</em>: <code class="xref py py-class docutils literal"><span class="pre">float</span></code></dt>
+<dd><p class="first last">Maximum <em>y</em> coordinate including padding</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Versions:</th><td class="field-body"><ul class="first last simple">
+<li>2015-07-06 <code class="docutils literal"><span class="pre">&#64;ddalle</span></code>: First version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fileCntl.html" title="4.3.9. File control base module: cape.fileCntl"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="convert.html" title="4.3.7. Conversion tools for Cape"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyCart 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >4. Cape Module Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >4.3. The <code class="docutils literal"><span class="pre">cape</span></code> module</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014-2017, Derek J. Dalle.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

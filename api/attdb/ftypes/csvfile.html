@@ -1,0 +1,851 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cape.attdb.ftypes.csfilev: Comma-separated value read/write &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.attdb.ftypes.mat: MATLAB data interface" href="matfile.html" />
+    <link rel="prev" title="cape.attdb.ftypes.basefile: Common ATTDB file type attributes" href="basefile.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="matfile.html" title="cape.attdb.ftypes.mat: MATLAB data interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="basefile.html" title="cape.attdb.ftypes.basefile: Common ATTDB file type attributes"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code>: Data file type interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csfilev</span></code>: Comma-separated value read/write</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.attdb.ftypes.csvfile"></span><div class="section" id="cape-attdb-ftypes-csfilev-comma-separated-value-read-write">
+<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csfilev</span></code>: Comma-separated value read/write<a class="headerlink" href="#cape-attdb-ftypes-csfilev-comma-separated-value-read-write" title="Permalink to this headline">¶</a></h1>
+<p>This module contains a basic interface in the spirit of
+<a class="reference internal" href="index.html#module-cape.attdb.ftypes" title="cape.attdb.ftypes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code></a> for standard comma-separated value files.  It
+creates a class, <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">CSVFile</span></code></a> that does not rely on the popular
+<code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.loadtxt()</span></code> function.</p>
+<p>If possible, the column names (which become keys in the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>-like class) are read from the header row.  If the file
+begins with multiple comment lines, the column names are read from the
+final comment before the beginning of data.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.csvfile.</span></span><span class="sig-name descname"><span class="pre">CSVFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for reading CSV files</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">CSVFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">CSVFile</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of columns read</p>
+</dd>
+<dt><em>db.opts</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFileOpts" title="cape.attdb.ftypes.csvfile.CSVFileOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">CSVFileOpts</span></code></a></dt><dd><p>Options for this instance</p>
+</dd>
+<dt><em>db.defns</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFileDefn" title="cape.attdb.ftypes.csvfile.CSVFileDefn"><code class="xref py py-class docutils literal notranslate"><span class="pre">CSVFileDefn</span></code></a>]</dt><dd><p>Definitions for each column</p>
+</dd>
+<dt><em>db[col]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Numeric array or list of strings for each column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">See also</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="basefile.html#cape.attdb.ftypes.basefile.BaseFile" title="cape.attdb.ftypes.basefile.BaseFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basefile.BaseFile</span></code></a></p></li>
+<li><p><a class="reference internal" href="basefile.html#cape.attdb.ftypes.basefile.TextInterpreter" title="cape.attdb.ftypes.basefile.TextInterpreter"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basefile.TextInterpreter</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-11-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2019-11-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0; generalized</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.c_read_csv">
+<span class="sig-name descname"><span class="pre">c_read_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.c_read_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an entire CSV file, including header using C</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv_header" title="cape.attdb.ftypes.csvfile.CSVFile.read_csv_header"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_csv_header()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv_data" title="cape.attdb.ftypes.csvfile.CSVFile.read_csv_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_csv_data()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.c_read_csv_data">
+<span class="sig-name descname"><span class="pre">c_read_csv_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.c_read_csv_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read data portion of CSV file using C extension</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">c_read_csv_data</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.create_c_dtypes">
+<span class="sig-name descname"><span class="pre">create_c_dtypes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.create_c_dtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize <em>db._c_dtypes</em> for C text input</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">create_c_dtypes</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db._c_dtypes</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of integer codes for each data type</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.py_read_csv">
+<span class="sig-name descname"><span class="pre">py_read_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.py_read_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an entire CSV file with pure Python</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">py_read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv_header" title="cape.attdb.ftypes.csvfile.CSVFile.read_csv_header"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_csv_header()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv_data" title="cape.attdb.ftypes.csvfile.CSVFile.read_csv_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_csv_data()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.py_read_csv_data">
+<span class="sig-name descname"><span class="pre">py_read_csv_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.py_read_csv_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read data portion of CSV file using Python</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">py_read_csv_data</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.read_csv">
+<span class="sig-name descname"><span class="pre">read_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a CSV file, including header</p>
+<p>Reads either entire file or from current location</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File open for reading</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv_header" title="cape.attdb.ftypes.csvfile.CSVFile.read_csv_header"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_csv_header()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv_data" title="cape.attdb.ftypes.csvfile.CSVFile.read_csv_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_csv_data()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.read_csv_data">
+<span class="sig-name descname"><span class="pre">read_csv_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read data portion of CSV file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csv_data</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2019-11-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Tries C versionfirst</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.read_csv_dataline">
+<span class="sig-name descname"><span class="pre">read_csv_dataline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv_dataline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read one data line of a CSV file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csv_dataline</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.read_csv_firstrowtypes">
+<span class="sig-name descname"><span class="pre">read_csv_firstrowtypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv_firstrowtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get initial guess at data types from first data row</p>
+<p>If (and only if) the <em>DefaultType</em> input is an integer type,
+guessed types can be integers.  Otherwise the sequence of
+possibilities is <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">complex</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csv_firstrowtypes</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+<dt><em>DefaultType</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;float&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of default class</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.read_csv_header">
+<span class="sig-name descname"><span class="pre">read_csv_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read column names from beginning of open file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csv_header</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.read_csv_headerdefaultcols">
+<span class="sig-name descname"><span class="pre">read_csv_headerdefaultcols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv_headerdefaultcols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create column names “col1”, “col2”, etc. if needed</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csv_headerdefaultcols</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>If not previously determined, this becomes
+<code class="docutils literal notranslate"><span class="pre">[&quot;col1&quot;,</span> <span class="pre">&quot;col2&quot;,</span> <span class="pre">...]</span></code> based on number of columns
+in the first data row</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.read_csv_headerline">
+<span class="sig-name descname"><span class="pre">read_csv_headerline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.read_csv_headerline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read line and process column names if possible</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csv_headerline</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names if read</p>
+</dd>
+<dt><em>db._csv_header_once</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> if column names are read at all</p>
+</dd>
+<dt><em>db._csv_header_complete</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> if next line is expected to be data</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.write_csv">
+<span class="sig-name descname"><span class="pre">write_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.write_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a comma-separated file of some of the coefficients</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">write_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of CSV file to write</p>
+</dd>
+<dt><em>cols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of coefficients to write, or write all coefficients</p>
+</dd>
+<dt><em>fmt</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Format string to be used for each row (optional)</p>
+</dd>
+<dt><em>fmts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Dictionary of formats to use for each <em>coeff</em></p>
+</dd>
+<dt><em>comments</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;#&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Comment character, used as first character of file</p>
+</dd>
+<dt><em>delim</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;,</span> <span class="pre">&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Delimiter</p>
+</dd>
+<dt><em>translators</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of col name translations, e.g. <em>CAF</em> -&gt; <em>CA</em>;
+this dictionary is run in reverse</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2018-06-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2020-01-15 <code class="docutils literal notranslate"><span class="pre">&#64;jmeeroff</span></code>: From <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.db.db1</span></code></p></li>
+<li><p>2020-04-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Full options, version 2.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFile.write_csv_dense">
+<span class="sig-name descname"><span class="pre">write_csv_dense</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFile.write_csv_dense" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write dense CSV file using <em>WriteFlag</em> for each column</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">write_csv_dense</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">write_csv_dense</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File open for writing</p>
+</dd>
+<dt><em>fname</em>: {<em>db.fname</em>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to write</p>
+</dd>
+<dt><em>cols</em>: {<em>db.cols</em>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of columns to write</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-12-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFileDefn">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.csvfile.</span></span><span class="sig-name descname"><span class="pre">CSVFileDefn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_optsdict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_warnmode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFileDefn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVFileOpts">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.csvfile.</span></span><span class="sig-name descname"><span class="pre">CSVFileOpts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_optsdict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_warnmode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVFileOpts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVSimple">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.csvfile.</span></span><span class="sig-name descname"><span class="pre">CSVSimple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVSimple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to read CSV file with only <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> data</p>
+<p>This class differs from <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">CSVFile</span></code></a> in that it is less
+flexible, does not permit multirow or empty headers, has fixed
+delimiter and comment characters, and assumes all data is a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> with the system default length.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">CSVSimple</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVSimple" title="cape.attdb.ftypes.csvfile.CSVSimple"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVSimple</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of columns read</p>
+</dd>
+<dt><em>db.opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Options for this instance</p>
+</dd>
+<dt><em>db.opts[“Definitions”]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Definitions for each column</p>
+</dd>
+<dt><em>db[col]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Numeric array or list of strings for each column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">See also</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="basefile.html#cape.attdb.ftypes.basefile.BaseFile" title="cape.attdb.ftypes.basefile.BaseFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basefile.BaseFile</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-11-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Started</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVSimple.read_csvsimple">
+<span class="sig-name descname"><span class="pre">read_csvsimple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVSimple.read_csvsimple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an entire CSV file, including header</p>
+<p>The CSV file requires exactly one header row, which is the
+first non-empty line, whether or not it begins with a comment
+character (which must be <code class="docutils literal notranslate"><span class="pre">&quot;#&quot;</span></code>).  All entries, both in the
+header and in the data, must be separated by a <code class="docutils literal notranslate"><span class="pre">,</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csvsimple</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVSimple" title="cape.attdb.ftypes.csvfile.CSVSimple"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVSimple</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVSimple.read_csvsimple_header" title="cape.attdb.ftypes.csvfile.CSVSimple.read_csvsimple_header"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_csvsimple_header()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVSimple.read_csvsimple_data" title="cape.attdb.ftypes.csvfile.CSVSimple.read_csvsimple_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_csvsimple_data()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVSimple.read_csvsimple_data">
+<span class="sig-name descname"><span class="pre">read_csvsimple_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVSimple.read_csvsimple_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read data portion of simple CSV file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csvsimple_data</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVSimple" title="cape.attdb.ftypes.csvfile.CSVSimple"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVSimple</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVSimple.read_csvsimple_dataline">
+<span class="sig-name descname"><span class="pre">read_csvsimple_dataline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVSimple.read_csvsimple_dataline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read one data line of a simple CSV file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csvsimple_dataline</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVSimple" title="cape.attdb.ftypes.csvfile.CSVSimple"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVSimple</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-11-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVSimple.read_csvsimple_header">
+<span class="sig-name descname"><span class="pre">read_csvsimple_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVSimple.read_csvsimple_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read column names from beginning of open file</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_csv_header</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVSimple" title="cape.attdb.ftypes.csvfile.CSVSimple"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVSimple</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.csvfile.CSVSimple.translate_simplefloat">
+<span class="sig-name descname"><span class="pre">translate_simplefloat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.csvfile.CSVSimple.translate_simplefloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a string to default float</p>
+<p>This conversion allows for the format <code class="docutils literal notranslate"><span class="pre">&quot;2.40D+00&quot;</span></code> if the
+built-in <code class="xref py py-func docutils literal notranslate"><span class="pre">float()</span></code> converter fails.  Python expects the
+exponent character to be <code class="docutils literal notranslate"><span class="pre">E</span></code> or <code class="docutils literal notranslate"><span class="pre">e</span></code>, but <code class="docutils literal notranslate"><span class="pre">D</span></code> and <code class="docutils literal notranslate"><span class="pre">d</span></code>
+are allowed here.  Other exceptions are not handled.</p>
+<dl class="field-list">
+<dt class="field-odd">Call</dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">translate_simplefloat</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs</dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.csvfile.CSVFile" title="cape.attdb.ftypes.csvfile.CSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csvfile.CSVFile</span></code></a></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>txt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Text to be converted to <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Converted value, if possible</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="basefile.html"
+                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basefile</span></code>: Common ATTDB file type attributes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="matfile.html"
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.mat</span></code>: MATLAB data interface</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/attdb/ftypes/csvfile.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="matfile.html" title="cape.attdb.ftypes.mat: MATLAB data interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="basefile.html" title="cape.attdb.ftypes.basefile: Common ATTDB file type attributes"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code>: Data file type interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csfilev</span></code>: Comma-separated value read/write</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

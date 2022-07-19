@@ -1,0 +1,1034 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>6.1.2. OVERFLOW Powered Nacelle Example &#8212; CAPE 1.0</title>
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="6.2. Control Files for pyOver (pyOver.json)" href="../../json/index.html" />
+    <link rel="prev" title="6.1.1. OVERFLOW Bullet Example" href="../bullet/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../json/index.html" title="6.2. Control Files for pyOver (pyOver.json)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../bullet/index.html" title="6.1.1. OVERFLOW Bullet Example"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">6. </span>pyOver Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">6.1. </span>Examples using pyOver</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">6.1.2. OVERFLOW Powered Nacelle Example</a><ul>
+<li><a class="reference internal" href="#flow-through-nacelle-case">6.1.2.1. Flow-Through Nacelle Case</a></li>
+<li><a class="reference internal" href="#run-mach-sweep">6.1.2.2. Run Mach Sweep</a></li>
+<li><a class="reference internal" href="#report-generation">6.1.2.3. Report Generation</a><ul>
+<li><a class="reference internal" href="#convergence-plots">6.1.2.3.1. Convergence Plots</a></li>
+<li><a class="reference internal" href="#flow-visualization">6.1.2.3.2. Flow Visualization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#powered-nacelle-cases">6.1.2.4. Powered Nacelle Cases</a><ul>
+<li><a class="reference internal" href="#pyover-setup">6.1.2.4.1. pyover Setup</a></li>
+<li><a class="reference internal" href="#executing-pyover">6.1.2.4.2. Executing pyover</a></li>
+<li><a class="reference internal" href="#id1">6.1.2.4.3. Report Generation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#powered-boundary-conditions">6.1.2.5. Powered Boundary Conditions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../bullet/index.html"
+                        title="previous chapter"><span class="section-number">6.1.1. </span>OVERFLOW Bullet Example</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../../json/index.html"
+                        title="next chapter"><span class="section-number">6.2. </span>Control Files for pyOver (<code class="file docutils literal notranslate"><span class="pre">pyOver.json</span></code>)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/pyover/examples/powered_nacelle/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="overflow-powered-nacelle-example">
+<span id="pyover-example-powered-nacelle"></span><h1><span class="section-number">6.1.2. </span>OVERFLOW Powered Nacelle Example<a class="headerlink" href="#overflow-powered-nacelle-example" title="Permalink to this headline">¶</a></h1>
+<p>This pyOver example shows how to use pyover to run one of the simple test cases
+that come with the OVERFLOW source code. This example starts with the grids and
+inputs files that are created within the OVERFLOW examples, and documents how
+to create the pyOver setup, run matrix, how to run several OVERFLOW cases,
+covers some post-processing.  This pyOver example looks at the process from grid generation to execution and</p>
+<blockquote>
+<div><p>post-processing for a simple bullet geometry. This example is located in a</p>
+</div></blockquote>
+<p>separate tarball called</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">pyover02-powered_nacelle.tar.gz</span></code></p>
+</div></blockquote>
+<p>After untarring this file and entering the resulting folder using</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> tar -xzvf pyover02-powered_nacelle.tar.gz
+<span class="gp">$</span> <span class="nb">cd</span> pyover02-powered_nacelle
+</pre></div>
+</div>
+</div></blockquote>
+<p>the folder has the required input files, but it’s recommended to copy them to a
+working folder so that it’s easy to reset.  Just run the following command:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> ./copy_files.py
+<span class="gp">$</span> <span class="nb">cd</span> work/
+</pre></div>
+</div>
+</div></blockquote>
+<p>This example shows how to use pyOver for a test case with two related
+configurations, a flow-through axisymmetric nacelle, and a powered axisymmetric
+nacelle.  The example comes with the grids and input files ready to run
+OVERFLOW.</p>
+<div class="section" id="flow-through-nacelle-case">
+<h2><span class="section-number">6.1.2.1. </span>Flow-Through Nacelle Case<a class="headerlink" href="#flow-through-nacelle-case" title="Permalink to this headline">¶</a></h2>
+<p>Given the grid and input files created by the OVERFLOW scripts, the only two
+files that are required to run the flow-through example using pyOver are
+<code class="docutils literal notranslate"><span class="pre">flowthrough.json</span></code> and <code class="docutils literal notranslate"><span class="pre">inputs/matrix/flowthrough.csv</span></code>.</p>
+<p>To execute and duplicate the OVERFLOW Mach 0.8 flow-through example, simply run
+the command <code class="docutils literal notranslate"><span class="pre">pyover</span> <span class="pre">-f</span> <span class="pre">flowthrough.json</span> <span class="pre">-I</span> <span class="pre">1</span></code>. This simple problem
+will run in a matter of seconds:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pyover -f flowthrough.json -I 1</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">1    flowthrough/m0.8      ---     /           .</span>
+<span class="go">  Case name: &#39;flowthrough/m0.8&#39; (index 1)</span>
+<span class="go">     Starting case &#39;flowthrough/m0.8&#39;</span>
+<span class="go"> &gt; overrunmpi -np 8 run 01</span>
+<span class="go">     (PWD = &#39;/examples/pyover/02_powered_nacelle/flowthrough/m0.8&#39;)</span>
+<span class="go">     (STDOUT = &#39;overrun.out&#39;)</span>
+<span class="go">   Wall time used: 0.00 hrs (phase 0)</span>
+<span class="go">   Wall time used: 0.00 hrs</span>
+<span class="go">   Previous phase: 0.00 hrs</span>
+<span class="go"> &gt; overrunmpi -np 8 run 02</span>
+<span class="go">     (PWD = &#39;/examples/pyover/02_powered_nacelle/flowthrough/m0.8&#39;)</span>
+<span class="go">     (STDOUT = &#39;overrun.out&#39;)</span>
+<span class="go">   Wall time used: 0.00 hrs (phase 1)</span>
+
+<span class="go">Submitted or ran 1 job(s).</span>
+
+<span class="go">---=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This ran the MPI version of OVERFLOW locally, (without submitting a PBS job or
+similar) using 8 processors (cores). The actions that pyOver takes are
+summarized here:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Create the directory <code class="docutils literal notranslate"><span class="pre">flowthrough/m0.8/</span></code></p></li>
+<li><p>Create symbolic links pointing to some files in <code class="docutils literal notranslate"><span class="pre">common_flowthrough</span></code></p></li>
+<li><p>Create two OVERFLOW inputs files <code class="docutils literal notranslate"><span class="pre">run.01.inp</span></code> and <code class="docutils literal notranslate"><span class="pre">run.02.inp</span></code></p></li>
+<li><p>Execute <code class="docutils literal notranslate"><span class="pre">overrunmpi</span> <span class="pre">-np</span> <span class="pre">8</span> <span class="pre">run</span> <span class="pre">01</span></code></p></li>
+<li><p>Execute <code class="docutils literal notranslate"><span class="pre">overrunmpi</span> <span class="pre">-np</span> <span class="pre">8</span> <span class="pre">run</span> <span class="pre">02</span></code></p></li>
+</ol>
+</div></blockquote>
+<p>The sections in <code class="docutils literal notranslate"><span class="pre">flowthrough.json</span></code> that control the execution of
+OVERFLOW are shown here:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Namelist template</span>
+<span class="s2">&quot;OverNamelist&quot;</span><span class="o">:</span> <span class="s2">&quot;common_flowthrough/overflow.inp&quot;</span><span class="p">,</span>
+<span class="c1">// Options for overall run control and command-line inputs</span>
+<span class="s2">&quot;RunControl&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Run sequence</span>
+    <span class="s2">&quot;PhaseSequence&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">0</span><span class="p">,</span>   <span class="mf">1</span><span class="p">],</span>
+    <span class="s2">&quot;PhaseIters&quot;</span><span class="o">:</span>    <span class="p">[</span><span class="mf">600</span><span class="p">,</span> <span class="mf">1400</span><span class="p">],</span>
+    <span class="c1">// Operation modes</span>
+    <span class="s2">&quot;Prefix&quot;</span><span class="o">:</span> <span class="s2">&quot;run&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MPI&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">&quot;qsub&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="s2">&quot;Resubmit&quot;</span><span class="o">:</span> <span class="p">[</span><span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">],</span>
+    <span class="s2">&quot;Continue&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">&quot;mpicmd&quot;</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="s2">&quot;nProc&quot;</span><span class="o">:</span> <span class="mf">8</span><span class="p">,</span>
+    <span class="c1">// Dictionary of environment variables</span>
+    <span class="s2">&quot;Environ&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;F_UFMTENDIAN&quot;</span><span class="o">:</span> <span class="s2">&quot;little&quot;</span>
+    <span class="p">},</span>
+
+    <span class="c1">// OVERFLOW command-line interface</span>
+    <span class="s2">&quot;overrun&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;cmd&quot;</span><span class="o">:</span> <span class="s2">&quot;overrunmpi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aux&quot;</span><span class="o">:</span> <span class="kc">null</span>
+    <span class="p">}</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <em>PhaseSequence</em> and <em>PhaseIters</em> specify how many times and how long the
+code is run. The first specifies that OVERFLOW will run for phase <code class="docutils literal notranslate"><span class="pre">0</span></code> and
+phase <code class="docutils literal notranslate"><span class="pre">1</span></code>, (which are labeled as <code class="docutils literal notranslate"><span class="pre">01</span></code> and <code class="docutils literal notranslate"><span class="pre">02</span></code> for <code class="docutils literal notranslate"><span class="pre">overrunmpi</span></code>
+execution). These phases run until there are 600 and 1400 total global steps
+in OVERFLOW. For these and other inputs in the .json file, the sequential
+list of arguments are applied to sequentially to each phase. Note that
+if only one value is given, that value is applied for all phases. Also note
+that if the number of phases are greater than the number of inputs in a
+sequential list, the latter phases will use the last value given in the list.</p>
+<p>Setting <em>MPI</em> to <code class="docutils literal notranslate"><span class="pre">true</span></code> instructs pyOver to use the MPI version
+of OVERFLOW, but setting <em>mpicmd</em> to <code class="docutils literal notranslate"><span class="pre">null</span></code> is required because we want
+pyOver to use the <code class="docutils literal notranslate"><span class="pre">overrunmpi</span></code> script, as specified by the <em>cmd</em> value in
+the <em>overrun</em> section.</p>
+<p>Note that the actual number of iterations in one run of each phase is not set in the
+<em>RunControl</em> section above. These are controlled by the OVERFLOW input
+variable <em>NSTEPS</em> in the <em>GLOBAL</em> namelist. In the first phase we are also
+running full-multi-grid (FMG) iterations with FMGCYC = [[300,300]] and
+<em>NSTEPS[0]</em> = 0, thus 600 total iterations in the first phase.</p>
+<p>Here are the sections in <code class="docutils literal notranslate"><span class="pre">flowthrough.json</span></code> that control the <em>GLOBAL</em>
+and <em>OMIGLB</em> namelists:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Namelist inputs</span>
+<span class="s2">&quot;Overflow&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;GLOBAL&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;NQT&quot;</span><span class="o">:</span> <span class="mf">102</span><span class="p">,</span>
+        <span class="s2">&quot;NSTEPS&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">0</span><span class="p">,</span>   <span class="mf">800</span><span class="p">],</span>
+        <span class="s2">&quot;NSAVE&quot;</span><span class="o">:</span>  <span class="p">[</span><span class="mf">0</span><span class="p">,</span>  <span class="mf">2000</span><span class="p">],</span>
+        <span class="s2">&quot;FMG&quot;</span><span class="o">:</span> <span class="p">[</span><span class="kc">true</span><span class="p">,</span> <span class="kc">false</span><span class="p">],</span>
+        <span class="s2">&quot;FMGCYC&quot;</span><span class="o">:</span> <span class="p">[[</span><span class="mf">300</span><span class="p">,</span><span class="mf">300</span><span class="p">]],</span>
+        <span class="s2">&quot;NGLVL&quot;</span><span class="o">:</span> <span class="mf">3</span><span class="p">,</span>
+        <span class="s2">&quot;ISTART_QAVG&quot;</span><span class="o">:</span> <span class="mf">15000</span><span class="p">,</span>
+        <span class="s2">&quot;WALLDIST&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">2</span><span class="p">],</span>
+        <span class="s2">&quot;DTPHYS&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+        <span class="s2">&quot;NITNWT&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mf">0</span><span class="p">,</span>   <span class="mf">0</span><span class="p">,</span>   <span class="mf">0</span><span class="p">,</span>     <span class="mf">0</span><span class="p">,</span>   <span class="mf">5</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;OMIGLB&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;IRUN&quot;</span><span class="o">:</span> <span class="mf">0</span>
+    <span class="p">}</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Here are the sections in <code class="docutils literal notranslate"><span class="pre">flowthrough.json</span></code> that control the namelists
+for each individual mesh.  The <em>“ALL”:</em> section is applied to all grids.
+If one wants to specify different input values for a single grid, duplicate
+this section and replace <em>“ALL”</em> with the name of that grid in double quotes.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Namelist parameters for each grid</span>
+<span class="s2">&quot;Grids&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Settings applied to all grids</span>
+    <span class="s2">&quot;ALL&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="c1">// Solver parameters</span>
+        <span class="s2">&quot;METPRM&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;IRHS&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+            <span class="s2">&quot;ILHS&quot;</span><span class="o">:</span> <span class="mf">2</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;TIMACU&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;ITIME&quot;</span><span class="o">:</span> <span class="mf">1</span><span class="p">,</span>
+            <span class="s2">&quot;DT&quot;</span><span class="o">:</span> <span class="mf">0.10</span><span class="p">,</span>
+            <span class="s2">&quot;CFLMIN&quot;</span><span class="o">:</span> <span class="mf">5.0</span><span class="p">,</span>
+            <span class="s2">&quot;CFLMAX&quot;</span><span class="o">:</span> <span class="mf">0.0</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;SMOACU&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;DIS2&quot;</span><span class="o">:</span> <span class="mf">2.0</span><span class="p">,</span>
+            <span class="s2">&quot;DIS4&quot;</span><span class="o">:</span> <span class="mf">0.04</span><span class="p">,</span>
+            <span class="s2">&quot;DELTA&quot;</span><span class="o">:</span> <span class="mf">1.0</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Here is the <em>MESH</em> section, which tells pyOver which files to copy and which
+files to create symbolic links for.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Mesh</span>
+<span class="s2">&quot;Mesh&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Folder containing definition files</span>
+    <span class="s2">&quot;ConfigDir&quot;</span><span class="o">:</span> <span class="s2">&quot;common_flowthrough&quot;</span><span class="p">,</span>
+    <span class="c1">// Grid type, dcf or peg5</span>
+    <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;dcf&quot;</span><span class="p">,</span>
+    <span class="c1">// List or dictionary of files to link</span>
+    <span class="s2">&quot;LinkFiles&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s2">&quot;grid.in&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;xrays.in&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fomo/grid.ib&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fomo/grid.ibi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fomo/grid.nsf&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fomo/grid.map&quot;</span>
+    <span class="p">],</span>
+    <span class="c1">// List of files to copy instead of linking</span>
+    <span class="s2">&quot;CopyFiles&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s2">&quot;Config.xml&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fomo/mixsur.fmp&quot;</span>
+    <span class="p">]</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>One very important section of <code class="docutils literal notranslate"><span class="pre">flowthrough.json</span></code> is the <em>RunMatrix</em>
+section, shown here:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// RunMatrix description</span>
+<span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// If a file is specified, and it exists, trajectory values will be</span>
+    <span class="c1">// read from it.  RunMatrix values can also be specified locally.</span>
+    <span class="s2">&quot;File&quot;</span><span class="o">:</span> <span class="s2">&quot;inputs/matrix/flowthrough.csv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Keys&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">],</span>
+    <span class="c1">// Copy the mesh</span>
+    <span class="s2">&quot;GroupMesh&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="c1">// Configuration name [default]</span>
+    <span class="s2">&quot;GroupPrefix&quot;</span><span class="o">:</span> <span class="s2">&quot;flowthrough&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This describes an extremely simple run matrix file, whose only primary input
+variable (listed in the <em>Keys</em> input) is <em>mach</em>. Because the flow-through
+nacelle is an axisymmetric flow problem, one cannot run different angles of
+incidence, therefore <em>alpha</em> and <em>beta</em> are not listed as input variables.</p>
+</div>
+<div class="section" id="run-mach-sweep">
+<h2><span class="section-number">6.1.2.2. </span>Run Mach Sweep<a class="headerlink" href="#run-mach-sweep" title="Permalink to this headline">¶</a></h2>
+<p>Having defined the <em>RunMatrix</em> section in the json file, we can see that the
+run matrix given in the <code class="docutils literal notranslate"><span class="pre">inputs/matrix/flowthrough.csv</span></code> file looks
+like this:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span> mach, config, Label
+<span class="go">  0.75, flowthrough,</span>
+<span class="go">  0.80, flowthrough,</span>
+<span class="go">  0.85, flowthrough,</span>
+<span class="go">  0.90, flowthrough,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The run matrix consists of four cases with different Mach numbers. These cases
+can all be run using just the command <code class="docutils literal notranslate"><span class="pre">pyover</span></code>.  Doing this will execute the
+three remaining cases (since we ran case 1 in the beginning).  Afterwards,
+check the status of the cases using <code class="docutils literal notranslate"><span class="pre">pyover</span> <span class="pre">-c</span></code>, which should produce a list
+showing all the cases with a status of <code class="docutils literal notranslate"><span class="pre">DONE</span></code>:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    flowthrough/m0.75     DONE    1400/1400   .        0.0</span>
+<span class="go">1    flowthrough/m0.8      DONE    1400/1400   .        0.0</span>
+<span class="go">2    flowthrough/m0.85     DONE    1400/1400   .        0.0</span>
+<span class="go">3    flowthrough/m0.9      DONE    1400/1400   .        0.0</span>
+
+<span class="go">DONE=4,</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="report-generation">
+<h2><span class="section-number">6.1.2.3. </span>Report Generation<a class="headerlink" href="#report-generation" title="Permalink to this headline">¶</a></h2>
+<p>After running all four cases in the run matrix, the next thing to do is
+examine the convergence and view the flow. This can be accomplished for our
+case using the command:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pyover --report -I 0:4</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will create the report in the file <code class="docutils literal notranslate"><span class="pre">report/report-flowthrough.pdf</span></code>.
+There should be two pages for each case, one page with a table of aerodynamic
+data and several convergence plots, and one page with two flow-visualization
+figures.</p>
+<div class="section" id="convergence-plots">
+<h3><span class="section-number">6.1.2.3.1. </span>Convergence Plots<a class="headerlink" href="#convergence-plots" title="Permalink to this headline">¶</a></h3>
+<p>Nine different convergence plots are shown on the first page of the report for
+each case.  In addition to plotting the history of the three force coefficients
+and the three moment coefficients, the plot of the residual history, two
+different views are added zooming into the tail end of the axial force
+coefficient convergence.  The <em>force_CAzoom1</em> and <em>force_CAzoom2</em> subfigures
+show the last 800 and last 400 iterations of the convergence history.
+The definition of the subfigures used to view the convergence is relatively
+straightforward. The following shows the these subfigure definitions in
+<code class="docutils literal notranslate"><span class="pre">flowthrough.json</span></code>:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Definitions for subfigures</span>
+<span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="p">...</span>
+    <span class="c1">// Iterative history</span>
+    <span class="s2">&quot;force&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;PlotCoeff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Component&quot;</span><span class="o">:</span> <span class="s2">&quot;TOTAL FORCE&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;nPlotFirst&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+        <span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span> <span class="mf">4.5</span><span class="p">,</span>
+        <span class="s2">&quot;FigHeight&quot;</span><span class="o">:</span> <span class="mf">3.4</span><span class="p">,</span>
+        <span class="s2">&quot;Width&quot;</span><span class="o">:</span> <span class="mf">0.33</span><span class="p">,</span>
+        <span class="s2">&quot;StandardDeviation&quot;</span><span class="o">:</span> <span class="mf">1.0</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;force_CA&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span> <span class="s2">&quot;CA&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;force_CY&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span> <span class="s2">&quot;CY&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;force_CN&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span> <span class="s2">&quot;CN&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;force_CLL&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span> <span class="s2">&quot;CLL&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;force_CLM&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span> <span class="s2">&quot;CLM&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;force_CLN&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span> <span class="s2">&quot;CLN&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;force_CAzoom1&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;force&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;nPlotFirst&quot;</span><span class="o">:</span> <span class="o">-</span><span class="mf">800</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;force_CAzoom2&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;force&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;nPlotFirst&quot;</span><span class="o">:</span> <span class="o">-</span><span class="mf">400</span>
+    <span class="p">},</span>
+    <span class="c1">// Residual history</span>
+    <span class="s2">&quot;L2&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;PlotL2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span> <span class="mf">5.5</span><span class="p">,</span>
+        <span class="s2">&quot;FigHeight&quot;</span><span class="o">:</span> <span class="mf">6</span><span class="p">,</span>
+        <span class="s2">&quot;Width&quot;</span><span class="o">:</span> <span class="mf">0.33</span><span class="p">,</span>
+        <span class="s2">&quot;nPlotFirst&quot;</span><span class="o">:</span> <span class="mf">1</span><span class="p">,</span>
+        <span class="s2">&quot;Caption&quot;</span><span class="o">:</span> <span class="s2">&quot;$L_2$ Density Residual&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>When viewing the convergence and showing the entire history it can appear that
+the forces are very tightly converged. But when viewing the tail end, one can
+see that the axial force is still dropping slightly. The following figures show
+four of the convergence plots illustrating the three views of <em>CA</em> as well
+as the history of the L2 norm of the residual of the mean-flow quantities.</p>
+<blockquote>
+<div><span id="tab-pyover-nacelle-01"></span><table class="docutils align-default" id="id2">
+<caption><span class="caption-number">Table 6.3 </span><span class="caption-text">Convergence plots for the m0.75 case</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/force_CA.png"><img alt="../../../_images/force_CA.png" src="../../../_images/force_CA.png" style="width: 3.2in;" /></a>
+<p>TOTAL FORCE/<em>CA</em></p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/force_CAzoom1.png"><img alt="../../../_images/force_CAzoom1.png" src="../../../_images/force_CAzoom1.png" style="width: 3.2in;" /></a>
+<p>TOTAL FORCE/<em>CA</em></p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal image-reference" href="../../../_images/force_CAzoom2.png"><img alt="../../../_images/force_CAzoom2.png" src="../../../_images/force_CAzoom2.png" style="width: 3.2in;" /></a>
+<p>TOTAL FORCE/<em>CA</em></p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/L22.png"><img alt="../../../_images/L22.png" src="../../../_images/L22.png" style="width: 3.2in;" /></a>
+<p><em>L2</em> Residual</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="flow-visualization">
+<h3><span class="section-number">6.1.2.3.2. </span>Flow Visualization<a class="headerlink" href="#flow-visualization" title="Permalink to this headline">¶</a></h3>
+<p>In the <em>Report</em> section of <code class="docutils literal notranslate"><span class="pre">flowthrough.json</span></code>, the subfigures for the
+flow visualization use Tecplot® subfigures. Here we re-use the contour and
+color map settings from the <code class="docutils literal notranslate"><span class="pre">01-bullet</span></code> pyover example. The <em>MachSlice</em>
+subfigure uses tecplot and the supplied layout file in
+<code class="docutils literal notranslate"><span class="pre">inputs/flowthrough-mach.lay</span></code> to create Mach contours in the <em>Y=0</em> plane
+of the nacelle. Note that the <em>MaxLevel</em> for the contours is dependant
+upon the freestream Mach number. The color map break points are also a function
+of the freestream Mach.</p>
+<p>At the end of this section, the <em>MachSlice-mesh</em> subfigure is defined. This
+subfigure inherits all of the settings from the <em>MachSlice</em> subfigure, but
+uses a different layout file. The only difference between the two layout
+files is that the addition of the mesh overlay on the Mach contours.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Definitions for subfigures</span>
+<span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Tecplot figures</span>
+    <span class="s2">&quot;MachSlice&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;Tecplot&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Layout&quot;</span><span class="o">:</span> <span class="s2">&quot;inputs/flowthrough-mach.lay&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span> <span class="mf">1024</span><span class="p">,</span>
+        <span class="s2">&quot;Width&quot;</span><span class="o">:</span> <span class="mf">0.65</span><span class="p">,</span>
+        <span class="s2">&quot;Caption&quot;</span><span class="o">:</span> <span class="s2">&quot;Mach slice $y=0$&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ContourLevels&quot;</span><span class="o">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;NContour&quot;</span><span class="o">:</span> <span class="mf">1</span><span class="p">,</span>
+                <span class="s2">&quot;MinLevel&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+                <span class="s2">&quot;MaxLevel&quot;</span><span class="o">:</span> <span class="s2">&quot;max(1.4, 1.4*$mach)&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Delta&quot;</span><span class="o">:</span> <span class="mf">0.05</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;ColorMaps&quot;</span><span class="o">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;Name&quot;</span><span class="o">:</span> <span class="s2">&quot;Diverging - Purple/Green modified&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;NContour&quot;</span><span class="o">:</span> <span class="mf">2</span><span class="p">,</span>
+                <span class="s2">&quot;ColorMap&quot;</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;0.0&quot;</span><span class="o">:</span> <span class="s2">&quot;purple&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;$mach&quot;</span><span class="o">:</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;1.0&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;orange&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;max(1.4,1.4*$mach)&quot;</span><span class="o">:</span> <span class="s2">&quot;red&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;Keys&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;GLOBALCONTOUR&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;LABELS&quot;</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;Value&quot;</span><span class="o">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;AUTOLEVELSKIP&quot;</span><span class="o">:</span> <span class="mf">2</span><span class="p">,</span>
+                        <span class="s2">&quot;NUMFORMAT&quot;</span><span class="o">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;FORMATTING&quot;</span><span class="o">:</span> <span class="s2">&quot;&#39;FIXEDFLOAT&#39;&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;PRECISION&quot;</span><span class="o">:</span> <span class="mf">1</span><span class="p">,</span>
+                            <span class="s2">&quot;TIMEDATEFORMAT&quot;</span><span class="o">:</span> <span class="s2">&quot;&#39;&#39;&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;Parameter&quot;</span><span class="o">:</span> <span class="mf">1</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;MachSlice-mesh&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;MachSlice&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Layout&quot;</span><span class="o">:</span> <span class="s2">&quot;inputs/flowthrough-mach-mesh.lay&quot;</span>
+    <span class="p">},</span>
+  <span class="p">...</span>
+  <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The resulting <em>MachSlice</em> subfigures for each of the four cases are shown here:</p>
+<blockquote>
+<div><span id="tab-pyover-nacelle-02"></span><table class="docutils align-default" id="id3">
+<caption><span class="caption-number">Table 6.4 </span><span class="caption-text">Tecplot® Mach contour plots for each case</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/MachSlice_m075.png"><img alt="../../../_images/MachSlice_m075.png" src="../../../_images/MachSlice_m075.png" style="width: 3.2in;" /></a>
+<p>Mach slice m0.75</p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/MachSlice_m080.png"><img alt="../../../_images/MachSlice_m080.png" src="../../../_images/MachSlice_m080.png" style="width: 3.2in;" /></a>
+<p>Mach slice m0.80</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal image-reference" href="../../../_images/MachSlice_m080.png"><img alt="../../../_images/MachSlice_m080.png" src="../../../_images/MachSlice_m080.png" style="width: 3.2in;" /></a>
+<p>Mach slice m0.80</p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/MachSlice_m090.png"><img alt="../../../_images/MachSlice_m090.png" src="../../../_images/MachSlice_m090.png" style="width: 3.2in;" /></a>
+<p>Mach slice m0.90</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="powered-nacelle-cases">
+<h2><span class="section-number">6.1.2.4. </span>Powered Nacelle Cases<a class="headerlink" href="#powered-nacelle-cases" title="Permalink to this headline">¶</a></h2>
+<p>The powered nacelle test cases that come with Overflow also include three cases
+simulating the effect of an engine inside of the nacelle. This adds two
+boundaries inside of the nacelle. The first simulates the effect of the forward
+fan face in the inlet side of the nacelle. At this boundary the air is flowing
+out of the CFD domain. The second boundary simulates the flow exiting the
+engine. At this boundary the air is flowing into the CFD domain.</p>
+<div class="section" id="pyover-setup">
+<h3><span class="section-number">6.1.2.4.1. </span>pyover Setup<a class="headerlink" href="#pyover-setup" title="Permalink to this headline">¶</a></h3>
+<p>To create this test case in pyover, we have created these new files:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">powered.json</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inputs/matrix/powered.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inputs/powered-mach.lay</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inputs/powered-mach-mesh.lay</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>These were created by merely copying the flowthrough versions of the files and
+making slight modifications. You can compare the powered with the flowthrough
+versions of each file to see the modifications that were made. However, there
+is one more step, and it requires something new.</p>
+<p>Note that three different overflow input files are provided in the OVERFLOW
+source code for this case. These three input files have been installed in the
+pyover example as:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">common_powered/overflow_test01.inp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">common_powered/overflow_test02.inp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">common_powered/overflow_test03.inp</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>The basic pyover setup only allows one to specify one OVERFLOW input file for
+the template input file, but we have three different input files that we want
+to use.  This example will show how to incorporate a python module that will
+customize the behavior of pyover in order to specify different OVERFLOW input
+files. To enable this we will make use of the <code class="docutils literal notranslate"><span class="pre">Label</span></code> column in the input
+run matrix file.  The <code class="docutils literal notranslate"><span class="pre">Label</span></code> values will be used in the naming of the
+run directories.  Here are the first four lines in the input file:
+<code class="docutils literal notranslate"><span class="pre">inputs/matrix/powered.csv</span></code>.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span> mach, config,  Label
+<span class="go">  0.80, powered, test01</span>
+<span class="go">  0.80, powered, test02</span>
+<span class="go">  0.80, powered, test03</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Here is the corresponding <em>RunMatrix</em> entry in the <code class="docutils literal notranslate"><span class="pre">powered.json</span></code> file:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// RunMatrix description</span>
+<span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// If a file is specified, and it exists, trajectory values will be</span>
+    <span class="c1">// read from it.  RunMatrix values can also be specified locally.</span>
+    <span class="s2">&quot;File&quot;</span><span class="o">:</span> <span class="s2">&quot;inputs/matrix/powered.csv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Keys&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="s2">&quot;Label&quot;</span><span class="p">],</span>
+    <span class="c1">// Copy the mesh</span>
+    <span class="s2">&quot;GroupMesh&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="c1">// Configuration name [default]</span>
+    <span class="s2">&quot;GroupPrefix&quot;</span><span class="o">:</span> <span class="s2">&quot;powered&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In order to customize the pyover behavior, we have added some python code
+in a file called <code class="docutils literal notranslate"><span class="pre">tools/nacelle.py</span></code>, and have added these lines to the
+<code class="docutils literal notranslate"><span class="pre">powered.json</span></code> file:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Module settings</span>
+<span class="s2">&quot;PythonPath&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;tools&quot;</span><span class="p">],</span>
+<span class="s2">&quot;Modules&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;nacelle&quot;</span><span class="p">],</span>
+<span class="s2">&quot;InitFunction&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;nacelle.InitNAC1&quot;</span><span class="p">],</span>
+<span class="s2">&quot;CaseFunction&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;nacelle.ApplyLabel&quot;</span><span class="p">],</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This notifies pyover to look in the <code class="docutils literal notranslate"><span class="pre">tools</span></code> directory for a python module
+called <code class="docutils literal notranslate"><span class="pre">nacelle.py</span></code>. It also identifies two functions in the <code class="docutils literal notranslate"><span class="pre">nacelle.py</span></code>
+module that will be executed by pyover. The first function <code class="docutils literal notranslate"><span class="pre">InitNac1()</span></code> will
+be called when pyover first starts running.  The second function <code class="docutils literal notranslate"><span class="pre">ApplyLabel</span></code>
+will be called during the process of creating each of the runs.  These two
+functions have been written in the <code class="docutils literal notranslate"><span class="pre">tools/nacelle.py</span></code> file.  The
+<code class="docutils literal notranslate"><span class="pre">InitNac1()</span></code> does not actually do anything in this example, but this function
+can be used customize certain behaviors at the beginning of a pyover run. The
+<code class="docutils literal notranslate"><span class="pre">ApplyLabel()</span></code> function is shown here:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply options based on the *Label* RunMatrix key</span>
+<span class="k">def</span> <span class="nf">ApplyLabel</span><span class="p">(</span><span class="n">cntl</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Modify settings for each case using value of *Label*</span>
+
+<span class="sd">    This method is programmed to specify a different OVERFLOW input</span>
+<span class="sd">    file based on the value of *Label* for a given case. This is used</span>
+<span class="sd">    to run each of the three input files that come with the</span>
+<span class="sd">    powered_nacelle test problem that comes with the OVERFLOW source</span>
+<span class="sd">    code.</span>
+
+<span class="sd">    :Call:</span>
+<span class="sd">        &gt;&gt;&gt; ApplyLabel(cntl, i)</span>
+<span class="sd">    :Inputs:</span>
+<span class="sd">        *cntl*: :class:`pyOver.overflow.Overflow`</span>
+<span class="sd">            OVERFLOW settings interface</span>
+<span class="sd">        *i*: :class:`int`</span>
+<span class="sd">            Case number</span>
+<span class="sd">    :Versions:</span>
+<span class="sd">        * 2020-01-28 ``@serogers``: First version</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Get the specified label</span>
+    <span class="n">lbl</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;Label&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+    <span class="c1"># Set the overflow input file as a function of the Label</span>
+    <span class="k">if</span> <span class="s1">&#39;test01&#39;</span> <span class="ow">in</span> <span class="n">lbl</span><span class="p">:</span>
+        <span class="n">cntl</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;OverNamelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;common_powered/overflow_test01.inp&#39;</span>
+    <span class="k">elif</span> <span class="s1">&#39;test02&#39;</span> <span class="ow">in</span> <span class="n">lbl</span><span class="p">:</span>
+        <span class="n">cntl</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;OverNamelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;common_powered/overflow_test02.inp&#39;</span>
+    <span class="k">elif</span> <span class="s1">&#39;test03&#39;</span> <span class="ow">in</span> <span class="n">lbl</span><span class="p">:</span>
+        <span class="n">cntl</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;OverNamelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;common_powered/overflow_test03.inp&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="executing-pyover">
+<h3><span class="section-number">6.1.2.4.2. </span>Executing pyover<a class="headerlink" href="#executing-pyover" title="Permalink to this headline">¶</a></h3>
+<p>This completes the setup, the next step is to run pyover and run all three test
+cases:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;</span> pyover -f powered.json
+<span class="go">Importing module &#39;nacelle&#39;</span>
+<span class="go">  InitFunction: nacelle.InitNAC1()</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    powered/m0.8_test01   ---     /           .</span>
+<span class="go">  Case Function: cntl.nacelle.ApplyLabel(0)</span>
+<span class="go">  Case name: &#39;powered/m0.8_test01&#39; (index 0)</span>
+<span class="go">     Starting case &#39;powered/m0.8_test01&#39;</span>
+<span class="go"> &gt; overrunmpi -np 8 run 01</span>
+<span class="go">     (PWD = &#39;/u/wk/serogers/usr/cape/examples/pyover/02_powered_nacelle/powered/m0.8_test01&#39;)</span>
+<span class="go">     (STDOUT = &#39;overrun.out&#39;)</span>
+<span class="go">   Wall time used: 0.00 hrs (phase 0)</span>
+<span class="go">   Wall time used: 0.00 hrs</span>
+<span class="go">   Previous phase: 0.00 hrs</span>
+<span class="go"> &gt; overrunmpi -np 8 run 02</span>
+<span class="go">     (PWD = &#39;/u/wk/serogers/usr/cape/examples/pyover/02_powered_nacelle/powered/m0.8_test01&#39;)</span>
+<span class="go">     (STDOUT = &#39;overrun.out&#39;)</span>
+<span class="go">   Wall time used: 0.00 hrs (phase 1)</span>
+<span class="go">1    powered/m0.8_test02   ---     /           .</span>
+<span class="go">  Case Function: cntl.nacelle.ApplyLabel(1)</span>
+<span class="go">  Case name: &#39;powered/m0.8_test02&#39; (index 1)</span>
+<span class="go">     Starting case &#39;powered/m0.8_test02&#39;</span>
+<span class="go"> &gt; overrunmpi -np 8 run 01</span>
+<span class="go">     (PWD = &#39;/u/wk/serogers/usr/cape/examples/pyover/02_powered_nacelle/powered/m0.8_test02&#39;)</span>
+<span class="go">     (STDOUT = &#39;overrun.out&#39;)</span>
+<span class="go">   Wall time used: 0.00 hrs (phase 0)</span>
+<span class="go">   Wall time used: 0.00 hrs</span>
+<span class="go">   Previous phase: 0.00 hrs</span>
+<span class="go"> &gt; overrunmpi -np 8 run 02</span>
+<span class="go">     (PWD = &#39;/u/wk/serogers/usr/cape/examples/pyover/02_powered_nacelle/powered/m0.8_test02&#39;)</span>
+<span class="go">     (STDOUT = &#39;overrun.out&#39;)</span>
+<span class="go">   Wall time used: 0.00 hrs (phase 1)</span>
+<span class="go">2    powered/m0.8_test03   ---     /           .</span>
+<span class="go">  Case Function: cntl.nacelle.ApplyLabel(2)</span>
+<span class="go">  Case name: &#39;powered/m0.8_test03&#39; (index 2)</span>
+<span class="go">     Starting case &#39;powered/m0.8_test03&#39;</span>
+<span class="go"> &gt; overrunmpi -np 8 run 01</span>
+<span class="go">     (PWD = &#39;/u/wk/serogers/usr/cape/examples/pyover/02_powered_nacelle/powered/m0.8_test03&#39;)</span>
+<span class="go">     (STDOUT = &#39;overrun.out&#39;)</span>
+<span class="go">   Wall time used: 0.00 hrs (phase 0)</span>
+<span class="go">   Wall time used: 0.01 hrs</span>
+<span class="go">   Previous phase: 0.00 hrs</span>
+<span class="go"> &gt; overrunmpi -np 8 run 02</span>
+<span class="go">     (PWD = &#39;/u/wk/serogers/usr/cape/examples/pyover/02_powered_nacelle/powered/m0.8_test03&#39;)</span>
+<span class="go">     (STDOUT = &#39;overrun.out&#39;)</span>
+<span class="go">   Wall time used: 0.00 hrs (phase 1)</span>
+
+<span class="go">Submitted or ran 3 job(s).</span>
+
+<span class="go">---=3,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that the output informs you that it is excuting the <em>Case Function</em>
+<code class="docutils literal notranslate"><span class="pre">cntl.nacelle.ApplyLabel()</span></code> before each case is run, passing the case number
+as the argument.</p>
+</div>
+<div class="section" id="id1">
+<h3><span class="section-number">6.1.2.4.3. </span>Report Generation<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Generate the report for these three cases using <code class="docutils literal notranslate"><span class="pre">pyover</span> <span class="pre">-f</span> <span class="pre">powered.json</span>
+<span class="pre">--report</span></code>. The powered runs plot different convergence history plots than the
+flowthrough example.  The plots now include the axial force coefficient for
+both the <em>INLET</em> and the <em>EXIT</em> components. At this time, pyover does not have
+the capability to plot convergence history for the mass-flow rate.</p>
+<p>Convergence plots for the <em>INLET</em> and <em>EXIT</em> axial force coefficients for
+each of the three case are shown here.</p>
+<blockquote>
+<div><span id="tab-pyover-nacelle-03"></span><table class="docutils align-default" id="id4">
+<caption><span class="caption-number">Table 6.5 </span><span class="caption-text">Convergence plots for <em>INLET</em> and <em>EXIT</em> axial force</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/test01_inlet_CA.png"><img alt="../../../_images/test01_inlet_CA.png" src="../../../_images/test01_inlet_CA.png" style="width: 3.2in;" /></a>
+<p>INLET/<em>CA</em> <em>test01</em></p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/test01_exit_CA.png"><img alt="../../../_images/test01_exit_CA.png" src="../../../_images/test01_exit_CA.png" style="width: 3.2in;" /></a>
+<p>EXIT/<em>CA</em> <em>test01</em></p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal image-reference" href="../../../_images/test02_inlet_CA.png"><img alt="../../../_images/test02_inlet_CA.png" src="../../../_images/test02_inlet_CA.png" style="width: 3.2in;" /></a>
+<p>INLET/<em>CA</em> <em>test02</em></p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/test02_exit_CA.png"><img alt="../../../_images/test02_exit_CA.png" src="../../../_images/test02_exit_CA.png" style="width: 3.2in;" /></a>
+<p>EXIT/<em>CA</em> <em>test02</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/test03_inlet_CA.png"><img alt="../../../_images/test03_inlet_CA.png" src="../../../_images/test03_inlet_CA.png" style="width: 3.2in;" /></a>
+<p>INLET/<em>CA</em> <em>test03</em></p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/test03_exit_CA.png"><img alt="../../../_images/test03_exit_CA.png" src="../../../_images/test03_exit_CA.png" style="width: 3.2in;" /></a>
+<p>EXIT/<em>CA</em> <em>test03</em></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>The report also includes <em>MachSlice</em> subfigures. Each case shows the Mach
+contours with and without the grid included. All three test cases show very
+similar Mach contours, the subfigures for <em>test01</em> are shown here:</p>
+<blockquote>
+<div><span id="tab-pyover-nacelle-04"></span><table class="docutils align-default" id="id5">
+<caption><span class="caption-number">Table 6.6 </span><span class="caption-text">Tecplot® Mach contour plots for test01</span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/test01_Mach.png"><img alt="../../../_images/test01_Mach.png" src="../../../_images/test01_Mach.png" style="width: 6.0in;" /></a>
+<p>Mach slice test01</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal image-reference" href="../../../_images/test01_Machg.png"><img alt="../../../_images/test01_Machg.png" src="../../../_images/test01_Machg.png" style="width: 6.0in;" /></a>
+<p>Mach slice with grid</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="powered-boundary-conditions">
+<h2><span class="section-number">6.1.2.5. </span>Powered Boundary Conditions<a class="headerlink" href="#powered-boundary-conditions" title="Permalink to this headline">¶</a></h2>
+<p>This example comes with one more configuration using the powered-nacelle
+setup that comes with OVERFLOW. This configuration illustrates the ability
+to manipulate the nacelle boundary conditions in the run matrix file. This
+can be very useful for developing simulations where the thrust or engine
+conditions are changed as part of the run matrix. This configuration setup
+uses the following files:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>inputs/matrix/bcpower.json</p></li>
+<li><p>bcpower.json</p></li>
+<li><p>tools/bcpower.py</p></li>
+</ul>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">inputs/matrix/bcpower.json</span></code> file contains the new run matrix. This file
+contains the following:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span> mach, InletBC, ExitBC, config,   Label
+<span class="go">  0.80, 1.258,    1.200,  bcpower, test01</span>
+<span class="go">  0.80, 1.358,    2.000,  bcpower, test01</span>
+<span class="go">  0.80, 1.458,    4.000,  bcpower, test01</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This has added two new columns called <em>InletBC</em> and <em>ExitBC</em>. These are defined
+in the <em>RunMatrix</em> section in the <code class="docutils literal notranslate"><span class="pre">bcpower.json</span></code> file:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// RunMatrix description</span>
+<span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;File&quot;</span><span class="o">:</span> <span class="s2">&quot;inputs/matrix/bcpower.csv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Keys&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span> <span class="s2">&quot;InletBC&quot;</span><span class="p">,</span> <span class="s2">&quot;ExitBC&quot;</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="s2">&quot;Label&quot;</span><span class="p">],</span>
+    <span class="c1">// Copy the mesh</span>
+    <span class="s2">&quot;GroupMesh&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="c1">// Configuration name [default]</span>
+    <span class="s2">&quot;GroupPrefix&quot;</span><span class="o">:</span> <span class="s2">&quot;powered&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Definitions&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="c1">// InletBC</span>
+        <span class="s2">&quot;InletBC&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;CaseFunction&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Function&quot;</span><span class="o">:</span> <span class="s2">&quot;self.bcnacelle.ApplyInletBC&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Value&quot;</span><span class="o">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Label&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="s2">&quot;Format&quot;</span><span class="o">:</span> <span class="s2">&quot;%05.3f_&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Abbreviation&quot;</span><span class="o">:</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grids&quot;</span><span class="o">:</span> <span class="s2">&quot;Inlet&quot;</span>
+        <span class="p">},</span>
+        <span class="c1">// ExitBC</span>
+        <span class="s2">&quot;ExitBC&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;Type&quot;</span><span class="o">:</span> <span class="s2">&quot;CaseFunction&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Function&quot;</span><span class="o">:</span> <span class="s2">&quot;self.bcnacelle.ApplyExitBC&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Value&quot;</span><span class="o">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Label&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="s2">&quot;Format&quot;</span><span class="o">:</span> <span class="s2">&quot;%05.3f&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Abbreviation&quot;</span><span class="o">:</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grids&quot;</span><span class="o">:</span> <span class="s2">&quot;Exit&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The new columns are assigned the with <code class="docutils literal notranslate"><span class="pre">&quot;Type&quot;:</span> <span class="pre">&quot;CaseFunction&quot;</span></code>, and has
+an attribute assigned for <code class="docutils literal notranslate"><span class="pre">&quot;Function&quot;</span></code>. This will cause
+<em>pyover</em> to execute that function when it is time to build the OVERFLOW
+input file for each case. It will pass the value from the column in the
+RunMatrix to that function for each individual case. Thus when it starts the
+first case, it will pass a value of <em>1.258</em> to the <code class="docutils literal notranslate"><span class="pre">bcnacelle.ApplyInletBC</span></code>
+function. This is a user-defined function that is located in the
+<code class="docutils literal notranslate"><span class="pre">tools/bcnacelle.py</span></code> python module. Let us examine the contents of this
+function:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">ApplyInletBC</span><span class="p">(</span><span class="n">cntl</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Modify BCINP for nacelle inlet face</span>
+
+<span class="sd">    This method is modifies the BCINP namelist in the OVERFLOW input file</span>
+<span class="sd">    for the boundary conditions on the Inlet grid</span>
+
+<span class="sd">    The IBTYP=33 boundary condition applies a contant pressure outflow</span>
+<span class="sd">    at the engine inlet face. This uses the value of BCPAR1 to set the</span>
+<span class="sd">    ratio of the boundary static pressure to freestream pressure.</span>
+
+<span class="sd">    The IBTYP=34 boundary condition applies a constant mass-flow rate</span>
+<span class="sd">    at the engine inlet face. This uses the value of BCPAR1 to set the</span>
+<span class="sd">    target mass-flow rate.  BCPAR2 sets the update rate and relaxation factor.</span>
+<span class="sd">    BCFILE is used to supply the FOMOCO component and Aref.</span>
+
+<span class="sd">    :Call:</span>
+<span class="sd">        &gt;&gt;&gt; ApplyInletBC(cntl, v, i)</span>
+<span class="sd">    :Inputs:</span>
+<span class="sd">        *cntl*: :class:`pyOver.overflow.Overflow`</span>
+<span class="sd">            OVERFLOW settings interface</span>
+<span class="sd">        *v*: :class:`float`</span>
+<span class="sd">            Run-matrix value in the InletBC column for case i</span>
+<span class="sd">        *i*: :class:`int`</span>
+<span class="sd">            Case number</span>
+<span class="sd">    :Versions:</span>
+<span class="sd">        * 2020-01-30 ``@serogers``: First version</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">## Inlet grid: set boundary conditions</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="s1">&#39;Inlet&#39;</span>
+    <span class="n">bci</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">In function ApplyInletBC, v = &quot;</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="c1"># Extract the BCINP from the template for this grid</span>
+    <span class="n">IBTYP</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">Namelist</span><span class="o">.</span><span class="n">GetKeyFromGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s1">&#39;BCINP&#39;</span><span class="p">,</span> <span class="s1">&#39;IBTYP&#39;</span><span class="p">)</span>
+
+    <span class="c1">#################################################</span>
+    <span class="c1"># Process the pressure BC</span>
+    <span class="k">if</span> <span class="n">IBTYP</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">33</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Get the column for ibtyp=33</span>
+        <span class="n">bci</span> <span class="o">=</span> <span class="n">IBTYP</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="mi">33</span><span class="p">)</span>
+        <span class="c1"># Change bci to 1-based index</span>
+        <span class="n">bci</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Set the BCPAR1 value for this case</span>
+        <span class="n">cntl</span><span class="o">.</span><span class="n">Namelist</span><span class="o">.</span><span class="n">SetKeyForGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s1">&#39;BCINP&#39;</span><span class="p">,</span> <span class="s1">&#39;BCPAR1&#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">bci</span><span class="p">)</span>
+        <span class="n">BCPAR1</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">Namelist</span><span class="o">.</span><span class="n">GetKeyFromGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s1">&#39;BCINP&#39;</span><span class="p">,</span> <span class="s1">&#39;BCPAR1&#39;</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">bci</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This function is programmed to change the value of <em>BCPAR1</em> associated with
+the boundary condition entry that uses IBTYP=33 for the grid named
+<em>Inlet</em> in the OVERFLOW input file.  For IBTYP=33, the <em>BCPAR1</em> value is used
+to set the static pressure ratio at an outflow boundary. In other words, it
+sets the static pressure at the boundary of the engine fan face in our
+nacelle example.  The run matrix is set up to run three different values of
+static-pressure ratio for the three different cases.</p>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">ApplyInletBC</span></code> function only changes the boundary condition
+if it finds an entry with IBTYP=33 in the OVERFLOW template input file.
+It is left as an exercise to the reader to add python code that will change
+the boundary condition if IBTYP=34, which controls the mass-flow rate instead
+of the pressure.</p>
+<p>Similarly, the run-matrix column for <em>ExitBC</em> is tied to a function called
+<code class="docutils literal notranslate"><span class="pre">ApplyExitBC</span></code>, contained in the <code class="docutils literal notranslate"><span class="pre">tools/bcnacelle.py</span></code> file. This function
+sets the value of <em>BCPAR1</em> for the IBTYP=141 boundary condition.  This sets
+the total pressure value used at the boundary condition for the nacelle
+exit. By varying the values in the <em>ExitBC</em> column of the run matrix, this
+changes the total pressure in the flow coming out of the engine, changing
+the resulting engine thrust.</p>
+<p>The commands to run the three cases and generating the report for this
+configuration are:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pyover -f bcpower.json -I 0,1,2</span>
+<span class="go">pyover -f bcpower.json --report</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The report is setup to create the same force and moment convergence plots as
+the <code class="docutils literal notranslate"><span class="pre">powered.json</span></code> configuration. The flow-field contour plots include the
+same Mach contour figures, and additionally a figure of pressure coefficient
+(Cp) contours.  The effect of the changes of the Inlet and Exit boundary conditions
+are illustrated in these contour plots. The following table combines the
+Cp and Mach contour images for the three cases for each comparison.</p>
+<p>The change to flow into the inlet is seen for the InletBC values of
+1.258, 1.358, and 1.458. The increasing static pressure on the boundary
+can be seen in the Cp contours, and its effect of reducing the Mach
+number of the flow into the inlet boundary.</p>
+<p>The total pressure values of 1.2, 2.0, and 4.0 prescribed in the run matrix
+in the ExitBC column are also evident. The increasing total pressure creates
+higher exit pressures and higher Mach numbers as the flow exits the nacelle.</p>
+<blockquote>
+<div><span id="tab-pyover-nacelle-05"></span><table class="docutils align-default" id="id6">
+<caption><span class="caption-number">Table 6.7 </span><span class="caption-text">Tecplot® Cp and Mach contour plots for each case</span><a class="headerlink" href="#id6" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 49%" />
+<col style="width: 51%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/CpSlice_bcpower1.png"><img alt="../../../_images/CpSlice_bcpower1.png" src="../../../_images/CpSlice_bcpower1.png" style="width: 3.5in;" /></a>
+<p>Cp slice bc_power_1.258_E1.200</p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/MachSlice_bcpower1.png"><img alt="../../../_images/MachSlice_bcpower1.png" src="../../../_images/MachSlice_bcpower1.png" style="width: 3.5in;" /></a>
+<p>Mach slice  bc_power_1.258_E1.200</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal image-reference" href="../../../_images/CpSlice_bcpower2.png"><img alt="../../../_images/CpSlice_bcpower2.png" src="../../../_images/CpSlice_bcpower2.png" style="width: 3.5in;" /></a>
+<p>Cp slice bc_power_1.358_E2.000</p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/MachSlice_bcpower2.png"><img alt="../../../_images/MachSlice_bcpower2.png" src="../../../_images/MachSlice_bcpower2.png" style="width: 3.5in;" /></a>
+<p>Mach slice  bc_power_1.358_E2.000</p>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/CpSlice_bcpower3.png"><img alt="../../../_images/CpSlice_bcpower3.png" src="../../../_images/CpSlice_bcpower3.png" style="width: 3.5in;" /></a>
+<p>Cp slice bc_power_1.458_E4.000</p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/MachSlice_bcpower3.png"><img alt="../../../_images/MachSlice_bcpower3.png" src="../../../_images/MachSlice_bcpower3.png" style="width: 3.5in;" /></a>
+<p>Mach slice  bc_power_1.458_E4.000</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../json/index.html" title="6.2. Control Files for pyOver (pyOver.json)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../bullet/index.html" title="6.1.1. OVERFLOW Bullet Example"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">6. </span>pyOver Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">6.1. </span>Examples using pyOver</a> &#187;</li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0 documentation, 2019.
+  </div>
+
+
+  </body>
+</html>
