@@ -1,18 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>cape.tnakit.argread: Command-line argument parser &#8212; CAPE 1.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>&lt;no title&gt; &#8212; CAPE 1.0.0</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="cape.tnakit.kwutils: Tools for Processing Keyword Arguments" href="kwutils.html" />
@@ -33,9 +33,10 @@
         <li class="right" >
           <a href="index.html" title="cape.tnakit: Basic TNA Python tool kit"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit</span></code>: Basic TNA Python tool kit</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit.argread</span></code>: Command-line argument parser</a></li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit</span></code>: Basic TNA Python tool kit</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">&lt;no title&gt;</a></li> 
       </ul>
     </div>  
 
@@ -44,232 +45,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-cape.tnakit.argread"></span><div class="section" id="cape-tnakit-argread-command-line-argument-parser">
-<h1><a class="reference internal" href="#module-cape.tnakit.argread" title="cape.tnakit.argread"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit.argread</span></code></a>: Command-line argument parser<a class="headerlink" href="#cape-tnakit-argread-command-line-argument-parser" title="Permalink to this headline">¶</a></h1>
-<p>Parse command-line inputs based on one of two methods.  The first method
-counts both “-” and “–” as prefixes for keyword names; this is common
-among many advanced programs. For example, the two following examples
-would be treated as equivalent (assuming it is called by some script
-<code class="docutils literal notranslate"><span class="pre">myScript.py</span></code>.</p>
-<blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> myScript.py --v --i test.txt
-<span class="gp">$</span> myScript.py -v -i test.txt
-</pre></div>
-</div>
-</div></blockquote>
-<p>The second method assumes single-hyphen options are single-character
-flags that can be combined. This is common in many built-in Unix/Linux
-utilities. Consider how <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-lh</span></code> is interpreted.  The following two
-examples would be interpreted equivalently.</p>
-<blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> myScript.py -v -i
-<span class="gp">$</span> myScript.py -vi
-</pre></div>
-</div>
-</div></blockquote>
-<p>A third method is provided to have similar behavior to the Unix <code class="docutils literal notranslate"><span class="pre">tar</span></code>
-command. In this case, the following two commands will be different.</p>
-<blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> myScript.py -cf mytar.tar
-<span class="gp">$</span> myScript.py --cf mytar.tar
-</pre></div>
-</div>
-</div></blockquote>
-<p>The first example sets <em>c</em> to <code class="docutils literal notranslate"><span class="pre">True</span></code> and <em>f</em> to <code class="docutils literal notranslate"><span class="pre">&quot;mytar.tar&quot;</span></code>; the
-second command sets <em>cf</em> to <code class="docutils literal notranslate"><span class="pre">&quot;mytar.tar&quot;</span></code>.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cape.tnakit.argread.readflags">
-<span class="sig-prename descclassname"><span class="pre">cape.tnakit.argread.</span></span><span class="sig-name descname"><span class="pre">readflags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.argread.readflags" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read list of strings from <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code> with double-hyphen as an indicator 
-of a keyword and a single-hyphen as a list of stackable flags</p>
-<dl class="field-list">
-<dt class="field-odd">Call</dt>
-<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">argread</span><span class="o">.</span><span class="n">readflags</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd>
-<dt class="field-even">Inputs</dt>
-<dd class="field-even"><dl class="simple">
-<dt><em>argv</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of string inputs; first entry is ignored (from <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code>)</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-odd">Outputs</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><em>args</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>List of general inputs with no keyword names</p>
-</dd>
-<dt><em>kwargs</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of inputs specified with option flags</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Examples</dt>
-<dd class="field-even"><p>The following shows an example with a stacked flag.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span><span class="p">)</span> <span class="o">=</span> <span class="n">readflags</span><span class="p">([</span><span class="s1">&#39;ex.sh&#39;</span><span class="p">,</span> <span class="s1">&#39;arg.file&#39;</span><span class="p">,</span> <span class="s1">&#39;-lvi&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
-<span class="go">[&#39;arg.file&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kw</span>
-<span class="go">{&#39;l&#39;: True, &#39;v&#39;: True, &#39;i&#39;: True}</span>
-</pre></div>
-</div>
-<p>This example shows the difference between single- and double-hyphens.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span><span class="p">)</span> <span class="o">=</span> <span class="n">readflags</span><span class="p">([</span><span class="s1">&#39;ex.sh&#39;</span><span class="p">,</span> <span class="s1">&#39;-lv&#39;</span><span class="p">,</span> <span class="s1">&#39;--in&#39;</span><span class="p">,</span> <span class="s1">&#39;i.tri&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
-<span class="go">[]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kw</span>
-<span class="go">{&#39;l&#39;: True, &#39;v&#39;: True, &#39;in&#39;: &#39;i.tri&#39;}</span>
-</pre></div>
-</div>
-<p>The following shows a stacked flag followed by a raw input.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">readflagstar</span><span class="p">([</span><span class="s1">&#39;ex.sh&#39;</span><span class="p">,</span> <span class="s1">&#39;-tvf&#39;</span><span class="p">,</span> <span class="s1">&#39;fname.dat&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
-<span class="go">[&#39;fname.dat&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kw</span>
-<span class="go">{&#39;t&#39;: True, &#39;v&#39;: True, &#39;f&#39;: True}</span>
-</pre></div>
-</div>
-</dd>
-<dt class="field-odd">Versions</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
-<li><p>2017-04-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <code class="docutils literal notranslate"><span class="pre">--no-v</span></code> –&gt; <code class="docutils literal notranslate"><span class="pre">v=False</span></code></p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="cape.tnakit.argread.readflagstar">
-<span class="sig-prename descclassname"><span class="pre">cape.tnakit.argread.</span></span><span class="sig-name descname"><span class="pre">readflagstar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.argread.readflagstar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read list of strings from <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code> with double-hyphen as an indicator 
-of a keyword and a single-hyphen as a list of stackable flags.  This version
-behaves like <cite>tar</cite> in that the last flag in a group can be used with a
-following value.</p>
-<dl class="field-list">
-<dt class="field-odd">Call</dt>
-<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">argread</span><span class="o">.</span><span class="n">readflagstar</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd>
-<dt class="field-even">Inputs</dt>
-<dd class="field-even"><dl class="simple">
-<dt><em>argv</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of string inputs; first entry is ignored (from <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code>)</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-odd">Outputs</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><em>args</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>List of general inputs with no keyword names</p>
-</dd>
-<dt><em>kwargs</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of inputs specified with option flags</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Examples</dt>
-<dd class="field-even"><p>The following shows an example with a stacked flag.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span><span class="p">)</span> <span class="o">=</span> <span class="n">readflagstar</span><span class="p">([</span><span class="s1">&#39;ex.sh&#39;</span><span class="p">,</span> <span class="s1">&#39;arg.file&#39;</span><span class="p">,</span> <span class="s1">&#39;-lvi&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
-<span class="go">[&#39;arg.file&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kw</span>
-<span class="go">{&#39;l&#39;: True, &#39;v&#39;: True, &#39;i&#39;: True}</span>
-</pre></div>
-</div>
-<p>This example shows the difference between single- and double-hyphens.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span><span class="p">)</span> <span class="o">=</span> <span class="n">readflagstar</span><span class="p">([</span><span class="s1">&#39;ex.sh&#39;</span><span class="p">,</span> <span class="s1">&#39;-lv&#39;</span><span class="p">,</span> <span class="s1">&#39;--in&#39;</span><span class="p">,</span> <span class="s1">&#39;i.tri&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
-<span class="go">[]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kw</span>
-<span class="go">{&#39;l&#39;: True, &#39;v&#39;: True, &#39;in&#39;: &#39;i.tri&#39;}</span>
-</pre></div>
-</div>
-<p>The following shows a stacked flag with a value for the last option</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">readflagstar</span><span class="p">([</span><span class="s1">&#39;ex.sh&#39;</span><span class="p">,</span> <span class="s1">&#39;-tvf&#39;</span><span class="p">,</span> <span class="s1">&#39;fname.dat&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
-<span class="go">[]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kw</span>
-<span class="go">{&#39;t&#39;: True, &#39;v&#39;: True, &#39;f&#39;: &#39;fname.dat&#39;}</span>
-</pre></div>
-</div>
-</dd>
-<dt class="field-odd">Versions</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p>2014-10-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
-<li><p>2017-04-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <code class="docutils literal notranslate"><span class="pre">--no-v</span></code> –&gt; <code class="docutils literal notranslate"><span class="pre">v=False</span></code></p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="cape.tnakit.argread.readkeys">
-<span class="sig-prename descclassname"><span class="pre">cape.tnakit.argread.</span></span><span class="sig-name descname"><span class="pre">readkeys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.argread.readkeys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read list of strings from <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code> with any hyphen or double-hyphen as
-an indicator of a keyword.</p>
-<dl class="field-list">
-<dt class="field-odd">Call</dt>
-<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">argread</span><span class="o">.</span><span class="n">readkeys</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd>
-<dt class="field-even">Inputs</dt>
-<dd class="field-even"><dl class="simple">
-<dt><em>argv</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of string inputs; first entry is ignored (from <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code>)</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-odd">Outputs</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><em>args</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>List of general inputs with no keyword names</p>
-</dd>
-<dt><em>kwargs</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of inputs specified with option flags</p>
-</dd>
-<dt><em>kwargs[‘_old’]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>)</dt><dd><p>List of single-argument dictionaries that were overwritten</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Examples</dt>
-<dd class="field-even"><p>The following shows an example with only general inputs and no options</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">readkeys</span><span class="p">([</span><span class="s1">&#39;ex.sh&#39;</span><span class="p">,</span> <span class="s1">&#39;a.1&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
-<span class="go">[&#39;a.1&#39;, &#39;1&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kw</span>
-<span class="go">{}</span>
-</pre></div>
-</div>
-<p>This example shows one general input followed by two options.  One of
-the options has an argument associated with it, and the other does not.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">readkeys</span><span class="p">([</span><span class="s1">&#39;ex.sh&#39;</span><span class="p">,</span> <span class="s1">&#39;a.1&#39;</span><span class="p">,</span> <span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="s1">&#39;in.tri&#39;</span><span class="p">,</span> <span class="s1">&#39;-v&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
-<span class="go">[&#39;a.1&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kw</span>
-<span class="go">{&#39;i&#39;: &#39;in.tri&#39;, &#39;v&#39;: True}</span>
-</pre></div>
-</div>
-<p>Double-hyphens are interpreted as hyphens.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">readkeys</span><span class="p">([</span><span class="s1">&#39;ex.sh&#39;</span><span class="p">,</span> <span class="s1">&#39;--h&#39;</span><span class="p">,</span> <span class="s1">&#39;--i&#39;</span><span class="p">,</span> <span class="s1">&#39;in.tri&#39;</span><span class="p">,</span> <span class="s1">&#39;a.1&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
-<span class="go">[&#39;a.1&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kw</span>
-<span class="go">{&#39;h&#39;: True, &#39;i&#39;: &#39;in.tri&#39;}</span>
-</pre></div>
-</div>
-<p>Overwritten settings are saved in <code class="docutils literal notranslate"><span class="pre">kw['_old']</span></code>.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">readkeys</span><span class="p">([</span><span class="s1">&#39;ex.sh&#39;</span><span class="p">,</span> <span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="s1">&#39;in.1&#39;</span><span class="p">,</span> <span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="s1">&#39;in.2&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kw</span>
-<span class="go">{&#39;_old&#39;: [{&#39;a&#39;: &#39;in.1&#39;}], &#39;f&#39;: &#39;in.2&#39;}</span>
-</pre></div>
-</div>
-</dd>
-<dt class="field-odd">Versions</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
-<li><p>2017-04-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <code class="docutils literal notranslate"><span class="pre">--no-v</span></code> –&gt; <code class="docutils literal notranslate"><span class="pre">v=False</span></code></p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-
+  
 
             <div class="clearer"></div>
           </div>
@@ -280,12 +56,16 @@ the options has an argument associated with it, and the other does not.</p>
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
             </a></p>
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit</span></code>: Basic TNA Python tool kit</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="kwutils.html"
-                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit.kwutils</span></code>: Tools for Processing Keyword Arguments</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit</span></code>: Basic TNA Python tool kit</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="kwutils.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit.kwutils</span></code>: Tools for Processing Keyword Arguments</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -302,7 +82,7 @@ the options has an argument associated with it, and the other does not.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -322,9 +102,10 @@ the options has an argument associated with it, and the other does not.</p>
         <li class="right" >
           <a href="index.html" title="cape.tnakit: Basic TNA Python tool kit"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit</span></code>: Basic TNA Python tool kit</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit.argread</span></code>: Command-line argument parser</a></li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit</span></code>: Basic TNA Python tool kit</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">&lt;no title&gt;</a></li> 
       </ul>
     </div>
 
