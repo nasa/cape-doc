@@ -1,0 +1,727 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>4.1.2. Demo 2: Closer Analysis of Simple Arrow Shape &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="4.1.3. Demo 3: Moving Fins" href="../03-fins/index.html" />
+    <link rel="prev" title="4.1.1. Demo 1: Basic Usage on a Bullet Shape" href="../01-bullet/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../03-fins/index.html" title="4.1.3. Demo 3: Moving Fins"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../01-bullet/index.html" title="4.1.1. Demo 1: Basic Usage on a Bullet Shape"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.2. </span>Demo 2: Closer Analysis of Simple Arrow Shape</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="demo-2-closer-analysis-of-simple-arrow-shape">
+<span id="pycart-ex-arrow"></span><h1><span class="section-number">4.1.2. </span>Demo 2: Closer Analysis of Simple Arrow Shape<a class="headerlink" href="#demo-2-closer-analysis-of-simple-arrow-shape" title="Permalink to this heading">¶</a></h1>
+<p>The second example is similar to the first pyCart demo except that four fins
+have been added and more details of the input files are explained. To get
+started, clone the following repo and enter the folder and run a couple of
+commands:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/nasa-ddalle/pycart02-arrow.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>pycart02-arrow
+<span class="gp">$ </span>./copy-files.py
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>work/
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will copy all of the files into a newly created <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder. Follow
+the instructions below by entering that <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder; the purpose is that
+you can easily delete the <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder and restart the tutorial at any
+time.</p>
+<p>The geometry used for this shape is a capped cylinder with four fins and 9216
+faces and seven components.  The surface triangulation, <code class="docutils literal notranslate"><span class="pre">arrow.tri</span></code>, is
+shown below.</p>
+<blockquote>
+<div><figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../../../_images/arrow01.png"><img alt="../../../_images/arrow01.png" src="../../../_images/arrow01.png" style="width: 4in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 4.2 </span><span class="caption-text">Simple bullet shape triangulation with four fins</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>This example is set up with a larger run matrix in order to demonstrate more of
+the features of pyCart.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pycart -c
+Case Config/Run Directory    Status  Iterations  Que CPU Time
+---- ----------------------- ------- ----------- --- --------
+0    poweroff/m1.25a0.0r0.0  ---     /           .
+1    poweroff/m1.25a1.0r0.0  ---     /           .
+2    poweroff/m1.25a1.0r15.0 ---     /           .
+3    poweroff/m1.25a1.0r30.0 ---     /           .
+4    poweroff/m1.25a1.0r45.0 ---     /           .
+5    poweroff/m1.5a1.0r0.0   ---     /           .
+6    poweroff/m1.5a1.0r15.0  ---     /           .
+7    poweroff/m1.5a1.0r30.0  ---     /           .
+8    poweroff/m1.5a1.0r45.0  ---     /           .
+9    poweroff/m1.75a1.0r0.0  ---     /           .
+10   poweroff/m1.75a1.0r15.0 ---     /           .
+11   poweroff/m1.75a1.0r30.0 ---     /           .
+12   poweroff/m1.75a1.0r45.0 ---     /           .
+13   poweroff/m2.0a1.0r0.0   ---     /           .
+14   poweroff/m2.0a1.0r15.0  ---     /           .
+15   poweroff/m2.0a1.0r30.0  ---     /           .
+16   poweroff/m2.0a1.0r45.0  ---     /           .
+17   poweroff/m2.5a1.0r0.0   ---     /           .
+18   poweroff/m2.5a1.0r15.0  ---     /           .
+19   poweroff/m2.5a1.0r30.0  ---     /           .
+20   poweroff/m2.5a1.0r45.0  ---     /           .
+
+---=21,
+</pre></div>
+</div>
+</div></blockquote>
+<section id="input-files">
+<h2><span class="section-number">4.1.2.1. </span>Input Files<a class="headerlink" href="#input-files" title="Permalink to this heading">¶</a></h2>
+<p>Let’s look at the files in this folder.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>: Master settings for running pyCart, input to <code class="docutils literal notranslate"><span class="pre">pycart</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arrow.tri</span></code>: Surface triangulation (ASCII)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arrow.xml</span></code>: Names for components of the surface</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matrix.csv</span></code>: Run matrix</p></li>
+</ul>
+</div></blockquote>
+<section id="json-settings">
+<h3><span class="section-number">4.1.2.1.1. </span>JSON Settings<a class="headerlink" href="#json-settings" title="Permalink to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code> file contains the master settings divided into several
+sections, which we will discuss in more detail.  The overall contents of the
+file look something like the following, with the <code class="docutils literal notranslate"><span class="pre">...</span></code> replaced by more
+content.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Iteration control and command-line inputs</span>
+<span class="w">    </span><span class="s2">&quot;RunControl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Run sequence</span>
+<span class="w">        </span><span class="s2">&quot;InputSeq&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;IterSeq&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">200</span><span class="p">],</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="p">...</span>
+
+<span class="w">    </span><span class="c1">// RunMatrix (i.e. run matrix) description</span>
+<span class="w">    </span><span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Keys&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Mach&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;alpha_t&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;phi&quot;</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;File&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;matrix.csv&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;GroupMesh&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;GroupPrefix&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;poweroff&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The first section (actually, the order does not matter, but it’s the first
+section in the file provided) is the <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> section, which has
+settings for the overall run procedure (such as number of iterations, whether
+or not to submit the job to a queue, etc.) and command-line inputs to the
+various Cart3D programs.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;RunControl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Run sequence</span>
+<span class="w">    </span><span class="s2">&quot;PhaseSequece&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;PhaseIters&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">200</span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Verbosity</span>
+<span class="w">    </span><span class="s2">&quot;Verbose&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// System configuration</span>
+<span class="w">    </span><span class="s2">&quot;nProc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">4</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Options for ``flowCart``</span>
+<span class="w">    </span><span class="s2">&quot;flowCart&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;it_fc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;mpi_fc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;use_aero_csh&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cfl&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1.1</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;mg_fc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;y_is_spanwise&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Defines the flow domain automatically</span>
+<span class="w">    </span><span class="s2">&quot;autoInputs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Volume mesh options</span>
+<span class="w">    </span><span class="s2">&quot;cubes&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;maxR&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;pre&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;preSpec.c3d.cntl&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cubes_a&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cubes_b&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;reorder&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;flowCart&quot;</span></code> section contains command-line inputs for running
+<code class="docutils literal notranslate"><span class="pre">flowCart</span></code>, which is the main flow solver of Cart3D, or <code class="docutils literal notranslate"><span class="pre">mpix_flowCart</span></code>,
+which is the MPI version of the same. Many of the variable names, such as
+<em>it_fc</em>, are copied from Cart3D’s template <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> scripts or
+command-line inputs to Cart3D’s <code class="docutils literal notranslate"><span class="pre">flowCart</span></code>. The three main options (which are
+required for any pyCart project) are <em>PhaseSequence</em>, <em>PhaseIters</em>, and
+<em>it_fc</em>.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><em>it_fc</em></p></td>
+<td><p>Number of iterations for each call to <code class="docutils literal notranslate"><span class="pre">flowCart</span></code>,
+short for <code class="docutils literal notranslate"><span class="pre">iterations_flowCart</span></code>; command-line input
+is <code class="docutils literal notranslate"><span class="pre">flowCart</span> <span class="pre">-N</span> <span class="pre">$it_fc</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>PhaseSequence</em></p></td>
+<td><p>Input sequence, tells pyCart to run phase 0; in more
+complex projects, this will be a list like <code class="docutils literal notranslate"><span class="pre">[0,1,3]</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><em>PhaseIters</em></p></td>
+<td><p>Min iterations for each phase; this tells pyCart to
+continue calling <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> until 200 iterations
+have been run.  If this was <code class="docutils literal notranslate"><span class="pre">400</span></code>, pyCart would
+automatically run <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> twice using the first
+run’s results as inputs to the second</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>The <em>Verbose</em> option is relatively self-explanatory in that more information is
+printed to either the terminal or the PBS output file.  In particular, each
+command that is issued to the top-level terminal also prints the name of the
+directory in which it is run and the name of the file storing its STDOUT
+output.</p>
+<p>For a simple case, these parameters seem unnecessarily confusing. Why not just
+tell <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> how many iterations to run and be done with it? For one
+thing, <em>IterSeq</em> specifies a required number of iterations whereas <em>it_fc</em> just
+suggests to <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> or <code class="docutils literal notranslate"><span class="pre">mpix_flowCart</span></code> how many iterations to run. If
+<code class="docutils literal notranslate"><span class="pre">flowCart</span></code> exits early due to some kind of failure, this convention means
+that pyCart will clearly alert us.</p>
+<p>Secondly, some applications require more sophisticated approach. A common
+example is a hypersonic case that needs to be run in first-order mode for a few
+iterations first. It might have something like <code class="docutils literal notranslate"><span class="pre">&quot;PhaseIters&quot;:</span> <span class="pre">[0,</span> <span class="pre">400]</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&quot;PhaseSequence&quot;:</span> <span class="pre">[0,</span> <span class="pre">1]</span></code>. This tells pyCart to run input set <code class="docutils literal notranslate"><span class="pre">0</span></code> until it
+has run at least <code class="docutils literal notranslate"><span class="pre">0</span></code> iterations and then phase <code class="docutils literal notranslate"><span class="pre">1</span></code> until it has run at
+least <code class="docutils literal notranslate"><span class="pre">400</span></code> iterations.</p>
+<p>The remaining inputs are quite a bit simpler. For example <em>nProc</em> sets the
+total number of cores or threads to use. The next section allows pyCart to use
+the Cart3D binary <code class="docutils literal notranslate"><span class="pre">autoInputs</span></code> to create the flow domain and basic volume
+mesh parameters with the command <code class="docutils literal notranslate"><span class="pre">autoInputs</span> <span class="pre">-r</span> <span class="pre">8</span></code>, which sets the farfield
+boundary at roughly 8 times the size of your surface triangulation.</p>
+<p>Running <code class="docutils literal notranslate"><span class="pre">autoInputs</span></code> creates files <code class="docutils literal notranslate"><span class="pre">input.c3d</span></code> and <code class="docutils literal notranslate"><span class="pre">preSpec.c3d.cntl</span></code>,
+which are given as inputs to the volume generator <code class="docutils literal notranslate"><span class="pre">cubes</span></code>.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Mesh&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Surface triangulation</span>
+<span class="w">    </span><span class="s2">&quot;TriFile&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow.tri&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <em>Mesh</em> section controls inputs to the Cart3D commands that produce the
+volume mesh. The <em>TriFile</em> setting is relatively obvious and points to the name
+of the surface triangulation.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Config&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Defer to a file for most things.</span>
+<span class="w">    </span><span class="s2">&quot;File&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow.xml&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Declare forces and moments</span>
+<span class="w">    </span><span class="s2">&quot;Force&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;cap&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;body&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;fins&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;bullet_no_base&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;bullet_total&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;RefPoint&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;bullet_no_base&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">]}</span>
+<span class="w">    </span><span class="c1">// Reference quantities</span>
+<span class="w">    </span><span class="s2">&quot;RefArea&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">3.14159</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;RefLength&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <em>Config</em> section gives instructions about which components to track, what
+moment reference points to use, and similar definitions. The XML file allows
+Cart3D and pyCart to refer to define groups of components and refer to
+components by name instead of memorizing their numbers. The <em>Force</em> option
+specifies a list of components on which <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> should track the force at
+each iteration. This creates files <code class="docutils literal notranslate"><span class="pre">cap.dat</span></code>, <code class="docutils literal notranslate"><span class="pre">body.dat</span></code>, <code class="docutils literal notranslate"><span class="pre">fins.dat</span></code>,
+etc. Then <em>RefPoint</em> specifies the list of components for which to also track
+the moments, and the moment reference point to use for each such component. In
+this case, the moments will be reported alongside the forces in
+<code class="docutils literal notranslate"><span class="pre">bullet_no_base.dat</span></code>.</p>
+<p>The <em>RefArea</em> and <em>RefLength</em> parameters are used here to specify global
+reference values, but it is possible to use different reference lengths or
+areas for different components in the same run.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Keys&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Mach&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;alpha_t&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;phi&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;File&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;matrix.csv&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;GroupMesh&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;GroupPrefix&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;poweroff&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The final section (actually, the order is irrelevant, but it’s the last section
+in this file) describes the run matrix, i.e. trajectory. The <em>Keys</em> parameter
+lists the names of variables that will change in the run matrix, i.e. the
+independent variables. In this case, we are using Mach number, total angle of
+attack, and velocity roll angle. There is a set of predefined trajectory keys,
+and all three of these examples are in that set, but later examples will show
+how to define customized trajectory keys in this section.</p>
+<p>The <em>File</em> parameter points to a file in which the cases to run are listed, and
+<em>GroupMesh</em> specifies whether or not each case can use the same mesh.  Setting
+it to <code class="docutils literal notranslate"><span class="pre">true</span></code> means that <code class="docutils literal notranslate"><span class="pre">cubes</span></code> is only run once for the matrix (more
+accurately, once for each group, but this example has only one group).  The
+<em>GroupPrefix</em> gives a name for the folder in which to put all the cases, which
+explains why a typical case is named <code class="docutils literal notranslate"><span class="pre">poweroff/m1.50a2.00r0.00</span></code>, for example.</p>
+<p>There are two more sections in the <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>, which describe various
+products.</p>
+</section>
+<section id="triangulation-file-arrow-tri">
+<h3><span class="section-number">4.1.2.1.2. </span>Triangulation File: <code class="docutils literal notranslate"><span class="pre">arrow.tri</span></code><a class="headerlink" href="#triangulation-file-arrow-tri" title="Permalink to this heading">¶</a></h3>
+<p>The surface geometry is defined in an ASCII file in a straightforward Cart3D
+format.  A summary of the contents is shown below.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>4610  9216
++4.81527351e-03 +9.80171422e-02 +0.00000000e+00
++1.92147203e-02 +1.95090326e-01 +0.00000000e+00
+...
++6.37716534e+00 +1.58689240e-08 +1.06574801e+00
+385 386 16
+386 387 17
+...
+2565 4257 2530
+1
+1
+...
+11
+</pre></div>
+</div>
+</div></blockquote>
+<p>The first line is a summary of the contents of the file.  It states that there
+are <code class="docutils literal notranslate"><span class="pre">4610</span></code> nodes, i.e. three-dimensional points in space, and <code class="docutils literal notranslate"><span class="pre">9216</span></code>
+triangles.  What follows is 4610 lines with three floating point numbers per
+line.  Next is 9216 lines in which each line defines one triangle.  For example,
+the first triangle connects node <code class="docutils literal notranslate"><span class="pre">385</span></code> to node <code class="docutils literal notranslate"><span class="pre">386</span></code> to node <code class="docutils literal notranslate"><span class="pre">16</span></code>.  After
+9216 such lines, there are 9216 more lines with a single integer on each line
+that defines the component ID of each triangle.  Thus triangle 1 is part of
+component 1, triangle 2 is part of component 1, and the last triangle is part of
+component 11.</p>
+</section>
+<section id="component-names-arrow-xml">
+<h3><span class="section-number">4.1.2.1.3. </span>Component Names: <code class="docutils literal notranslate"><span class="pre">arrow.xml</span></code><a class="headerlink" href="#component-names-arrow-xml" title="Permalink to this heading">¶</a></h3>
+<p>Cart3D uses an optional XML file that associates names with each component.  It
+uses a standard XML format with component IDs (the numbers at the end of the
+<code class="docutils literal notranslate"><span class="pre">.tri</span></code> file discussed above) with a <code class="docutils literal notranslate"><span class="pre">Face</span> <span class="pre">Label</span></code> value inside a
+<code class="docutils literal notranslate"><span class="pre">&lt;Data&gt;</span></code> tag.  It also allows for the definition of a “container” component
+that is the combination of several other components.  This makes it possible to
+track <code class="docutils literal notranslate"><span class="pre">fin1</span></code> separately while also tracking all the <code class="docutils literal notranslate"><span class="pre">fins</span></code> as a group.  The
+contents of the file are shown below.</p>
+<blockquote>
+<div><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;</span>
+
+<span class="nt">&lt;Configuration</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;bullet sample&quot;</span><span class="w"> </span><span class="na">Source=</span><span class="s">&quot;bullet.tri&quot;</span><span class="nt">&gt;</span>
+
+<span class="w"> </span><span class="cm">&lt;!-- Containers --&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;bullet_no_base&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;container&quot;</span><span class="w"> </span><span class="na">Parent=</span><span class="s">&quot;bullet_total&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Component&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;fins&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;container&quot;</span><span class="w"> </span><span class="na">Parent=</span><span class="s">&quot;bullet_no_base&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Component&gt;</span>
+
+<span class="w">  </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;bullet_total&quot;</span><span class="w">   </span><span class="na">Type=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Component&gt;</span>
+<span class="w"> </span><span class="cm">&lt;!-- Containers --&gt;</span>
+
+<span class="w"> </span><span class="cm">&lt;!-- body --&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;cap&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;Data&gt;</span><span class="w"> </span>Face<span class="w"> </span>Label=1<span class="w"> </span><span class="nt">&lt;/Data&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Component&gt;</span>
+
+<span class="w">  </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;body&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;Data&gt;</span><span class="w"> </span>Face<span class="w"> </span>Label=2<span class="w"> </span><span class="nt">&lt;/Data&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Component&gt;</span>
+
+<span class="w">  </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;base&quot;</span><span class="w"> </span><span class="na">Parent=</span><span class="s">&quot;bullet_total&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;Data&gt;</span><span class="w"> </span>Face<span class="w"> </span>Label=3<span class="w"> </span><span class="nt">&lt;/Data&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Component&gt;</span>
+<span class="w"> </span><span class="cm">&lt;!-- body --&gt;</span>
+
+<span class="w"> </span><span class="cm">&lt;!-- fins --&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;fin1&quot;</span><span class="w"> </span><span class="na">Parent=</span><span class="s">&quot;fins&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;Data&gt;</span><span class="w"> </span>Face<span class="w"> </span>Label=11<span class="w"> </span><span class="nt">&lt;/Data&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Component&gt;</span>
+
+<span class="w">  </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;fin2&quot;</span><span class="w"> </span><span class="na">Parent=</span><span class="s">&quot;fins&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;Data&gt;</span><span class="w"> </span>Face<span class="w"> </span>Label=12<span class="w"> </span><span class="nt">&lt;/Data&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Component&gt;</span>
+
+<span class="w">  </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;fin3&quot;</span><span class="w"> </span><span class="na">Parent=</span><span class="s">&quot;fins&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;Data&gt;</span><span class="w"> </span>Face<span class="w"> </span>Label=13<span class="w"> </span><span class="nt">&lt;/Data&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Component&gt;</span>
+
+<span class="w">  </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;fin4&quot;</span><span class="w"> </span><span class="na">Parent=</span><span class="s">&quot;fins&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span><span class="nt">&lt;Data&gt;</span><span class="w"> </span>Face<span class="w"> </span>Label=14<span class="w"> </span><span class="nt">&lt;/Data&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/Component&gt;</span>
+<span class="w"> </span><span class="cm">&lt;!-- fins --&gt;</span>
+
+<span class="nt">&lt;/Configuration&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="run-matrix-file-matrix-csv">
+<h3><span class="section-number">4.1.2.1.4. </span>Run Matrix File: <code class="docutils literal notranslate"><span class="pre">matrix.csv</span></code><a class="headerlink" href="#run-matrix-file-matrix-csv" title="Permalink to this heading">¶</a></h3>
+<p>The conditions at which Cart3D are read from this file, which is a simple list
+of conditions.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Mach, alpha, phi
+1.25,   0.00,   0.0
+1.25,   1.00,   0.0
+1.25,   1.00,   15.0
+...
+2.50,   1.00,   45.0
+</pre></div>
+</div>
+</div></blockquote>
+<p>The comment line at the top is not read by pyCart but is placed there for
+readability.  Further, the commas are not required; pyCart and other CAPE
+modules read trajectory files in a pretty general way.</p>
+</section>
+</section>
+<section id="run-directives">
+<h2><span class="section-number">4.1.2.2. </span>Run Directives<a class="headerlink" href="#run-directives" title="Permalink to this heading">¶</a></h2>
+<p>Let’s run one case, but not the first case.  We can do this by using the
+<code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-I</span></code> command to pick out a specific index or a range of indices.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pycart -I 12
+Case Config/Run Directory    Status  Iterations  Que CPU Time
+---- ----------------------- ------- ----------- --- --------
+0    poweroff/m1.75a1.0r15.0 ---     /           .
+  Group name: &#39;poweroff&#39; (index 0)
+  Preparing surface triangulation...
+  Reading tri file(s) from root directory.
+     Writing triangulation: &#39;Components.i.tri&#39;
+ &gt; autoInputs -r 8 -t Components.i.tri -maxR 10
+     (PWD = &#39;pycart02-arrow/poweroff&#39;)
+     (STDOUT = &#39;autoInputs.out&#39;)
+ &gt; cubes -pre preSpec.c3d.cntl -maxR 10 -reorder -a 10 -b 2
+     (PWD = &#39;pycart02-arrow/poweroff&#39;)
+     (STDOUT = &#39;cubes.out&#39;)
+ &gt; mgPrep -n 3
+     (PWD = &#39;/u/wk/ddalle/usr/pycart/examples/pycart/02_arrow/poweroff&#39;)
+     (STDOUT = &#39;mgPrep.out&#39;)
+Using template for &#39;input.cntl&#39; file
+     Starting case &#39;poweroff/m1.75a1.0r15.0&#39;.
+ &gt; flowCart -his -clic -N 200 -y_is_spanwise -limiter 2 -T -cfl 1.1 -mg 3 -binaryIO -tm 0
+     (PWD = &#39;poweroff/m1.75a1.0r15.0&#39;)
+     (STDOUT = &#39;flowCart.out&#39;)
+
+Submitted or ran 1 job(s).
+
+---=1,
+</pre></div>
+</div>
+</div></blockquote>
+<p>We can check the status of all the cases at Mach 1.75 using the following.  Like
+the previous example, the CPU time is below 0.1 hours.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pycart -I 11:15 -c
+Case Config/Run Directory    Status  Iterations  Que CPU Time
+---- ----------------------- ------- ----------- --- --------
+0    poweroff/m1.75a1.0r0.0  ---     /           .
+1    poweroff/m1.75a1.0r15.0 DONE    200/200     .   0.0
+2    poweroff/m1.75a1.0r30.0 ---     /           .
+3    poweroff/m1.75a1.0r45.0 ---     /           .
+
+---=3, DONE=1,
+</pre></div>
+</div>
+</div></blockquote>
+<p>We can use a more direct method to select cases with a certain Mach number using
+a constraint.  Let’s run the remaining Mach 1.75 cases using that capability.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pycart --cons &quot;Mach==1.75, alpha_t==1.0&quot;
+Case Config/Run Directory    Status  Iterations  Que CPU Time
+---- ----------------------- ------- ----------- --- --------
+0    poweroff/m1.75a1.0r0.0  ---     /           .
+Using template for &#39;input.cntl&#39; file
+     Starting case &#39;poweroff/m1.75a1.0r0.0&#39;.
+ &gt; flowCart -his -clic -N 200 -y_is_spanwise -limiter 2 -T -cfl 1.1 -mg 3 -binaryIO -tm 0
+     (PWD = &#39;poweroff/m1.75a1.0r0.0&#39;)
+     (STDOUT = &#39;flowCart.out&#39;)
+1    poweroff/m1.75a1.0r15.0 DONE    200/200     .   0.0
+2    poweroff/m1.75a1.0r30.0 ---     /           .
+Using template for &#39;input.cntl&#39; file
+     Starting case &#39;poweroff/m1.75a1.0r30.0&#39;.
+ &gt; flowCart -his -clic -N 200 -y_is_spanwise -limiter 2 -T -cfl 1.1 -mg 3 -binaryIO -tm 0
+     (PWD = &#39;poweroff/m1.75a1.0r30.0&#39;)
+     (STDOUT = &#39;flowCart.out&#39;)
+3    poweroff/m1.75a1.0r45.0 ---     /           .
+Using template for &#39;input.cntl&#39; file
+     Starting case &#39;poweroff/m1.75a1.0r45.0&#39;.
+ &gt; flowCart -his -clic -N 200 -y_is_spanwise -limiter 2 -T -cfl 1.1 -mg 3 -binaryIO -tm 0
+     (PWD = &#39;poweroff/m1.75a1.0r45.0&#39;)
+     (STDOUT = &#39;flowCart.out&#39;)
+
+Submitted or ran 3 job(s).
+
+---=3, DONE=1,
+</pre></div>
+</div>
+</div></blockquote>
+<p>It is also possible to select these cases using <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--filter</span> <span class="pre">m1.75a1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--glob</span> <span class="pre">&quot;*m1.75a1*&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--re</span> <span class="pre">&quot;m1\.75a1&quot;</span></code>. The last of these
+checks for a regular expression, which allows more complex filters to be
+applied.</p>
+</section>
+<section id="run-folders-and-output-files">
+<h2><span class="section-number">4.1.2.3. </span>Run Folders and Output Files<a class="headerlink" href="#run-folders-and-output-files" title="Permalink to this heading">¶</a></h2>
+<p>Let’s take a look at the files that pyCart created.  First, let’s look at the
+files that define the mesh in the <code class="docutils literal notranslate"><span class="pre">poweroff/</span></code> folder.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cd poweroff/
+$ ls
+autoInputs.out    input.c3d       m1.75a1.0r45.0  mgPrep.out
+Components.i.tri  m1.75a1.0r0.0   Mesh.c3d.Info   preSpec.c3d.cntl
+Config.xml        m1.75a1.0r15.0  Mesh.mg.c3d
+cubes.out         m1.75a1.0r30.0  Mesh.R.c3d
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">.out</span></code> files save STDIO printouts from the mesh-generation commands.
+The <code class="docutils literal notranslate"><span class="pre">Mesh.mg.c3d</span></code> is the actual mesh file, including multigrid levels
+(i.e., coarsened grids). Our surface triangulation, <code class="docutils literal notranslate"><span class="pre">arrow.tri</span></code> is copied
+to <code class="docutils literal notranslate"><span class="pre">Components.i.tri</span></code> in this folder; and the configuration file
+<code class="docutils literal notranslate"><span class="pre">arrow.xml</span></code> is copied to <code class="docutils literal notranslate"><span class="pre">Config.xml</span></code>. The single mesh without
+multigrid levels is <code class="docutils literal notranslate"><span class="pre">Mesh.R.c3d</span></code>, and the remaining files are created by
+<code class="docutils literal notranslate"><span class="pre">autoInputs</span></code>.</p>
+<p>The contents of <code class="docutils literal notranslate"><span class="pre">input.c3d</span></code> set the minimum and maximum <em>x</em>, <em>y</em>, and <em>z</em>
+coordinates for the domain on which Cart3D is solved, and is a pretty unique
+file.  In this case, it is created automatically by <code class="docutils literal notranslate"><span class="pre">autoInputs</span></code> based on the
+physical size of the <code class="docutils literal notranslate"><span class="pre">Components.i.tri</span></code> surface.  The other auto-created
+file, <code class="docutils literal notranslate"><span class="pre">preSpec.c3d.cntl</span></code> defines regions in which the volume mesh should
+have increased resolution.  Calling <code class="docutils literal notranslate"><span class="pre">cubes</span></code> also generates regions of
+increased resolution based on distance from the surface, but this file can be
+used to request more detail.  In addition to some header lines, the contents
+look something like the following.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span># BBox: level   Xmin   Xmax      Ymin   Ymax      Zmin    Zmax
+#       (int)  (float) (float) (float) (float)  (float) (float)
+
+
+$__Prespecified_Adaptation_Regions:     # &lt;-Section head (req&#39;d)
+BBox: 6   -0.800   8.800   -4.800   4.800   -4.800   4.800   #  Config BBox
+BBox: 7   -0.299   1.299   -0.800   0.800   -0.799   0.799   #  Comp #0
+BBox: 7    1.700   7.300   -0.800   0.800   -0.800   0.800   #  Comp #1
+BBox: 7    7.201   8.799   -0.800   0.800   -0.799   0.799   #  Comp #2
+BBox: 7    6.479   7.653   -0.401   0.401    1.099   1.900   #  Comp #10
+BBox: 7    6.479   7.653   -1.900  -1.099   -0.401   0.401   #  Comp #11
+BBox: 7    6.479   7.653   -0.401   0.400   -1.900  -1.099   #  Comp #12
+BBox: 7    6.479   7.653    1.099   1.900   -0.400   0.401   #  Comp #13
+</pre></div>
+</div>
+</div></blockquote>
+<p>The third row of <em>BBox</em> commands define a region with <em>x</em>-coordinates between
+1.7 and 7.3, <em>y</em>-coordinates between -0.8 and +0.8, and <em>z</em>-coordinates between
+-0.8 and +0.8.  Within this region, <code class="docutils literal notranslate"><span class="pre">cubes</span></code> must make a mesh that has been
+refined at least 7 times.  In other words, the mesh size must be at least 128
+times smaller than the original mesh.</p>
+<p>Now let’s look at the files in a run folder.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cd m1.75a1.0r0.0
+$ ls
+body.dat              Components.i.tri     history.dat    moments.dat
+bullet_no_base.dat    Components.i.triq    input.00.cntl  preSpec.c3d.cntl
+bullet_total.dat      conditions.json      input.c3d      run.00.200
+cap.dat               Config.xml           input.cntl     run_cart3d.pbs
+case.json             cutPlanes.00200.plt  loadsCC.dat
+check.00200           entire.dat           Mesh.c3d.Info
+checkDT.00200         forces.dat           Mesh.mg.c3d
+Components.00200.plt  functional.dat       Mesh.R.c3d
+</pre></div>
+</div>
+</div></blockquote>
+<p>Obviously, there are quite a few files, although many of them are links. For
+example, the files that are listed here and in the parent folder discussed
+above are either links or copies. The <code class="docutils literal notranslate"><span class="pre">input.c3d</span></code> and
+<code class="docutils literal notranslate"><span class="pre">preSpec.c3d.cntl</span></code> files are copied because they are small.</p>
+<p>Most of the files ending with <code class="docutils literal notranslate"><span class="pre">.dat</span></code> are iterative history files. Some of
+these are standard results of running <code class="docutils literal notranslate"><span class="pre">flowCart</span></code>, and others are specifically
+requested. The most special of these is <code class="docutils literal notranslate"><span class="pre">history.dat</span></code>, which contains the
+residual history. In pyCart, this file is used to determine how many iterations
+have been run. With the exception of some comment lines, each line reports one
+iteration number and the residual at that iteration.</p>
+<p>The files <code class="docutils literal notranslate"><span class="pre">forces.dat</span></code> and <code class="docutils literal notranslate"><span class="pre">moments.dat</span></code> report the forces and
+moments on the <code class="docutils literal notranslate"><span class="pre">entire</span></code> component, i.e. the entire triangulation. These files
+are always produced, report results before any axis changes, and are ignored by
+pyCart. Four other files, <code class="docutils literal notranslate"><span class="pre">body.dat</span></code>, <code class="docutils literal notranslate"><span class="pre">bullet_no_base.dat</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bullet_total.dat</span></code>, and <code class="docutils literal notranslate"><span class="pre">cap.dat</span></code>, are specifically requested.
+Cart3D produces them because the <code class="docutils literal notranslate"><span class="pre">input.cntl</span></code> file contains lines <code class="docutils literal notranslate"><span class="pre">Force</span>
+<span class="pre">body</span></code>, <code class="docutils literal notranslate"><span class="pre">Force</span> <span class="pre">cap</span></code>, etc. in the <code class="docutils literal notranslate"><span class="pre">$__Force_Moment_Processing:</span></code> section.
+Although we did not request <code class="docutils literal notranslate"><span class="pre">entire</span></code> in our pyCart setup, it got produced
+here because the template <code class="docutils literal notranslate"><span class="pre">input.cntl</span></code> file contains the line <code class="docutils literal notranslate"><span class="pre">Force</span>
+<span class="pre">entire</span></code>. These <code class="docutils literal notranslate"><span class="pre">.dat</span></code> files are used by pyCart to read the iterative history
+of forces and moments on parts of the vehicle.</p>
+<p>The volume and surfaceresults files are <code class="docutils literal notranslate"><span class="pre">check.00200</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Components.00200.plt</span></code>, <code class="docutils literal notranslate"><span class="pre">Components.i.triq</span></code>, and <code class="docutils literal notranslate"><span class="pre">cutPlanes.00200.plt</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">check.00200</span></code> file is a binary file used and created by Cart3D, and the
+<code class="docutils literal notranslate"><span class="pre">plt</span></code> files are Tecplot files. These Tecplot files are created by Cart3D, and
+pyCart changes the file names by inserting the iteration numbers to which they
+correspond. Finally, the <code class="docutils literal notranslate"><span class="pre">Components.i.triq</span></code> file is very similar to the
+surface triangulation except with extra info describing the state solution at
+each vertex. Noe that the <code class="docutils literal notranslate"><span class="pre">Components.0200.plt</span></code> and <code class="docutils literal notranslate"><span class="pre">Components.i.triq</span></code>
+files do not contain identical information because the Tecplot file references
+the Cartesian volume mesh projected onto the surface while the <code class="docutils literal notranslate"><span class="pre">triq</span></code> file
+only has solution data at the triangulation vertices.</p>
+<p>Also in this folder are the files <code class="docutils literal notranslate"><span class="pre">run_cart3d.pbs</span></code>, which is a script used to
+run <code class="docutils literal notranslate"><span class="pre">flowCart</span></code>.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PBS -S /bin/bash</span>
+<span class="c1">#PBS -N m1.75a1r0</span>
+<span class="c1">#PBS -r n</span>
+<span class="c1">#PBS -j oe</span>
+<span class="c1">#PBS -l select=1:ncpus=12:mpiprocs=12</span>
+<span class="c1">#PBS -l walltime=2:00:00</span>
+<span class="c1">#PBS -q normal</span>
+
+<span class="c1"># Go to the working directory.</span>
+<span class="nb">cd</span><span class="w"> </span>/u/wk/ddalle/usr/pycart/examples/pycart/02_arrow/poweroff/m1.75a1.0r0.0
+
+<span class="c1"># Additional shell commands</span>
+
+<span class="c1"># Call the flowCart/mpix_flowCart/aero.csh interface.</span>
+run_flowCart.py
+</pre></div>
+</div>
+</div></blockquote>
+<p>The script includes some PBS settings (which are not used in this example), a
+command to change to the correct folder using an absolute path, whatever shell
+commands are specified in the JSON file, and a command to determine the correct
+Cart3D command.  The file <code class="docutils literal notranslate"><span class="pre">case.json</span></code> contains all of the
+<code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code> settings from the <code class="docutils literal notranslate"><span class="pre">&quot;flowCart&quot;</span></code> section, because they are
+needed to determine the command-line inputs.</p>
+<p>That covers the essential files for this example.  The very import
+<code class="docutils literal notranslate"><span class="pre">input.cntl</span></code> file (which in this case is just a link to
+<code class="docutils literal notranslate"><span class="pre">input.00.cntl</span></code>) is worthy of far more discussion, and there are several
+other files that have varying degrees of utility, but that will have to come at
+a different time and place.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4.1.2. Demo 2: Closer Analysis of Simple Arrow Shape</a><ul>
+<li><a class="reference internal" href="#input-files">4.1.2.1. Input Files</a><ul>
+<li><a class="reference internal" href="#json-settings">4.1.2.1.1. JSON Settings</a></li>
+<li><a class="reference internal" href="#triangulation-file-arrow-tri">4.1.2.1.2. Triangulation File: <code class="docutils literal notranslate"><span class="pre">arrow.tri</span></code></a></li>
+<li><a class="reference internal" href="#component-names-arrow-xml">4.1.2.1.3. Component Names: <code class="docutils literal notranslate"><span class="pre">arrow.xml</span></code></a></li>
+<li><a class="reference internal" href="#run-matrix-file-matrix-csv">4.1.2.1.4. Run Matrix File: <code class="docutils literal notranslate"><span class="pre">matrix.csv</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#run-directives">4.1.2.2. Run Directives</a></li>
+<li><a class="reference internal" href="#run-folders-and-output-files">4.1.2.3. Run Folders and Output Files</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../01-bullet/index.html"
+                          title="previous chapter"><span class="section-number">4.1.1. </span>Demo 1: Basic Usage on a Bullet Shape</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../03-fins/index.html"
+                          title="next chapter"><span class="section-number">4.1.3. </span>Demo 3: Moving Fins</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/pycart/examples/02-arrow/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../03-fins/index.html" title="4.1.3. Demo 3: Moving Fins"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../01-bullet/index.html" title="4.1.1. Demo 1: Basic Usage on a Bullet Shape"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.2. </span>Demo 2: Closer Analysis of Simple Arrow Shape</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

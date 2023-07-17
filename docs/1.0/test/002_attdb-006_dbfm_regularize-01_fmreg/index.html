@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Test results: test.002_attdb.006_dbfm_regularize.test_01_fmreg &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Test results: test.002_attdb.007_dbfm_eval.test_01_eval" href="../002_attdb-007_dbfm_eval-01_eval/index.html" />
+    <link rel="prev" title="Test results: test.002_attdb.005_llintegrate.test_01_trapz" href="../002_attdb-005_llintegrate-01_trapz/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../002_attdb-007_dbfm_eval-01_eval/index.html" title="Test results: test.002_attdb.007_dbfm_eval.test_01_eval"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../002_attdb-005_llintegrate-01_trapz/index.html" title="Test results: test.002_attdb.005_llintegrate.test_01_trapz"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.002_attdb.006_dbfm_regularize.test_01_fmreg</span></code></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="test-results-test-002-attdb-006-dbfm-regularize-test-01-fmreg">
+<h1>Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.002_attdb.006_dbfm_regularize.test_01_fmreg</span></code><a class="headerlink" href="#test-results-test-002-attdb-006-dbfm-regularize-test-01-fmreg" title="Permalink to this heading">¶</a></h1>
+<p>This page documents from the folder</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test/002_attdb/006_dbfm_regularize</span></code></p>
+</div></blockquote>
+<p>using the file</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test_01_fmreg.py</span></code></p>
+</div></blockquote>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 82 </span><span class="caption-text">test_01_fmreg.py</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># Standard library modules</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Third-party modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">testutils</span>
+
+<span class="c1"># Import CSV module</span>
+<span class="kn">import</span> <span class="nn">cape.attdb.dbfm</span> <span class="k">as</span> <span class="nn">dbfm</span>
+
+
+<span class="c1"># Database file</span>
+<span class="n">MAT_FILE</span> <span class="o">=</span> <span class="s2">&quot;bullet-fm.mat&quot;</span>
+
+
+<span class="c1"># Griddata regularize</span>
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_01_griddata</span><span class="p">():</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">dbfm</span><span class="o">.</span><span class="n">DBFM</span><span class="p">(</span><span class="s2">&quot;bullet-fm.mat&quot;</span><span class="p">)</span>
+    <span class="c1"># Actual FM columns present</span>
+    <span class="n">fmcols</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Loop through FM tags</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CA&quot;</span><span class="p">,</span> <span class="s2">&quot;CY&quot;</span><span class="p">,</span> <span class="s2">&quot;CN&quot;</span><span class="p">,</span> <span class="s2">&quot;CLL&quot;</span><span class="p">,</span> <span class="s2">&quot;CLM&quot;</span><span class="p">,</span> <span class="s2">&quot;CLN&quot;</span><span class="p">]:</span>
+        <span class="c1"># Extend</span>
+        <span class="n">fmcols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">get_col_by_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
+    <span class="c1"># Number of break points</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">17</span>
+    <span class="c1"># Reference points for regularization</span>
+    <span class="n">A0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">B0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="c1"># Save break points</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">bkpts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">A0</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">:</span> <span class="n">B0</span><span class="p">}</span>
+    <span class="c1"># Get Mach number break points</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">create_bkpts</span><span class="p">([</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">])</span>
+    <span class="c1"># Regularize</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">regularize_by_griddata</span><span class="p">(</span>
+        <span class="n">fmcols</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;reg.&quot;</span><span class="p">,</span> <span class="n">scol</span><span class="o">=</span><span class="s2">&quot;mach&quot;</span><span class="p">)</span>
+    <span class="c1"># Check number of Mach numbers</span>
+    <span class="n">nmach</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">bkpts</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+    <span class="c1"># Check regularlized columns</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bullet.CA&quot;</span><span class="p">,</span> <span class="s2">&quot;bullet.CLM&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;mach&quot;</span><span class="p">):</span>
+        <span class="c1"># Form column name</span>
+        <span class="n">regcol</span> <span class="o">=</span> <span class="s2">&quot;reg.&quot;</span> <span class="o">+</span> <span class="n">col</span>
+        <span class="c1"># Check present and its size</span>
+        <span class="k">assert</span> <span class="n">regcol</span> <span class="ow">in</span> <span class="n">db</span>
+        <span class="k">assert</span> <span class="n">db</span><span class="p">[</span><span class="n">regcol</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">nmach</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span>
+
+
+<span class="c1"># Griddata regularize</span>
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_02_rbf</span><span class="p">():</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">dbfm</span><span class="o">.</span><span class="n">DBFM</span><span class="p">(</span><span class="s2">&quot;bullet-fm.mat&quot;</span><span class="p">)</span>
+    <span class="c1"># Actual FM columns present</span>
+    <span class="n">fmcols</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Loop through FM tags</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CA&quot;</span><span class="p">,</span> <span class="s2">&quot;CY&quot;</span><span class="p">,</span> <span class="s2">&quot;CN&quot;</span><span class="p">,</span> <span class="s2">&quot;CLL&quot;</span><span class="p">,</span> <span class="s2">&quot;CLM&quot;</span><span class="p">,</span> <span class="s2">&quot;CLN&quot;</span><span class="p">]:</span>
+        <span class="c1"># Extend</span>
+        <span class="n">fmcols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">get_col_by_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
+    <span class="c1"># Number of break points</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">17</span>
+    <span class="c1"># Reference points for regularization</span>
+    <span class="n">A0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">B0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="c1"># Save break points</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">bkpts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">A0</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">:</span> <span class="n">B0</span><span class="p">}</span>
+    <span class="c1"># Get Mach number break points</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">create_bkpts</span><span class="p">([</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">])</span>
+    <span class="c1"># Regularize</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">regularize_by_rbf</span><span class="p">(</span>
+        <span class="n">fmcols</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;reg.&quot;</span><span class="p">,</span> <span class="n">scol</span><span class="o">=</span><span class="s2">&quot;mach&quot;</span><span class="p">)</span>
+    <span class="c1"># Check number of Mach numbers</span>
+    <span class="n">nmach</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">bkpts</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+    <span class="c1"># Check regularlized columns</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bullet.CA&quot;</span><span class="p">,</span> <span class="s2">&quot;bullet.CLM&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;mach&quot;</span><span class="p">):</span>
+        <span class="c1"># Form column name</span>
+        <span class="n">regcol</span> <span class="o">=</span> <span class="s2">&quot;reg.&quot;</span> <span class="o">+</span> <span class="n">col</span>
+        <span class="c1"># Check present and its size</span>
+        <span class="k">assert</span> <span class="n">regcol</span> <span class="ow">in</span> <span class="n">db</span>
+        <span class="k">assert</span> <span class="n">db</span><span class="p">[</span><span class="n">regcol</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">nmach</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span>
+    
+</pre></div>
+</div>
+</div>
+<section id="test-case-test-01-griddata">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_01_griddata()</span></code><a class="headerlink" href="#test-case-test-01-griddata" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">Listing 83 </span><span class="caption-text">test_01_griddata</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_01_griddata</span><span class="p">():</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">dbfm</span><span class="o">.</span><span class="n">DBFM</span><span class="p">(</span><span class="s2">&quot;bullet-fm.mat&quot;</span><span class="p">)</span>
+    <span class="c1"># Actual FM columns present</span>
+    <span class="n">fmcols</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Loop through FM tags</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CA&quot;</span><span class="p">,</span> <span class="s2">&quot;CY&quot;</span><span class="p">,</span> <span class="s2">&quot;CN&quot;</span><span class="p">,</span> <span class="s2">&quot;CLL&quot;</span><span class="p">,</span> <span class="s2">&quot;CLM&quot;</span><span class="p">,</span> <span class="s2">&quot;CLN&quot;</span><span class="p">]:</span>
+        <span class="c1"># Extend</span>
+        <span class="n">fmcols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">get_col_by_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
+    <span class="c1"># Number of break points</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">17</span>
+    <span class="c1"># Reference points for regularization</span>
+    <span class="n">A0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">B0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="c1"># Save break points</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">bkpts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">A0</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">:</span> <span class="n">B0</span><span class="p">}</span>
+    <span class="c1"># Get Mach number break points</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">create_bkpts</span><span class="p">([</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">])</span>
+    <span class="c1"># Regularize</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">regularize_by_griddata</span><span class="p">(</span>
+        <span class="n">fmcols</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;reg.&quot;</span><span class="p">,</span> <span class="n">scol</span><span class="o">=</span><span class="s2">&quot;mach&quot;</span><span class="p">)</span>
+    <span class="c1"># Check number of Mach numbers</span>
+    <span class="n">nmach</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">bkpts</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+    <span class="c1"># Check regularlized columns</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bullet.CA&quot;</span><span class="p">,</span> <span class="s2">&quot;bullet.CLM&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;mach&quot;</span><span class="p">):</span>
+        <span class="c1"># Form column name</span>
+        <span class="n">regcol</span> <span class="o">=</span> <span class="s2">&quot;reg.&quot;</span> <span class="o">+</span> <span class="n">col</span>
+        <span class="c1"># Check present and its size</span>
+        <span class="k">assert</span> <span class="n">regcol</span> <span class="ow">in</span> <span class="n">db</span>
+        <span class="k">assert</span> <span class="n">db</span><span class="p">[</span><span class="n">regcol</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">nmach</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-02-rbf">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_02_rbf()</span></code><a class="headerlink" href="#test-case-test-02-rbf" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">Listing 84 </span><span class="caption-text">test_02_rbf</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_02_rbf</span><span class="p">():</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">dbfm</span><span class="o">.</span><span class="n">DBFM</span><span class="p">(</span><span class="s2">&quot;bullet-fm.mat&quot;</span><span class="p">)</span>
+    <span class="c1"># Actual FM columns present</span>
+    <span class="n">fmcols</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Loop through FM tags</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CA&quot;</span><span class="p">,</span> <span class="s2">&quot;CY&quot;</span><span class="p">,</span> <span class="s2">&quot;CN&quot;</span><span class="p">,</span> <span class="s2">&quot;CLL&quot;</span><span class="p">,</span> <span class="s2">&quot;CLM&quot;</span><span class="p">,</span> <span class="s2">&quot;CLN&quot;</span><span class="p">]:</span>
+        <span class="c1"># Extend</span>
+        <span class="n">fmcols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">get_col_by_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
+    <span class="c1"># Number of break points</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">17</span>
+    <span class="c1"># Reference points for regularization</span>
+    <span class="n">A0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">B0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="c1"># Save break points</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">bkpts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">A0</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">:</span> <span class="n">B0</span><span class="p">}</span>
+    <span class="c1"># Get Mach number break points</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">create_bkpts</span><span class="p">([</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">])</span>
+    <span class="c1"># Regularize</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">regularize_by_rbf</span><span class="p">(</span>
+        <span class="n">fmcols</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;reg.&quot;</span><span class="p">,</span> <span class="n">scol</span><span class="o">=</span><span class="s2">&quot;mach&quot;</span><span class="p">)</span>
+    <span class="c1"># Check number of Mach numbers</span>
+    <span class="n">nmach</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">bkpts</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+    <span class="c1"># Check regularlized columns</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bullet.CA&quot;</span><span class="p">,</span> <span class="s2">&quot;bullet.CLM&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;mach&quot;</span><span class="p">):</span>
+        <span class="c1"># Form column name</span>
+        <span class="n">regcol</span> <span class="o">=</span> <span class="s2">&quot;reg.&quot;</span> <span class="o">+</span> <span class="n">col</span>
+        <span class="c1"># Check present and its size</span>
+        <span class="k">assert</span> <span class="n">regcol</span> <span class="ow">in</span> <span class="n">db</span>
+        <span class="k">assert</span> <span class="n">db</span><span class="p">[</span><span class="n">regcol</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">nmach</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.002_attdb.006_dbfm_regularize.test_01_fmreg</span></code></a><ul>
+<li><a class="reference internal" href="#test-case-test-01-griddata">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_01_griddata()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-02-rbf">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_02_rbf()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../002_attdb-005_llintegrate-01_trapz/index.html"
+                          title="previous chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.002_attdb.005_llintegrate.test_01_trapz</span></code></a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../002_attdb-007_dbfm_eval-01_eval/index.html"
+                          title="next chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.002_attdb.007_dbfm_eval.test_01_eval</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/test/002_attdb-006_dbfm_regularize-01_fmreg/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../002_attdb-007_dbfm_eval-01_eval/index.html" title="Test results: test.002_attdb.007_dbfm_eval.test_01_eval"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../002_attdb-005_llintegrate-01_trapz/index.html" title="Test results: test.002_attdb.005_llintegrate.test_01_trapz"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.002_attdb.006_dbfm_regularize.test_01_fmreg</span></code></a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

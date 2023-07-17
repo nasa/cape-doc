@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Test results: test.001_cape.004_case.test_01_case &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Test results: test.001_cape.005_cntl.test_01_cntl" href="../001_cape-005_cntl-01_cntl/index.html" />
+    <link rel="prev" title="Test results: test.001_cape.003_atm.test_atm76" href="../001_cape-003_atm-atm76/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../001_cape-005_cntl-01_cntl/index.html" title="Test results: test.001_cape.005_cntl.test_01_cntl"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../001_cape-003_atm-atm76/index.html" title="Test results: test.001_cape.003_atm.test_atm76"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.001_cape.004_case.test_01_case</span></code></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="test-results-test-001-cape-004-case-test-01-case">
+<h1>Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.001_cape.004_case.test_01_case</span></code><a class="headerlink" href="#test-results-test-001-cape-004-case-test-01-case" title="Permalink to this heading">¶</a></h1>
+<p>This page documents from the folder</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test/001_cape/004_case</span></code></p>
+</div></blockquote>
+<p>using the file</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test_01_case.py</span></code></p>
+</div></blockquote>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 39 </span><span class="caption-text">test_01_case.py</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="c1"># Standard library</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="c1"># Third-party</span>
+<span class="kn">import</span> <span class="nn">testutils</span>
+
+<span class="c1"># Local imports</span>
+<span class="kn">from</span> <span class="nn">cape.cfdx</span> <span class="kn">import</span> <span class="n">case</span>
+
+
+<span class="c1"># Files to copy</span>
+<span class="n">TEST_FILES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;case.json&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;conditions.json&quot;</span>
+<span class="p">)</span>
+
+
+<span class="c1"># Read conditions</span>
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_sandbox</span><span class="p">(</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">TEST_FILES</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_read_conditions</span><span class="p">():</span>
+    <span class="c1"># Read conditions</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">ReadConditions</span><span class="p">()</span>
+    <span class="c1"># Check values</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.4</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1e-8</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mf">4.0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1e-8</span>
+    <span class="c1"># Read specified key</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">ReadConditions</span><span class="p">(</span><span class="s2">&quot;beta&quot;</span><span class="p">)</span>
+    <span class="c1"># Check</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">beta</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1e-8</span>
+
+
+<span class="c1"># Read conditions</span>
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_sandbox</span><span class="p">(</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">TEST_FILES</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_read_case_json</span><span class="p">():</span>
+    <span class="c1"># Read options</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">ReadCaseJSON</span><span class="p">()</span>
+    <span class="c1"># Test option values</span>
+    <span class="k">assert</span> <span class="n">rc</span><span class="o">.</span><span class="n">get_PhaseSequence</span><span class="p">()</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">rc</span><span class="o">.</span><span class="n">get_PhaseIters</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">750</span>
+    <span class="k">assert</span> <span class="n">rc</span><span class="o">.</span><span class="n">get_PhaseIters</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1000</span>
+    <span class="k">assert</span> <span class="n">rc</span><span class="o">.</span><span class="n">get_PhaseIters</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1000</span>
+    <span class="k">assert</span> <span class="n">rc</span><span class="o">.</span><span class="n">get_qsub</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">False</span>
+
+
+<span class="c1"># Timing</span>
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_sandbox</span><span class="p">(</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">TEST_FILES</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_case_timing</span><span class="p">():</span>
+    <span class="c1"># Example file names</span>
+    <span class="n">fstrt</span> <span class="o">=</span> <span class="s2">&quot;cape_start.dat&quot;</span>
+    <span class="n">ftime</span> <span class="o">=</span> <span class="s2">&quot;cape_time.dat&quot;</span>
+    <span class="c1"># Create initial time</span>
+    <span class="n">tic</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="c1"># Read settings</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">ReadCaseJSON</span><span class="p">()</span>
+    <span class="c1"># Write a flag for starting a program</span>
+    <span class="k">case</span><span class="o">.</span><span class="n">WriteStartTimeProg</span><span class="p">(</span><span class="n">tic</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fstrt</span><span class="p">,</span> <span class="s2">&quot;prog&quot;</span><span class="p">)</span>
+    <span class="c1"># Read it</span>
+    <span class="n">nProc</span><span class="p">,</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">ReadStartTimeProg</span><span class="p">(</span><span class="n">fstrt</span><span class="p">)</span>
+    <span class="c1"># Calculate delta time</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">tic</span> <span class="o">-</span> <span class="n">t0</span>
+    <span class="c1"># Test output</span>
+    <span class="k">assert</span> <span class="n">nProc</span> <span class="o">==</span> <span class="mi">4</span>
+    <span class="k">assert</span> <span class="n">dt</span><span class="o">.</span><span class="n">seconds</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">dt</span><span class="o">.</span><span class="n">microseconds</span> <span class="o">&lt;</span> <span class="mi">1000000</span>
+    <span class="c1"># Write output file</span>
+    <span class="k">case</span><span class="o">.</span><span class="n">WriteUserTimeProg</span><span class="p">(</span><span class="n">tic</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ftime</span><span class="p">,</span> <span class="s2">&quot;cape&quot;</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<section id="test-case-test-read-conditions">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_read_conditions()</span></code><a class="headerlink" href="#test-case-test-read-conditions" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">Listing 40 </span><span class="caption-text">test_read_conditions</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_sandbox</span><span class="p">(</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">TEST_FILES</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_read_conditions</span><span class="p">():</span>
+    <span class="c1"># Read conditions</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">ReadConditions</span><span class="p">()</span>
+    <span class="c1"># Check values</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.4</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1e-8</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mf">4.0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1e-8</span>
+    <span class="c1"># Read specified key</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">ReadConditions</span><span class="p">(</span><span class="s2">&quot;beta&quot;</span><span class="p">)</span>
+    <span class="c1"># Check</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">beta</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1e-8</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-read-case-json">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_read_case_json()</span></code><a class="headerlink" href="#test-case-test-read-case-json" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">Listing 41 </span><span class="caption-text">test_read_case_json</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_sandbox</span><span class="p">(</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">TEST_FILES</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_read_case_json</span><span class="p">():</span>
+    <span class="c1"># Read options</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">ReadCaseJSON</span><span class="p">()</span>
+    <span class="c1"># Test option values</span>
+    <span class="k">assert</span> <span class="n">rc</span><span class="o">.</span><span class="n">get_PhaseSequence</span><span class="p">()</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">rc</span><span class="o">.</span><span class="n">get_PhaseIters</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">750</span>
+    <span class="k">assert</span> <span class="n">rc</span><span class="o">.</span><span class="n">get_PhaseIters</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1000</span>
+    <span class="k">assert</span> <span class="n">rc</span><span class="o">.</span><span class="n">get_PhaseIters</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1000</span>
+    <span class="k">assert</span> <span class="n">rc</span><span class="o">.</span><span class="n">get_qsub</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-case-timing">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_case_timing()</span></code><a class="headerlink" href="#test-case-test-case-timing" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">Listing 42 </span><span class="caption-text">test_case_timing</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_sandbox</span><span class="p">(</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">TEST_FILES</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_case_timing</span><span class="p">():</span>
+    <span class="c1"># Example file names</span>
+    <span class="n">fstrt</span> <span class="o">=</span> <span class="s2">&quot;cape_start.dat&quot;</span>
+    <span class="n">ftime</span> <span class="o">=</span> <span class="s2">&quot;cape_time.dat&quot;</span>
+    <span class="c1"># Create initial time</span>
+    <span class="n">tic</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="c1"># Read settings</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">ReadCaseJSON</span><span class="p">()</span>
+    <span class="c1"># Write a flag for starting a program</span>
+    <span class="k">case</span><span class="o">.</span><span class="n">WriteStartTimeProg</span><span class="p">(</span><span class="n">tic</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fstrt</span><span class="p">,</span> <span class="s2">&quot;prog&quot;</span><span class="p">)</span>
+    <span class="c1"># Read it</span>
+    <span class="n">nProc</span><span class="p">,</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">ReadStartTimeProg</span><span class="p">(</span><span class="n">fstrt</span><span class="p">)</span>
+    <span class="c1"># Calculate delta time</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">tic</span> <span class="o">-</span> <span class="n">t0</span>
+    <span class="c1"># Test output</span>
+    <span class="k">assert</span> <span class="n">nProc</span> <span class="o">==</span> <span class="mi">4</span>
+    <span class="k">assert</span> <span class="n">dt</span><span class="o">.</span><span class="n">seconds</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">dt</span><span class="o">.</span><span class="n">microseconds</span> <span class="o">&lt;</span> <span class="mi">1000000</span>
+    <span class="c1"># Write output file</span>
+    <span class="k">case</span><span class="o">.</span><span class="n">WriteUserTimeProg</span><span class="p">(</span><span class="n">tic</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ftime</span><span class="p">,</span> <span class="s2">&quot;cape&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.001_cape.004_case.test_01_case</span></code></a><ul>
+<li><a class="reference internal" href="#test-case-test-read-conditions">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_read_conditions()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-read-case-json">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_read_case_json()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-case-timing">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_case_timing()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../001_cape-003_atm-atm76/index.html"
+                          title="previous chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.001_cape.003_atm.test_atm76</span></code></a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../001_cape-005_cntl-01_cntl/index.html"
+                          title="next chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.001_cape.005_cntl.test_01_cntl</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/test/001_cape-004_case-01_case/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../001_cape-005_cntl-01_cntl/index.html" title="Test results: test.001_cape.005_cntl.test_01_cntl"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../001_cape-003_atm-atm76/index.html" title="Test results: test.001_cape.003_atm.test_atm76"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.001_cape.004_case.test_01_case</span></code></a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

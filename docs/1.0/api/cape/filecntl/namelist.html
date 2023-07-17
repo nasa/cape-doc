@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.filecntl.namelist: Fortran namelists module &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.filecntl.namelist2: Fortran namelists with repeat sections" href="namelist2.html" />
+    <link rel="prev" title="cape.filecntl.filecntl: File control base module" href="filecntl.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="namelist2.html" title="cape.filecntl.namelist2: Fortran namelists with repeat sections"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="filecntl.html" title="cape.filecntl.filecntl: File control base module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl</span></code>: Interfaces for text control files</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.namelist</span></code>: Fortran namelists module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.filecntl.namelist">
+<span id="cape-filecntl-namelist-fortran-namelists-module"></span><h1><a class="reference internal" href="#module-cape.filecntl.namelist" title="cape.filecntl.namelist"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.namelist</span></code></a>: Fortran namelists module<a class="headerlink" href="#module-cape.filecntl.namelist" title="Permalink to this heading">¶</a></h1>
+<p>This is a module built off of the <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code> module
+customized for manipulating Fortran namelists.  Such files are split
+into sections which are called “name lists.”  Each name list has syntax
+similar to the following.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&amp;project
+    project_rootname = &quot;pyfun&quot;
+    case_title = &quot;Test case&quot;
+/
+</pre></div>
+</div>
+</div></blockquote>
+<p>and this module is designed to recognize such sections.  The main
+feature of this module is methods to set specific properties of a
+namelist file, for example the Mach number or CFL number.</p>
+<p>This function provides a class <a class="reference internal" href="#cape.filecntl.namelist.Namelist" title="cape.filecntl.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a> that can both read and
+set values in the namelist.  The key functions are</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#cape.filecntl.namelist.Namelist.SetVar" title="cape.filecntl.namelist.Namelist.SetVar"><code class="xref py py-func docutils literal notranslate"><span class="pre">Namelist.SetVar()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.filecntl.namelist.Namelist.GetVar" title="cape.filecntl.namelist.Namelist.GetVar"><code class="xref py py-func docutils literal notranslate"><span class="pre">Namelist.GetVar()</span></code></a></p></li>
+</ul>
+</div></blockquote>
+<p>The conversion from namelist text to Python is handled by
+<a class="reference internal" href="#cape.filecntl.namelist.Namelist.ConvertToText" title="cape.filecntl.namelist.Namelist.ConvertToText"><code class="xref py py-func docutils literal notranslate"><span class="pre">Namelist.ConvertToText()</span></code></a>, and the reverse is handled by
+<a class="reference internal" href="#cape.filecntl.namelist.Namelist.ConvertToVal" title="cape.filecntl.namelist.Namelist.ConvertToVal"><code class="xref py py-func docutils literal notranslate"><span class="pre">Namelist.ConvertToVal()</span></code></a>.  Conversions cannot quite be performed
+just by the Python functions <code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code> because
+delimiters are not used in the same fashion.  Some of the conversions
+are tabulated below.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Namelist</p></th>
+<th class="head"><p>Python</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">&quot;text&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">&quot;text&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">'text'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">'text'</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">3</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">3.1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">3.1</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">False</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">.f.</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">False</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">.t.</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">10.0</span> <span class="pre">20.0</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">[10.0,</span> <span class="pre">20.0]</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">100</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">[1,</span> <span class="pre">100]</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">val(1)</span> <span class="pre">=</span> <span class="pre">1.2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">[1.2,</span> <span class="pre">1.5]</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">val(2)</span> <span class="pre">=</span> <span class="pre">1.5</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">_mach_</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">val</span> <span class="pre">=</span> <span class="pre">&quot;_mach_&quot;</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>In most cases, the <a class="reference internal" href="#cape.filecntl.namelist.Namelist" title="cape.filecntl.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a> will try to interpret invalid
+values for any namelist entry as a string with missing quotes.  The
+reason for this is that users often create template namelist with
+entries like <code class="docutils literal notranslate"><span class="pre">_mach_</span></code> that can be safely replaced with appropriate
+values using <code class="docutils literal notranslate"><span class="pre">sed</span></code> commands or something similar.</p>
+<p>There is also a function <a class="reference internal" href="#cape.filecntl.namelist.Namelist.ReturnDict" title="cape.filecntl.namelist.Namelist.ReturnDict"><code class="xref py py-func docutils literal notranslate"><span class="pre">Namelist.ReturnDict()</span></code></a> to access the
+entire namelist as a <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>.  Similarly,
+<a class="reference internal" href="#cape.filecntl.namelist.Namelist.ApplyDict" title="cape.filecntl.namelist.Namelist.ApplyDict"><code class="xref py py-func docutils literal notranslate"><span class="pre">Namelist.ApplyDict()</span></code></a> can be used to apply multiple settings using
+a <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> as input.</p>
+<p>See also:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="namelist2.html#module-cape.filecntl.namelist2" title="cape.filecntl.namelist2"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.namelist2</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../pyfun/namelist.html#module-cape.pyfun.namelist" title="cape.pyfun.namelist"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.namelist</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../pyover/overNamelist.html#module-cape.pyover.overNamelist" title="cape.pyover.overNamelist"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.overNamelist</span></code></a></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">pyFun.case.GetNamelist()</span></code></p></li>
+<li><p><a class="reference internal" href="../../pyfun/cntl.html#cape.pyfun.cntl.Cntl.ReadNamelist" title="cape.pyfun.cntl.Cntl.ReadNamelist"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl.ReadNamelist()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../pyover/cntl.html#cape.pyover.cntl.Cntl.ReadNamelist" title="cape.pyover.cntl.Cntl.ReadNamelist"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pyover.cntl.Cntl.ReadNamelist()</span></code></a></p></li>
+</ul>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.filecntl.namelist.Namelist">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.filecntl.namelist.</span></span><span class="sig-name descname"><span class="pre">Namelist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fun3d.nml'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.namelist.Namelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>File control class for Fortran namelists</p>
+<p>This class is derived from the <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code>
+class, so all methods applicable to that class can also be used for
+instances of this class.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">Namelist</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">Namelist</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of namelist file to read, defaults to <code class="docutils literal notranslate"><span class="pre">'fun3d.nml'</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.filecntl.namelist.Namelist" title="cape.filecntl.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Namelist file control instance</p>
+</dd>
+<dt><em>nml.Sections</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</dt><dd><p>Dictionary of sections containing contents of each namelist</p>
+</dd>
+<dt><em>nml.SectionNames</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of section names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Version<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v0.1; started</p></li>
+<li><p>2015-10-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.namelist.Namelist.AddSection">
+<span class="sig-name descname"><span class="pre">AddSection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.namelist.Namelist.AddSection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a section to the namelist interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">AddSection</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-04-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.namelist.Namelist.ApplyDict">
+<span class="sig-name descname"><span class="pre">ApplyDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.namelist.Namelist.ApplyDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a whole dictionary of settings to the namelist</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">ApplyDict</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.filecntl.namelist.Namelist" title="cape.filecntl.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Namelist file control instance</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of namelist options</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.namelist.Namelist.ConvertToText">
+<span class="sig-name descname"><span class="pre">ConvertToText</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.namelist.Namelist.ConvertToText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a value to text to write in the namelist file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">ConvertToText</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.filecntl.namelist.Namelist" title="cape.filecntl.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Namelist file control instance</p>
+</dd>
+<dt><em>v</em>: <strong>any</strong></dt><dd><p>Evaluated value of the text</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>val</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Text of the value from file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.namelist.Namelist.ConvertToVal">
+<span class="sig-name descname"><span class="pre">ConvertToVal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.namelist.Namelist.ConvertToVal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert text to Python based on a series of rules</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">ConvertToVal</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.filecntl.namelist.Namelist" title="cape.filecntl.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Namelist file control instance</p>
+</dd>
+<dt><em>val</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></dt><dd><p>Text of the value from file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>: <code class="docutils literal notranslate"><span class="pre">str</span></code> | <code class="docutils literal notranslate"><span class="pre">int</span></code> | <code class="docutils literal notranslate"><span class="pre">float</span></code> | <code class="docutils literal notranslate"><span class="pre">bool</span></code> | <code class="docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Evaluated value of the text</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2016-01-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; boolean shortcut .T.</p></li>
+<li><p>2022-07-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; parse ‘12 * 3.7’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.namelist.Namelist.Copy">
+<span class="sig-name descname"><span class="pre">Copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.namelist.Namelist.Copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy a file interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml2</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">Copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.filecntl.namelist.Namelist" title="cape.filecntl.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Namelist file control instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>nml2</em>: <a class="reference internal" href="#cape.filecntl.namelist.Namelist" title="cape.filecntl.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Duplicate file control instance for <code class="file docutils literal notranslate"><span class="pre">fun3d.nml</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-06-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.namelist.Namelist.GetVar">
+<span class="sig-name descname"><span class="pre">GetVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.namelist.Namelist.GetVar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get value of a variable</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">GetVar</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">GetVar</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.filecntl.namelist.Namelist" title="cape.filecntl.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Namelist file control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section in which to set variable</p>
+</dd>
+<dt><em>name</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of variable as identified in ‘aero.csh’</p>
+</dd>
+<dt><em>k</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Namelist index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>val</em>: any</dt><dd><p>Value to which variable is set in final script</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2015-10-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; add Fortran index</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.namelist.Namelist.ReturnDict">
+<span class="sig-name descname"><span class="pre">ReturnDict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.namelist.Namelist.ReturnDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary of options that mirrors the namelist</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">ReturnDict</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.filecntl.namelist.Namelist" title="cape.filecntl.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Namelist file control instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of namelist options</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.filecntl.namelist.Namelist.SetVar">
+<span class="sig-name descname"><span class="pre">SetVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.filecntl.namelist.Namelist.SetVar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set generic <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> variable value</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetVar</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetVar</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.filecntl.namelist.Namelist" title="cape.filecntl.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Namelist file control instance</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of section in which to set variable</p>
+</dd>
+<dt><em>name</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of variable as identified in ‘aero.csh’</p>
+</dd>
+<dt><em>val</em>: any</dt><dd><p>Value to which variable is set in final script</p>
+</dd>
+<dt><em>k</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Namelist index</p>
+</dd>
+<dt><em>indent</em>: {<code class="docutils literal notranslate"><span class="pre">4</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> &gt;= 0</dt><dd><p>Number of spaces for indent</p>
+</dd>
+<dt><em>tab</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">&quot;</span> <span class="pre">*</span> <span class="pre">indent</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Specific indent string</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2015-10-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; add Fortran index</p></li>
+<li><p>2019-06-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; add indentation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.namelist</span></code>: Fortran namelists module</a><ul>
+<li><a class="reference internal" href="#cape.filecntl.namelist.Namelist"><code class="docutils literal notranslate"><span class="pre">Namelist</span></code></a><ul>
+<li><a class="reference internal" href="#cape.filecntl.namelist.Namelist.AddSection"><code class="docutils literal notranslate"><span class="pre">Namelist.AddSection()</span></code></a></li>
+<li><a class="reference internal" href="#cape.filecntl.namelist.Namelist.ApplyDict"><code class="docutils literal notranslate"><span class="pre">Namelist.ApplyDict()</span></code></a></li>
+<li><a class="reference internal" href="#cape.filecntl.namelist.Namelist.ConvertToText"><code class="docutils literal notranslate"><span class="pre">Namelist.ConvertToText()</span></code></a></li>
+<li><a class="reference internal" href="#cape.filecntl.namelist.Namelist.ConvertToVal"><code class="docutils literal notranslate"><span class="pre">Namelist.ConvertToVal()</span></code></a></li>
+<li><a class="reference internal" href="#cape.filecntl.namelist.Namelist.Copy"><code class="docutils literal notranslate"><span class="pre">Namelist.Copy()</span></code></a></li>
+<li><a class="reference internal" href="#cape.filecntl.namelist.Namelist.GetVar"><code class="docutils literal notranslate"><span class="pre">Namelist.GetVar()</span></code></a></li>
+<li><a class="reference internal" href="#cape.filecntl.namelist.Namelist.ReturnDict"><code class="docutils literal notranslate"><span class="pre">Namelist.ReturnDict()</span></code></a></li>
+<li><a class="reference internal" href="#cape.filecntl.namelist.Namelist.SetVar"><code class="docutils literal notranslate"><span class="pre">Namelist.SetVar()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="filecntl.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.filecntl</span></code>: File control base module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="namelist2.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.namelist2</span></code>: Fortran namelists with repeat sections</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/cape/filecntl/namelist.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="namelist2.html" title="cape.filecntl.namelist2: Fortran namelists with repeat sections"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="filecntl.html" title="cape.filecntl.filecntl: File control base module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl</span></code>: Interfaces for text control files</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.namelist</span></code>: Fortran namelists module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

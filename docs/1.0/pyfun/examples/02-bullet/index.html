@@ -1,0 +1,545 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>5.1.2. Demo 2: Inviscid Bullet with Reports &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="5.2. Control Files for pyFun (pyFun.json)" href="../../json/index.html" />
+    <link rel="prev" title="5.1.1. Demo 1: Basic Viscous FUN3D Usage on Arrow with Fins" href="../01-arrow/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../json/index.html" title="5.2. Control Files for pyFun (pyFun.json)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../01-arrow/index.html" title="5.1.1. Demo 1: Basic Viscous FUN3D Usage on Arrow with Fins"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">5. </span>pyFun Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">5.1. </span>Examples Using pyFun</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.1.2. </span>Demo 2: Inviscid Bullet with Reports</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="demo-2-inviscid-bullet-with-reports">
+<span id="pyfun-ex02-bullet"></span><h1><span class="section-number">5.1.2. </span>Demo 2: Inviscid Bullet with Reports<a class="headerlink" href="#demo-2-inviscid-bullet-with-reports" title="Permalink to this heading">¶</a></h1>
+<p>This is a second CAPE/pyfun demo using a bullet shape and demonstrating how to
+use the inviscid solver in FUN3D.</p>
+<p>To get started, clone the repo and run a few short commands:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/nasa-ddalle/pyfun02-bullet.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>pyfun02-bullet
+<span class="gp">$ </span>./copy-files.py
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>work/
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will copy all of the files into a newly created <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder. Follow
+the instructions below by entering that <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder; the purpose is that
+you can easily delete the <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder and restart the tutorial at any
+time.</p>
+<p>To keep computation time low for the purposes of running examples. The example
+seeks to introduce the pyFun user to data books and automated reports,
+including sweep plots. It should be noted that the <a class="reference internal" href="../../../pycart/examples/index.html#pycart-examples"><span class="std std-ref">Cart3D examples</span></a> are more descriptive, and users are encouraged to consider
+reading those examples since most of the process is the same for each solver.</p>
+<p>The geometry used for this shape is a capped cylinder and little or nothing
+else. An inviscid volume mesh was created using AFLR3. The surface
+triangulation, <code class="docutils literal notranslate"><span class="pre">bullet.tri</span></code>, is shown below.</p>
+<blockquote>
+<div><figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../../../_images/bullet011.png"><img alt="../../../_images/bullet011.png" src="../../../_images/bullet011.png" style="width: 4in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 5.2 </span><span class="caption-text">Simple bullet shape triangulation with four fins</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>The files in this folder are listed below with a short description.  In this
+case, the run matrix is defined within the <code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code> file.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code>: Master input control file for pyFun</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matrix.csv</span></code>: Run matrix</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code>: Template namelist file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bullet-inviscid.ugrid</span></code>: Volume grid, ASCII AFLR3 format</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bullet-inviscid.mapbc</span></code>: Boundary conditions file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bullet-far.tri</span></code>: (Not used) Cart3D surface triangulation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bullet.xml</span></code>: XML files used to name each numbered component</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">slice-y0.py</span></code>: Python script for use with Paraview</p></li>
+</ul>
+</div></blockquote>
+<section id="running-cases">
+<span id="pyfun-ex02-run"></span><h2><span class="section-number">5.1.2.1. </span>Running Cases<a class="headerlink" href="#running-cases" title="Permalink to this heading">¶</a></h2>
+<p>Assuming the present working directory is in this demo folder, i.e.
+<code class="docutils literal notranslate"><span class="pre">pyfun02_bullet</span></code>, a good first test command is the following, which checks
+the status of each case in the matrix.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfun<span class="w"> </span>-c
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    bullet/m0.80a0.0b0.0  ---     /           .</span>
+<span class="go">1    bullet/m0.80a4.0b0.0  ---     /           .</span>
+<span class="go">...</span>
+<span class="go">23   bullet/m1.75a30.0b0.0 ---     /           .</span>
+
+<span class="go">---=24,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This example contains 24 cases in the run matrix, and the computation time is
+kept low in order to run each case within a few minutes (using the serial
+version of FUN3D).</p>
+<p>Running case number 3 (note zero-based indexing) has the following output.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfun<span class="w"> </span>-I<span class="w"> </span><span class="m">3</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">3    bullet/m0.80a30.0b0.0 ---     /           .</span>
+<span class="go">  Case name: &#39;bullet/m0.80a30.0b0.0&#39; (index 3)</span>
+<span class="go">     Starting case &#39;bullet/m0.80a30.0b0.0&#39;</span>
+<span class="go"> &gt; nodet --animation_freq 100</span>
+<span class="go">     (PWD = &#39;bullet/m0.80a30.0b0.0&#39;)</span>
+<span class="go">     (STDOUT = &#39;fun3d.out&#39;)</span>
+<span class="go"> &gt; nodet --animation_freq 100</span>
+<span class="go">     (PWD = &#39;bullet/m0.80a30.0b0.0&#39;)</span>
+<span class="go">     (STDOUT = &#39;fun3d.out&#39;)</span>
+
+<span class="go">Submitted or ran 1 job(s).</span>
+
+<span class="go">---=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>We can then check how much CPU time that used.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfun<span class="w"> </span>-I<span class="w"> </span><span class="m">3</span><span class="w"> </span>-c
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">3    bullet/m0.80a30.0b0.0 DONE    200/200     .        0.1</span>
+
+<span class="go">DONE=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In the master input file <code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code>, the key section is the <code class="docutils literal notranslate"><span class="pre">&quot;Fun3D&quot;</span></code>
+section, which modifies the template namelist <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code>.  The example
+is set up to run two phases.  The first phase has a starting CFL number of 0.1
+which ramps up to 100.0.  The second phase has a constant CFL number of 100.0.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Fun3D&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;nonlinear_solver_parameters&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;schedule_cfl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mf">100.0</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0</span><span class="p">]],</span>
+<span class="w">        </span><span class="s2">&quot;schedule_iteration&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">100</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">50</span><span class="p">]]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;global&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;volume_animation_freq&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;code_run_control&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;restart_read&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;off&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;on&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;inviscid_flux_method&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;first_order_iterations&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">50</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;flux_construction&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;roe&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;flux_construction_lhs&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;vanleer&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;flux_limiter&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;hvanalbada&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;freeze_limiter_iteration&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">150</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;special_parameters&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;large_angle_fix&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;on&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;boundary_output_variables&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;boundary_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;7-9&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cp&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;ptot&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Another interesting parameter is the <em>Config&gt;File</em>, which is set to
+<code class="docutils literal notranslate"><span class="pre">&quot;bullet.xml&quot;</span></code>.  This is an XML file that prescribes a name for each
+component and furthermore can be used to define groups of components.  While
+this is not a recognized FUN3D file format, it is used by pyFun to make some of
+the setup easier.  Some of the text from the XML file are shown below.</p>
+<blockquote>
+<div><div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;</span>
+
+<span class="nt">&lt;Configuration</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;arrow sample&quot;</span><span class="w"> </span><span class="na">Source=</span><span class="s">&quot;arrow-far.tri&quot;</span><span class="nt">&gt;</span>
+
+<span class="cm">&lt;!-- triangulated components --&gt;</span>
+<span class="w"> </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;cap&quot;</span><span class="w"> </span><span class="na">Parent=</span><span class="s">&quot;bullet_no_base&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Data&gt;</span><span class="w"> </span>Face<span class="w"> </span>Label=1<span class="w"> </span><span class="nt">&lt;/Data&gt;</span>
+<span class="w"> </span><span class="nt">&lt;/Component&gt;</span>
+
+<span class="w"> </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;body&quot;</span><span class="w"> </span><span class="na">Parent=</span><span class="s">&quot;bullet_no_base&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Data&gt;</span><span class="w"> </span>Face<span class="w"> </span>Label=2<span class="w"> </span><span class="nt">&lt;/Data&gt;</span>
+<span class="w"> </span><span class="nt">&lt;/Component&gt;</span>
+
+<span class="w"> </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;base&quot;</span><span class="w"> </span><span class="na">Parent=</span><span class="s">&quot;bullet_total&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;tri&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Data&gt;</span><span class="w"> </span>Face<span class="w"> </span>Label=3<span class="w"> </span><span class="nt">&lt;/Data&gt;</span>
+<span class="w"> </span><span class="nt">&lt;/Component&gt;</span>
+
+<span class="cm">&lt;!-- Containers --&gt;</span>
+<span class="w"> </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;fins&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;container&quot;</span><span class="w"> </span><span class="na">Parent=</span><span class="s">&quot;bullet_no_base&quot;</span><span class="nt">&gt;</span>
+<span class="w"> </span><span class="nt">&lt;/Component&gt;</span>
+<span class="w"> </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;bullet_no_base&quot;</span><span class="w"> </span><span class="na">Type=</span><span class="s">&quot;container&quot;</span><span class="w"> </span><span class="na">Parent=</span><span class="s">&quot;bullet_total&quot;</span><span class="nt">&gt;</span>
+<span class="w"> </span><span class="nt">&lt;/Component&gt;</span>
+<span class="w"> </span><span class="nt">&lt;Component</span><span class="w"> </span><span class="na">Name=</span><span class="s">&quot;bullet_total&quot;</span><span class="w">   </span><span class="na">Type=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+<span class="w"> </span><span class="nt">&lt;/Component&gt;</span>
+
+<span class="nt">&lt;/Configuration&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In particular, this allows pyFun to set the correct namelist parameters to
+track the forces and moments on each component.  This is important because
+FUN3D internally renumbers all the components 1,2,…,*N* according to the
+lines of the <code class="docutils literal notranslate"><span class="pre">.mapbc</span></code> file.  The present setup in the <em>Config</em> section of
+<code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code> prevents the need to figure out the component number(s) for
+each component.</p>
+<p>Before moving on to the next session, let’s also run case 17 so we can complete
+the rest of the tutorial.  Some of the aerodynamic data book is already in
+place, but cases 3 and 17 are missing.  Users may wish to run all 24 cases or
+just a few more in order to do more experimenting.</p>
+</section>
+<section id="automated-single-case-report">
+<span id="pycart-ex02-report"></span><h2><span class="section-number">5.1.2.2. </span>Automated Single-Case Report<a class="headerlink" href="#automated-single-case-report" title="Permalink to this heading">¶</a></h2>
+<p>This example is set up to create a report called <code class="docutils literal notranslate"><span class="pre">report-case.pdf</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">report/</span></code> folder.  It includes a couple of summary tables, 8 iterative
+history plots, and a flow visualization slide that works with Paraview.
+<a class="reference internal" href="#fig-pyfun-ex02-slice-y0"><span class="std std-numref">Figure 5.3</span></a> shows an example of this Paraview image from
+case 17 (<code class="docutils literal notranslate"><span class="pre">bullet/m1.50a4.0b0.0</span></code>).</p>
+<blockquote>
+<div><figure class="align-default" id="id2">
+<span id="fig-pyfun-ex02-slice-y0"></span><a class="reference internal image-reference" href="../../../_images/slice-y0.png"><img alt="../../../_images/slice-y0.png" src="../../../_images/slice-y0.png" style="width: 4.0in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 5.3 </span><span class="caption-text">Surface <span class="math notranslate nohighlight">\(c_p\)</span> and <span class="math notranslate nohighlight">\(y{=}0\)</span> Mach slice</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p><strong>Note about Paraview figure</strong>: This example requires
+<a class="reference external" href="www.paraview.org/Wiki/VisIt_Database_Bridge">ParaView with VisIt Bridge</a>
+since it reads binary Tecplot (<code class="docutils literal notranslate"><span class="pre">.plt</span></code>) files.  Installation can be tricky,
+and prepackaged ParaView modules often do not have the VisIt bridge.  One
+relatively easy workaround is to install the free and open-source software
+<a class="reference external" href="http://www.salome-platform.org/downloads/current-version">SALOME</a>, which
+does include the appropriate version.  It is fairly simple to download a
+version of SALOME and then use the included ParaView binaries within that
+installation.</p>
+<p>The report also includes axial force coefficient (<em>CA</em>), side force coefficient
+(<em>CY</em>), and normal force (<em>CY</em>) coefficient on both <code class="docutils literal notranslate"><span class="pre">bullet_no_base</span></code> and
+<code class="docutils literal notranslate"><span class="pre">cap</span></code>.  The <code class="docutils literal notranslate"><span class="pre">bullet_no_base</span></code> component includes bot the rounded nose
+<code class="docutils literal notranslate"><span class="pre">cap</span></code> and the cylindrical portion.  <a class="reference internal" href="#fig-pyfun-ex02-bullet-cn"><span class="std std-numref">Figure 5.4</span></a> shows
+one of these plots.</p>
+<blockquote>
+<div><figure class="align-default" id="id3">
+<span id="fig-pyfun-ex02-bullet-cn"></span><a class="reference internal image-reference" href="../../../_images/bullet_CN.png"><img alt="../../../_images/bullet_CN.png" src="../../../_images/bullet_CN.png" style="width: 3.2in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 5.4 </span><span class="caption-text">Iterative history on bullet (not including base) normal force
+coefficient (<em>CN</em>) for <code class="docutils literal notranslate"><span class="pre">bullet/m1.50a4.0b0.0</span></code></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>In addition, there is a plot of overall pitching moment coefficient, and a
+residual plot.  Both <a class="reference internal" href="#fig-pyfun-ex02-bullet-cn"><span class="std std-numref">Figure 5.4</span></a> and
+<a class="reference internal" href="#fig-pyfun-ex02-l2"><span class="std std-numref">Figure 5.5</span></a> show a big change of behavior at iteration 50, when
+the first-order iterations end.  The residual history also shows a change of
+behavior at iteration 75; the residual stops dropping for a while while the
+fluxes are frozen.</p>
+<blockquote>
+<div><figure class="align-default" id="id4">
+<span id="fig-pyfun-ex02-l2"></span><a class="reference internal image-reference" href="../../../_images/L2.png"><img alt="../../../_images/L2.png" src="../../../_images/L2.png" style="width: 3.2in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 5.5 </span><span class="caption-text">Overall <span class="math notranslate nohighlight">\(L_2\)</span> residual for <code class="docutils literal notranslate"><span class="pre">bullet/m1.50a4.0b0.0</span></code></span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>The Paraview subfigure settings from the JSON file are shown below.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;slice-y0&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Paraview&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Caption&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Surface $c_p$ and $y{=}0$ Mach slice&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Width&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.33</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Layout&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;slice-y0.py&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;ImageFile&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;slice-y0.png&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This points pyFun to the Python script <code class="docutils literal notranslate"><span class="pre">slice-y0.py</span></code>.  The image is
+created by the system command <code class="docutils literal notranslate"><span class="pre">pvpython</span> <span class="pre">slice-y0.py</span></code> in each case folder.
+This <a class="reference download internal" download="" href="../../../_downloads/63a517aa0a5b79ccc4712d9e90014a2f/slice-y0.py"><code class="xref download docutils literal notranslate"><span class="pre">slice-y0.py</span></code></a> was created by recording a Python script in
+ParaView interactively and then modifying the resulting script later.  At the
+time of writing, this is found in the <em>Tools</em> menu under <em>Tools&gt;Start Trace</em>.</p>
+<p>The header of this script contains some helper functions that were added in
+order to provide a solution for users who do not have a version of FUN3D
+compiled with the TecIO library.  It does require the user to use Tecplot’s
+<code class="docutils literal notranslate"><span class="pre">preplot</span></code> tool, which can be downloaded from the <a class="reference external" href="http://www.tecplot.com/downloads/tecio-library/">Tecplot TecIO library
+website</a>.  The first few
+lines of <a class="reference download internal" download="" href="../../../_downloads/63a517aa0a5b79ccc4712d9e90014a2f/slice-y0.py"><code class="xref download docutils literal notranslate"><span class="pre">slice-y0.py</span></code></a> are shown below.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#### import the simple module from the paraview</span>
+<span class="kn">from</span> <span class="nn">paraview.simple</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c1">#### disable automatic camera reset on &#39;Show&#39;</span>
+<span class="n">paraview</span><span class="o">.</span><span class="n">simple</span><span class="o">.</span><span class="n">_DisableFirstRenderCameraReset</span><span class="p">()</span>
+
+<span class="c1"># System interface</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="c1"># Check for DAT instead of PLT file</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;arrow_tec_boundary&#39;</span><span class="p">,</span> <span class="s1">&#39;arrow_plane-y0&#39;</span><span class="p">]:</span>
+    <span class="c1"># Name of DAT and PLT files</span>
+    <span class="n">fdat</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.dat&#39;</span> <span class="o">%</span> <span class="n">f</span>
+    <span class="n">fplt</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.plt&#39;</span> <span class="o">%</span> <span class="n">f</span>
+    <span class="c1"># Check for DAT file</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fdat</span><span class="p">):</span>
+        <span class="c1"># Delete any PLT file</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fplt</span><span class="p">):</span> <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fplt</span><span class="p">)</span>
+        <span class="c1"># Create new PLT file</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;preplot </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fdat</span><span class="p">,</span> <span class="n">fplt</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Most of the rest of the contents of the Python script come from the <a class="reference external" href="http://www.paraview.org/ParaView/Doc/Nightly/www/py-doc/">ParaView
+API</a>, but the
+command at the end is relevant.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># save screenshot</span>
+<span class="n">SaveScreenshot</span><span class="p">(</span><span class="s1">&#39;slice-y0.png&#39;</span><span class="p">,</span>
+    <span class="n">magnification</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="n">renderView1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is the command that actually saves the image, and it is relevant to
+explain here that the name of the image, <code class="docutils literal notranslate"><span class="pre">'slice-y0.png'</span></code>, must line up with
+the <em>ImageFile</em> option from the JSON subfigure definition.</p>
+</section>
+<section id="aerodynamic-data-book-and-sweep-plots">
+<span id="pycart-ex02-databook"></span><h2><span class="section-number">5.1.2.3. </span>Aerodynamic Data Book and Sweep Plots<a class="headerlink" href="#aerodynamic-data-book-and-sweep-plots" title="Permalink to this heading">¶</a></h2>
+<p>The provided example in <code class="docutils literal notranslate"><span class="pre">$PYCART/examples/pyfun/02_bullet/</span></code> includes an
+aerodynamic database for all but two of the 24 conditions in the
+<code class="docutils literal notranslate"><span class="pre">data/bullet</span></code> folder.  The contents of an aero data book file are the same
+here as for Cart3D, and a selection of text from the main <code class="docutils literal notranslate"><span class="pre">bullet_no_base</span></code>
+file can be seen below.  These aero data book files have the file name
+<code class="docutils literal notranslate"><span class="pre">aero_$COMP.csv</span></code> for an arbitrary component <em>COMP</em>.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Database statistics for &#39;bullet_no_base&#39; extracted on 2017-04-09 19:35:55
+#
+#mach,alpha,beta,q,T,config,Label,CA,CY,CN,...,nOrders,nIter,nStats
+0.8,0,0,1250,475.33,bullet,,0.1293,-0.0036,-0.0001,...,6.7889,200,50
+0.8,4,0,1250,475.33,bullet,,0.1260,-0.0046,0.1854,...,6.8890,200,50
+...
+1.75,30,0,1250,475.33,bullet,,0.6291,-0.0010,2.8408,...,4.5099,200,50
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is a relatively simple data book definition, as shown in the <em>DataBook</em>
+section of <code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code>, reproduced below.  We include five data book
+components here, and all are restricted to be just forces to make some of the
+files smaller.  Normally, a user would not include the lines such as <code class="docutils literal notranslate"><span class="pre">&quot;cap&quot;:</span>
+<span class="pre">{&quot;Type&quot;:</span> <span class="pre">&quot;Force&quot;}</span></code>.  Without a user-specified type, components have the type
+<code class="docutils literal notranslate"><span class="pre">&quot;FM&quot;</span></code>, which stand for “Force &amp; Moment” (except for Cart3D data books, which
+are by default <code class="docutils literal notranslate"><span class="pre">&quot;Force&quot;</span></code>).  The <em>DataBook&gt;nStats</em> component means that at
+least 50 iterations must be included in the averaging window for each
+coefficient of each component, and <em>nMin</em> states that only iterations after
+iteration 150 are allowed to be included.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;DataBook&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// List of components</span>
+<span class="w">    </span><span class="s2">&quot;Components&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;bullet_no_base&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;bullet_total&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cap&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;body&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;base&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Location</span>
+<span class="w">    </span><span class="s2">&quot;Folder&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;data/bullet&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Overall statistic inputs</span>
+<span class="w">    </span><span class="s2">&quot;nStats&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">50</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;nMin&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">150</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Definitions</span>
+<span class="w">    </span><span class="s2">&quot;bullet_no_base&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Force&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;bullet_total&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Force&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;cap&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Force&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;body&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Force&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;base&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Force&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Running the command <code class="docutils literal notranslate"><span class="pre">pyfun</span> <span class="pre">--aero</span></code> will fill in the other two cases.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfun<span class="w"> </span>-I<span class="w"> </span>:3<span class="w"> </span>--aero
+<span class="go">bullet/m0.80a0.0b0.0</span>
+<span class="go">bullet/m0.80a4.0b0.0</span>
+<span class="go">bullet/m0.80a10.0b0.0</span>
+<span class="go">bullet/m0.80a30.0b0.0</span>
+<span class="go">  Adding new databook entry at iteration 200.</span>
+<span class="go">bullet/m0.95a0.0b0.0</span>
+<span class="go">bullet/m0.95a4.0b0.0</span>
+<span class="go">bullet/m0.95a10.0b0.0</span>
+<span class="go">bullet/m0.95a30.0b0.0</span>
+<span class="go">bullet/m1.10a0.0b0.0</span>
+<span class="go">bullet/m1.10a4.0b0.0</span>
+<span class="go">bullet/m1.10a10.0b0.0</span>
+<span class="go">bullet/m1.10a30.0b0.0</span>
+<span class="go">bullet/m1.25a0.0b0.0</span>
+<span class="go">bullet/m1.25a4.0b0.0</span>
+<span class="go">bullet/m1.25a10.0b0.0</span>
+<span class="go">bullet/m1.25a30.0b0.0</span>
+<span class="go">bullet/m1.50a0.0b0.0</span>
+<span class="go">bullet/m1.50a4.0b0.0</span>
+<span class="go">  Adding new databook entry at iteration 200.</span>
+<span class="go">bullet/m1.50a10.0b0.0</span>
+<span class="go">bullet/m1.50a30.0b0.0</span>
+<span class="go">bullet/m1.75a0.0b0.0</span>
+<span class="go">bullet/m1.75a4.0b0.0</span>
+<span class="go">bullet/m1.75a10.0b0.0</span>
+<span class="go">bullet/m1.75a30.0b0.0</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;Report&quot;</span></code> section also includes a Mach sweep figure.
+Details of the Mach sweep (with an angle of attack carpet plot) are the same as
+in the Cart3D example <a class="reference internal" href="../../../pycart/examples/07-data_arrow/index.html#pycart-ex-data-arrow"><span class="std std-ref">Demo 7: Data Book Plots and Reports</span></a>, but
+<a class="reference internal" href="#fig-pyfun-ex02-mach-cap-cn"><span class="std std-numref">Figure 5.6</span></a> gives an example of one of the plots from
+the resulting <code class="docutils literal notranslate"><span class="pre">report-mach.pdf</span></code>.</p>
+<blockquote>
+<div><figure class="align-default" id="id5">
+<span id="fig-pyfun-ex02-mach-cap-cn"></span><a class="reference internal image-reference" href="../../../_images/mach_cap_CN.png"><img alt="../../../_images/mach_cap_CN.png" src="../../../_images/mach_cap_CN.png" style="width: 3.5in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 5.6 </span><span class="caption-text">Mach sweep of <em>CN</em> on <code class="docutils literal notranslate"><span class="pre">cap</span></code> for various angles of attacks.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>To generate this report, issue the following command:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfun<span class="w"> </span>--report<span class="w"> </span>mach
+<span class="go">mach/bullet/m0.80a0.0b0.0</span>
+<span class="go">  SweepConds: New subfig</span>
+<span class="go">  SweepList: New subfig</span>
+<span class="go">  mach_bullet_CA: New subfig</span>
+<span class="go">  mach_bullet_CY: New subfig</span>
+<span class="go">  mach_bullet_CN: New subfig</span>
+<span class="go">  mach_total_CA: New subfig</span>
+<span class="go">  mach_total_CY: New subfig</span>
+<span class="go">  mach_total_CN: New subfig</span>
+<span class="go">  mach_cap_CA: New subfig</span>
+<span class="go">  mach_cap_CY: New subfig</span>
+<span class="go">  mach_cap_CN: New subfig</span>
+<span class="go">Compiling...</span>
+<span class="go">Compiling...</span>
+<span class="go">Cleaning up...</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Actually, <a class="reference internal" href="#fig-pyfun-ex02-mach-cap-cn"><span class="std std-numref">Figure 5.6</span></a> is missing two data points (one
+of these is obvious while the other is somewhat hidden).  If the user has run
+the suggested <code class="docutils literal notranslate"><span class="pre">pyfun</span> <span class="pre">--aero</span></code> command from earlier, the resulting plots will
+include these two missing points.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.1.2. Demo 2: Inviscid Bullet with Reports</a><ul>
+<li><a class="reference internal" href="#running-cases">5.1.2.1. Running Cases</a></li>
+<li><a class="reference internal" href="#automated-single-case-report">5.1.2.2. Automated Single-Case Report</a></li>
+<li><a class="reference internal" href="#aerodynamic-data-book-and-sweep-plots">5.1.2.3. Aerodynamic Data Book and Sweep Plots</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../01-arrow/index.html"
+                          title="previous chapter"><span class="section-number">5.1.1. </span>Demo 1: Basic Viscous FUN3D Usage on Arrow with Fins</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../../json/index.html"
+                          title="next chapter"><span class="section-number">5.2. </span>Control Files for pyFun (<code class="file docutils literal notranslate"><span class="pre">pyFun.json</span></code>)</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/pyfun/examples/02-bullet/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../json/index.html" title="5.2. Control Files for pyFun (pyFun.json)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../01-arrow/index.html" title="5.1.1. Demo 1: Basic Viscous FUN3D Usage on Arrow with Fins"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">5. </span>pyFun Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">5.1. </span>Examples Using pyFun</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.1.2. </span>Demo 2: Inviscid Bullet with Reports</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

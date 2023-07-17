@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.pyover.report: Automated report interface &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pyover.manage: Manage pyOver case folders" href="manage.html" />
+    <link rel="prev" title="cape.pyover.lineLoad: Sectional loads module" href="lineLoad.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="manage.html" title="cape.pyover.manage: Manage pyOver case folders"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="lineLoad.html" title="cape.pyover.lineLoad: Sectional loads module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.report</span></code>: Automated report interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.pyover.report">
+<span id="cape-pyover-report-automated-report-interface"></span><h1><a class="reference internal" href="#module-cape.pyover.report" title="cape.pyover.report"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.report</span></code></a>: Automated report interface<a class="headerlink" href="#module-cape.pyover.report" title="Permalink to this heading">¶</a></h1>
+<p>The pyOver module for generating automated results reports using
+PDFLaTeX provides a single class <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.report.Report</span></code>, which is
+based off the CAPE version <a class="reference internal" href="../cape/cfdx/report.html#cape.cfdx.report.Report" title="cape.cfdx.report.Report"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.report.Report</span></code></a>. The
+<a class="reference internal" href="../cape/cfdx/report.html#cape.cfdx.report.Report" title="cape.cfdx.report.Report"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.report.Report</span></code></a> class is a sort of dual-purpose object
+that contains a file interface using <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.tex.Tex</span></code> combined with
+a capability to create figures for each case or sweep of cases mostly
+based on <a class="reference internal" href="../cape/cfdx/dataBook.html#module-cape.cfdx.dataBook" title="cape.cfdx.dataBook"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.dataBook</span></code></a>.</p>
+<p>An automated report is a multi-page PDF generated using PDFLaTeX.
+Usually, each CFD case has one or more pages dedicated to results for
+that case. The user defines a list of figures, each with its own list of
+subfigures, and these are generated for each case in the run matrix
+(subject to any command-line constraints the user may specify). Types of
+subfigures include</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Table of the values of the input variables for this case</p></li>
+<li><p>Table of force and moment values and statistics</p></li>
+<li><p>Iterative histories of forces or moments (one or more coefficients)</p></li>
+<li><p>Iterative histories of residuals</p></li>
+<li><p>Images using a Tecplot layout</p></li>
+<li><p>Many more</p></li>
+</ul>
+</div></blockquote>
+<p>In addition, the user may also define “sweeps,” which analyze groups of
+cases defined by user-specified constraints. For example, a sweep may be
+used to plot results as a function of Mach number for sets of cases
+having matching angle of attack and sideslip angle. When using a sweep,
+the report contains one or more pages for each sweep (rather than one or
+more pages for each case).</p>
+<p>Reports are created using system commands of the following format.</p>
+<blockquote>
+<div></div></blockquote>
+<p>The class has an immense number of methods, which can be somewhat
+grouped into bookkeeping methods and plotting methods.  The main
+user-facing methods are <a class="reference internal" href="../cape/cfdx/report.html#cape.cfdx.report.Report.UpdateCases" title="cape.cfdx.report.Report.UpdateCases"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.report.Report.UpdateCases()</span></code></a> and
+<a class="reference internal" href="../cape/cfdx/report.html#cape.cfdx.report.Report.UpdateSweep" title="cape.cfdx.report.Report.UpdateSweep"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.report.Report.UpdateSweep()</span></code></a>.  Each type of subfigure has
+its own method, for example
+<a class="reference internal" href="../cape/cfdx/report.html#cape.cfdx.report.Report.SubfigPlotCoeff" title="cape.cfdx.report.Report.SubfigPlotCoeff"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.report.Report.SubfigPlotCoeff()</span></code></a> for <code class="docutils literal notranslate"><span class="pre">&quot;PlotCoeff&quot;</span></code>  or
+<a class="reference internal" href="../cape/cfdx/report.html#cape.cfdx.report.Report.SubfigPlotL2" title="cape.cfdx.report.Report.SubfigPlotL2"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.report.Report.SubfigPlotL2()</span></code></a> for <code class="docutils literal notranslate"><span class="pre">&quot;PlotL2&quot;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../cape/cfdx/report.html#module-cape.cfdx.report" title="cape.cfdx.report"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.report</span></code></a></p></li>
+<li><p><a class="reference internal" href="options/Report.html#module-cape.pyover.options.Report" title="cape.pyover.options.Report"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options.Report</span></code></a></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.options.Report</span></code></p></li>
+<li><p><a class="reference internal" href="../cape/cfdx/dataBook.html#cape.cfdx.dataBook.DBComp" title="cape.cfdx.dataBook.DBComp"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.dataBook.DBComp</span></code></a></p></li>
+<li><p><a class="reference internal" href="../cape/cfdx/dataBook.html#cape.cfdx.dataBook.CaseFM" title="cape.cfdx.dataBook.CaseFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.dataBook.CaseFM</span></code></a></p></li>
+<li><p><a class="reference internal" href="../cape/cfdx/lineLoad.html#cape.cfdx.lineLoad.DBLineLoad" title="cape.cfdx.lineLoad.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineLoad.DBLineLoad</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyover.report.Report">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyover.report.</span></span><span class="sig-name descname"><span class="pre">Report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cntl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rep</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.report.Report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for automated report generation</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">pyOver</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">(</span><span class="n">oflow</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>oflow</em>: <a class="reference internal" href="cntl.html#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.cntl.Cntl</span></code></a></dt><dd><p>Master Cart3D settings interface</p>
+</dd>
+<dt><em>rep</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of report to update</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>R</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.report.Report</span></code></dt><dd><p>Automated report interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.report.Report.LinkVizFiles">
+<span class="sig-name descname"><span class="pre">LinkVizFiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sfig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.report.Report.LinkVizFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create links to appropriate visualization files</p>
+<p>Specifically, <code class="docutils literal notranslate"><span class="pre">Components.i.plt</span></code> and <code class="docutils literal notranslate"><span class="pre">cutPlanes.plt</span></code> or
+<code class="docutils literal notranslate"><span class="pre">Components.i.dat</span></code> and <code class="docutils literal notranslate"><span class="pre">cutPlanes.dat</span></code> are created.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span><span class="o">.</span><span class="n">LinkVizFiles</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>R</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.report.Report</span></code></dt><dd><p>Automated report interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-func docutils literal notranslate"><span class="pre">pyCart.case.LinkPLT()</span></code></p>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.report.Report.ReadCaseFM">
+<span class="sig-name descname"><span class="pre">ReadCaseFM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.report.Report.ReadCaseFM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read iterative history for a component</p>
+<p>This function needs to be customized for each solver</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">FM</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">ReadCaseFM</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>R</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.report.Report</span></code></dt><dd><p>Automated report interface</p>
+</dd>
+<dt><em>comp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of component to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>FM</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> or <a class="reference internal" href="../cape/cfdx/dataBook.html#cape.cfdx.dataBook.CaseFM" title="cape.cfdx.dataBook.CaseFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.dataBook.CaseFM</span></code></a> derivative</dt><dd><p>Case iterative force &amp; moment history for one component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2017-03-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <em>CompID</em> option</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.report.Report.ReadCaseResid">
+<span class="sig-name descname"><span class="pre">ReadCaseResid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sfig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.report.Report.ReadCaseResid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read iterative residual history for a component</p>
+<p>This function needs to be customized for each solver</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">ReadCaseResid</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>R</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.report.Report</span></code></dt><dd><p>Automated report interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>hist</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> or <a class="reference internal" href="../cape/cfdx/dataBook.html#cape.cfdx.dataBook.CaseResid" title="cape.cfdx.dataBook.CaseResid"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.dataBook.CaseResid</span></code></a> derivative</dt><dd><p>Case iterative residual history for one case</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.report.Report.ReadTecscript">
+<span class="sig-name descname"><span class="pre">ReadTecscript</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fsrc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.report.Report.ReadTecscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a Tecplot script interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span><span class="o">.</span><span class="n">ReadTecscript</span><span class="p">(</span><span class="n">fsrc</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>R</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.report.Report</span></code></dt><dd><p>Automated report interface</p>
+</dd>
+<dt><em>fscr</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-10-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.report.Report.SubfigSwitch">
+<span class="sig-name descname"><span class="pre">SubfigSwitch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.report.Report.SubfigSwitch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switch function to find the correct subfigure function</p>
+<p>This function may need to be defined for each CFD solver</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">SubfigSwitch</span><span class="p">(</span><span class="n">sfig</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>R</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.report.Report</span></code></dt><dd><p>Automated report interface</p>
+</dd>
+<dt><em>sfig</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of subfigure to update</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Case index</p>
+</dd>
+<dt><em>lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of lines already in LaTeX file</p>
+</dd>
+<dt><em>q</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to redraw images</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>lines</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Updated list of lines for LaTeX file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-05-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2016-10-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: <em>UpdateCaseSubfigs</em> -&gt; <em>SubfigSwitch</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.report</span></code>: Automated report interface</a><ul>
+<li><a class="reference internal" href="#cape.pyover.report.Report"><code class="docutils literal notranslate"><span class="pre">Report</span></code></a><ul>
+<li><a class="reference internal" href="#cape.pyover.report.Report.LinkVizFiles"><code class="docutils literal notranslate"><span class="pre">Report.LinkVizFiles()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.report.Report.ReadCaseFM"><code class="docutils literal notranslate"><span class="pre">Report.ReadCaseFM()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.report.Report.ReadCaseResid"><code class="docutils literal notranslate"><span class="pre">Report.ReadCaseResid()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.report.Report.ReadTecscript"><code class="docutils literal notranslate"><span class="pre">Report.ReadTecscript()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.report.Report.SubfigSwitch"><code class="docutils literal notranslate"><span class="pre">Report.SubfigSwitch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="lineLoad.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.lineLoad</span></code>: Sectional loads module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="manage.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.manage</span></code>: Manage pyOver case folders</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pyover/report.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="manage.html" title="cape.pyover.manage: Manage pyOver case folders"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="lineLoad.html" title="cape.pyover.lineLoad: Sectional loads module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.report</span></code>: Automated report interface</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

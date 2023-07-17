@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>3.7.8.2. Sweep Definitions &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="3.7.8.3. Figure Definitions" href="Figures.html" />
+    <link rel="prev" title="3.7.8.1. Report Definitions" href="main.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Figures.html" title="3.7.8.3. Figure Definitions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="main.html" title="3.7.8.1. Report Definitions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.7. </span>Common JSON Settings</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><span class="section-number">3.7.8. </span>Automated Report Generation with LaTeX</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.7.8.2. </span>Sweep Definitions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="sweep-definitions">
+<span id="cape-json-reportsweep"></span><h1><span class="section-number">3.7.8.2. </span>Sweep Definitions<a class="headerlink" href="#sweep-definitions" title="Permalink to this heading">¶</a></h1>
+<p>Each sweep has a definition that is similar to a report but with additional
+options to divide the run matrix into subsets.  For example, if the run matrix
+has three independent variables (which pyCart calls trajectory keys) of
+<code class="docutils literal notranslate"><span class="pre">&quot;Mach&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;alpha&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;beta&quot;</span></code>, then a common sweep would be to plot
+results as a function of Mach number for constant <em>alpha</em> and <em>beta</em>.  To do
+that, one would put <code class="docutils literal notranslate"><span class="pre">&quot;EqCons&quot;:</span> <span class="pre">[&quot;alpha&quot;,</span> <span class="pre">&quot;beta&quot;]</span></code> in the sweep definition.</p>
+<p>The full list of available options is below.</p>
+<blockquote>
+<div><dl>
+<dt><em>Sweeps</em>: <code class="docutils literal notranslate"><span class="pre">{}</span></code> | <code class="docutils literal notranslate"><span class="pre">{[S]}</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>)</dt><dd><p>Dictionary of sweep definitions (combined plots of subsets of cases)</p>
+<dl>
+<dt><em>S</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of sweep definitions for sweep named <code class="docutils literal notranslate"><span class="pre">&quot;S&quot;</span></code></p>
+<dl class="simple">
+<dt><em>Figures</em>: {<code class="docutils literal notranslate"><span class="pre">[]</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of figures to include for each sweep subset</p>
+</dd>
+<dt><em>EqCons</em>: {<code class="docutils literal notranslate"><span class="pre">[]</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of trajectory keys to hold constant for each subset</p>
+</dd>
+<dt><em>TolCons</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>)</dt><dd><p>Dictionary of trajectory keys to hold within a certain tolerance
+from the value of that key for the first case in the subset</p>
+</dd>
+<dt><em>IndexTol</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>If used, only allow the index of the first and last cases in a
+subset to differ by this value</p>
+</dd>
+<dt><em>XAxis</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of trajectory key used to sort subset; if <code class="docutils literal notranslate"><span class="pre">None</span></code>, sort by
+data book index</p>
+</dd>
+<dt><em>RunMatrixOnly</em>: <code class="docutils literal notranslate"><span class="pre">true</span></code> | {<code class="docutils literal notranslate"><span class="pre">false</span></code>}</dt><dd><p>By default, the data book is the source for sweep plots; this
+option can restrict the plots to points in the current run
+matrix</p>
+</dd>
+<dt><em>GlobalCons</em>: {<code class="docutils literal notranslate"><span class="pre">[]</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of global constraints to only divide part of the run matrix
+into subsets</p>
+</dd>
+<dt><em>Indices</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>)</dt><dd><p>If used, list of indices to divide into subsets</p>
+</dd>
+<dt><em>MinCases</em>: {<code class="docutils literal notranslate"><span class="pre">1</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Minimum number of cases for a sweep to be reported</p>
+</dd>
+<dt><em>CarpetEqCons</em>: <code class="docutils literal notranslate"><span class="pre">[]</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>Some sweep subfigures allow a sweep to be subdivided into
+subsweeps; this could be used to create plots of <em>CN</em> versus
+<em>Mach</em> with several lines each having constant <em>alpha</em></p>
+</dd>
+<dt><em>CarpetTolCons</em>: <code class="docutils literal notranslate"><span class="pre">{}</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>)</dt><dd><p>Tolerance constraints for subdividing sweeps</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p>The subsets are defined so that each case meeting the <em>GlobalCons</em> is placed
+into exactly one subset.  For each subset, pyCart begins with the first
+available case and applies the constraints using that point as a reference.</p>
+<p>Constraints can be defined in more complex ways than the example given prior to
+the list of options.  For relatively simple run matrices, grouping cases by
+constant values of one or more trajectory keys (i.e. using <em>EqCons</em>) may be
+adequate, but other run matrices may require more advanced settings.</p>
+<p>For example, wind tunnel data often is collected at conditions that are not
+exactly constant, i.e. the angle of attack may fluctuate slightly.  Instead of
+using <em>EqCons</em>, a better option in this case would be to include <code class="docutils literal notranslate"><span class="pre">&quot;TolCons&quot;:</span>
+<span class="pre">{&quot;alpha&quot;:</span> <span class="pre">0.02}</span></code>.  Then all cases in a subset would have an angle of attack
+within <code class="docutils literal notranslate"><span class="pre">0.02</span></code> of the angle of attack of the first point of the subset.</p>
+<p>Another advanced capability is to use <em>EqCons</em> such as <code class="docutils literal notranslate"><span class="pre">[&quot;k%10&quot;]</span></code> or
+<code class="docutils literal notranslate"><span class="pre">[&quot;k/10%10&quot;]</span></code>.  This could be used to require each case to have the same ones
+digit or the same tens digit of some trajectory variable called <em>k</em>.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="main.html"
+                          title="previous chapter"><span class="section-number">3.7.8.1. </span>Report Definitions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Figures.html"
+                          title="next chapter"><span class="section-number">3.7.8.3. </span>Figure Definitions</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/common/json/Report/Sweeps.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Figures.html" title="3.7.8.3. Figure Definitions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="main.html" title="3.7.8.1. Report Definitions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.7. </span>Common JSON Settings</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><span class="section-number">3.7.8. </span>Automated Report Generation with LaTeX</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.7.8.2. </span>Sweep Definitions</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

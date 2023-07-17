@@ -1,0 +1,766 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.cfdx.case: Generic case control &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.cfdx.cmd: Creating system commands" href="cmd.html" />
+    <link rel="prev" title="cape.cfdx.bin: CAPE executable operation" href="bin.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cmd.html" title="cape.cfdx.cmd: Creating system commands"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bin.html" title="cape.cfdx.bin: CAPE executable operation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx</span></code>: Templates for CFD control tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.case</span></code>: Generic case control</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.cfdx.case">
+<span id="cape-cfdx-case-generic-case-control"></span><h1><a class="reference internal" href="#module-cape.cfdx.case" title="cape.cfdx.case"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.case</span></code></a>: Generic case control<a class="headerlink" href="#module-cape.cfdx.case" title="Permalink to this heading">¶</a></h1>
+<p>This module contains templates for interacting with individual cases.  Since
+this is one of the most highly customized modules of the Cape system, there are
+few functions here, and the functions that are present are mostly templates.</p>
+<p>In general, the <code class="xref py py-mod docutils literal notranslate"><span class="pre">case</span></code> module is used for actually running the CFD solver
+(and any additional binaries that may be required as part of the run process),
+and it contains other capabilities for renaming files and determining the
+settings for a particular case.  Cape saves many settings for the CFD solver
+and archiving in a file called <code class="file docutils literal notranslate"><span class="pre">case.json</span></code> within each case folder, which
+prevents changes to the master JSON file from unpredictably affecting cases
+that have already been initialized or are already running.</p>
+<p>Actual functionality is left to individual modules listed below.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../../pycart/case.html#module-cape.pycart.case" title="cape.pycart.case"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.case</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../pyfun/case.html#module-cape.pyfun.case" title="cape.pyfun.case"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.case</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../pyover/case.html#module-cape.pyover.case" title="cape.pyover.case"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.case</span></code></a></p></li>
+</ul>
+</div></blockquote>
+<p>Several of the key methods for this API module are described below.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.CaseAFLR3">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">CaseAFLR3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Components'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lb8.ugrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.CaseAFLR3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create volume mesh using <code class="docutils literal notranslate"><span class="pre">aflr3</span></code></p>
+<p>This function looks for several files to determine the most
+appropriate actions to take, replacing <code class="docutils literal notranslate"><span class="pre">Components</span></code> with the value
+from <em>proj</em> for each file name and <code class="docutils literal notranslate"><span class="pre">lb8.ugrid</span></code> with the value from
+<em>fmt</em>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Components.i.tri</span></code>: Triangulation file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Components.surf</span></code>: AFLR3 surface file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Components.aflr3bc</span></code>: AFLR3 boundary conditions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Components.xml</span></code>: Surface component ID mapping file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Components.lb8.ugrid</span></code>: Output volume mesh</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Components.FAIL.surf</span></code>: AFLR3 surface indicating failure</p></li>
+</ul>
+</div></blockquote>
+<p>If the volume grid file already exists, this function takes no
+action. If the <code class="docutils literal notranslate"><span class="pre">surf</span></code> file does not exist, the function attempts
+to create it by reading the <code class="docutils literal notranslate"><span class="pre">tri</span></code>, <code class="docutils literal notranslate"><span class="pre">xml</span></code>, and <code class="docutils literal notranslate"><span class="pre">aflr3bc</span></code> files
+using <a class="reference internal" href="../tri.html#cape.tri.Tri" title="cape.tri.Tri"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.tri.Tri</span></code></a>.  The function then calls
+<code class="xref py py-func docutils literal notranslate"><span class="pre">cape.bin.aflr3()</span></code> and finally checks for the <code class="docutils literal notranslate"><span class="pre">FAIL</span></code> file.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CaseAFLR3</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;Components&quot;</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;lb8.ugrid&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.runControl.RunControl</span></code></dt><dd><p>Case options interface from <code class="docutils literal notranslate"><span class="pre">case.json</span></code></p>
+</dd>
+<dt><em>proj</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;Components&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Project root name</p>
+</dd>
+<dt><em>fmt</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;b8.ugrid&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>AFLR3 volume mesh format</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Iteration number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-04-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.CaseIntersect">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">CaseIntersect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Components'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fpre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'run'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.CaseIntersect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">intersect</span></code> to combine geometries if appropriate</p>
+<p>This is a multistep process in order to preserve all the component
+IDs of the input triangulations. Normally <code class="docutils literal notranslate"><span class="pre">intersect</span></code> requires
+each intersecting component to have a single component ID, and each
+component must be a water-tight surface.</p>
+<p>Cape utilizes two input files, <code class="docutils literal notranslate"><span class="pre">Components.c.tri</span></code>, which is the
+original triangulation file with intersections and the original
+component IDs, and <code class="docutils literal notranslate"><span class="pre">Components.tri</span></code>, which maps each individual
+original <code class="docutils literal notranslate"><span class="pre">tri</span></code> file to a single component. The files involved are
+tabulated below.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Components.tri</span></code>: Intersecting components, each with own compID</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Components.c.tri</span></code>: Intersecting triangulation, original compIDs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Components.o.tri</span></code>: Output of <code class="docutils literal notranslate"><span class="pre">intersect</span></code>, only a few compIDs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Components.i.tri</span></code>: Original compIDs mapped to intersected tris</p></li>
+</ul>
+<p>More specifically, these files are <code class="docutils literal notranslate"><span class="pre">&quot;%s.i.tri&quot;</span> <span class="pre">%</span> <span class="pre">proj</span></code>, etc.; the
+default project name is <code class="docutils literal notranslate"><span class="pre">&quot;Components&quot;</span></code>.  This function also calls
+the Chimera Grid Tools program <code class="docutils literal notranslate"><span class="pre">triged</span></code> to remove unused nodes from
+the intersected triangulation and optionally remove small triangles.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CaseIntersect</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;Components&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fpre</span><span class="o">=</span><span class="s1">&#39;run&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.runControl.RunControl</span></code></dt><dd><p>Case options interface from <code class="docutils literal notranslate"><span class="pre">case.json</span></code></p>
+</dd>
+<dt><em>proj</em>: {<code class="docutils literal notranslate"><span class="pre">'Components'</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Project root name</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Iteration number</p>
+</dd>
+<dt><em>fpre</em>: {<code class="docutils literal notranslate"><span class="pre">'run'</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Standard output file name prefix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../tri.html#cape.tri.Tri" title="cape.tri.Tri"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.tri.Tri</span></code></a></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.bin.intersect()</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-09-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Split from <code class="xref py py-func docutils literal notranslate"><span class="pre">run_flowCart()</span></code></p></li>
+<li><p>2016-04-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Generalized to <a class="reference internal" href="../index.html#module-cape" title="cape"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.CaseVerify">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">CaseVerify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Components'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fpre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'run'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.CaseVerify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">verify</span></code> to check triangulation if appropriate</p>
+<p>This function checks the validity of triangulation in file 
+<code class="docutils literal notranslate"><span class="pre">&quot;%s.i.tri&quot;</span> <span class="pre">%</span> <span class="pre">proj</span></code>.  It calls <code class="xref py py-func docutils literal notranslate"><span class="pre">cape.bin.verify()</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CaseVerify</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;Components&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fpre</span><span class="o">=</span><span class="s1">&#39;run&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.runControl.RunControl</span></code></dt><dd><p>Case options interface from <code class="docutils literal notranslate"><span class="pre">case.json</span></code></p>
+</dd>
+<dt><em>proj</em>: {<code class="docutils literal notranslate"><span class="pre">'Components'</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Project root name</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Iteration number</p>
+</dd>
+<dt><em>fpre</em>: {<code class="docutils literal notranslate"><span class="pre">'run'</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Standard output file name prefix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-09-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0; from <code class="xref py py-func docutils literal notranslate"><span class="pre">run_flowCart()</span></code></p></li>
+<li><p>2016-04-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; generalize to <a class="reference internal" href="../index.html#module-cape" title="cape"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.GetCurrentIter">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">GetCurrentIter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.GetCurrentIter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template function to report the most recent iteration</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">GetCurrentIter</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>n</em>: <code class="docutils literal notranslate"><span class="pre">0</span></code></dt><dd><p>Most recent index, customized for each solver</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-09-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.GetPhaseNumber">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">GetPhaseNumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fpre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'run'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.GetPhaseNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the phase number based on results available</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span> <span class="o">=</span> <span class="n">GetPhaseNumber</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fpre</span><span class="o">=</span><span class="s1">&#39;run&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.runControl.RunControl</span></code></dt><dd><p>Options interface for run control</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Iteration number</p>
+</dd>
+<dt><em>fpre</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;run&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Prefix for output files</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>j</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Most appropriate phase number for a restart</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2015-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; FUN3D version</p></li>
+<li><p>2016-04-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.2; CAPE version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.GetRestartIter">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">GetRestartIter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.GetRestartIter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the restart iteration</p>
+<p>This is a placeholder function and is only called in error.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">GetRestartIter</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>RuntimeError</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></dt><dd><p>Error regarding where this was called</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-04-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.GetTriqFile">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">GetTriqFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Components'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.GetTriqFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get most recent <code class="docutils literal notranslate"><span class="pre">triq</span></code> file and its associated iterations</p>
+<p>This is a template version with specific implementations for each solver.
+The <a class="reference internal" href="../index.html#module-cape" title="cape"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code></a> version simply returns the most recent <code class="docutils literal notranslate"><span class="pre">triq</span></code> file in the
+current folder with no iteration information.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ftriq</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">i0</span><span class="p">,</span> <span class="n">i1</span> <span class="o">=</span> <span class="n">GetTriqFile</span><span class="p">(</span><span class="n">proj</span><span class="o">=</span><span class="s1">&#39;Components&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>proj</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;Components&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>File root name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>ftriq</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of most recently modified <code class="docutils literal notranslate"><span class="pre">triq</span></code> file</p>
+</dd>
+<dt><em>n</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>}</dt><dd><p>Number of iterations included</p>
+</dd>
+<dt><em>i0</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>}</dt><dd><p>First iteration in the averaging</p>
+</dd>
+<dt><em>i1</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>}</dt><dd><p>Last iteration in the averaging</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.PrepareEnvironment">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">PrepareEnvironment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.PrepareEnvironment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set environment variables, alter resource limits (<code class="docutils literal notranslate"><span class="pre">ulimit</span></code>)</p>
+<p>This function relies on the system module <code class="xref py py-mod docutils literal notranslate"><span class="pre">resource</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">case</span><span class="o">.</span><span class="n">PrepareEnvironment</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.runControl.RunControl</span></code></dt><dd><p>Options interface for run control and command-line inputs</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.cfdx.case.SetResourceLimit" title="cape.cfdx.case.SetResourceLimit"><code class="xref py py-func docutils literal notranslate"><span class="pre">SetResourceLimit()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-11-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.ReadCaseJSON">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">ReadCaseJSON</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fjson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'case.json'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.ReadCaseJSON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read Cape settings for local case</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rc</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">ReadCaseJSON</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fjson</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;case.json&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of JSON settings file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.runControl.RunControl</span></code></dt><dd><p>Options interface for run control and command-line inputs</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.ReadConditions">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">ReadConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.ReadConditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read run matrix variable value in the current folder</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">conds</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">ReadConditions</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">ReadConditions</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>k</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of run matrix variable/trajectory key</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>conds</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">any</span></code>)</dt><dd><p>Dictionary of run matrix conditions</p>
+</dd>
+<dt><em>v</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">any</span></code></dt><dd><p>Run matrix conditions of key <em>k</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-03-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.ReadStartTimeProg">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">ReadStartTimeProg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.ReadStartTimeProg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the most recent start time to file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nProc</span><span class="p">,</span> <span class="n">tic</span> <span class="o">=</span> <span class="n">ReadStartTimeProg</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file containing CPU usage history</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>nProc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of cores</p>
+</dd>
+<dt><em>tic</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></dt><dd><p>Time at which most recent run was started</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-08-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.SetResourceLimit">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">SetResourceLimit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ulim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1024</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.SetResourceLimit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set resource limit for one variable</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SetResourceLimit</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">ulim</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>r</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Integer code of particular limit, from <code class="xref py py-mod docutils literal notranslate"><span class="pre">resource</span></code></p>
+</dd>
+<dt><em>ulim</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.ulimit.ulimit</span></code></dt><dd><p>System resource options interface</p>
+</dd>
+<dt><em>u</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of limit to set</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Phase number</p>
+</dd>
+<dt><em>unit</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Multiplier, usually for a kbyte</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.options.ulimit</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2021-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; check if Windows</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.StartCase">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">StartCase</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.StartCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empty template for starting a case</p>
+<p>The function is empty but does not raise an error</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape</span><span class="o">.</span><span class="n">case</span><span class="o">.</span><span class="n">StartCase</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">See also<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="../../pycart/case.html#cape.pycart.case.StartCase" title="cape.pycart.case.StartCase"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pycart.case.StartCase()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../pyfun/case.html#cape.pyfun.case.StartCase" title="cape.pyfun.case.StartCase"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pyfun.case.StartCase()</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../pyover/case.html#cape.pyover.case.StartCase" title="cape.pyover.case.StartCase"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pyover.case.StartCase()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-09-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Skeleton</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.StopCase">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">StopCase</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.StopCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop a case by deleting PBS job and removing <code class="docutils literal notranslate"><span class="pre">RUNNING</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">case</span><span class="o">.</span><span class="n">StopCase</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.WriteStartTimeProg">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">WriteStartTimeProg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.WriteStartTimeProg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the time to file at which a program or job started</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">WriteStartTimeProg</span><span class="p">(</span><span class="n">tic</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">prog</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>tic</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></dt><dd><p>Time from which timer will be measured</p>
+</dd>
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.options.runControl.RunControl</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Phase number</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file containing CPU usage history</p>
+</dd>
+<dt><em>prog</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of program to write in history</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.WriteUserTimeProg">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">WriteUserTimeProg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.WriteUserTimeProg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write time usage since time <em>tic</em> to file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">toc</span> <span class="o">=</span> <span class="n">WriteUserTime</span><span class="p">(</span><span class="n">tic</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">prog</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>tic</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></dt><dd><p>Time from which timer will be measured</p>
+</dd>
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.options.runControl.RunControl</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Phase number</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file containing CPU usage history</p>
+</dd>
+<dt><em>prog</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of program to write in history</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>toc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></dt><dd><p>Time at which time delta was measured</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-12-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2015-12-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Copied from <a class="reference internal" href="../../pycart/case.html#module-cape.pycart.case" title="cape.pycart.case"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.case</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.init_timer">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">init_timer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.init_timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark a case as <code class="docutils literal notranslate"><span class="pre">RUNNING</span></code> and initialize a timer</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tic</span> <span class="o">=</span> <span class="n">init_timer</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>tic</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></dt><dd><p>Time at which case was started</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0; from <code class="xref py py-func docutils literal notranslate"><span class="pre">run_fun3d()</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.case.read_case_json">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.case.</span></span><span class="sig-name descname"><span class="pre">read_case_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls=&lt;class</span> <span class="pre">'cape.cfdx.options.runControl.RunControl'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.case.read_case_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read <em>RunControl</em> settings from <code class="docutils literal notranslate"><span class="pre">case.json</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rc</span> <span class="o">=</span> <span class="n">read_case_json</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rc</span> <span class="o">=</span> <span class="n">read_case_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cls</em>: {<code class="xref py py-mod docutils literal notranslate"><span class="pre">RunControl</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></dt><dd><p>Class to use for output file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>rc</em>: <em>cls</em></dt><dd><p>Case run control settings</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.case</span></code>: Generic case control</a><ul>
+<li><a class="reference internal" href="#cape.cfdx.case.CaseAFLR3"><code class="docutils literal notranslate"><span class="pre">CaseAFLR3()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.CaseIntersect"><code class="docutils literal notranslate"><span class="pre">CaseIntersect()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.CaseVerify"><code class="docutils literal notranslate"><span class="pre">CaseVerify()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.GetCurrentIter"><code class="docutils literal notranslate"><span class="pre">GetCurrentIter()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.GetPhaseNumber"><code class="docutils literal notranslate"><span class="pre">GetPhaseNumber()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.GetRestartIter"><code class="docutils literal notranslate"><span class="pre">GetRestartIter()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.GetTriqFile"><code class="docutils literal notranslate"><span class="pre">GetTriqFile()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.PrepareEnvironment"><code class="docutils literal notranslate"><span class="pre">PrepareEnvironment()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.ReadCaseJSON"><code class="docutils literal notranslate"><span class="pre">ReadCaseJSON()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.ReadConditions"><code class="docutils literal notranslate"><span class="pre">ReadConditions()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.ReadStartTimeProg"><code class="docutils literal notranslate"><span class="pre">ReadStartTimeProg()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.SetResourceLimit"><code class="docutils literal notranslate"><span class="pre">SetResourceLimit()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.StartCase"><code class="docutils literal notranslate"><span class="pre">StartCase()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.StopCase"><code class="docutils literal notranslate"><span class="pre">StopCase()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.WriteStartTimeProg"><code class="docutils literal notranslate"><span class="pre">WriteStartTimeProg()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.WriteUserTimeProg"><code class="docutils literal notranslate"><span class="pre">WriteUserTimeProg()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.init_timer"><code class="docutils literal notranslate"><span class="pre">init_timer()</span></code></a></li>
+<li><a class="reference internal" href="#cape.cfdx.case.read_case_json"><code class="docutils literal notranslate"><span class="pre">read_case_json()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="bin.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.bin</span></code>: CAPE executable operation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="cmd.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.cmd</span></code>: Creating system commands</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/cape/cfdx/case.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cmd.html" title="cape.cfdx.cmd: Creating system commands"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bin.html" title="cape.cfdx.bin: CAPE executable operation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx</span></code>: Templates for CFD control tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.case</span></code>: Generic case control</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

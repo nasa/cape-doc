@@ -1,0 +1,576 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.geom: Generic geometry utilities &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.io: Binary file input/output tools" href="io.html" />
+    <link rel="prev" title="cape.convert: Unit and angle conversion utilities" href="convert.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="io.html" title="cape.io: Binary file input/output tools"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="convert.html" title="cape.convert: Unit and angle conversion utilities"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.geom</span></code>: Generic geometry utilities</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.geom">
+<span id="cape-geom-generic-geometry-utilities"></span><h1><a class="reference internal" href="#module-cape.geom" title="cape.geom"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.geom</span></code></a>: Generic geometry utilities<a class="headerlink" href="#module-cape.geom" title="Permalink to this heading">¶</a></h1>
+<p>This module provides several methods for modifying points or performing
+other geometric manipulations in a way accessible to each of the
+subclasses.</p>
+<p>The main categories are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>performing manipulations on sets of points, such as rotations</p></li>
+<li><p>checking for intersections, polygon membership, etc.</p></li>
+</ul>
+</div></blockquote>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.geom.DistancePointToCurve">
+<span class="sig-prename descclassname"><span class="pre">cape.geom.</span></span><span class="sig-name descname"><span class="pre">DistancePointToCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.geom.DistancePointToCurve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get distance from point to segments of a piecewise linear curve</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">DistancePointToCurve</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Test point, <em>shape</em>: (3,)</p>
+</dd>
+<dt><em>X</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Array of curve break points, <em>shape</em>: (n,3)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>D</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Distance from <em>x</em> to each segment, <em>shape</em>: (n-1,)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-09-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.geom.DistancePointToLine">
+<span class="sig-prename descclassname"><span class="pre">cape.geom.</span></span><span class="sig-name descname"><span class="pre">DistancePointToLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.geom.DistancePointToLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get distance from a point to a line segment</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">DistancePointToLine</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Test point, <em>shape</em>: (3,)</p>
+</dd>
+<dt><em>x1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Segment start point, <em>shape</em>: (3,)</p>
+</dd>
+<dt><em>x2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Segment end point, <em>shape</em>: (3,)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>d</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Distance from segment to point</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-09-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.geom.RotatePoints">
+<span class="sig-prename descclassname"><span class="pre">cape.geom.</span></span><span class="sig-name descname"><span class="pre">RotatePoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.geom.RotatePoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate a list of points</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Y</span> <span class="o">=</span> <span class="n">RotatePoints</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>X</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Array of node coordinates, <em>shape</em>: (N, 3)</p>
+</dd>
+<dt><em>v1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Start point of rotation vector, <em>shape</em>: (3,)</p>
+</dd>
+<dt><em>v2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>End point of rotation vector, <em>shape</em>: (3,)</p>
+</dd>
+<dt><em>theta</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Rotation angle in degrees</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>Y</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray`(:class:`float</span></code>), <em>shape</em> = (N,3)</dt><dd><p>List of rotated node coordinates</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0, from <code class="xref py py-class docutils literal notranslate"><span class="pre">TriBase</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.geom.TranslatePoints">
+<span class="sig-prename descclassname"><span class="pre">cape.geom.</span></span><span class="sig-name descname"><span class="pre">TranslatePoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dR</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.geom.TranslatePoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate the nodes of a triangulation object.</p>
+<p>The offset coordinates may be specified as individual inputs or a
+single vector of three coordinates.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">TranslatePoints</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dR</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>X</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>List of node coordinates, <em>shape</em>: (N,3)</p>
+</dd>
+<dt><em>dR</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>List of three coordinates to use for translation</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>Y</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>List of translated node coordinates, <em>shape</em>: (N,3)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.geom.dist2_lines_to_pt">
+<span class="sig-prename descclassname"><span class="pre">cape.geom.</span></span><span class="sig-name descname"><span class="pre">dist2_lines_to_pt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.geom.dist2_lines_to_pt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get square of distance from point(s) to line segment(s)</p>
+<p>The test point can either be a single point or a collection of
+points with dimensions equal to the collection of lines.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d2</span> <span class="o">=</span> <span class="n">dist2_lines_to_pt</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">Y1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">Y2</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>X1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>x</em>-coords of start points of several line segments</p>
+</dd>
+<dt><em>Y1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>y</em>-coords of start points of several line segments</p>
+</dd>
+<dt><em>X2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>x</em>-coords of end points of several line segments</p>
+</dd>
+<dt><em>Y2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>y</em>-coords of end points of several line segments</p>
+</dd>
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p><em>x</em>-coord of test point(s)</p>
+</dd>
+<dt><em>y</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p><em>y</em>-coord of test point(s)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>d2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Minimum distance from each segment to point</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2022-11-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.geom.dist2_tris_to_pt">
+<span class="sig-prename descclassname"><span class="pre">cape.geom.</span></span><span class="sig-name descname"><span class="pre">dist2_tris_to_pt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.geom.dist2_tris_to_pt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get square of distance from a point to a collection of triangles</p>
+<p>Points that are inside the triangle return a distance of 0</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">dist_tris_to_pt</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>X</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>x</em>-coords of vertices of <em>n</em> tris, <em>shape</em>: (n,3)</p>
+</dd>
+<dt><em>Y</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], shape=(n,3))</dt><dd><p><em>y</em>-coords of vertices of <em>n</em> tris, <em>shape</em>: (n,3)</p>
+</dd>
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p><em>x</em>-coordinate of test point</p>
+</dd>
+<dt><em>y</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p><em>y</em>-coordinate of test point</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>D</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Matrix of minimum distance squared from each tri to point</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-02-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2022-11-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0; faster</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.geom.dist_lines_to_pt">
+<span class="sig-prename descclassname"><span class="pre">cape.geom.</span></span><span class="sig-name descname"><span class="pre">dist_lines_to_pt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.geom.dist_lines_to_pt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get distance from a point to a collection of line segments</p>
+<p>The test point can either be a single point or a collection of
+points with dimensions equal to the collection of lines.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">dist_lines_to_pt</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">Y1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">Y2</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>X1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>x</em>-coords of start points of several line segments</p>
+</dd>
+<dt><em>Y1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>y</em>-coords of start points of several line segments</p>
+</dd>
+<dt><em>X2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>x</em>-coords of end points of several line segments</p>
+</dd>
+<dt><em>Y2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>y</em>-coords of end points of several line segments</p>
+</dd>
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p><em>x</em>-coord of test point(s)</p>
+</dd>
+<dt><em>y</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p><em>y</em>-coord of test point(s)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>D</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Minimum distance from each segment to point</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-02-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.geom.dist_tris_to_pt">
+<span class="sig-prename descclassname"><span class="pre">cape.geom.</span></span><span class="sig-name descname"><span class="pre">dist_tris_to_pt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.geom.dist_tris_to_pt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get distance from a point to a collection of triangles</p>
+<p>Points that are inside the triangle return a distance of 0.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">dist_tris_to_pt</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>X</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>x</em>-coords of vertices of <em>n</em> tris, <em>shape</em>: (n,3)</p>
+</dd>
+<dt><em>Y</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], shape=(n,3))</dt><dd><p><em>y</em>-coords of vertices of <em>n</em> tris, <em>shape</em>: (n,3)</p>
+</dd>
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p><em>x</em>-coordinate of test point</p>
+</dd>
+<dt><em>y</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p><em>y</em>-coordinate of test point</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>D</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p>Matrix of minimum distance from each tri to point</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-02-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2022-11-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0; faster</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.geom.edges_int_line">
+<span class="sig-prename descclassname"><span class="pre">cape.geom.</span></span><span class="sig-name descname"><span class="pre">edges_int_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.geom.edges_int_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a set of edges intersects another line segment</p>
+<p>Intersections between the test segment and the start point of any
+edge are not counted as an intersection.  The test point can either
+be a single point or a collection of points with dimensions equal to
+the collection of lines.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="n">edges_int_line</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">Y1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">Y2</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>X1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>x</em>-coords of start points of several line segments</p>
+</dd>
+<dt><em>Y1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>y</em>-coords of start points of several line segments</p>
+</dd>
+<dt><em>X2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>x</em>-coords of end points of several line segments</p>
+</dd>
+<dt><em>Y2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>y</em>-coords of end points of several line segments</p>
+</dd>
+<dt><em>x1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Start point <em>x</em>-coordinate of test segment</p>
+</dd>
+<dt><em>y1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Start point <em>y</em>-coordinate of test segment</p>
+</dd>
+<dt><em>x2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>End point <em>x</em>-coordinate of test segment</p>
+</dd>
+<dt><em>y2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>End point <em>y</em>-coordinate of test segment</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>Q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, shape=*X1.shape*)</dt><dd><p>Matrix of whether or not each segment intersects test segment</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-02-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.geom.lines_int_line">
+<span class="sig-prename descclassname"><span class="pre">cape.geom.</span></span><span class="sig-name descname"><span class="pre">lines_int_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.geom.lines_int_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a set of line segments intersects another line segment</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="n">lines_int_line</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">Y1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">Y2</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>X1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>x</em>-coords of start points of several line segments</p>
+</dd>
+<dt><em>Y1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>y</em>-coords of start points of several line segments</p>
+</dd>
+<dt><em>X2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>x</em>-coords of end points of several line segments</p>
+</dd>
+<dt><em>Y2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>y</em>-coords of end points of several line segments</p>
+</dd>
+<dt><em>x1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Start point <em>x</em>-coordinate of test segment</p>
+</dd>
+<dt><em>y1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>Start point <em>y</em>-coordinate of test segment</p>
+</dd>
+<dt><em>x2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>End point <em>x</em>-coordinate of test segment</p>
+</dd>
+<dt><em>y2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p>End point <em>y</em>-coordinate of test segment</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>Q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</dt><dd><p>Whether or not each segment intersects test segment</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-02-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.geom.tris_have_pt">
+<span class="sig-prename descclassname"><span class="pre">cape.geom.</span></span><span class="sig-name descname"><span class="pre">tris_have_pt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.geom.tris_have_pt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if each triangle in a list contains a specified point(s)</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="n">tris_have_pt</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>X</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>x</em>-coords of vertices of <em>n</em> tris, <em>shape</em>: (n,3)</p>
+</dd>
+<dt><em>Y</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</dt><dd><p><em>y</em>-coords of vertices of <em>n</em> tris, <em>shape</em>: (n,3)</p>
+</dd>
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p><em>x</em>-coord of test point(s), <em>shape</em>: (n,)</p>
+</dd>
+<dt><em>y</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></dt><dd><p><em>y</em>-coord of test point(s), <em>shape</em>: (n,)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>Q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</dt><dd><p>Whether or not each tri contains the test point</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-02-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2022-11-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0; use tri areas</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.geom</span></code>: Generic geometry utilities</a><ul>
+<li><a class="reference internal" href="#cape.geom.DistancePointToCurve"><code class="docutils literal notranslate"><span class="pre">DistancePointToCurve()</span></code></a></li>
+<li><a class="reference internal" href="#cape.geom.DistancePointToLine"><code class="docutils literal notranslate"><span class="pre">DistancePointToLine()</span></code></a></li>
+<li><a class="reference internal" href="#cape.geom.RotatePoints"><code class="docutils literal notranslate"><span class="pre">RotatePoints()</span></code></a></li>
+<li><a class="reference internal" href="#cape.geom.TranslatePoints"><code class="docutils literal notranslate"><span class="pre">TranslatePoints()</span></code></a></li>
+<li><a class="reference internal" href="#cape.geom.dist2_lines_to_pt"><code class="docutils literal notranslate"><span class="pre">dist2_lines_to_pt()</span></code></a></li>
+<li><a class="reference internal" href="#cape.geom.dist2_tris_to_pt"><code class="docutils literal notranslate"><span class="pre">dist2_tris_to_pt()</span></code></a></li>
+<li><a class="reference internal" href="#cape.geom.dist_lines_to_pt"><code class="docutils literal notranslate"><span class="pre">dist_lines_to_pt()</span></code></a></li>
+<li><a class="reference internal" href="#cape.geom.dist_tris_to_pt"><code class="docutils literal notranslate"><span class="pre">dist_tris_to_pt()</span></code></a></li>
+<li><a class="reference internal" href="#cape.geom.edges_int_line"><code class="docutils literal notranslate"><span class="pre">edges_int_line()</span></code></a></li>
+<li><a class="reference internal" href="#cape.geom.lines_int_line"><code class="docutils literal notranslate"><span class="pre">lines_int_line()</span></code></a></li>
+<li><a class="reference internal" href="#cape.geom.tris_have_pt"><code class="docutils literal notranslate"><span class="pre">tris_have_pt()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="convert.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.convert</span></code>: Unit and angle conversion utilities</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="io.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.io</span></code>: Binary file input/output tools</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cape/geom.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="io.html" title="cape.io: Binary file input/output tools"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="convert.html" title="cape.convert: Unit and angle conversion utilities"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.geom</span></code>: Generic geometry utilities</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

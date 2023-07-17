@@ -1,0 +1,922 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.attdb.datakithub: Hub for importing DataKits by name &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.attdb.datakitloader: Tools for reading DataKits from a collection" href="datakitloader.html" />
+    <link rel="prev" title="cape.attdb.rdb: Main DataKit module" href="rdb.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datakitloader.html" title="cape.attdb.datakitloader: Tools for reading DataKits from a collection"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rdb.html" title="cape.attdb.rdb: Main DataKit module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.datakithub</span></code>: Hub for importing DataKits by name</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.attdb.datakithub">
+<span id="cape-attdb-datakithub-hub-for-importing-datakits-by-name"></span><h1><a class="reference internal" href="#module-cape.attdb.datakithub" title="cape.attdb.datakithub"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.datakithub</span></code></a>: Hub for importing DataKits by name<a class="headerlink" href="#module-cape.attdb.datakithub" title="Permalink to this heading">¶</a></h1>
+<p>This module provides the class <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a> that provides a tool
+to simplify the importing of named “datakits” (from
+<a class="reference internal" href="rdb.html#cape.attdb.rdb.DataKit" title="cape.attdb.rdb.DataKit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.rdb.DataKit</span></code></a>).  More specifically, it allows users to
+create one or more naming conventions for databases/datakits and to
+read that data with minimal low-level Python programming.</p>
+<p>An instance of the <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a> class is created by reading a
+JSON file that contains the naming conventions, such as the following:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cape.attdb.datakithub</span> <span class="kn">import</span> <span class="n">DataKitHub</span>
+
+<span class="c1"># Create an instance</span>
+<span class="n">hub</span> <span class="o">=</span> <span class="n">DataKitHub</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will look for a file</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">data/datakithub/datakithub.json</span></code></p>
+</div></blockquote>
+<p>in the current folder and each parent folder.</p>
+<p>A simple <code class="docutils literal notranslate"><span class="pre">datakithub.json</span></code> file might contain the following:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;DB-ATT&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;repo&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;/home/user/datakit/db&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;module&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;module_attribute&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;db&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;module_regex&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;DB-ATT-([0-9]+)&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;dbatt.db%s&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>It will make more sense to explain this content after seeing an example.
+Now we can use the <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a> instance to read databases by
+their title, such as <code class="docutils literal notranslate"><span class="pre">&quot;DB-ATT-1&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;DB-ATT-002&quot;</span></code>, as long as they
+start with <code class="docutils literal notranslate"><span class="pre">&quot;DB-ATT&quot;</span></code> or some other string defined in the JSON file.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cape.attdb.datakithub</span> <span class="kn">import</span> <span class="n">DataKitHub</span>
+
+<span class="c1"># Create an instance</span>
+<span class="n">hub</span> <span class="o">=</span> <span class="n">DataKitHub</span><span class="p">(</span><span class="s2">&quot;/home/user/datakit/datakithub.json&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read the database &quot;DB-ATT-1&quot;</span>
+<span class="n">db1</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">read_db</span><span class="p">(</span><span class="s2">&quot;DB-ATT-1&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read the database &quot;DB-ATT-002&quot;</span>
+<span class="n">db2</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">read_db</span><span class="p">(</span><span class="s2">&quot;DB-ATT-002&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This is roughly the same as</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read the database &quot;DB-ATT-1&quot;</span>
+<span class="kn">import</span> <span class="nn">dbatt.db1</span>
+<span class="n">db1</span> <span class="o">=</span> <span class="n">dbatt</span><span class="o">.</span><span class="n">db1</span><span class="o">.</span><span class="n">db</span>
+
+<span class="c1"># Read the database &quot;DB-ATT-002&quot;</span>
+<span class="kn">import</span> <span class="nn">dbatt.db002</span>
+<span class="n">db2</span> <span class="o">=</span> <span class="n">dbatt</span><span class="o">.</span><span class="n">db002</span><span class="o">.</span><span class="n">db</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>but without having to deal with either <code class="docutils literal notranslate"><span class="pre">sys.path</span></code> or the <em>PYTHONPATH</em>
+environment variable, which can be both tedious and difficult to make
+work for multiple users on different types of computers.</p>
+<p>Here is a description of the JSON parameters</p>
+<blockquote>
+<div><dl class="simple">
+<dt><em>repo</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of the folder containing the data or modules</p>
+</dd>
+<dt><em>module_attribute</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Name of variable(s) in imported module to use as datakit</p>
+</dd>
+<dt><em>module_function</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Name of function(s) from imported module that return datakit</p>
+</dd>
+<dt><em>module_regex</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Rules for converting a regular expression to module names</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.attdb.datakithub.</span></span><span class="sig-name descname"><span class="pre">DataKitHub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fjson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cwd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load datakits using only the database name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hub</span> <span class="o">=</span> <span class="n">DataKitHub</span><span class="p">(</span><span class="n">fjson</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fjson</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Path to JSON file with import rules for one or more db names</p>
+</dd>
+<dt><em>cwd</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Path from which to begin search</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance that implements import rules by name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-02-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-08-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0</dt><dd><ul>
+<li><p>simpler search for JSON file</p></li>
+<li><p>similar to how git finds <code class="docutils literal notranslate"><span class="pre">.git</span></code> folder</p></li>
+<li><p>better regular expression support</p></li>
+<li><p>can try multiple sections if one matches but fails</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.abspath">
+<span class="sig-name descname"><span class="pre">abspath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.abspath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expand absolute path to a relative path</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">abspath</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>path</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Path to some file, relative or absolute</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>abspath</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Absolute path to <em>path</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.expand_regex">
+<span class="sig-name descname"><span class="pre">expand_regex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regex_template</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.expand_regex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expand a regular expression template</p>
+<p>Use defined groups from <em>hub.regex_groups</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">regex</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">expand_regex</span><span class="p">(</span><span class="n">regex_template</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>regex_template</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Raw template with <code class="docutils literal notranslate"><span class="pre">&lt;grp&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">%(grp)s</span></code> groups</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>regex</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Expanded regex with <code class="docutils literal notranslate"><span class="pre">(?P&lt;grp&gt;...)</span></code> filled in</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.fullmatch">
+<span class="sig-name descname"><span class="pre">fullmatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regex_template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.fullmatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Match a full string (usually DB name) to a regex template</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">groupdict</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex_template</span><span class="p">,</span> <span class="n">dbname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>regex_template</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression template for section of datakits</p>
+</dd>
+<dt><em>dbname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Database name for one datakit</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>groupdict</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Augmented <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> of groups from regex</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.genr8_modname">
+<span class="sig-name descname"><span class="pre">genr8_modname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.genr8_modname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine module name from DB name, regex, and template</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">modname</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">genr8_modname</span><span class="p">(</span><span class="n">dbname</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>dbname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Database name for one datakit</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression template for section of datakits</p>
+</dd>
+<dt><em>regex</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression template for database names</p>
+</dd>
+<dt><em>template</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Template for module name based on <em>regex</em> match groups</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>modname</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of module according to regex and template</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.genr8_modpath">
+<span class="sig-name descname"><span class="pre">genr8_modpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.genr8_modpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate $PYTHONPATH for given database name (if any)</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">modpath</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">genr8_modpath</span><span class="p">(</span><span class="n">dbname</span><span class="p">,</span> <span class="n">sec</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>dbname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Database name for one datakit</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression template for section of datakits</p>
+</dd>
+<dt><em>template</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Template for module name based on <em>regex</em> match groups</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>modpath</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Path to module if not in existing <code class="docutils literal notranslate"><span class="pre">$PYTHONPATH</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.get_regex_groups">
+<span class="sig-name descname"><span class="pre">get_regex_groups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.get_regex_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get expanded regular expressions from <em>hub.regex_groups</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">regex_dict</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">get_regex_groups</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>regex_template</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Raw template with <code class="docutils literal notranslate"><span class="pre">&lt;grp&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">%(grp)s</span></code> groups</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>regex_dict</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Expanded regex with <code class="docutils literal notranslate"><span class="pre">(?P&lt;grp&gt;...)</span></code> for each group</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.get_section">
+<span class="sig-name descname"><span class="pre">get_section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.get_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get options for specified module section</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">secopts</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">get_section</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of datakit section</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>secopts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Options for <em>sec</em> loaded in <em>hub[sec]</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.get_section_opt">
+<span class="sig-name descname"><span class="pre">get_section_opt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vdef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.get_section_opt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the <em>type</em> of a given datakit group</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">get_section_opt</span><span class="p">(</span><span class="n">grp</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">vdef</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of datakit section</p>
+</dd>
+<dt><em>opt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of option to access</p>
+</dd>
+<dt><em>vdef</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <strong>any</strong></dt><dd><p>Default value for <em>opt</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>: {<em>vdef</em>} | </dt><dd><p>Value of <em>hub[grp][opt]</em> or <em>vdef</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-02-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-08-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1</dt><dd><ul>
+<li><p>was <code class="xref py py-func docutils literal notranslate"><span class="pre">get_group_opt()</span></code></p></li>
+<li><p>add module-level defaults</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.get_section_repo">
+<span class="sig-name descname"><span class="pre">get_section_repo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.get_section_repo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get <em>repo</em> option for section</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">repo</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">get_section_repo</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of datakit section</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>repo</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Name of folder to add to path</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.get_section_type">
+<span class="sig-name descname"><span class="pre">get_section_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.get_section_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get <em>type</em> option for section</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sectype</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">get_section_type</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of datakit section</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>sectype</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of folder to add to path</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.import_dbname">
+<span class="sig-name descname"><span class="pre">import_dbname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.import_dbname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import a datakit module based on DB name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">import_dbname</span><span class="p">(</span><span class="n">dbname</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>dbname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Database name for one datakit</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Keyword Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>, <em>verbose</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to report results of matching modules</p>
+</dd>
+<dt><em>vv</em>, <em>veryverbose</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to report all attempts in matching sections</p>
+</dd>
+<dt><em>vvv</em>, <em>veryveryverbose</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to report all attempts</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>mod</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">module</span></code></dt><dd><p>Imported module if possible</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-02-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-08-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0</dt><dd><ul>
+<li><p>forked from <code class="xref py py-func docutils literal notranslate"><span class="pre">load_module()</span></code></p></li>
+<li><p>better regular expression support</p></li>
+<li><p>better fallback if more than one section matches</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.import_module">
+<span class="sig-name descname"><span class="pre">import_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.import_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import a datakit module based on DB name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">dbname</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>dbname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Database name for one datakit</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Keyword Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>, <em>verbose</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to report results of matching modules</p>
+</dd>
+<dt><em>vv</em>, <em>veryverbose</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to report all attempts in matching sections</p>
+</dd>
+<dt><em>vvv</em>, <em>veryveryverbose</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to report all attempts</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>mod</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">module</span></code></dt><dd><p>Imported module if possible</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-02-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-08-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0</dt><dd><ul>
+<li><p>forked from <code class="xref py py-func docutils literal notranslate"><span class="pre">load_module()</span></code></p></li>
+<li><p>better regular expression support</p></li>
+<li><p>better fallback if more than one section matches</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.match">
+<span class="sig-name descname"><span class="pre">match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regex_template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Match a regular expression template to a target string</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">groupdict</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex_template</span><span class="p">,</span> <span class="n">dbname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>regex_template</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression template for section of datakits</p>
+</dd>
+<dt><em>dbname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Database name for one datakit</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>groupdict</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Augmented <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> of groups from regex</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.match_section">
+<span class="sig-name descname"><span class="pre">match_section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.match_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a database name matches a given section</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">groupdict</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">match_section</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">dbname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>section</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Regular expression template for section of datakits</p>
+</dd>
+<dt><em>dbname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Database name for one datakit</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>groupdict</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>Augmented <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> of groups from regex</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.read_db">
+<span class="sig-name descname"><span class="pre">read_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.read_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a datakit based on DB name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">read_db</span><span class="p">(</span><span class="n">dbname</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>dbname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Database name for one datakit</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Keyword Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>, <em>verbose</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to report results of matching modules</p>
+</dd>
+<dt><em>vv</em>, <em>veryverbose</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to report all attempts in matching sections</p>
+</dd>
+<dt><em>vvv</em>, <em>veryveryverbose</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to report all attempts</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">DataKit</span></code></dt><dd><p>Data interface if successful</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-02-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-08-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0</dt><dd><ul>
+<li><p>better regex and fallback support</p></li>
+<li><p>verbosity options</p></li>
+<li><p>calls <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.read_dbname" title="cape.attdb.datakithub.DataKitHub.read_dbname"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_dbname()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.DataKitHub.read_dbname">
+<span class="sig-name descname"><span class="pre">read_dbname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.DataKitHub.read_dbname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a datakit based on DB name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">read_dbname</span><span class="p">(</span><span class="n">dbname</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hub</em>: <a class="reference internal" href="#cape.attdb.datakithub.DataKitHub" title="cape.attdb.datakithub.DataKitHub"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKitHub</span></code></a></dt><dd><p>Instance of datakit-reading hub</p>
+</dd>
+<dt><em>dbname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Database name for one datakit</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Keyword Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>, <em>verbose</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to report results of matching modules</p>
+</dd>
+<dt><em>vv</em>, <em>veryverbose</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to report all attempts in matching sections</p>
+</dd>
+<dt><em>vvv</em>, <em>veryveryverbose</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to report all attempts</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">DataKit</span></code></dt><dd><p>Data interface if successful</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-08-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.attdb.datakithub.prepare_template">
+<span class="sig-prename descclassname"><span class="pre">cape.attdb.datakithub.</span></span><span class="sig-name descname"><span class="pre">prepare_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.datakithub.prepare_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expand a string template with some substitutions</p>
+<p>The substitutions made include:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">r&quot;\g&lt;grp&gt;&quot;</span></code> –&gt; <code class="docutils literal notranslate"><span class="pre">&quot;%(grp)s&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r&quot;\l\g&lt;grp&gt;&quot;</span></code> –&gt; <code class="docutils literal notranslate"><span class="pre">&quot;%(l-grp)s&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r&quot;\u\1&quot;</span></code> –&gt; <code class="docutils literal notranslate"><span class="pre">&quot;%(u-1)s&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r&quot;\1&quot;</span></code> –&gt; <code class="docutils literal notranslate"><span class="pre">&quot;%(1)s&quot;</span></code></p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fmt</span> <span class="o">=</span> <span class="n">prepare_template</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>template</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Initial template, mixing <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> string expansion and
+<code class="xref py py-func docutils literal notranslate"><span class="pre">re.sub()</span></code> syntax</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fmt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Template ready for standard string expansion, for example
+using <code class="docutils literal notranslate"><span class="pre">fmt</span> <span class="pre">%</span> <span class="pre">grpdict</span></code> where <em>grpdict</em> is a <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.datakithub</span></code>: Hub for importing DataKits by name</a><ul>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub"><code class="docutils literal notranslate"><span class="pre">DataKitHub</span></code></a><ul>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.abspath"><code class="docutils literal notranslate"><span class="pre">DataKitHub.abspath()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.expand_regex"><code class="docutils literal notranslate"><span class="pre">DataKitHub.expand_regex()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.fullmatch"><code class="docutils literal notranslate"><span class="pre">DataKitHub.fullmatch()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.genr8_modname"><code class="docutils literal notranslate"><span class="pre">DataKitHub.genr8_modname()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.genr8_modpath"><code class="docutils literal notranslate"><span class="pre">DataKitHub.genr8_modpath()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.get_regex_groups"><code class="docutils literal notranslate"><span class="pre">DataKitHub.get_regex_groups()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.get_section"><code class="docutils literal notranslate"><span class="pre">DataKitHub.get_section()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.get_section_opt"><code class="docutils literal notranslate"><span class="pre">DataKitHub.get_section_opt()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.get_section_repo"><code class="docutils literal notranslate"><span class="pre">DataKitHub.get_section_repo()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.get_section_type"><code class="docutils literal notranslate"><span class="pre">DataKitHub.get_section_type()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.import_dbname"><code class="docutils literal notranslate"><span class="pre">DataKitHub.import_dbname()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.import_module"><code class="docutils literal notranslate"><span class="pre">DataKitHub.import_module()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.match"><code class="docutils literal notranslate"><span class="pre">DataKitHub.match()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.match_section"><code class="docutils literal notranslate"><span class="pre">DataKitHub.match_section()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.read_db"><code class="docutils literal notranslate"><span class="pre">DataKitHub.read_db()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.DataKitHub.read_dbname"><code class="docutils literal notranslate"><span class="pre">DataKitHub.read_dbname()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cape.attdb.datakithub.prepare_template"><code class="docutils literal notranslate"><span class="pre">prepare_template()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="rdb.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.rdb</span></code>: Main DataKit module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="datakitloader.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.datakitloader</span></code>: Tools for reading DataKits from a collection</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/attdb/datakithub.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datakitloader.html" title="cape.attdb.datakitloader: Tools for reading DataKits from a collection"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rdb.html" title="cape.attdb.rdb: Main DataKit module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.datakithub</span></code>: Hub for importing DataKits by name</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

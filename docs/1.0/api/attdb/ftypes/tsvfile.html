@@ -1,0 +1,916 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.attdb.ftypes.tsvfile: Space-separated value read/write &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.attdb.ftypes.xlsfile: Excel spreadsheet data interface" href="xlsfile.html" />
+    <link rel="prev" title="cape.attdb.ftypes.textdata: Generic textual data interface" href="textdata.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xlsfile.html" title="cape.attdb.ftypes.xlsfile: Excel spreadsheet data interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="textdata.html" title="cape.attdb.ftypes.textdata: Generic textual data interface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code>: Data file type interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile</span></code>: Space-separated value read/write</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.attdb.ftypes.tsvfile">
+<span id="cape-attdb-ftypes-tsvfile-space-separated-value-read-write"></span><h1><a class="reference internal" href="#module-cape.attdb.ftypes.tsvfile" title="cape.attdb.ftypes.tsvfile"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile</span></code></a>: Space-separated value read/write<a class="headerlink" href="#module-cape.attdb.ftypes.tsvfile" title="Permalink to this heading">¶</a></h1>
+<p>This module contains a basic interface in the spirit of
+<a class="reference internal" href="index.html#module-cape.attdb.ftypes" title="cape.attdb.ftypes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code></a> for standard comma-separated value files.  It
+creates a class, <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">TSVFile</span></code></a> that does not rely on the popular
+<code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.loadtxt()</span></code> function.</p>
+<p>If possible, the column names (which become keys in the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>-like class) are read from the header row.  If the file
+begins with multiple comment lines, the column names are read from the
+final comment before the beginning of data.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.tsvfile.</span></span><span class="sig-name descname"><span class="pre">TSVFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for reading space-separated files</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">TSVFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">TSVFile</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of columns read</p>
+</dd>
+<dt><em>db.opts</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFileOpts" title="cape.attdb.ftypes.tsvfile.TSVFileOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">TSVFileOpts</span></code></a></dt><dd><p>Options for this instance</p>
+</dd>
+<dt><em>db.defns</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFileDefn" title="cape.attdb.ftypes.tsvfile.TSVFileDefn"><code class="xref py py-class docutils literal notranslate"><span class="pre">TSVFileDefn</span></code></a>]</dt><dd><p>Definitions for each column</p>
+</dd>
+<dt><em>db[col]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Numeric array or list of strings for each column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">See also<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="basefile.html#cape.attdb.ftypes.basefile.BaseFile" title="cape.attdb.ftypes.basefile.BaseFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basefile.BaseFile</span></code></a></p></li>
+<li><p><a class="reference internal" href="basefile.html#cape.attdb.ftypes.basefile.TextInterpreter" title="cape.attdb.ftypes.basefile.TextInterpreter"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basefile.TextInterpreter</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-01-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.c_read_tsv">
+<span class="sig-name descname"><span class="pre">c_read_tsv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.c_read_tsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an entire TSV file, including header using C</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_header" title="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_header"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_tsv_header()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_data" title="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_tsv_data()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVFile)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.c_read_tsv_data">
+<span class="sig-name descname"><span class="pre">c_read_tsv_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.c_read_tsv_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read data portion of TSV file using C extension</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">c_read_tsv_data</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVFile)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.create_c_dtypes">
+<span class="sig-name descname"><span class="pre">create_c_dtypes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.create_c_dtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize <em>db._c_dtypes</em> for C text input</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">create_c_dtypes</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db._c_dtypes</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of integer codes for each data type</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVFile)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.py_read_tsv">
+<span class="sig-name descname"><span class="pre">py_read_tsv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.py_read_tsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an entire TSV file with pure Python</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">py_read_tsv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_header" title="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_header"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_tsv_header()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_data" title="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_tsv_data()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVFile)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.py_read_tsv_data">
+<span class="sig-name descname"><span class="pre">py_read_tsv_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.py_read_tsv_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read data portion of TSV file using Python</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">py_read_tsv_data</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVFile)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv">
+<span class="sig-name descname"><span class="pre">read_tsv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a TSV file, including header</p>
+<p>Reads either entire file or from current location</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsv</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File open for reading</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_header" title="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_header"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_tsv_header()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_data" title="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_tsv_data()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVFile)</p></li>
+<li><p>2021-01-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_data">
+<span class="sig-name descname"><span class="pre">read_tsv_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read data portion of TSV file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsv_data</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVFile)</p></li>
+<li><p>2019-11-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; try C first</p></li>
+<li><p>2021-01-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_dataline">
+<span class="sig-name descname"><span class="pre">read_tsv_dataline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_dataline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read one data line of a TSV file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsv_dataline</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVFile)</p></li>
+<li><p>2021-01-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_firstrowtypes">
+<span class="sig-name descname"><span class="pre">read_tsv_firstrowtypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_firstrowtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get initial guess at data types from first data row</p>
+<p>If (and only if) the <em>DefaultType</em> input is an integer type,
+guessed types can be integers.  Otherwise the sequence of
+possibilities is <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">complex</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsv_firstrowtypes</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+<dt><em>DefaultType</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;float&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of default class</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVFile)</p></li>
+<li><p>2021-01-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_header">
+<span class="sig-name descname"><span class="pre">read_tsv_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read column names from beginning of open file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsv_header</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVFile)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_headerdefaultcols">
+<span class="sig-name descname"><span class="pre">read_tsv_headerdefaultcols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_headerdefaultcols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create column names “col1”, “col2”, etc. if needed</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsv_headerdefaultcols</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>If not previously determined, this becomes
+<code class="docutils literal notranslate"><span class="pre">[&quot;col1&quot;,</span> <span class="pre">&quot;col2&quot;,</span> <span class="pre">...]</span></code> based on number of columns
+in the first data row</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_headerline">
+<span class="sig-name descname"><span class="pre">read_tsv_headerline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_headerline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read line and process column names if possible</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsv_headerline</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names if read</p>
+</dd>
+<dt><em>db._tsv_header_once</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> if column names are read at all</p>
+</dd>
+<dt><em>db._tsv_header_complete</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> if next line is expected to be data</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVFile)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.write_tsv">
+<span class="sig-name descname"><span class="pre">write_tsv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.write_tsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a comma-separated file of some of the coefficients</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">write_tsv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of TSV file to write</p>
+</dd>
+<dt><em>cols</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of coefficients to write, or write all coefficients</p>
+</dd>
+<dt><em>fmt</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Format string to be used for each row (optional)</p>
+</dd>
+<dt><em>fmts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Dictionary of formats to use for each <em>coeff</em></p>
+</dd>
+<dt><em>comments</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;#&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Comment character, used as first character of file</p>
+</dd>
+<dt><em>delim</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;,</span> <span class="pre">&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Delimiter</p>
+</dd>
+<dt><em>translators</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of col name translations, e.g. <em>CAF</em> -&gt; <em>CA</em>;
+this dictionary is run in reverse</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2018-06-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (cape.attdb.db.db1)</p></li>
+<li><p>2020-01-15 <code class="docutils literal notranslate"><span class="pre">&#64;jmeeroff</span></code>: Version 1.0</p></li>
+<li><p>2020-04-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0; full options</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFile.write_tsv_dense">
+<span class="sig-name descname"><span class="pre">write_tsv_dense</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFile.write_tsv_dense" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write dense TSV file using <em>WriteFlag</em> for each column</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">write_tsv_dense</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">write_tsv_dense</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File open for writing</p>
+</dd>
+<dt><em>fname</em>: {<em>db.fname</em>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to write</p>
+</dd>
+<dt><em>cols</em>: {<em>db.cols</em>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of columns to write</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-12-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVFile)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFileDefn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.tsvfile.</span></span><span class="sig-name descname"><span class="pre">TSVFileDefn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_optsdict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_warnmode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFileDefn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVFileOpts">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.tsvfile.</span></span><span class="sig-name descname"><span class="pre">TSVFileOpts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_optsdict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_warnmode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVFileOpts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVSimple">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.tsvfile.</span></span><span class="sig-name descname"><span class="pre">TSVSimple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVSimple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to read TSV file with only <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> data</p>
+<p>This class differs from <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">TSVFile</span></code></a> in that it is less
+flexible, does not permit multirow or empty headers, has fixed
+delimiter and comment characters, and assumes all data is a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> with the system default length.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">TSVSimple</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVSimple" title="cape.attdb.ftypes.tsvfile.TSVSimple"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVSimple</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of columns read</p>
+</dd>
+<dt><em>db.opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Options for this instance</p>
+</dd>
+<dt><em>db.opts[“Definitions”]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Definitions for each column</p>
+</dd>
+<dt><em>db[col]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Numeric array or list of strings for each column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">See also<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="basefile.html#cape.attdb.ftypes.basefile.BaseFile" title="cape.attdb.ftypes.basefile.BaseFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basefile.BaseFile</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-11-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Started</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple">
+<span class="sig-name descname"><span class="pre">read_tsvsimple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an entire TSV file, including header</p>
+<p>The TSV file requires exactly one header row, which is the
+first non-empty line, whether or not it begins with a comment
+character (which must be <code class="docutils literal notranslate"><span class="pre">&quot;#&quot;</span></code>).  All entries, both in the
+header and in the data, must be separated by a <code class="docutils literal notranslate"><span class="pre">,</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsvsimple</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVSimple" title="cape.attdb.ftypes.tsvfile.TSVSimple"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVSimple</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_header" title="cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_header"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_tsvsimple_header()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_data" title="cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_tsvsimple_data()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (CSVSimle)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_data">
+<span class="sig-name descname"><span class="pre">read_tsvsimple_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read data portion of simple TSV file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsvsimple_data</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVSimple" title="cape.attdb.ftypes.tsvfile.TSVSimple"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVSimple</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2021-07-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0; <code class="xref py py-func docutils literal notranslate"><span class="pre">np.fromfile()</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_header">
+<span class="sig-name descname"><span class="pre">read_tsvsimple_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read column names from beginning of open file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsvsimple_header</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (<code class="xref py py-class docutils literal notranslate"><span class="pre">CSVSimple</span></code>)</p></li>
+<li><p>2021-01-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-07-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0</dt><dd><ul>
+<li><p>Allow multiple comments</p></li>
+<li><p>Allow no header</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_headerdefaultcols">
+<span class="sig-name descname"><span class="pre">read_tsvsimple_headerdefaultcols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_headerdefaultcols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create column names “col1”, “col2”, etc. if needed</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsvsimple_headerdefaultcols</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>If not previously determined, this becomes
+<code class="docutils literal notranslate"><span class="pre">[&quot;col1&quot;,</span> <span class="pre">&quot;col2&quot;,</span> <span class="pre">...]</span></code> based on number of columns
+in the first data row</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (<a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">TSVFile</span></code></a>)</p></li>
+<li><p>2021-07-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_headerline">
+<span class="sig-name descname"><span class="pre">read_tsvsimple_headerline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_headerline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read line and process column names if possible</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_tsvsimple_headerline</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile" title="cape.attdb.ftypes.tsvfile.TSVFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile.TSVFile</span></code></a></dt><dd><p>TSV file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db.cols</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of column names if read</p>
+</dd>
+<dt><em>db._tsv_header_once</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> if column names are read at all</p>
+</dd>
+<dt><em>db._tsv_header_complete</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> if next line is expected to be data</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (<code class="xref py py-class docutils literal notranslate"><span class="pre">CSVFile</span></code>)</p></li>
+<li><p>2021-07-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile</span></code>: Space-separated value read/write</a><ul>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile"><code class="docutils literal notranslate"><span class="pre">TSVFile</span></code></a><ul>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.c_read_tsv"><code class="docutils literal notranslate"><span class="pre">TSVFile.c_read_tsv()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.c_read_tsv_data"><code class="docutils literal notranslate"><span class="pre">TSVFile.c_read_tsv_data()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.create_c_dtypes"><code class="docutils literal notranslate"><span class="pre">TSVFile.create_c_dtypes()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.py_read_tsv"><code class="docutils literal notranslate"><span class="pre">TSVFile.py_read_tsv()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.py_read_tsv_data"><code class="docutils literal notranslate"><span class="pre">TSVFile.py_read_tsv_data()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv"><code class="docutils literal notranslate"><span class="pre">TSVFile.read_tsv()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_data"><code class="docutils literal notranslate"><span class="pre">TSVFile.read_tsv_data()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_dataline"><code class="docutils literal notranslate"><span class="pre">TSVFile.read_tsv_dataline()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_firstrowtypes"><code class="docutils literal notranslate"><span class="pre">TSVFile.read_tsv_firstrowtypes()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_header"><code class="docutils literal notranslate"><span class="pre">TSVFile.read_tsv_header()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_headerdefaultcols"><code class="docutils literal notranslate"><span class="pre">TSVFile.read_tsv_headerdefaultcols()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.read_tsv_headerline"><code class="docutils literal notranslate"><span class="pre">TSVFile.read_tsv_headerline()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.write_tsv"><code class="docutils literal notranslate"><span class="pre">TSVFile.write_tsv()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFile.write_tsv_dense"><code class="docutils literal notranslate"><span class="pre">TSVFile.write_tsv_dense()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFileDefn"><code class="docutils literal notranslate"><span class="pre">TSVFileDefn</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVFileOpts"><code class="docutils literal notranslate"><span class="pre">TSVFileOpts</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVSimple"><code class="docutils literal notranslate"><span class="pre">TSVSimple</span></code></a><ul>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple"><code class="docutils literal notranslate"><span class="pre">TSVSimple.read_tsvsimple()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_data"><code class="docutils literal notranslate"><span class="pre">TSVSimple.read_tsvsimple_data()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_header"><code class="docutils literal notranslate"><span class="pre">TSVSimple.read_tsvsimple_header()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_headerdefaultcols"><code class="docutils literal notranslate"><span class="pre">TSVSimple.read_tsvsimple_headerdefaultcols()</span></code></a></li>
+<li><a class="reference internal" href="#cape.attdb.ftypes.tsvfile.TSVSimple.read_tsvsimple_headerline"><code class="docutils literal notranslate"><span class="pre">TSVSimple.read_tsvsimple_headerline()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="textdata.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.textdata</span></code>: Generic textual data interface</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="xlsfile.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.xlsfile</span></code>: Excel spreadsheet data interface</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/attdb/ftypes/tsvfile.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xlsfile.html" title="cape.attdb.ftypes.xlsfile: Excel spreadsheet data interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="textdata.html" title="cape.attdb.ftypes.textdata: Generic textual data interface"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code>: Data file type interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.tsvfile</span></code>: Space-separated value read/write</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

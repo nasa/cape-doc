@@ -1,0 +1,1276 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.pyover.cntl: OVERFLOW control module &#8212; CAPE 1.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pyover.options: OVERFLOW and pyOver Settings" href="options/index.html" />
+    <link rel="prev" title="The cape.pyover module" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="options/index.html" title="cape.pyover.options: OVERFLOW and pyOver Settings"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="The cape.pyover module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.cntl</span></code>: OVERFLOW control module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.pyover.cntl"></span><section id="cape-pyover-cntl-overflow-control-module">
+<h1><a class="reference internal" href="#module-cape.pyover.cntl" title="cape.pyover.cntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.cntl</span></code></a>: OVERFLOW control module<a class="headerlink" href="#cape-pyover-cntl-overflow-control-module" title="Permalink to this heading">¶</a></h1>
+<p>This module provides tools to quickly setup basic or complex OVERFLOW run matrices
+and serve as an executive for pre-processing, running, post-processing, and
+managing the solutions. A collection of cases combined into a run matrix can be
+loaded using the following commands.</p>
+<blockquote>
+<div><div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cape.pyover.fun3d</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">pyover</span><span class="o">.</span><span class="n">cntl</span><span class="o">.</span><span class="n">Cntl</span><span class="p">(</span><span class="s2">&quot;pyOver.json&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span>
+<span class="go">&lt;cape.pyover.Cntl(nCase=907)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">GetFullFolderNames</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">&#39;poweroff/m1.5a0.0b0.0&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>An instance of this <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.cntl.Cntl</span></code></a> class has many
+attributes, which include the run matrix (<code class="docutils literal notranslate"><span class="pre">cntl.x</span></code>), the options
+interface (<code class="docutils literal notranslate"><span class="pre">cntl.opts</span></code>), and optionally the data book
+(<code class="docutils literal notranslate"><span class="pre">cntl.DataBook</span></code>), the appropriate input files (such as
+<code class="docutils literal notranslate"><span class="pre">cntl.Namelist</span></code>), and possibly others.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><em>cntl.x</em></p></td>
+<td><p><a class="reference internal" href="../cape/runmatrix.html#cape.runmatrix.RunMatrix" title="cape.runmatrix.RunMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>cntl.opts</em></p></td>
+<td><p><a class="reference internal" href="options/index.html#cape.pyover.options.Options" title="cape.pyover.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.options.Options</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><em>cntl.DataBook</em></p></td>
+<td><p><a class="reference internal" href="dataBook.html#cape.pyover.dataBook.DataBook" title="cape.pyover.dataBook.DataBook"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.dataBook.DataBook</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>cntl.Namelist</em></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.namelist.Namelist</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Finally, the <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a> class is subclassed from the
+<a class="reference internal" href="../cape/cntl.html#cape.cntl.Cntl" title="cape.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cntl.Cntl</span></code></a> class, so any methods available to the CAPE class are
+also available here.</p>
+</section>
+<section id="overflow-executive-class-cape-pyover-cntl-cntl">
+<h1>OVERFLOW executive class: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.cntl.Cntl</span></code></a><a class="headerlink" href="#overflow-executive-class-cape-pyover-cntl-cntl" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyover.cntl.</span></span><span class="sig-name descname"><span class="pre">Cntl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pyOver.json'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for handling global options and setup for OVERFLOW</p>
+<p>This class is intended to handle all settings used to describe a
+group of OVERFLOW cases. For situations where it is not
+sufficiently customized, it can be used partially, e.g., to set up a
+Mach/alpha sweep for each single control variable setting.</p>
+<p>The settings are read from a JSON file, which is robust and simple
+to read, but has the disadvantage that there is no support for
+comments. Hopefully the various names are descriptive enough not to
+require explanation.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">pyover</span><span class="o">.</span><span class="n">Cntl</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s2">&quot;pyOver.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of cape.pyover input file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../pyfun/fun3d.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a></dt><dd><p>Instance of the cape.pyover control class</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Data members<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl.opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of options for this case (directly from <em>fname</em>)</p>
+</dd>
+<dt><em>cntl.x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.runmatrix.RunMatrix</span></code></dt><dd><p>Values and definitions for variables in the run matrix</p>
+</dd>
+<dt><em>cntl.Namelist</em>: <a class="reference internal" href="overNamelist.html#cape.pyover.overNamelist.OverNamelist" title="cape.pyover.overNamelist.OverNamelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.overNamelist.OverNamelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">over.namelist</span></code> OVERFLOW input file</p>
+</dd>
+<dt><em>cntl.RootDir</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Absolute path to the root directory</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Started</p></li>
+<li><p>2016-02-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.ApplyCase">
+<span class="sig-name descname"><span class="pre">ApplyCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nPhase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.ApplyCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply settings from <em>cntl.opts</em> to a set of cases</p>
+<p>This rewrites each run namelist file and the <code class="docutils literal notranslate"><span class="pre">case.json</span></code> file
+in the specified directories.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ApplyCase</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">nPhase</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Overflow control interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Case number</p>
+</dd>
+<dt><em>nPhase</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | positive <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Last phase number (default determined by <em>PhaseSequence</em>)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-12-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.ArchivePWD">
+<span class="sig-name descname"><span class="pre">ArchivePWD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phantom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.ArchivePWD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Archive a single case in the current folder</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ArchivePWD</span><span class="p">(</span><span class="n">phantom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control interface</p>
+</dd>
+<dt><em>phantom</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Write actions to <code class="docutils literal notranslate"><span class="pre">archive.log</span></code>; only delete if <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2017-12-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <em>phantom</em> option</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.CaseGetCurrentIter">
+<span class="sig-name descname"><span class="pre">CaseGetCurrentIter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.CaseGetCurrentIter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current iteration number from the appropriate module</p>
+<p>This function utilizes the <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.case</span></code> module, and so it must be
+copied to the definition for each solver’s control class</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">CaseGetCurrentIter</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../pyfun/fun3d.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index of the case to check (0-based)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Number of completed iterations or <code class="docutils literal notranslate"><span class="pre">None</span></code> if not set up</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.CaseGetCurrentPhase">
+<span class="sig-name descname"><span class="pre">CaseGetCurrentPhase</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.CaseGetCurrentPhase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current phase number from the appropriate module</p>
+<p>This function utilizes the <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.case</span></code> module, and so it must be
+copied to the definition for each solver’s control class</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">CaseGetCurrentPhase</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../cape/cntl.html#cape.cntl.Cntl" title="cape.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cntl.Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index of the case to check (0-based)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>j</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-06-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.CheckError">
+<span class="sig-name descname"><span class="pre">CheckError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.CheckError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a case has a failure</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">CheckError</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>OVERFLOW control interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Run index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, case has <code class="file docutils literal notranslate"><span class="pre">FAIL</span></code> file in it</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-01-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2017-04-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Checking for <code class="docutils literal notranslate"><span class="pre">q.bomb</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.CheckMesh">
+<span class="sig-name descname"><span class="pre">CheckMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.CheckMesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the mesh for case <em>i</em> is prepared</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">CheckMesh</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of OVERFLOW run control class</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index of the case to check</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></dt><dd><p>Whether or not the mesh for case <em>i</em> is prepared</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.CheckNone">
+<span class="sig-name descname"><span class="pre">CheckNone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.CheckNone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the current folder has the necessary files to run</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">CheckNone</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../pyfun/fun3d.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>v</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Verbose flag</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>q</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2017-02-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; add <em>v</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.CheckUsedPhase">
+<span class="sig-name descname"><span class="pre">CheckUsedPhase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.CheckUsedPhase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check maximum phase number run at least once</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">CheckUsedPhase</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../cape/cntl.html#cape.cntl.Cntl" title="cape.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cntl.Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index of the case to check (0-based)</p>
+</dd>
+<dt><em>v</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Verbose flag; prints messages if <em>n</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>j</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Phase number</p>
+</dd>
+<dt><em>n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Max phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-06-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2017-07-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; add <em>v</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.CleanPWD">
+<span class="sig-name descname"><span class="pre">CleanPWD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phantom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.CleanPWD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Archive a single case in the current folder</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">CleanPWD</span><span class="p">(</span><span class="n">phantom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control interface</p>
+</dd>
+<dt><em>phantom</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Write actions to <code class="docutils literal notranslate"><span class="pre">archive.log</span></code>; only delete if <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-03-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2017-12-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <em>phantom</em> option</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.ExtendCase">
+<span class="sig-name descname"><span class="pre">ExtendCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.ExtendCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the final phase of case <em>i</em> again</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ExtendCase</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">imax</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Run index</p>
+</dd>
+<dt><em>n</em>: {<code class="docutils literal notranslate"><span class="pre">1</span></code>} | positive <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Add <em>n</em> times <em>NSTEPS</em> to the total iteration count</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | nonnegative <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Apply to phase <em>j</em>, by default use the last phase</p>
+</dd>
+<dt><em>imax</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | nonnegative <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Use <em>imax</em> as the maximum iteration count</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.GetCPUTime">
+<span class="sig-name descname"><span class="pre">GetCPUTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">running</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.GetCPUTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a CAPE-style core-hour file from a case</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CPUt</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">GetCPUTime</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">running</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../pyfun/fun3d.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a></dt><dd><p>OVERFLOW control interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Case index</p>
+</dd>
+<dt><em>running</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not the case is running</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>CPUt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Total core hours used in this job</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-12-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2016-08-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; start times</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.GetConfig">
+<span class="sig-name descname"><span class="pre">GetConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.GetConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the configuration (if any) for case <em>i</em></p>
+<p>If there is no <em>config</em> or similar run matrix variable, return the name
+of the group folder</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">GetConfig</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Case index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>config</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Case configuration</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.GetConfigDir">
+<span class="sig-name descname"><span class="pre">GetConfigDir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.GetConfigDir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return absolute path to configuration folder</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fcfg</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">GetConfigDir</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Case index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fcfg</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Full path to configuration folder</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.GetMeshFileNames">
+<span class="sig-name descname"><span class="pre">GetMeshFileNames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.GetMeshFileNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of mesh files</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">GetMeshFileNames</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../pyfun/fun3d.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of file names read from root directory</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.GetNamelistVar">
+<span class="sig-name descname"><span class="pre">GetNamelistVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.GetNamelistVar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a namelist variable’s value</p>
+<p>The JSON file overrides the value from the namelist file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">GetNamelistVar</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>sec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of namelist section/group</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Variable to read</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Run sequence index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>val</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>Value</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.GetPrefix">
+<span class="sig-name descname"><span class="pre">GetPrefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.GetPrefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the project root name or OVERFLOW file prefix</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">name</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">GetPrefix</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>name</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Project root name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.GetSurfBCState">
+<span class="sig-name descname"><span class="pre">GetSurfBCState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.GetSurfBCState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get stagnation pressure and temperature ratios</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p0</span><span class="p">,</span> <span class="n">T0</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">GetSurfBC</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of SurfBC key to process</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Case index</p>
+</dd>
+<dt><em>grid</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of grid for which to extract settings</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>p0</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Ratio of BC total pressure to freestream total pressure</p>
+</dd>
+<dt><em>T0</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Ratio of BC total temperature to freestream total temperature</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-08-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.GetSurfCTState">
+<span class="sig-name descname"><span class="pre">GetSurfCTState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.GetSurfCTState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get stagnation pressure and temp. ratios for <em>SurfCT</em> key</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p0</span><span class="p">,</span> <span class="n">T0</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">GetSurfCTState</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of SurfBC key to process</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Case index</p>
+</dd>
+<dt><em>grid</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of grid for which to extract settings</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>p0</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Ratio of BC total pressure to freestream total pressure</p>
+</dd>
+<dt><em>T0</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Ratio of BC total temperature to freestream total temperature</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-08-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.PrepareCase">
+<span class="sig-name descname"><span class="pre">PrepareCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.PrepareCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare a case for running if it is not already prepared</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">PrepareCase</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../pyfun/fun3d.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index of case to prepare/analyze</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.PrepareMesh">
+<span class="sig-name descname"><span class="pre">PrepareMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.PrepareMesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare the mesh for case <em>i</em> if necessary</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">PrepareMesh</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Case index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-02-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.PrepareNamelist">
+<span class="sig-name descname"><span class="pre">PrepareNamelist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nPhase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.PrepareNamelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">over.namelist</span></code> for run case <em>i</em></p>
+<p>The optional input <em>nPhase</em> can be used to right additional
+phases that are not part of the default <em>PhaseSequence</em>, which
+can be useful when only a subset of cases in the run matrix will
+require additional phases.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">PrepareNamelist</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">nPhase</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of OVERFLOW control class</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Run index</p>
+</dd>
+<dt><em>nPhase</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | positive <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Last phase number (default determined by <em>PhaseSequence</em>)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-02-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2016-12-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; add second input</p></li>
+<li><p>2022-01-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.2; reread nml each call</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.ReadCaseJSON">
+<span class="sig-name descname"><span class="pre">ReadCaseJSON</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.ReadCaseJSON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read <code class="docutils literal notranslate"><span class="pre">case.json</span></code> file from case <em>i</em> if possible</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rc</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">ReadCaseJSON</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Run index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>rc</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">RunControl</span></code></dt><dd><p>Run control interface read from <code class="docutils literal notranslate"><span class="pre">case.json</span></code> file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.ReadCaseNamelist">
+<span class="sig-name descname"><span class="pre">ReadCaseNamelist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.ReadCaseNamelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read namelist from case <em>i</em>, phase <em>j</em> if possible</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">ReadCaseNamelist</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">rc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Run index</p>
+</dd>
+<dt><em>rc</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">RunControl</span></code></dt><dd><p>Run control interface read from <code class="docutils literal notranslate"><span class="pre">case.json</span></code> file</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | nonnegative <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>nml</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">OverNamelist</span></code></dt><dd><p>Namelist interface is possible</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.ReadDataBook">
+<span class="sig-name descname"><span class="pre">ReadDataBook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.ReadDataBook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the current data book</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ReadDataBook</span><span class="p">(</span><span class="n">comp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>comp</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></dt><dd><p>List of components, or read all if <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-02-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2017-04-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1l1; add <em>comp</em> option</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.ReadNamelist">
+<span class="sig-name descname"><span class="pre">ReadNamelist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.ReadNamelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the OVERFLOW namelist template</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ReadNamelist</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>j</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Phase number</p>
+</dd>
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></dt><dd><p>Whether or not to read to <em>Namelist</em>, else <em>Namelist0</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-02-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.ReadReport">
+<span class="sig-name descname"><span class="pre">ReadReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rep</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.ReadReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a report interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">ReadReport</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>rep</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of report</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>R</em>: <a class="reference internal" href="report.html#cape.pyover.report.Report" title="cape.pyover.report.Report"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.report.Report</span></code></a></dt><dd><p>Report interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.SetSurfBC">
+<span class="sig-name descname"><span class="pre">SetSurfBC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CT</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.SetSurfBC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a surface BC for one key using <em>IBTYP</em> 153</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">SetSurfBC</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">CT</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>key</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of SurfBC key to process</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Case index</p>
+</dd>
+<dt><em>CT</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether this key has thrust as input (else <em>p0</em>, <em>T0</em> directly)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.SkeletonPWD">
+<span class="sig-name descname"><span class="pre">SkeletonPWD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phantom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.SkeletonPWD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete most files in current folder, leaving only a skeleton</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">SkeletonPWD</span><span class="p">(</span><span class="n">phantom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control interface</p>
+</dd>
+<dt><em>phantom</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Write actions to <code class="docutils literal notranslate"><span class="pre">archive.log</span></code>; only delete if <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-12-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.StopCases">
+<span class="sig-name descname"><span class="pre">StopCases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.StopCases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop one or more cases by writing a <code class="docutils literal notranslate"><span class="pre">STOP</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">StopCases</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cons</span><span class="o">=</span><span class="p">[],</span> <span class="n">I</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>n</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | positive <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Iteration at which to stop</p>
+</dd>
+<dt><em>cons</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of trajectory constraints</p>
+</dd>
+<dt><em>I</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>List of case indices</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../cape/runmatrix.html#cape.runmatrix.RunMatrix.GetIndices" title="cape.runmatrix.RunMatrix.GetIndices"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix.GetIndices()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-03-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.WriteConfig">
+<span class="sig-name descname"><span class="pre">WriteConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Config.xml'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.WriteConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write configuration file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">WriteConfig</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s1">&#39;Config.xml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Overflow control interface</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Case index</p>
+</dd>
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">'Config.xml'</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of file to write within run folder</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.WritePBS">
+<span class="sig-name descname"><span class="pre">WritePBS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nPhase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.WritePBS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the PBS script(s) for a given case</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">WritePBS</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">nPhase</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of cape.pyover control class</p>
+</dd>
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Run index</p>
+</dd>
+<dt><em>nPhase</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Optional maximum phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2016-12-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; add <em>nPhase</em> input</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.cntl.Cntl.cli">
+<span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.cntl.Cntl.cli" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command-line interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">cli</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>kw</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code> (<code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>Unprocessed keyword arguments</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cmd</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of command that was processed, if any</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Content from <code class="docutils literal notranslate"><span class="pre">bin/</span></code> executables</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.cntl</span></code>: OVERFLOW control module</a></li>
+<li><a class="reference internal" href="#overflow-executive-class-cape-pyover-cntl-cntl">OVERFLOW executive class: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.cntl.Cntl</span></code></a><ul>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl"><code class="docutils literal notranslate"><span class="pre">Cntl</span></code></a><ul>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.ApplyCase"><code class="docutils literal notranslate"><span class="pre">Cntl.ApplyCase()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.ArchivePWD"><code class="docutils literal notranslate"><span class="pre">Cntl.ArchivePWD()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.CaseGetCurrentIter"><code class="docutils literal notranslate"><span class="pre">Cntl.CaseGetCurrentIter()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.CaseGetCurrentPhase"><code class="docutils literal notranslate"><span class="pre">Cntl.CaseGetCurrentPhase()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.CheckError"><code class="docutils literal notranslate"><span class="pre">Cntl.CheckError()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.CheckMesh"><code class="docutils literal notranslate"><span class="pre">Cntl.CheckMesh()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.CheckNone"><code class="docutils literal notranslate"><span class="pre">Cntl.CheckNone()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.CheckUsedPhase"><code class="docutils literal notranslate"><span class="pre">Cntl.CheckUsedPhase()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.CleanPWD"><code class="docutils literal notranslate"><span class="pre">Cntl.CleanPWD()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.ExtendCase"><code class="docutils literal notranslate"><span class="pre">Cntl.ExtendCase()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.GetCPUTime"><code class="docutils literal notranslate"><span class="pre">Cntl.GetCPUTime()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.GetConfig"><code class="docutils literal notranslate"><span class="pre">Cntl.GetConfig()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.GetConfigDir"><code class="docutils literal notranslate"><span class="pre">Cntl.GetConfigDir()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.GetMeshFileNames"><code class="docutils literal notranslate"><span class="pre">Cntl.GetMeshFileNames()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.GetNamelistVar"><code class="docutils literal notranslate"><span class="pre">Cntl.GetNamelistVar()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.GetPrefix"><code class="docutils literal notranslate"><span class="pre">Cntl.GetPrefix()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.GetSurfBCState"><code class="docutils literal notranslate"><span class="pre">Cntl.GetSurfBCState()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.GetSurfCTState"><code class="docutils literal notranslate"><span class="pre">Cntl.GetSurfCTState()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.PrepareCase"><code class="docutils literal notranslate"><span class="pre">Cntl.PrepareCase()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.PrepareMesh"><code class="docutils literal notranslate"><span class="pre">Cntl.PrepareMesh()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.PrepareNamelist"><code class="docutils literal notranslate"><span class="pre">Cntl.PrepareNamelist()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.ReadCaseJSON"><code class="docutils literal notranslate"><span class="pre">Cntl.ReadCaseJSON()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.ReadCaseNamelist"><code class="docutils literal notranslate"><span class="pre">Cntl.ReadCaseNamelist()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.ReadDataBook"><code class="docutils literal notranslate"><span class="pre">Cntl.ReadDataBook()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.ReadNamelist"><code class="docutils literal notranslate"><span class="pre">Cntl.ReadNamelist()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.ReadReport"><code class="docutils literal notranslate"><span class="pre">Cntl.ReadReport()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.SetSurfBC"><code class="docutils literal notranslate"><span class="pre">Cntl.SetSurfBC()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.SkeletonPWD"><code class="docutils literal notranslate"><span class="pre">Cntl.SkeletonPWD()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.StopCases"><code class="docutils literal notranslate"><span class="pre">Cntl.StopCases()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.WriteConfig"><code class="docutils literal notranslate"><span class="pre">Cntl.WriteConfig()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.WritePBS"><code class="docutils literal notranslate"><span class="pre">Cntl.WritePBS()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyover.cntl.Cntl.cli"><code class="docutils literal notranslate"><span class="pre">Cntl.cli()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code> module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="options/index.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options</span></code>: OVERFLOW and pyOver Settings</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pyover/overflow.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="options/index.html" title="cape.pyover.options: OVERFLOW and pyOver Settings"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="The cape.pyover module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.cntl</span></code>: OVERFLOW control module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

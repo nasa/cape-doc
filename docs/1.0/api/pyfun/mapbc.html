@@ -1,0 +1,441 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.pyfun.mapbc: FUN3D boundary condition module &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pyfun.faux: FAUXGeom interface module" href="faux.html" />
+    <link rel="prev" title="cape.namelist: FUN3D namelist module" href="namelist.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="faux.html" title="cape.pyfun.faux: FAUXGeom interface module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="namelist.html" title="cape.namelist: FUN3D namelist module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.mapbc</span></code>: FUN3D boundary condition module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.pyfun.mapbc">
+<span id="cape-pyfun-mapbc-fun3d-boundary-condition-module"></span><h1><a class="reference internal" href="#module-cape.pyfun.mapbc" title="cape.pyfun.mapbc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.mapbc</span></code></a>: FUN3D boundary condition module<a class="headerlink" href="#module-cape.pyfun.mapbc" title="Permalink to this heading">¶</a></h1>
+<p>This module provides an interface to FUN3D <code class="docutils literal notranslate"><span class="pre">.mapbc</span></code> files, which 
+specify a boundary condition and name for each component ID in the 
+surface grid. An example of such a file is shown below.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>       13
+21   5050        farfield_front
+22   5050        farfield_top
+23   5050        farfield_left
+24   5050        farfield_bottom
+25   5050        farfield_right
+26   5050        farfield_back
+ 1   4000        cap
+ 2   4000        body
+ 3   4000        base
+11   4000        fin1
+12   4000        fin2
+13   4000        fin3
+14   4000        fin4
+</pre></div>
+</div>
+</div></blockquote>
+<p>The entry on the first line is the total number of components, which is
+also the number of remaining rows.  Each data row has three columns:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Surface component ID in original mesh</p></li>
+<li><p>FUN3D boundary condition index</p></li>
+<li><p>Name of the surface component</p></li>
+</ol>
+</div></blockquote>
+<p>Providing an interface for this file (rather than simply copying a 
+template into each run folder) is convenient because FUN3D considers 
+these to be components 1 through 13 (not 21, 22, … 14), and combining
+this interface with a configuration XML file or configuration JSON file
+allows users to get the index or indices of of surfaces in a FUN3D 
+component by name.</p>
+<p>If <em>BC</em> is an instance of the class provided in this module, 
+<a class="reference internal" href="#cape.pyfun.mapbc.MapBC" title="cape.pyfun.mapbc.MapBC"><code class="xref py py-class docutils literal notranslate"><span class="pre">MapBC</span></code></a>, for the <code class="docutils literal notranslate"><span class="pre">.mapbc</span></code> file shown above, then the following
+methods show the main capabilities for going back and forth between 
+component numbers and surface numbers.</p>
+<blockquote>
+<div><div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span><span class="o">.</span><span class="n">GetSurfIndex</span><span class="p">(</span><span class="s2">&quot;cap&quot;</span><span class="p">)</span>
+<span class="go">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span><span class="o">.</span><span class="n">GetSurfID</span><span class="p">(</span><span class="s2">&quot;cap&quot;</span><span class="p">)</span>
+<span class="go">7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span><span class="o">.</span><span class="n">GetSurfIndex</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span><span class="o">.</span><span class="n">GetCompID</span><span class="p">(</span><span class="s2">&quot;cap&quot;</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span><span class="o">.</span><span class="n">GerSurfID</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>There is also a method <a class="reference internal" href="#cape.pyfun.mapbc.MapBC.SetBC" title="cape.pyfun.mapbc.MapBC.SetBC"><code class="xref py py-func docutils literal notranslate"><span class="pre">MapBC.SetBC()</span></code></a> that can be used to change the
+FUN3D boundary condition indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="cntl.html#module-cape.pyfun.cntl" title="cape.pyfun.cntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.cntl</span></code></a></p></li>
+<li><p><a class="reference internal" href="cntl.html#cape.pyfun.cntl.Cntl.ReadMapBC" title="cape.pyfun.cntl.Cntl.ReadMapBC"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl.ReadMapBC()</span></code></a></p></li>
+<li><p><a class="reference internal" href="cntl.html#cape.pyfun.cntl.Cntl.PrepareNamelistConfig" title="cape.pyfun.cntl.Cntl.PrepareNamelistConfig"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl.PrepareNamelistConfig()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyfun.mapbc.MapBC">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyfun.mapbc.</span></span><span class="sig-name descname"><span class="pre">MapBC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.mapbc.MapBC" title="Permalink to this definition">¶</a></dt>
+<dd><p>FUN3D boundary condition map class</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">MapBC</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">mapbc</span></code> file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>BC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.mapbc.MapBC</span></code></dt><dd><p>Boundary condition map instance</p>
+</dd>
+<dt><em>BC.n</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Number of surfaces</p>
+</dd>
+<dt><em>BC.SurfID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>FUN3D surface indices, numbered 1 to <em>n</em></p>
+</dd>
+<dt><em>BC.CompID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>Corresponding component IDs of each surface</p>
+</dd>
+<dt><em>BC.BCs</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</dt><dd><p>Boundary condition numbers</p>
+</dd>
+<dt><em>BC.Names</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</dt><dd><p>List of surface names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.mapbc.MapBC.GetCompID">
+<span class="sig-name descname"><span class="pre">GetCompID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.mapbc.MapBC.GetCompID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the component ID number used to tag this face in the 
+mesh</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compID</span> <span class="o">=</span> <span class="n">BC</span><span class="o">.</span><span class="n">GetCompID</span><span class="p">(</span><span class="n">compID</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compID</span> <span class="o">=</span> <span class="n">BC</span><span class="o">.</span><span class="n">GetCompID</span><span class="p">(</span><span class="n">face</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>BC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.mapbc.MapBC</span></code></dt><dd><p>FUN3D boundary condition interface</p>
+</dd>
+<dt><em>face</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of face</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Face triangulation index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.mapbc.MapBC.GetSurfID">
+<span class="sig-name descname"><span class="pre">GetSurfID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.mapbc.MapBC.GetSurfID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get surface ID number from input component ID or name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">surfID</span> <span class="o">=</span> <span class="n">BC</span><span class="o">.</span><span class="n">GetSurfID</span><span class="p">(</span><span class="n">compID</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">surfID</span> <span class="o">=</span> <span class="n">BC</span><span class="o">.</span><span class="n">GetSurfID</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>BC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.mapbc.MapBC</span></code></dt><dd><p>FUN3D boundary condition interface</p>
+</dd>
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Face triangulation index</p>
+</dd>
+<dt><em>face</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of face</p>
+</dd>
+<dt><em>check</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to return an error if component is not 
+found</p>
+</dd>
+<dt><em>warn</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to print warnings if not raising errors</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>surfID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index of the FUN3D surface, surfaces numbered 1 to <em>n</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.mapbc.MapBC.GetSurfIndex">
+<span class="sig-name descname"><span class="pre">GetSurfIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.mapbc.MapBC.GetSurfIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get surface ID number from input component ID or name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">BC</span><span class="o">.</span><span class="n">GetSurfID</span><span class="p">(</span><span class="n">compID</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">BC</span><span class="o">.</span><span class="n">GetSurfID</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>BC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.mapbc.MapBC</span></code></dt><dd><p>FUN3D boundary condition interface</p>
+</dd>
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Face triangulation index</p>
+</dd>
+<dt><em>face</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of face</p>
+</dd>
+<dt><em>check</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to return an error if component is not 
+found</p>
+</dd>
+<dt><em>warn</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to print warnings if not raising errors</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>i</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index of the FUN3D surface, 0-based</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.mapbc.MapBC.Read">
+<span class="sig-name descname"><span class="pre">Read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.mapbc.MapBC.Read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a FUN3D boundary condition map file (<code class="docutils literal notranslate"><span class="pre">.mapbc</span></code>)</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>BC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.mapbc.MapBC</span></code></dt><dd><p>FUN3D boundary condition map interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>File name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-03-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.mapbc.MapBC.SetBC">
+<span class="sig-name descname"><span class="pre">SetBC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.mapbc.MapBC.SetBC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set boundary condition</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span><span class="o">.</span><span class="n">SetBC</span><span class="p">(</span><span class="n">compID</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span><span class="o">.</span><span class="n">SetBC</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>BC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.mapbc.MapBC</span></code></dt><dd><p>FUN3D boundary condition interface</p>
+</dd>
+<dt><em>compID</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Face triangulation index</p>
+</dd>
+<dt><em>face</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Name of face</p>
+</dd>
+<dt><em>bc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>FUN3D boundary condition number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.mapbc.MapBC.Write">
+<span class="sig-name descname"><span class="pre">Write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.mapbc.MapBC.Write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write FUN3D MapBC file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>BC</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.mapbc.MapBC</span></code></dt><dd><p>FUN3D boundary condition interface</p>
+</dd>
+<dt><em>fname</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Name of file to write; defaults to <em>BC.fname</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.mapbc</span></code>: FUN3D boundary condition module</a><ul>
+<li><a class="reference internal" href="#cape.pyfun.mapbc.MapBC"><code class="docutils literal notranslate"><span class="pre">MapBC</span></code></a><ul>
+<li><a class="reference internal" href="#cape.pyfun.mapbc.MapBC.GetCompID"><code class="docutils literal notranslate"><span class="pre">MapBC.GetCompID()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyfun.mapbc.MapBC.GetSurfID"><code class="docutils literal notranslate"><span class="pre">MapBC.GetSurfID()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyfun.mapbc.MapBC.GetSurfIndex"><code class="docutils literal notranslate"><span class="pre">MapBC.GetSurfIndex()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyfun.mapbc.MapBC.Read"><code class="docutils literal notranslate"><span class="pre">MapBC.Read()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyfun.mapbc.MapBC.SetBC"><code class="docutils literal notranslate"><span class="pre">MapBC.SetBC()</span></code></a></li>
+<li><a class="reference internal" href="#cape.pyfun.mapbc.MapBC.Write"><code class="docutils literal notranslate"><span class="pre">MapBC.Write()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="namelist.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.namelist</span></code>: FUN3D namelist module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="faux.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.faux</span></code>: FAUXGeom interface module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pyfun/mapbc.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="faux.html" title="cape.pyfun.faux: FAUXGeom interface module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="namelist.html" title="cape.namelist: FUN3D namelist module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.mapbc</span></code>: FUN3D boundary condition module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

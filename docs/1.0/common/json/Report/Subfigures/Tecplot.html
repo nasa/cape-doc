@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>3.7.8.4.11. Tecplot Layout Subfigure &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="3.7.8.4.12. Paraview Subfigure" href="Paraview.html" />
+    <link rel="prev" title="3.7.8.4.10. Single-Case Line Load Plots" href="PlotLineLoad.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Paraview.html" title="3.7.8.4.12. Paraview Subfigure"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="PlotLineLoad.html" title="3.7.8.4.10. Single-Case Line Load Plots"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" ><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" ><span class="section-number">3.7. </span>Common JSON Settings</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../index.html" ><span class="section-number">3.7.8. </span>Automated Report Generation with LaTeX</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="index.html" accesskey="U"><span class="section-number">3.7.8.4. </span>Subfigure Definitions</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.7.8.4.11. </span>Tecplot Layout Subfigure</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="tecplot-layout-subfigure">
+<span id="cape-json-reporttecplot"></span><h1><span class="section-number">3.7.8.4.11. </span>Tecplot Layout Subfigure<a class="headerlink" href="#tecplot-layout-subfigure" title="Permalink to this heading">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;Tecplot&quot;</span></code> class of subfigure is used to set up <em>Tecplot</em> to open a
+layout within each solution folder and attempt to export a figure.  There are
+advanced options that instruct Cape to edit the layout file.  These values can
+utilize the value of any trajectory key using sigils.  For example, the
+following <em>ColorMap</em> instruction sets the Mach 0.0 color to <code class="docutils literal notranslate"><span class="pre">&quot;darkpurple&quot;</span></code>,
+the maximum Mach number color to <code class="docutils literal notranslate"><span class="pre">&quot;darkorange&quot;</span></code>, a sharp purple-to-green
+border at Mach 1.0, and the freestream Mach number to <code class="docutils literal notranslate"><span class="pre">&quot;white&quot;</span></code>.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;ColorMap&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;0.0&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;darkpurple&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;1.0&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;#b55fbf&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;green&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;$mach&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;max(1.1,1.4*$mach)&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;darkorange&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Colors are interpreted by <a class="reference internal" href="../../../../api/cape/color.html#module-cape.color" title="cape.color"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.color</span></code></a>.  The value for <code class="docutils literal notranslate"><span class="pre">$mach</span></code> is
+determined from the case number and the current
+<a class="reference internal" href="../../../../api/cape/runmatrix.html#cape.runmatrix.RunMatrix" title="cape.runmatrix.RunMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></a> for the run configuration.  If <em>mach</em> is
+not a trajectory key of the current run matrix, this specification will fail.</p>
+<p>The full list of options is shown below.</p>
+<blockquote>
+<div><dl>
+<dt><em>S</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of settings for <em>Tecplot</em> subfigure</p>
+<dl class="simple">
+<dt><em>Type</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;Tecplot&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Subfigure type</p>
+</dd>
+<dt><em>Header</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Heading placed above subfigure (bold, italic)</p>
+</dd>
+<dt><em>Position</em>: <code class="docutils literal notranslate"><span class="pre">&quot;t&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;c&quot;</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;b&quot;</span></code>}</dt><dd><p>Vertical alignment of subfigure</p>
+</dd>
+<dt><em>Alignment</em>: <code class="docutils literal notranslate"><span class="pre">&quot;left&quot;</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;center&quot;</span></code>}</dt><dd><p>Horizontal alignment</p>
+</dd>
+<dt><em>Width</em>: {<code class="docutils literal notranslate"><span class="pre">0.5</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></dt><dd><p>Width of subfigure as a fraction of page text width</p>
+</dd>
+<dt><em>FigWidth</em>: {<code class="docutils literal notranslate"><span class="pre">1024</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Width of the image generated by <em>Tecplot</em> in pixels</p>
+</dd>
+<dt><em>VarSet</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of <em>Tecplot</em> variable values to set within layout file</p>
+</dd>
+<dt><em>ContourLevels</em>: {<code class="docutils literal notranslate"><span class="pre">[]</span></code>} | [<em>CL</em>] | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>)</dt><dd><p>List of min, max, and delta values for contours; used to change
+limits for different solutions</p>
+</dd>
+<dt><em>ColorMaps</em>: {<code class="docutils literal notranslate"><span class="pre">[]</span></code>} | [<em>CM</em>] | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>List of color map dictionaries; used to change coloration for
+different solutions</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p>The full set of options for the dictionaries used in <em>ContourLevels</em> is shown
+below.</p>
+<blockquote>
+<div><dl>
+<dt><em>CL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of <em>ContourLevel</em> settings for some conditions</p>
+<dl class="simple">
+<dt><em>NContour</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index of <em>Tecplot</em> color map to alter</p>
+</dd>
+<dt><em>Constraints</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of constraints to describe which cases these instructions
+should be applied to</p>
+</dd>
+<dt><em>MinLevel</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Value of lower limit of minimum of contour level or Python text to
+<code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code> after substituting sigils</p>
+</dd>
+<dt><em>MaxLevel</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Value of upper limit of minimum of contour level or Python text to
+<code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code> after substituting sigils</p>
+</dd>
+<dt><em>Delta</em>:<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></dt><dd><p>Value of interval between contours or Python text to <code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code>
+after substituting sigils</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p>The full set of options for the dictionaries used in <em>ColorMaps</em> is shown
+below.</p>
+<blockquote>
+<div><dl>
+<dt><em>CM</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of <em>ColorMap</em> settings for some conditions</p>
+<dl class="simple">
+<dt><em>NContour</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></dt><dd><p>Index of <em>Tecplot</em> color map to alter</p>
+</dd>
+<dt><em>Constraints</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>)</dt><dd><p>List of constraints to describe which cases these instructions
+should be applied to</p>
+</dd>
+<dt><em>ColorMap</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></dt><dd><p>Dictionary of colors (or pair of colors if inserting a sharp color
+boundary) at specified values of the contour variable</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="PlotLineLoad.html"
+                          title="previous chapter"><span class="section-number">3.7.8.4.10. </span>Single-Case Line Load Plots</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Paraview.html"
+                          title="next chapter"><span class="section-number">3.7.8.4.12. </span>Paraview Subfigure</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/common/json/Report/Subfigures/Tecplot.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Paraview.html" title="3.7.8.4.12. Paraview Subfigure"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="PlotLineLoad.html" title="3.7.8.4.10. Single-Case Line Load Plots"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" ><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" ><span class="section-number">3.7. </span>Common JSON Settings</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../index.html" ><span class="section-number">3.7.8. </span>Automated Report Generation with LaTeX</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="index.html" ><span class="section-number">3.7.8.4. </span>Subfigure Definitions</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.7.8.4.11. </span>Tecplot Layout Subfigure</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,1403 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>6.1.1. OVERFLOW Bullet Example &#8212; CAPE 1.0.2</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="6.1.2. OVERFLOW Powered Nacelle Example" href="../02-powered_nacelle/index.html" />
+    <link rel="prev" title="6.1. Examples using pyOver" href="../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../02-powered_nacelle/index.html" title="6.1.2. OVERFLOW Powered Nacelle Example"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="6.1. Examples using pyOver"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">6. </span>pyOver Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">6.1. </span>Examples using pyOver</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.1.1. </span>OVERFLOW Bullet Example</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="overflow-bullet-example">
+<span id="pyover-example-bullet"></span><h1><span class="section-number">6.1.1. </span>OVERFLOW Bullet Example<a class="headerlink" href="#overflow-bullet-example" title="Permalink to this heading">¶</a></h1>
+<p>This pyOver example looks at the process from grid generation to execution and
+post-processing for a simple bullet geometry. To start, clone the repo and
+enter the resulting folder</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/nasa-ddalle/pyover01-bullet.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>pyover01-bullet
+</pre></div>
+</div>
+</div></blockquote>
+<p>the folder has the required input files, but it’s recommended to copy them to a
+working folder so that it’s easy to reset. Just run the following command:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./copy_files.py
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>work/
+</pre></div>
+</div>
+</div></blockquote>
+<p>This section guides the user through generating a grid system using Chimera
+Grid Tools. The resulting surface grid system is shown in
+<a class="reference internal" href="#tab-pyover-bullet-01"><span class="std std-numref">Table 6.1</span></a>, and one view of the volume grid is shown in
+<a class="reference internal" href="#fig-pyover-bullet-01"><span class="std std-numref">Figure 6.1</span></a>.</p>
+<blockquote>
+<div><span id="tab-pyover-bullet-01"></span><table class="docutils align-default" id="id1">
+<caption><span class="caption-number">Table 6.1 </span><span class="caption-text">OVERFLOW surface grid for bullet example</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/bullet-surf-01.png"><img alt="../../../_images/bullet-surf-01.png" src="../../../_images/bullet-surf-01.png" style="width: 2.8in;" /></a>
+<p>Front and side view</p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/bullet-surf-02.png"><img alt="../../../_images/bullet-surf-02.png" src="../../../_images/bullet-surf-02.png" style="width: 2.8in;" /></a>
+<p>Aft view</p>
+</td>
+</tr>
+</tbody>
+</table>
+<figure class="align-default" id="id2">
+<span id="fig-pyover-bullet-01"></span><a class="reference internal image-reference" href="../../../_images/bullet-vol-01.png"><img alt="../../../_images/bullet-vol-01.png" src="../../../_images/bullet-vol-01.png" style="width: 4.0in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 6.1 </span><span class="caption-text">OVERFLOW volume grid slice for bullet example</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>This is a three-grid system that demonstrates a lot of the basic features of
+running OVERFLOW and creating a simple grid system.</p>
+<section id="grid-generation">
+<h2><span class="section-number">6.1.1.1. </span>Grid generation<a class="headerlink" href="#grid-generation" title="Permalink to this heading">¶</a></h2>
+<p>While many users are opting to create overset grid systems using a graphical
+user interface (for example Pointwise), this example guides users through a
+traditional script-based grid generation process.  While there are really no
+special contributions of pyOver to this process, it may increase understanding
+of later tasks to explain how the grid system was generated.</p>
+<p>Some aspects of the grid generation example may rely on recent features of
+Chimera Grid Tools.</p>
+<p>Starting from the base directory for the example,
+<code class="docutils literal notranslate"><span class="pre">pyover01-bullet/</span></code>, the grid generation takes place in the
+<code class="docutils literal notranslate"><span class="pre">dcf/</span></code> folder.  The initial contents of this folder include a <code class="docutils literal notranslate"><span class="pre">geom/</span></code>
+folder that contains the basic definitions for the geometry and some TCL
+scripts for generating the grid.</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">dcf/</span></code></p>
+<blockquote>
+<div><ul>
+<li><p><em>GlobalDefs.tcl</em>: script to set overall variables for grid system</p></li>
+<li><p><em>inputs.tcl</em>: various local variables such as grid spacing</p></li>
+<li><p><em>config.tcl</em>: instructions for names of grids</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom/</span></code>: geometry definitions folder</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>bullet.i.tri</em>: surface geometry triangulation</p></li>
+<li><p><em>bullet.stp</em>: STEP file of relevant curves</p></li>
+<li><p><em>bullet.lr8.crv</em>: little-endian curve of axisymmetric radius</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bullet/</span></code>: grid building are for <strong>bullet</strong> component</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>BuildBullet.tcl</em>: main script to generate <strong>bullet</strong> grids</p></li>
+<li><p><em>localinputs.tcl</em>: local settings for <strong>bullet</strong> component</p></li>
+<li><p><em>Makefile</em>: <code class="docutils literal notranslate"><span class="pre">make</span></code> instructions for building surface grids</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<section id="geometry-definitions">
+<h3><span class="section-number">6.1.1.1.1. </span>Geometry definitions<a class="headerlink" href="#geometry-definitions" title="Permalink to this heading">¶</a></h3>
+<p>The surface triangulation and curves generated from the natural boundaries of
+this triangulation are shown in <a class="reference internal" href="#fig-pyover-bullet-02"><span class="std std-numref">Figure 6.2</span></a>.</p>
+<blockquote>
+<div><figure class="align-default" id="id3">
+<span id="fig-pyover-bullet-02"></span><a class="reference internal image-reference" href="../../../_images/bullet-geom-01.png"><img alt="../../../_images/bullet-geom-01.png" src="../../../_images/bullet-geom-01.png" style="width: 3.5in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 6.2 </span><span class="caption-text">Surface triangulation and curves for bullet example</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>The curve file was generated using the STEP file in addition to the
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">pc_StepTri2Crv</span></code> script:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pc_StepTri2Crv.py<span class="w"> </span>bullet<span class="w"> </span>-lr8<span class="w"> </span>-o<span class="w"> </span>bullet.lr8.crv
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="grid-script-setup">
+<h3><span class="section-number">6.1.1.1.2. </span>Grid script setup<a class="headerlink" href="#grid-script-setup" title="Permalink to this heading">¶</a></h3>
+<p>The contents of the <code class="docutils literal notranslate"><span class="pre">dcf/</span></code> directory are detailed above, but some aspects of
+the TCL scripts are explained here.  This example has only a single logical
+“component,” called <strong>bullet</strong>, but a more general use case for the Chimera
+Grid Tools grid script system may have many such components.  For example, if
+we added fins to this example, we may create the grids for those fins using
+another folder called <code class="docutils literal notranslate"><span class="pre">fins/</span></code>.</p>
+<p>Grid scripts rely on several hard-coded TCL file names, which can be guessed
+from the layout of this <code class="docutils literal notranslate"><span class="pre">dcf/</span></code> example.  The <code class="docutils literal notranslate"><span class="pre">GlobalDefs.tcl</span></code> script sets a
+few global variables for the grid script.  None of the variables set in this
+file are universal requirements, but those that are set in this TCL script can
+become available to all of the other scripts.  The contents of this particular
+example of the <code class="docutils literal notranslate"><span class="pre">GlobalDefs.tcl</span></code> are shown below.</p>
+<blockquote>
+<div><div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c">#!/usr/bin/env tclsh</span>
+
+<span class="k">global</span><span class="w"> </span>Par
+
+<span class="c"># Source folder stuff</span>
+<span class="k">set</span><span class="w"> </span>ScriptFile<span class="w"> </span><span class="k">[</span><span class="nb">file</span><span class="w"> </span>normalize<span class="w"> </span><span class="k">[</span><span class="nb">info</span><span class="w"> </span>script<span class="k">]]</span>
+<span class="k">set</span><span class="w"> </span>ScriptDir<span class="w">  </span><span class="k">[</span><span class="nb">file</span><span class="w"> </span>dirname<span class="w"> </span><span class="nv">$ScriptFile</span><span class="k">]</span>
+<span class="k">set</span><span class="w"> </span>RootDir<span class="w">    </span><span class="k">[</span><span class="nb">file</span><span class="w"> </span>join<span class="w"> </span><span class="k">{</span><span class="o">*</span><span class="k">}[</span><span class="nb">lrange</span><span class="w"> </span><span class="k">[</span><span class="nb">file</span><span class="w"> </span>split<span class="w"> </span><span class="nv">$ScriptDir</span><span class="k">]</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span>end<span class="k">]]</span>
+<span class="k">set</span><span class="w"> </span>GeomDir<span class="w">    </span><span class="k">[</span><span class="nb">file</span><span class="w"> </span>join<span class="w"> </span><span class="nv">$RootDir</span><span class="w"> </span>geom<span class="k">]</span>
+
+<span class="k">set</span><span class="w"> </span>Par<span class="k">(</span><span class="nv">ScriptFile</span><span class="k">)</span><span class="w"> </span><span class="nv">$ScriptFile</span>
+<span class="k">set</span><span class="w"> </span>Par<span class="k">(</span><span class="nv">ScriptDir</span><span class="k">)</span><span class="w">  </span><span class="nv">$ScriptDir</span>
+<span class="k">set</span><span class="w"> </span>Par<span class="k">(</span><span class="nv">GeomDir</span><span class="k">)</span><span class="w">    </span><span class="nv">$GeomDir</span>
+
+<span class="c"># Global switch for OVERFLOW solver</span>
+<span class="k">set</span><span class="w"> </span>ovfi_inputs<span class="w"> </span><span class="s2">&quot;ssor&quot;</span>
+
+<span class="c"># List of parts included</span>
+<span class="k">set</span><span class="w"> </span>IncludeBullet<span class="w">    </span><span class="mi">1</span>
+
+<span class="c"># Grid scaling parameter</span>
+<span class="k">set</span><span class="w"> </span>GlobalScaleFactor<span class="w"> </span><span class="mf">1.0</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Some of this unusual TCL syntax is just intended to save the absolute path to
+various folders, including the one containing the script (<em>ScriptDir</em> and
+<em>RootDir</em> in this example) and the input geometry files (<em>GeomDir</em>).  The
+<em>GlobalScaleFactor</em> can also be used to change the overall resolution of grid
+as long as all the other spacing variables are programmed to change with
+<em>GlobalScaleFactor</em>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">inputs.tcl</span></code> file is much longer but is also a script that basically just
+sets variables for use elsewhere.  It defines basic grid resolution settings
+with syntax such as</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span># ------
+# Wall spacing and stretching ratio
+# ------
+set Par(ds,wall) 0.001
+set Par(sr,wall) 1.2
+set Par(klayer) 3
+# ------
+# Surface stretching ratio
+# ------
+set Par(sr)      1.2
+set Par(sr,slow) 1.1
+# ------
+# Main marching distance
+# ------
+set Par(md)              5.0
+set Par(md,protub)       2.0
+set Par(md,protub,small) 1.0
+</pre></div>
+</div>
+</div></blockquote>
+<p>It is a common convention to use <em>Par</em> as the TCL variable that stores
+parameters for grid spacing.  The <code class="docutils literal notranslate"><span class="pre">inputs.tcl</span></code> script also contains default
+volume grid options</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span># ------
+# Default hypgen inputs
+# ------
+set Par(smu) 0.5
+set default(zreg)  $Par(md)
+set default(dz0)   $Par(ds,wall)
+set default(dz1)   $Par(ds,glb)
+set default(srmax) $Par(sr)
+set default(ibcja) -10
+set default(ibcjb) -10
+set default(ibcka) -10
+set default(ibckb) -10
+set default(imeth) 2
+</pre></div>
+</div>
+</div></blockquote>
+<p>The volume options (<code class="docutils literal notranslate"><span class="pre">hypgen</span></code> options) can be overridden for individual
+surface grids as needed.  In addition the syntax</p>
+<blockquote>
+<div><div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># ------</span>
+<span class="c"># Volume grids created by other means</span>
+<span class="c"># ------</span>
+<span class="k">set</span><span class="w"> </span>bullet_body<span class="k">(</span><span class="nv">nomakevol</span><span class="k">)</span><span class="w"> </span><span class="mi">1</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>instructs the <code class="docutils literal notranslate"><span class="pre">BuildVol</span></code> command not to grow a volume grid for the grid named
+<code class="docutils literal notranslate"><span class="pre">bullet_body</span></code> because that volume grid is already created during the
+execution of <code class="docutils literal notranslate"><span class="pre">BuildBullet.tcl</span></code>.</p>
+<p>Within <code class="docutils literal notranslate"><span class="pre">inputs.tcl</span></code>, there are also instructions for what settings to use in
+the template OVERFLOW namelist, <code class="docutils literal notranslate"><span class="pre">overflow.inp</span></code>:</p>
+<blockquote>
+<div><div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># ------</span>
+<span class="c"># Inputs for the OVERFLOW flow solver</span>
+<span class="c"># ------</span>
+<span class="k">set</span><span class="w"> </span>Ovr<span class="k">(</span><span class="nv">incore</span><span class="k">)</span><span class="w"> </span>.T.
+<span class="k">set</span><span class="w"> </span>Ovr<span class="k">(</span><span class="nv">nsteps</span><span class="k">)</span><span class="w"> </span><span class="mi">100</span>
+<span class="k">set</span><span class="w"> </span>Ovr<span class="k">(</span><span class="nv">restrt</span><span class="k">)</span><span class="w"> </span>.F.
+<span class="k">set</span><span class="w"> </span>Ovr<span class="k">(</span><span class="nv">fmg</span><span class="k">)</span><span class="w">    </span>.T.
+<span class="k">set</span><span class="w"> </span>Ovr<span class="k">(</span><span class="nv">fmgcyc</span><span class="k">)</span><span class="w"> </span><span class="s2">&quot;1000, 1000, 0&quot;</span>
+<span class="k">set</span><span class="w"> </span>Ovr<span class="k">(</span><span class="nv">nglvl</span><span class="k">)</span><span class="w">  </span><span class="mi">4</span>
+<span class="k">set</span><span class="w"> </span>Ovr<span class="k">(</span><span class="nv">nfomo</span><span class="k">)</span><span class="w">  </span><span class="mi">2</span>
+<span class="k">set</span><span class="w"> </span>Ovr<span class="k">(</span><span class="nv">dtphys</span><span class="k">)</span><span class="w"> </span><span class="mf">0.0</span>
+<span class="k">set</span><span class="w"> </span>Ovr<span class="k">(</span><span class="nv">nitnwt</span><span class="k">)</span><span class="w"> </span><span class="mi">0</span>
+<span class="k">set</span><span class="w"> </span>Ovr<span class="k">(</span><span class="nv">walldist</span><span class="k">)</span><span class="w"> </span><span class="mi">2</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Of course, these can be altered later by <a class="reference internal" href="../../../api/pyover/index.html#module-cape.pyover" title="cape.pyover"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code></a> using the
+<a class="reference internal" href="../../../api/pyover/overNamelist.html#module-cape.pyover.overNamelist" title="cape.pyover.overNamelist"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.overNamelist</span></code></a> interface.  Finally, the <em>mixsurcomp</em> variable can
+be used to group surface families into larger components, which affects the
+file <code class="docutils literal notranslate"><span class="pre">mixsur.i</span></code> that is built by <code class="docutils literal notranslate"><span class="pre">BuildMixsuri</span></code>.</p>
+<p>The file <code class="docutils literal notranslate"><span class="pre">config.tcl</span></code> describes the list of grids to include (for each
+component, in examples where that’s appropriate).</p>
+<blockquote>
+<div><div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c">#!/usr/bin/env tclsh</span>
+
+<span class="nb">source</span><span class="w"> </span><span class="k">[</span><span class="nv">GetIfile</span><span class="w"> </span>GlobalDefs.tcl<span class="k">]</span>
+<span class="nb">source</span><span class="w"> </span><span class="k">[</span><span class="nv">GetIfile</span><span class="w"> </span>inputs.tcl<span class="k">]</span>
+
+<span class="c"># List of bullet grids</span>
+<span class="k">set</span><span class="w"> </span>grids<span class="w"> </span><span class="s2">&quot;bullet/bullet_body</span>
+<span class="s2">           bullet/bullet_cap</span>
+<span class="s2">           bullet/bullet_base &quot;</span>
+
+<span class="c"># List of xrays</span>
+<span class="k">set</span><span class="w"> </span>xrays<span class="w"> </span><span class="s2">&quot;bullet/bullet &quot;</span>
+
+<span class="c"># Convert variable names</span>
+<span class="k">set</span><span class="w"> </span>rootnames<span class="w"> </span><span class="s2">&quot;$grids&quot;</span>
+<span class="k">set</span><span class="w"> </span>xraynames<span class="w"> </span><span class="s2">&quot;$xrays&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This script is fairly self-explanatory for a simple example such as this, but
+in more general cases this file often contains more logic for including or not
+including grids based on component on/off switches in <code class="docutils literal notranslate"><span class="pre">GlobalDefs.tcl</span></code>.  The
+variables <em>rootnames</em> and <em>xraynames</em> are hard-coded and used by the grid
+script system.</p>
+</section>
+<section id="surface-grid-generation">
+<h3><span class="section-number">6.1.1.1.3. </span>Surface grid generation<a class="headerlink" href="#surface-grid-generation" title="Permalink to this heading">¶</a></h3>
+<p>From the <code class="docutils literal notranslate"><span class="pre">dcf/</span></code> folder, run the Chimera Grid Tools command</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>BuildSurf
+</pre></div>
+</div>
+</div></blockquote>
+<p>However, users should take care to match endianness.  The input file is
+little-endian, so the one of the following system commands may be necessary.
+Note that the <code class="docutils literal notranslate"><span class="pre">csh</span></code> versions of these commands would need to use <code class="docutils literal notranslate"><span class="pre">setenv</span></code>.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">GFORTRAN_CONVERT_UNIT</span><span class="o">=</span><span class="s2">&quot;little_endian&quot;</span>
+<span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">F_UFMTENDIAN</span><span class="o">=</span><span class="s2">&quot;little&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This command reads the <em>rootnames</em> variable and makes a list of all the folders
+referenced by any grid, which in our simple example is simply <code class="docutils literal notranslate"><span class="pre">bullet/</span></code>.
+Then the surface grid builder goes into each such folder and just calls</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>make
+</pre></div>
+</div>
+</div></blockquote>
+<p>Therefore the contents of the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> in each component folder have a
+direct impact.  The contents for this <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> are shown below.  Basically
+it instructs <code class="docutils literal notranslate"><span class="pre">make</span></code> to run the local script <code class="docutils literal notranslate"><span class="pre">BuildBullet.tcl</span></code> if any of
+four files are missing or if any of two TCL files are newer than the grid
+output files.</p>
+<blockquote>
+<div><div class="highlight-make notranslate"><div class="highlight"><pre><span></span><span class="nv">SurfGrids</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>bullet_cap.srf<span class="w"> </span><span class="se">\</span>
+<span class="w">            </span>bullet_body.srf<span class="w"> </span><span class="se">\</span>
+<span class="w">            </span>bullet_base.srf<span class="w"> </span><span class="se">\</span>
+<span class="w">            </span>bullet.xry
+
+<span class="nf">all</span><span class="o">:</span><span class="w"> </span><span class="k">$(</span><span class="nv">SurfGrids</span><span class="k">)</span>
+
+<span class="nf">clobber</span><span class="o">:</span>
+<span class="w">    </span>/bin/rm<span class="w"> </span>-f<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>bullet_cap.srf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>bullet_body.srf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>bullet_base.srf
+
+<span class="nf">$(SurfGrids)</span><span class="o">:</span><span class="w"> </span><span class="n">BuildBullet</span>.<span class="n">tcl</span> <span class="n">localinputs</span>.<span class="n">tcl</span>
+<span class="w">    </span>./BuildBullet.tcl
+</pre></div>
+</div>
+</div></blockquote>
+<p>The other fixed-name file in the <code class="docutils literal notranslate"><span class="pre">bullet/</span></code> folder is called
+<code class="docutils literal notranslate"><span class="pre">localinputs.tcl</span></code>.  This TCL script is sourced during the generation of
+surface grids and of volume grids.  The first part of this script sets spacings
+and point counts specific to this component.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#!/usr/bin/env tclsh
+
+global Ovr Par
+
+# Body spacings
+set Par(ds,bullet,cap)  [expr 0.10*$Par(ds,glb)]
+set Par(ds,bullet,crn)  [expr 0.05*$Par(ds,glb)]
+set Par(ds,bullet,body) [expr 0.25*$Par(ds,glb)]
+set Par(ds,bullet,aft)  [expr 0.15*$Par(ds,glb)]
+
+# Number of points around the bullet
+set Par(npcirc,bullet) 73
+</pre></div>
+</div>
+</div></blockquote>
+<p>Within the <code class="docutils literal notranslate"><span class="pre">BuildBullet.tcl</span></code> script contains many calls to the TCL utilities
+of Chimera Grid Tools.  After running this script (via <code class="docutils literal notranslate"><span class="pre">BuildSurf</span></code> or a
+direct call) the following files are created in the <code class="docutils literal notranslate"><span class="pre">bullet/</span></code> folder.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>bullet_base.srf</strong>: surface grid <code class="docutils literal notranslate"><span class="pre">bullet_base</span></code></p></li>
+<li><p><strong>bullet_body.srf</strong>: surface grid <code class="docutils literal notranslate"><span class="pre">bullet_body</span></code></p></li>
+<li><p><strong>bullet_cap.srf</strong>: surface grid <code class="docutils literal notranslate"><span class="pre">bullet_cap</span></code></p></li>
+<li><p><strong>bullet_body.vol</strong>: volume grid <code class="docutils literal notranslate"><span class="pre">bullet_body</span></code></p></li>
+<li><p><em>bullet_base.ovfi</em>: OVERFLOW inputs for grid <code class="docutils literal notranslate"><span class="pre">bullet_base</span></code></p></li>
+<li><p><em>bullet_body.ovfi</em>: OVERFLOW inputs for grid <code class="docutils literal notranslate"><span class="pre">bullet_body</span></code></p></li>
+<li><p><em>bullet_cap.ovfi</em>: OVERFLOW inputs for grid <code class="docutils literal notranslate"><span class="pre">bullet_body</span></code></p></li>
+<li><p><strong>bullet.xry</strong>: X-Ray cutter file for bullet’s body</p></li>
+</ul>
+</div></blockquote>
+<p>These files demonstrate that one component may have multiple grids, and thus
+the decision on what is a “component” and what is multiple components is
+decided by the user for the specific situation.  The grid script system keeps
+all grid files separate (although to be clear these are multiple-grid format
+with one grid).</p>
+<p>Regarding the <code class="docutils literal notranslate"><span class="pre">ovfi</span></code> files, they contain namelists specifically for each
+grid.  These are assembled into the <code class="docutils literal notranslate"><span class="pre">overflow.inp</span></code> namelist for each included
+grid (order is important).</p>
+</section>
+<section id="volume-grid-generation">
+<h3><span class="section-number">6.1.1.1.4. </span>Volume grid generation<a class="headerlink" href="#volume-grid-generation" title="Permalink to this heading">¶</a></h3>
+<p>Creating the volume grids is performed using the following system command, also
+run from the <code class="docutils literal notranslate"><span class="pre">dcf/</span></code> root folder.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>BuildVol
+</pre></div>
+</div>
+</div></blockquote>
+<p>This creates a volume grid for the two grids that did not have a previously
+generated grid.  The <code class="docutils literal notranslate"><span class="pre">bullet_body.vol</span></code> grid is generated by rotating a 2D
+grid about the <em>x</em>-axis, so this volume does not need to be generated by
+<code class="docutils literal notranslate"><span class="pre">hypgen</span></code>.  After running <code class="docutils literal notranslate"><span class="pre">BuildVol</span></code>, the following additional files are
+created.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>bullet_base.vol</strong>: volume grid <code class="docutils literal notranslate"><span class="pre">bullet_base</span></code></p></li>
+<li><p><strong>bullet_cap.vol</strong>: volume grid <code class="docutils literal notranslate"><span class="pre">bullet_cap</span></code></p></li>
+<li><p><em>bullet_base.bvinp</em>: <code class="docutils literal notranslate"><span class="pre">makevol</span></code> inputs</p></li>
+<li><p><em>bullet_base.hypi</em>: <code class="docutils literal notranslate"><span class="pre">hypgen</span></code>  inputs</p></li>
+<li><p><em>bullet_base.mvlog</em>: <code class="docutils literal notranslate"><span class="pre">makevol</span></code> output log</p></li>
+<li><p><em>bullet_cap.bvinp</em>: <code class="docutils literal notranslate"><span class="pre">makevol</span></code> inputs</p></li>
+<li><p><em>bullet_cap.hypi</em>: <code class="docutils literal notranslate"><span class="pre">hypgen</span></code> stream inputs</p></li>
+<li><p><em>bullet_cap.mvlog</em>: <code class="docutils literal notranslate"><span class="pre">makevol</span></code> output log</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="grid-assembly">
+<h3><span class="section-number">6.1.1.1.5. </span>Grid assembly<a class="headerlink" href="#grid-assembly" title="Permalink to this heading">¶</a></h3>
+<p>To create the assembled volume and surface grids, the following (not
+necessarily obvious) commands are run.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>BuildPlot
+</pre></div>
+</div>
+</div></blockquote>
+<p>This results in the surface grid file <code class="docutils literal notranslate"><span class="pre">Composite.srf</span></code>, which contains all
+three surface grids combined into a single file.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>BuildPlot<span class="w"> </span>-vol
+</pre></div>
+</div>
+</div></blockquote>
+<p>This file creates <code class="docutils literal notranslate"><span class="pre">Composite.vol</span></code>, which is the primary volume grid that we
+need as input to run OVERFLOW.  Copy this file into the <code class="docutils literal notranslate"><span class="pre">common/</span></code>
+subdirectory of the parent folder.  The surface grid file is not required, but
+can be convenient to have in a common location.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cp<span class="w"> </span>Composite.vol<span class="w"> </span>../common/grid.in
+<span class="gp">$ </span>cp<span class="w"> </span>Composite.srf<span class="w"> </span>../common/grid.srf
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="assembling-inputs">
+<h3><span class="section-number">6.1.1.1.6. </span>Assembling inputs<a class="headerlink" href="#assembling-inputs" title="Permalink to this heading">¶</a></h3>
+<p>The following two commands create the template OVERFLOW input namelist and
+<code class="docutils literal notranslate"><span class="pre">mixsur</span></code> input file, respectively.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>BuildOveri
+<span class="gp">$ </span>BuildMixsuri
+</pre></div>
+</div>
+</div></blockquote>
+<p>After running the first command, the files <code class="docutils literal notranslate"><span class="pre">overflow.inp</span></code> and <code class="docutils literal notranslate"><span class="pre">xrays.in</span></code>
+are created.  Both of these files are also required for running, so they can be
+copied into the <code class="docutils literal notranslate"><span class="pre">../common/</span></code> folder, too.  However, the <code class="docutils literal notranslate"><span class="pre">overflow.inp</span></code> file
+is already provided; users can compare them to check that they are identical.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cp<span class="w"> </span>xrays.in<span class="w"> </span>../common/
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">BuildMixsuri</span></code> command creates the file <code class="docutils literal notranslate"><span class="pre">mixsur.i</span></code>.  We will need this
+file later, first let’s apply the xrays by running OVERFLOW for zero
+iterations.  To run OVERFLOW in this manner, we set the namelist parameter
+<em>OMIGLB</em> &gt; <em>IRUN</em> to <code class="docutils literal notranslate"><span class="pre">2</span></code>.  The normal value is <code class="docutils literal notranslate"><span class="pre">0</span></code>.  Fortunately, the
+<code class="docutils literal notranslate"><span class="pre">overflow.inp</span></code> file we created already has <em>IRUN</em>=2.  Now we create a
+folder called <code class="docutils literal notranslate"><span class="pre">irun2/</span></code> and copy the necessary files into it.  The following
+commands can be run from the <code class="docutils literal notranslate"><span class="pre">dcf/</span></code> folder.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>irun2
+<span class="gp">$ </span>cp<span class="w"> </span>Composite.vol<span class="w"> </span>irun2/grid.in
+<span class="gp">$ </span>cp<span class="w"> </span>overflow.inp<span class="w"> </span>irun2/
+<span class="gp">$ </span>cp<span class="w"> </span>xrays.in<span class="w"> </span>irun2/
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now we can enter this folder and run OVERFLOW.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>irun2
+<span class="gp">$ </span>overrunmpi<span class="w"> </span>-np<span class="w"> </span><span class="m">6</span><span class="w"> </span>overflow
+</pre></div>
+</div>
+</div></blockquote>
+<p>Users who do not have a compiled MPI version of OVERFLOW can try .</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>overrun<span class="w"> </span>overflow
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will run OVERFLOW and create quite a few output files. Most of these we
+can ignore, but we will need <code class="docutils literal notranslate"><span class="pre">x.save</span></code> to run <code class="docutils literal notranslate"><span class="pre">mixsur</span></code>.  In addition, for
+more complex grids, this is the file that we inspect to see interpolation
+quality and check the number of orphan points.</p>
+<p>To run <code class="docutils literal notranslate"><span class="pre">mixsur</span></code>, let’s go up two folders and set things up to run <code class="docutils literal notranslate"><span class="pre">mixsur</span></code>
+in the <code class="docutils literal notranslate"><span class="pre">common/fomo/</span></code> folder.  The term <em>fomo</em> is a common portmanteau for
+“force and moment” in the OVERFLOW world.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>../..
+<span class="gp">$ </span><span class="nb">pwd</span>
+<span class="go">.../pyover/01_bullet</span>
+<span class="gp">$ </span>cp<span class="w"> </span>dcf/irun2/x.save<span class="w"> </span>common/fomo
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">mixsur.i</span></code> file is already in the <code class="docutils literal notranslate"><span class="pre">fomo/</span></code> folder.  Now we can enter
+that folder and run <code class="docutils literal notranslate"><span class="pre">mixsur</span></code>.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>common/fomo
+<span class="gp">$ </span>mixsur<span class="w"> </span>&lt;<span class="w"> </span>mixsur.i<span class="w"> </span>&gt;<span class="w"> </span>mixsur.o
+</pre></div>
+</div>
+</div></blockquote>
+<p>This creates a significant number of files, most of which are useful for at
+least one OVERFLOW data analysis scenario.  The file <code class="docutils literal notranslate"><span class="pre">mixsur.fmp</span></code> is critical
+because it provides instructions to OVERFLOW on how to integrate the surface
+pressures and viscous loads into component forces &amp; moments.  In addition, the
+<code class="docutils literal notranslate"><span class="pre">grid.i.tri</span></code> file is a unique surface triangulation created from the surface
+grid.</p>
+<blockquote>
+<div><figure class="align-default" id="id4">
+<span id="fig-pyover-bullet-03"></span><a class="reference internal image-reference" href="../../../_images/bullet-tri-01.png"><img alt="../../../_images/bullet-tri-01.png" src="../../../_images/bullet-tri-01.png" style="width: 3.5in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 6.3 </span><span class="caption-text">Surface tri from <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> of OVERFLOW bullet surface grid</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>The surface triangulation created by <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> is shown in
+<a class="reference internal" href="#fig-pyover-bullet-03"><span class="std std-numref">Figure 6.3</span></a>.  It shows that the surface has been divided
+into three families, a cap, fuselage, and base, and that these do not
+correspond to the boundaries between grids or something similar.  These
+boundaries are set within <code class="docutils literal notranslate"><span class="pre">BuildBullet.tcl</span></code>.  In regions of overlapping
+grids, <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> picks a unique triangle (roughly the smallest available,
+although this process becomes very complex in the general case) and then
+creates “zipper” triangles to join together the triangles that are selected
+from dividing the surface grid quads in half.</p>
+<p>At this point, we have created all of the grid files that are needed, and we
+are ready to start running OVERFLOW using pyOver.</p>
+</section>
+</section>
+<section id="execution">
+<h2><span class="section-number">6.1.1.2. </span>Execution<a class="headerlink" href="#execution" title="Permalink to this heading">¶</a></h2>
+<p>In addition to the grid input files, <code class="docutils literal notranslate"><span class="pre">overflow.inp</span></code> template namelist, and
+<code class="docutils literal notranslate"><span class="pre">mixsur.fmp</span></code> file all described in the previous section, the <code class="docutils literal notranslate"><span class="pre">01_bullet/</span></code>
+folder contains a master settings file <code class="docutils literal notranslate"><span class="pre">pyOver.json</span></code> and a run matrix
+<code class="docutils literal notranslate"><span class="pre">inputs/matrix.csv</span></code>.</p>
+<p>To run one case, we can run the following command.  This will run the second
+case in the matrix (index 1 according to Python’s 0-based indexing).</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyover<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">1    poweroff/m0.8a4.0b0.0 ---     /           .</span>
+<span class="go">  Case name: &#39;poweroff/m0.8a4.0b0.0&#39; (index 1)</span>
+<span class="go">     Starting case &#39;poweroff/m0.8a4.0b0.0&#39;</span>
+<span class="go"> &gt; overrunmpi -np 6 run 01</span>
+<span class="go">     (PWD = &#39;/examples/pyover/01_bullet/poweroff/m0.8a4.0b0.0&#39;)</span>
+<span class="go">     (STDOUT = &#39;overrun.out&#39;)</span>
+<span class="go">   Wall time used: 0.07 hrs (phase 0)</span>
+<span class="go">   Wall time used: 0.07 hrs</span>
+<span class="go">   Previous phase: 0.07 hrs</span>
+<span class="go"> &gt; overrunmpi -np 6 run 02</span>
+<span class="go">     (PWD = &#39;/examples/pyover/01_bullet/poweroff/m0.8a4.0b0.0&#39;)</span>
+<span class="go">     (STDOUT = &#39;overrun.out&#39;)</span>
+<span class="go">   Wall time used: 0.08 hrs (phase 1)</span>
+<span class="go">   Wall time used: 0.14 hrs</span>
+<span class="go">   Previous phase: 0.08 hrs</span>
+<span class="go"> &gt; overrunmpi -np 6 run 03</span>
+<span class="go">     (PWD = /examples/pyover/01_bullet/poweroff/m0.8a4.0b0.0&#39;)</span>
+<span class="go">     (STDOUT = &#39;overrun.out&#39;)</span>
+<span class="go">   Wall time used: 0.05 hrs (phase 2)</span>
+
+<span class="go">Submitted or ran 1 job(s).</span>
+
+<span class="go">---=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>As we can see, this ran OVERFLOW locally (i.e. without submitting a PBS job or
+similar) using the MPI version and 6 processors (cores).  The actions that
+pyOver takes are fairly simple.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Create the <code class="docutils literal notranslate"><span class="pre">poweroff/m0.8a4.0b0.0/</span></code> folder</p></li>
+<li><p>Copy the requisite files into that folder</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">overrunmpi</span> <span class="pre">-np</span> <span class="pre">6</span> <span class="pre">run</span> <span class="pre">01</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">overrunmpi</span> <span class="pre">-np</span> <span class="pre">6</span> <span class="pre">run</span> <span class="pre">02</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">overrunmpi</span> <span class="pre">-np</span> <span class="pre">6</span> <span class="pre">run</span> <span class="pre">03</span></code></p></li>
+</ol>
+</div></blockquote>
+<p>The basic JSON inputs that caused these actions to be taken are highlighted
+below.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Options for overall run control and command-line inputs</span>
+<span class="s2">&quot;RunControl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Run sequence</span>
+<span class="w">    </span><span class="s2">&quot;PhaseSequence&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="w">    </span><span class="mf">1</span><span class="p">,</span><span class="w">    </span><span class="mf">2</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;PhaseIters&quot;</span><span class="o">:</span><span class="w">    </span><span class="p">[</span><span class="mf">1500</span><span class="p">,</span><span class="w"> </span><span class="mf">2000</span><span class="p">,</span><span class="w"> </span><span class="mf">2500</span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Operation modes</span>
+<span class="w">    </span><span class="s2">&quot;Prefix&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;run&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;MPI&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;qsub&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;mpicmd&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;nProc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// OVERFLOW command-line interface</span>
+<span class="w">    </span><span class="s2">&quot;overrun&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;cmd&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;overrunmpi&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;aux&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>As with any of the solver-specific <a class="reference internal" href="../../../api/cape/index.html#module-cape" title="cape"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code></a> modules, the <em>PhaseSequence</em> and
+<em>PhaseIters</em> specify how many times and for how long the code is run.  Here we
+have phases <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code>, and <code class="docutils literal notranslate"><span class="pre">2</span></code>, which become runs <code class="docutils literal notranslate"><span class="pre">01</span></code>, <code class="docutils literal notranslate"><span class="pre">02</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">03</span></code> for OVERFLOW (specifically <code class="docutils literal notranslate"><span class="pre">overrunmpi</span></code>).  These phases are run until
+there are 1500, 2000, and 2500 total global iterations run, respectively.</p>
+<p>Setting <em>MPI</em> to <code class="docutils literal notranslate"><span class="pre">true</span></code> instructs pyOver to use an MPI version of OVERFLOW,
+but setting <em>mpicmd</em> to <code class="docutils literal notranslate"><span class="pre">null</span></code> handles the special situation for
+<code class="docutils literal notranslate"><span class="pre">overrunmpi</span></code>.  The command-line calls to run OVERFLOW are handled by the
+<em>overrun</em> section, and since we have the command set to <code class="docutils literal notranslate"><span class="pre">&quot;overrunmpi&quot;</span></code>,
+command-line calls do not start with <code class="docutils literal notranslate"><span class="pre">mpiexec</span> <span class="pre">-np</span> <span class="pre">6</span> <span class="pre">...</span></code> the way that most
+MPI calls are.  The executable <code class="docutils literal notranslate"><span class="pre">overrunmpi</span></code> is a script that calls
+<code class="docutils literal notranslate"><span class="pre">mpiexec</span></code> internally, so we eliminate this prefix for the command called by
+pyOver.</p>
+<p>The actual number of iterations in one run of each phase is not set in the
+<em>RunControl</em> section above.  Instead, it is set within the <code class="docutils literal notranslate"><span class="pre">overflow.inp</span></code>
+namelist using the setting <em>GLOBAL</em>&gt;<em>NSTEPS</em>.  Here we have 500 “steps”
+(iterations) for each phase, but one run of phase 0 actually ends with 1500
+iterations because this is <code class="docutils literal notranslate"><span class="pre">NSTEPS[0]</span> <span class="pre">+</span> <span class="pre">FMGCYC[0][0]</span> <span class="pre">+</span> <span class="pre">FMGCYC[0][1]</span></code>.  We are
+requesting three levels of multigrid cycles on phase 0, so we add those cycles
+to the global iteration count.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Namelist inputs</span>
+<span class="s2">&quot;Overflow&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;GLOBAL&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;NQT&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">102</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;NSTEPS&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">500</span><span class="p">,</span><span class="w">  </span><span class="mf">500</span><span class="p">,</span><span class="w">  </span><span class="mf">500</span><span class="p">,</span><span class="w">  </span><span class="mf">500</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;NSAVE&quot;</span><span class="o">:</span><span class="w">  </span><span class="p">[</span><span class="mf">5000</span><span class="p">,</span><span class="w"> </span><span class="mf">5000</span><span class="p">,</span><span class="w"> </span><span class="mf">2000</span><span class="p">,</span><span class="w"> </span><span class="mf">5000</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">1000</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;FMG&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;FMGCYC&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="mf">500</span><span class="p">,</span><span class="mf">500</span><span class="p">]],</span>
+<span class="w">        </span><span class="s2">&quot;NGLVL&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;ISTART_QAVG&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">15000</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;WALLDIST&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">2</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;DTPHYS&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;NITNWT&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="w">   </span><span class="mf">0</span><span class="p">,</span><span class="w">   </span><span class="mf">0</span><span class="p">,</span><span class="w">     </span><span class="mf">0</span><span class="p">,</span><span class="w">   </span><span class="mf">5</span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;OMIGLB&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;IRUN&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;NADAPT&quot;</span><span class="o">:</span><span class="w">  </span><span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span><span class="w"> </span><span class="mf">250</span><span class="p">,</span><span class="w"> </span><span class="mf">500</span><span class="p">,</span><span class="w"> </span><span class="mf">250</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;NREFINE&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w">   </span><span class="mf">2</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;NBREFINE&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;SIGERR&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5.0</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;MAX_SIZE&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">600e6</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;MAX_GROWTH&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1.2</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Noe that the double list input for <em>FMGCYC</em> is important here because
+<code class="docutils literal notranslate"><span class="pre">&quot;FMGCYC&quot;:</span> <span class="pre">[500,</span> <span class="pre">500]</span></code> would be interpreted as <code class="docutils literal notranslate"><span class="pre">500</span></code> for phase 0 and
+<code class="docutils literal notranslate"><span class="pre">500</span></code> for all following phases.  We actually need this to be a list so
+<code class="docutils literal notranslate"><span class="pre">[[500,</span> <span class="pre">500]]</span></code> is interpreted as <code class="docutils literal notranslate"><span class="pre">[500,</span> <span class="pre">500]</span></code> for all phases.</p>
+<p>We have to set <em>OMIGLB</em>&gt;*IRUN* to <code class="docutils literal notranslate"><span class="pre">0</span></code> here so that OVERFLOW is actually run
+for more than 0 iterations.  The rest of the <em>OMIGLB</em> section sets mesh
+adaptation inputs.  The <em>Grids</em> top-level section of <code class="docutils literal notranslate"><span class="pre">pyOver.json</span></code> sets the
+CFL number for each grid and other key OVERFLOW input settings.  Below we have
+the <em>Mesh</em> section, which instructs pyOver which files to copy (or link) into
+each case folder.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Mesh</span>
+<span class="s2">&quot;Mesh&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Folder containing definition files</span>
+<span class="w">    </span><span class="s2">&quot;ConfigDir&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;common&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Grid type, dcf or peg5</span>
+<span class="w">    </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;dcf&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// List or dictionary of files to link</span>
+<span class="w">    </span><span class="s2">&quot;LinkFiles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;grid.in&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;xrays.in&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;fomo/grid.ibi&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;fomo/grid.nsf&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;fomo/grid.ptv&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// List of files to copy instead of linking</span>
+<span class="w">    </span><span class="s2">&quot;CopyFiles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;fomo/mixsur.fmp&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>For example, if the case is <code class="docutils literal notranslate"><span class="pre">poweroff/m0.80a4.0b0.0</span></code>, this effectively runs
+the following commands.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ln<span class="w"> </span>-s<span class="w"> </span>common/grid.in<span class="w"> </span>poweroff/m0.80a4.0b0.0/
+<span class="gp">$ </span>ln<span class="w"> </span>-s<span class="w"> </span>common/xrays.in<span class="w"> </span>poweroff/m0.80a4.0b0.0/
+<span class="gp">$ </span>ln<span class="w"> </span>-s<span class="w"> </span>common/common/grid.ibi<span class="w"> </span>poweroff/m0.80a4.0b0.0/
+<span class="gp">$ </span>ln<span class="w"> </span>-s<span class="w"> </span>common/common/grid.nsf<span class="w"> </span>poweroff/m0.80a4.0b0.0/
+<span class="gp">$ </span>ln<span class="w"> </span>-s<span class="w"> </span>common/common/grid.ptv<span class="w"> </span>poweroff/m0.80a4.0b0.0/
+<span class="gp">$ </span>cp<span class="w"> </span>common/fomo/mixsur.fmp<span class="w"> </span>poweroff/m0.80a4.0b0.0/
+</pre></div>
+</div>
+</div></blockquote>
+<p>The last key section is the run matrix.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// RunMatrix description</span>
+<span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// If a file is specified, and it exists, trajectory values will be</span>
+<span class="w">    </span><span class="c1">// read from it.  RunMatrix values can also be specified locally.</span>
+<span class="w">    </span><span class="s2">&quot;File&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;inputs/matrix.csv&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Keys&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;beta&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Copy the mesh</span>
+<span class="w">    </span><span class="s2">&quot;GroupMesh&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Configuration name [default]</span>
+<span class="w">    </span><span class="s2">&quot;GroupPrefix&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;poweroff&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This example just has Mach number, angle of attack, and angle of sideslip as
+inputs.  This means that the Reynolds number per inch and freestream static
+temperature are whatever values are in the template <code class="docutils literal notranslate"><span class="pre">common/overflow.inp</span></code>
+namelist.  In this case they are</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$FLOINP
+     FSMACH = 0.8,
+     ALPHA = 0.0,
+     BETA = 0.0,
+     GAMINF = 1.4,
+     REY = 10000.0,
+     TINF = 450.0,
+     $END
+</pre></div>
+</div>
+</div></blockquote>
+<section id="case-folders">
+<h3><span class="section-number">6.1.1.2.1. </span>Case folders<a class="headerlink" href="#case-folders" title="Permalink to this heading">¶</a></h3>
+<p>After running case <code class="docutils literal notranslate"><span class="pre">1</span></code> as shown above, we can enter the folder to see what
+files are present.  First, let’s set up case <code class="docutils literal notranslate"><span class="pre">2</span></code> and not run it.  That way we
+can compare the files before running and after.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyover<span class="w"> </span>-I<span class="w"> </span><span class="m">2</span><span class="w"> </span>--no-start
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">2    poweroff/m0.9a0.0b0.0 ---     /           .</span>
+<span class="go">  Case name: &#39;poweroff/m0.9a0.0b0.0&#39; (index 2)</span>
+
+<span class="go">Set up 1 job(s) but did not start.</span>
+
+<span class="go">---=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">--no-start</span></code> flag has the effect of not starting the case (or submitting
+a job, if the <em>qsub</em> option were <code class="docutils literal notranslate"><span class="pre">true</span></code>).  The files in this folder are
+described below.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>case.json</strong>: JSON <em>RunMatrix</em> settings for this case</p></li>
+<li><p><strong>conditions.json</strong>: JSON file with values of pyOver run matrix keys</p></li>
+<li><p><em>grid.ibi</em>: surface grid I-blanks file</p></li>
+<li><p><em>grid.in</em>: main input volume grid (near-body)</p></li>
+<li><p><em>grid.nsf</em>: another <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> grid file</p></li>
+<li><p><em>grid.ptv</em>: another <code class="docutils literal notranslate"><span class="pre">mixsur</span></code> grid file</p></li>
+<li><p><strong>mixsur.fmp</strong>: weights for each surface point’s contribution to F &amp; M</p></li>
+<li><p><strong>run.01.inp</strong>: input namelist for phase 0</p></li>
+<li><p><strong>run.02.inp</strong>: input namelist for phase 1</p></li>
+<li><p><strong>run.03.inp</strong>: input namelist for phase 2</p></li>
+<li><p><strong>run_overflow.pbs</strong>: BASH script that can be executed or submitted</p></li>
+<li><p><em>xrays.in</em>: input file for DCF X-ray generation</p></li>
+</ul>
+</div></blockquote>
+<p>If we look in the <code class="docutils literal notranslate"><span class="pre">poweroff/m0.8a4.0b0.0</span></code> folder that was already run, we
+have those files and the following additional ones:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>brkset.restart</strong>: brick grid file for adaptive off-body grids</p></li>
+<li><p><strong>brkset.save</strong>: brick grid file for adaptive off-body grids</p></li>
+<li><p><strong>fomoco.out</strong>: iterative force &amp; moment history from most recent run</p></li>
+<li><p><strong>grdwghts.restart</strong>: another adaptive off-body grid info file</p></li>
+<li><p><strong>grdwghts.save</strong>: another adaptive off-body grid info file</p></li>
+<li><p><strong>log.out</strong>: streamed output from <code class="docutils literal notranslate"><span class="pre">overrunmpi</span></code></p></li>
+<li><p><strong>mixsur.save</strong>: most recently used version of <strong>mixsur.fmp</strong></p></li>
+<li><p><strong>overrun.out</strong>: STDOUT from most recent run</p></li>
+<li><p><strong>pyover_start.dat</strong>: date and time of start of each run</p></li>
+<li><p><strong>pyover_time.dat</strong>: time used for each run completed</p></li>
+<li><p><strong>q.restart</strong>: primary volume grid solution file</p></li>
+<li><p><strong>q.save</strong>: primary volume grid solution file</p></li>
+<li><p><strong>resid.out</strong>: iterative residual history on each grid</p></li>
+<li><p><strong>rpmin.out</strong>: minimum density and pressure on each grid, iterative</p></li>
+<li><p><strong>run.01.1500</strong>: STDOUT/STDERR from run <code class="docutils literal notranslate"><span class="pre">01</span></code></p></li>
+<li><p><strong>run.01.2000</strong>: STDOUT/STDERR from run <code class="docutils literal notranslate"><span class="pre">02</span></code></p></li>
+<li><p><strong>run.01.2500</strong>: STDOUT/STDERR from run <code class="docutils literal notranslate"><span class="pre">03</span></code></p></li>
+<li><p><strong>run.fomoco</strong>: assembled force &amp; moment history</p></li>
+<li><p><strong>run.log</strong>: assembled log file</p></li>
+<li><p><strong>run.resid</strong>: assembled residual history</p></li>
+<li><p><strong>run.rpmin</strong>: assembled minimum density and pressure history</p></li>
+<li><p><strong>run.timers</strong>: OVERFLOW timing information</p></li>
+<li><p><strong>run.turb</strong>: turbulence residual history</p></li>
+<li><p><strong>timers.out</strong>: most recent OVERFLOW timing information</p></li>
+<li><p><strong>turb.out</strong>: turbulence residuals from most recent run</p></li>
+<li><p><strong>x.restart</strong>: final volume grid file</p></li>
+<li><p><strong>x.save</strong>: final volume grid file</p></li>
+</ul>
+</div></blockquote>
+<p>While a case is currently running there are also files such as <code class="docutils literal notranslate"><span class="pre">fomoco.tmp</span></code>
+that accumulate the force &amp; moment history or other iterative history only for
+the currently running phase.  When a run completes, these are moved into
+<code class="docutils literal notranslate"><span class="pre">fomoco.out</span></code> and copied into <code class="docutils literal notranslate"><span class="pre">run.fomoco</span></code>.</p>
+</section>
+<section id="report-generation">
+<h3><span class="section-number">6.1.1.2.2. </span>Report generation<a class="headerlink" href="#report-generation" title="Permalink to this heading">¶</a></h3>
+<p>This case is also set up to create a simple report with several iterative
+history plots.  The command is simple.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyover<span class="w"> </span>--report<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This generates two tables, one of which shows the values of input variables and
+the other of which shows the iteratively averaged values and standard
+deviations of <em>CA</em>, <em>CY</em>, and <em>CN</em> on three mixsur families.</p>
+<blockquote>
+<div><span id="tab-pyover-bullet-02"></span><table class="docutils align-default" id="id5">
+<caption><span class="caption-number">Table 6.2 </span><span class="caption-text">Sample iterative plots from OVERFLOW bullet case report for
+       <code class="docutils literal notranslate"><span class="pre">poweroff/m0.8a4.0b0.0</span></code></span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/arrow_CA.png"><img alt="../../../_images/arrow_CA.png" src="../../../_images/arrow_CA.png" style="width: 2.8in;" /></a>
+<p><code class="docutils literal notranslate"><span class="pre">bullet</span></code>/<em>CA</em></p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/cap_CA.png"><img alt="../../../_images/cap_CA.png" src="../../../_images/cap_CA.png" style="width: 2.8in;" /></a>
+<p><code class="docutils literal notranslate"><span class="pre">cap</span></code>/<em>CA</em></p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal image-reference" href="../../../_images/arrow_CY.png"><img alt="../../../_images/arrow_CY.png" src="../../../_images/arrow_CY.png" style="width: 2.8in;" /></a>
+<p><code class="docutils literal notranslate"><span class="pre">bullet</span></code>/<em>CY</em></p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/L21.png"><img alt="../../../_images/L21.png" src="../../../_images/L21.png" style="width: 2.8in;" /></a>
+<p>Global <em>L</em>2 residual</p>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/arrow_CN.png"><img alt="../../../_images/arrow_CN.png" src="../../../_images/arrow_CN.png" style="width: 2.8in;" /></a>
+<p><code class="docutils literal notranslate"><span class="pre">bullet</span></code>/<em>CN</em></p>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/arrow_CLM.png"><img alt="../../../_images/arrow_CLM.png" src="../../../_images/arrow_CLM.png" style="width: 2.8in;" /></a>
+<p><code class="docutils literal notranslate"><span class="pre">arrow</span></code>/<em>CLM</em></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>The averaging window for each coefficient is visible as a blue rectangle; the
+width of the box is the iterative averaging window and the height is one
+standard deviation above and below the mean value.  The averaging window can
+also be seen from where the dotted mean value horizontal line switches to a
+solid line.  The user can control the size of the iterative window (and give
+pyOver some freedom to decide if a range of values is given) in the <em>DataBook</em>
+section of <code class="docutils literal notranslate"><span class="pre">pyOver.json</span></code> using <em>nStats</em> and <em>nStatsMax</em>.  The height of the
+blue rectangle (as a multiple of the iterative standard deviation) is
+controlled using the <em>StandardDeviation</em> parameter within each subfigure’s
+definition in the <em>Report</em> section.</p>
+</section>
+<section id="extending-a-case">
+<h3><span class="section-number">6.1.1.2.3. </span>Extending a case<a class="headerlink" href="#extending-a-case" title="Permalink to this heading">¶</a></h3>
+<p>The plots in the previous subsection indicate that this case is not really
+converged.  To run the last phase another time, run the following simple
+commands.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyover<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>--extend
+<span class="go">poweroff/m0.8a4.0b0.0</span>
+<span class="go">  Phase 2: 2500 --&gt; 3000</span>
+<span class="gp">$ </span>pyover<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">1    poweroff/m0.8a4.0b0.0 INCOMP  2500/3000   .        1.1</span>
+<span class="go">     Starting case &#39;poweroff/m0.8a4.0b0.0&#39;</span>
+<span class="go"> &gt; overrunmpi -np 6 run 03</span>
+<span class="go">     (PWD = &#39;/examples/pyover/01_bullet/poweroff/m0.8a4.0b0.0&#39;)</span>
+<span class="go">     (STDOUT = &#39;overrun.out&#39;)</span>
+<span class="go">   Wall time used: 0.06 hrs (phase 2)</span>
+
+<span class="go">Submitted or ran 1 job(s).</span>
+
+<span class="go">INCOMP=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>It is also possible to use a command like <code class="docutils literal notranslate"><span class="pre">pyover</span> <span class="pre">-I</span> <span class="pre">1</span> <span class="pre">--extend</span> <span class="pre">2</span></code>, which
+would have instructed pyOver to run the last phase <code class="docutils literal notranslate"><span class="pre">2</span></code> more times, so we
+would have had 3500 iterations overall.</p>
+<p>Now we can check the overall status of the entire setup (four cases).  We
+should see something like the following.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyover<span class="w"> </span>-c
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m0.8a0.0b0.0 ---     /           .</span>
+<span class="go">1    poweroff/m0.8a4.0b0.0 DONE    3000/3000   .        1.5</span>
+<span class="go">2    poweroff/m0.9a0.0b0.0 INCOMP  0/2500      .</span>
+<span class="go">3    poweroff/m0.9a4.0b0.0 ---     /           .</span>
+
+<span class="go">---=2, INCOMP=1, DONE=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>On the system that was used 1.5 core hours; divide this by 6 to get the wall
+time.  Users can also rerun the <code class="docutils literal notranslate"><span class="pre">pyover</span> <span class="pre">-I</span> <span class="pre">1</span> <span class="pre">--report</span></code> command to get updated
+iterative histories.  The <code class="docutils literal notranslate"><span class="pre">--report</span></code> command is fairly intelligent about
+deciding whether or not a figure needs to be updated when regenerating a
+report.</p>
+</section>
+<section id="adding-a-new-phase">
+<h3><span class="section-number">6.1.1.2.4. </span>Adding a new phase<a class="headerlink" href="#adding-a-new-phase" title="Permalink to this heading">¶</a></h3>
+<p>Suppose instead of repeating the last phase we wanted to add another phase with
+slightly different inputs.  Then we can run very similar commands to above,
+presumably after making sure that phase <code class="docutils literal notranslate"><span class="pre">3</span></code> has the new OVERFLOW inputs we
+want in the <code class="docutils literal notranslate"><span class="pre">pyOver.json</span></code> file.  It is also possible to add the <code class="docutils literal notranslate"><span class="pre">--submit</span></code>
+flag at the end to combine the settings change and case restart commands.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyover<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>--apply<span class="w"> </span>--submit
+</pre></div>
+</div>
+</div></blockquote>
+<p>Keeping the distinction between  <code class="docutils literal notranslate"><span class="pre">--apply</span></code> and <code class="docutils literal notranslate"><span class="pre">--extend</span></code> commands clear is
+not always intuitive, but just remember that <code class="docutils literal notranslate"><span class="pre">--apply</span></code> has the property that
+it is applying whatever settings are in the master JSON file to a case.  This
+command can be used to change other settings even if no additional phases are
+being added, although of course this will not affect phases that have already
+been run.</p>
+</section>
+</section>
+<section id="using-tecplot">
+<h2><span class="section-number">6.1.1.3. </span>Using Tecplot®<a class="headerlink" href="#using-tecplot" title="Permalink to this heading">¶</a></h2>
+<p>It is possible to get pyOver and its automated reports to coordinate
+effectively with Tecplot®.  The procedure is somewhat involved and can be
+summarized as consisting of the following steps:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Enter a case folder with an appropriate solution and create a desirable
+Tecplot layout manually</p></li>
+<li><p>Save the layout file (<code class="docutils literal notranslate"><span class="pre">.lay</span></code>) to the <code class="docutils literal notranslate"><span class="pre">inputs/</span></code> folder or somewhere
+else accessible to pyOver</p></li>
+<li><p>Modify that template layout file slightly for use with pyOver</p></li>
+<li><p>Add the appropriate subfigure instructions to the <em>Report</em> section</p></li>
+<li><p>Generate a report including the Tecplot-generated subfigure</p></li>
+</ol>
+</div></blockquote>
+<section id="creating-a-layout">
+<h3><span class="section-number">6.1.1.3.1. </span>Creating a layout<a class="headerlink" href="#creating-a-layout" title="Permalink to this heading">¶</a></h3>
+<p>Using Tecplot with OVERFLOW solutions is much more involved than solutions of
+most other CFD solvers.  Users reaching this region of the example may already
+be experienced in generating Tecplot layouts, but this example includes a
+reduced step-by-step procedure for generating the examples in this file.</p>
+<p>First, go into the <code class="docutils literal notranslate"><span class="pre">poweroff/m0.8a4.0b0.0</span></code> folder that contains our solution
+files. Then launch Tecplot using whatever executable is set up on your system
+and go to</p>
+<blockquote>
+<div><p><span class="menuselection">File ‣ “Load Data…”</span>.</p>
+</div></blockquote>
+<p>Select “PLOT3D Loader” in the “<em>Files of type</em>” dropdown, and select and open
+<code class="docutils literal notranslate"><span class="pre">q.save</span></code> and <code class="docutils literal notranslate"><span class="pre">x.save</span></code>.</p>
+<p>This will open the solution but not draw any meaningful data yet. To find the
+surfaces, click the “<em>Zone Style…</em>” button on the main left toolbar
+and select the <em>Surfaces</em> tab. Select the first three zones, and then right
+click in the “<em>Surfaces to Plot</em>” and select “K-Planes”.  You can close the
+“<em>Zone Style…</em>” window.  This is a good time to use the menu option</p>
+<blockquote>
+<div><p><span class="menuselection">View ‣ “Fit Surfaces…”</span></p>
+</div></blockquote>
+<p>Next let’s calculate pressure coefficient (<em>Cp</em>) and local Mach number.
+Fortunately this is already present in the</p>
+<blockquote>
+<div><p><span class="menuselection">Analyze ‣ “Calculate Variables…”</span></p>
+</div></blockquote>
+<p>Tecplot menu item.  Press the <em>Select…</em> button in the window that opens, and
+then select “Pressure Coefficient”, press <em>Calculate</em>, and repeat for “Mach
+Number”.</p>
+<p>Now we have to instruct Tecplot® to use the OVERFLOW I-blanks from our volume
+grid file.  (Why this is not the default is unclear.)  Open the menu item</p>
+<blockquote>
+<div><p><span class="menuselection">Plot ‣ Blanking ‣ “Value Blanking…”</span></p>
+</div></blockquote>
+<p>and make the following selections:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“Include value blanking” –&gt; <strong>checked</strong></p></li>
+<li><p>“Active” –&gt; <strong>checked</strong></p></li>
+<li><p>“Blank when* –&gt; “<em>4: IBlank</em>”, “<em>is equal to</em>”, select <em>Constant</em></p></li>
+</ul>
+</div></blockquote>
+<p>Next we instruct Tecplot® what to plot on the surface and what to plot on the
+volume slice we will create.  Check the <em>Contour</em> box on the main left toolbar
+and press the <em>Details…</em> button.  In the window that opens, click the
+dropdown box in the top left and select “<em>12: Pressure Coefficient</em>”.  We
+should still be in the “<em>Levels and Color</em>” tab, and from there let’s press the
+“<em>Set Levels…</em>” button.</p>
+<p>This opens another window, and for this example let’s check the “Min, max and
+delta” option from the “<em>Range Distribution</em>” box and make the following
+selections:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“Minimum level”: <code class="docutils literal notranslate"><span class="pre">-0.8</span></code></p></li>
+<li><p>“Maximum level”: <code class="docutils literal notranslate"><span class="pre">0.8</span></code></p></li>
+<li><p>“Detla”: <code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>Press <em>OK</em> to close this window and then select “Diverging - Blue/Red” from the
+dropdown box just below the “<em>Color map options</em>” label and interactive color
+bar.  Now let’s go to the <em>Legend</em> tab to tweak the legend and color bar drawn
+on our figure.  Make the following selections.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“Alignment”: <em>Horizontal</em></p></li>
+<li><p>“Level skip”: <code class="docutils literal notranslate"><span class="pre">2</span></code></p></li>
+<li><p>“Size” (below “Number font”): <code class="docutils literal notranslate"><span class="pre">2</span></code></p></li>
+<li><p>“Size” (below “Header font”): <code class="docutils literal notranslate"><span class="pre">2</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>Then click the “<em>Legend Box…</em>” and make the following selections:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Top option: select <em>Fill</em></p></li>
+<li><p>“Box color”: <em>White</em></p></li>
+</ul>
+</div></blockquote>
+<p>Close this window and click the “<em>Number Format…</em>” button about two thirds of
+the way down the window.  In the window that opens make the following
+selections:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“Type”: <em>Float</em></p></li>
+<li><p>“Precision”: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>After closing this window, we are still in the
+“<em>Contour &amp; Multi-Coloring Details</em>” window.  Near the top of the window, click
+on the <em>2</em> button.  After clicking that, we set up the contour options for the
+second contour plot, which is going to be the Mach number volume slice.  After
+clicking the <em>2</em>, click on the top-left corner dropdown box and select
+“<em>13: Mach Number</em>”.  Then repeat all of the instructions above for the
+<em>Legend</em> tab that we should currently still be in.</p>
+<p>After repeating the <em>Legend</em> instructions, click again on the
+“<em>Levels and Color</em>” tab and change the color map to
+“<em>Diverging - Purple/Green</em>”.  The “<em>Set Levels..</em>” button can also be modified
+to the following settings:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“<em>Range Distribution</em>”: “<em>Min, max, and delta</em>”</p></li>
+<li><p>“Minimum level”: <code class="docutils literal notranslate"><span class="pre">0</span></code></p></li>
+<li><p>“Maximum level”: <code class="docutils literal notranslate"><span class="pre">1.6</span></code></p></li>
+<li><p>“Delta”: <code class="docutils literal notranslate"><span class="pre">0.2</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>Finally we are finished with the contour details window.  To get a nice fixed
+view if the solution, click the <em>Z-X</em> button in the
+“<em>Snap to orientation view</em>” near the top of the main left toolbar.  Then check
+the box to the left of <em>Slices</em> about half way down this toolbar and click the
+<em>Details…</em> button to its right.  We are going to make selections in several
+of the tabs of the window that opens, using the following outline.</p>
+<blockquote>
+<div><ul>
+<li><p><em>Definition</em> tab</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“Slice location”: <em>Y-Planes</em></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><em>Contour</em> tab</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“Show contours”: <strong>checked</strong></p></li>
+<li><p>“Flood by”: <em>C2: Mach Number</em></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><em>Other</em> tab</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“Show mesh”: <strong>checked</strong></p></li>
+<li><p>“Color” (mesh): <em>Cust 2</em> (lightest gray available)</p></li>
+<li><p>“Line thickness (%)”: <code class="docutils literal notranslate"><span class="pre">0.05</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>Ok, now select tha arrow tool from the top toolbar and click and drag the color
+bar legends to the top left and top right (or anywhere else that looks good).
+Then move the main window around until the field of view is appropriate, and we
+have created a good layout.</p>
+<p>To get rid of the orange dashed boxes that may be visible, make sure</p>
+<blockquote>
+<div><p><span class="menuselection">Options ‣ “Show Bounding Boxes for …”</span></p>
+</div></blockquote>
+<p>is unchecked.  Figures also look better after opening the</p>
+<blockquote>
+<div><p><span class="menuselection">Frame ‣ “Edit Active Frame…”</span></p>
+</div></blockquote>
+<p>window and unchecking “<em>Show border</em>”.</p>
+<p>Finally we can select</p>
+<blockquote>
+<div><p><span class="menuselection">File ‣ “Save Layout as…”</span></p>
+</div></blockquote>
+<p>to save the layout file.  Save the layout as <code class="docutils literal notranslate"><span class="pre">bullet-mach.lay</span></code> so that we can
+customize it and apply to other OVERFLOW solutions.</p>
+</section>
+<section id="tweaking-layout-file">
+<h3><span class="section-number">6.1.1.3.2. </span>Tweaking layout file<a class="headerlink" href="#tweaking-layout-file" title="Permalink to this heading">¶</a></h3>
+<p>We have to manually edit the layout file we just created, <code class="docutils literal notranslate"><span class="pre">bullet-mach.lay</span></code>
+to make very slight changes to the text.  The third line of this file contains
+many settings in a big list of strings.  One of these will end with <code class="docutils literal notranslate"><span class="pre">x.save</span></code>,
+and another will end with <code class="docutils literal notranslate"><span class="pre">q.save</span></code>.  Replace these two strings (including any
+folder names or absolute paths that precede them) with <code class="docutils literal notranslate"><span class="pre">x.pyover.p3d</span></code> and
+<code class="docutils literal notranslate"><span class="pre">q.pyover.p3d</span></code>, respectively.</p>
+<p>These file names are automatically created by pyOver during the report
+generation file using its own logic to determine what is the most recently
+available grid and solution file.</p>
+<p>At this point you can compare your edited layout file with the one provided in
+the <code class="docutils literal notranslate"><span class="pre">/examples/pyover/01_bullet/inputs/bullet-mach.lay</span></code> file.  They should be
+quite close except for at least some minor differences in camera position.  If
+desired, users are encouraged to copy the layout just created to the
+<code class="docutils literal notranslate"><span class="pre">inputs/</span></code> folder, preferably to a different file name so that the original
+layout is still available.</p>
+</section>
+<section id="setting-up-a-tecplot-subfigure">
+<h3><span class="section-number">6.1.1.3.3. </span>Setting up a Tecplot® subfigure<a class="headerlink" href="#setting-up-a-tecplot-subfigure" title="Permalink to this heading">¶</a></h3>
+<p>In the main <code class="docutils literal notranslate"><span class="pre">pyOver.json</span></code> file, we need to add another subfigure in the
+<em>Report</em> section to use this new layout file.  To make this work, add the
+following content.  Don’t delete entries that aren’t shown below, but do edit
+or add as necessary to match the following.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Report&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;bullet&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Figures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;CaseTables&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;CasePlots&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;FlowViz&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;Figures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;FlowViz&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;Header&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Flow visualization&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Alignment&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;MachSlice&quot;</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Definitions for subfigures</span>
+<span class="w">    </span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Tecplot figure</span>
+<span class="w">        </span><span class="s2">&quot;MachSlice&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Tecplot&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Layout&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;inputs/bullet-mach.lay&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1024</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Width&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.48</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Caption&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Surface $C_p$ and $y=0$ Mach slice&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;FieldMap&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">3</span><span class="p">,</span><span class="w"> </span><span class="mf">1000</span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Most of these inputs are relatively self-explanatory, but the <em>FieldMap</em>
+entry (while not actually required for this example) is worth explaining.  This
+controls Tecplot’s understanding of the “<em>Zone Style…</em>” window that we used
+in a preceding subsection.  It setting a large number for the last entry in
+<em>FieldMap</em> is very useful because the number of grids generated by OVERFLOW for
+the off-body solution can change, especially for adaptive solutions.  The first
+entry is <code class="docutils literal notranslate"><span class="pre">3</span></code> here, which it already was because we told Tecplot® that the
+first three grids have a surface at <em>K</em>=1.  Changing this <em>FieldMap</em> can be
+very useful when trying to use previously generated Tecplot® layouts for new
+grid systems that have a different number of surface grids.</p>
+<p>Now if we rerun</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyover<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span><span class="w"> </span>--report
+</pre></div>
+</div>
+</div></blockquote>
+<p>the automated report <code class="docutils literal notranslate"><span class="pre">report/report-bullet.pdf</span></code> will have a third page
+containing an image like the one in <a class="reference internal" href="#fig-pyover-bullet-04"><span class="std std-numref">Figure 6.4</span></a>.</p>
+<blockquote>
+<div><figure class="align-default" id="id6">
+<span id="fig-pyover-bullet-04"></span><a class="reference internal image-reference" href="../../../_images/MachSlice.png"><img alt="../../../_images/MachSlice.png" src="../../../_images/MachSlice.png" style="width: 4.0in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 6.4 </span><span class="caption-text">OVERFLOW bullet example <em>MachSlice</em> figure</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>This example does not take advantage of CAPE’s powerful capability to edit and
+customize layouts on the fly.  Let’s tweak the Mach number color map so that it
+will alter the color map and also keep white exactly at the freestream Mach
+number even if the Mach number changes.  To do so, we will add another
+subfigure called <em>MachSlice-orange</em> and base it off of what we just did.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Report&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Figures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;FlowViz&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;Header&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Flow visualization&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Alignment&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;MachSlice&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;MachSlice-orange&quot;</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Definitions for subfigures</span>
+<span class="w">    </span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;MachSlice-orange&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;MachSlice&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;ContourLevels&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="s2">&quot;NContour&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;MinLevel&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;MaxLevel&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;max(1.4, 1.4*$mach)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;Delta&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.05</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="s2">&quot;ColorMaps&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Diverging - Purple/Green modified&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NContour&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;ColorMap&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="s2">&quot;0.0&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;purple&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="s2">&quot;$mach&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="s2">&quot;1.0&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;green&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;orange&quot;</span><span class="p">],</span>
+<span class="w">                        </span><span class="s2">&quot;max(1.4,1.4*$mach)&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;red&quot;</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="s2">&quot;Keys&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;GLOBALCONTOUR&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="s2">&quot;LABELS&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="s2">&quot;Parameter&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">                        </span><span class="s2">&quot;Value&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                            </span><span class="s2">&quot;AUTOLEVELSKIP&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">                            </span><span class="s2">&quot;NUMFORMAT&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="s2">&quot;FORMATTING&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&#39;FIXEDFLOAT&#39;&quot;</span><span class="p">,</span>
+<span class="w">                                </span><span class="s2">&quot;PRECISION&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">                                </span><span class="s2">&quot;TIMEDATEFORMAT&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&#39;&#39;&quot;</span>
+<span class="w">                            </span><span class="p">}</span>
+<span class="w">                        </span><span class="p">}</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Using <em>Type</em>=``”MachSlice”`` means that any settings not specified in this
+subfigure are inherited from the <em>MachSlice</em> subfigure.  We then set up the
+Mach contour levels to be slightly finer and have an upper limit that depends
+on the Mach number.  In the <em>ColorMaps</em> parameter, we create a new color map
+that has just a few control points, and some of those control points depend on
+the run matrix variable.  Using the syntax <code class="docutils literal notranslate"><span class="pre">$mach</span></code> in these control points
+instructs pyOver to query the value from the run matrix.  At the value
+<code class="docutils literal notranslate"><span class="pre">&quot;1.0&quot;</span></code>, i.e. Mach 1, we set two colors.  This sets the first color
+(<code class="docutils literal notranslate"><span class="pre">&quot;green&quot;</span></code>) as the lower bound and the second color (<code class="docutils literal notranslate"><span class="pre">&quot;orange&quot;</span></code>) as the
+upper bound; the result is a sharp boundary highlighting the sonic line.</p>
+<p>This example is more complex than most applications because the <em>Keys</em> section
+is needed to reduce the number of values printed in the legend for the Mach
+number contour plot.  The Mach contour plot is the second contour map in the
+Tecplot layout, and really we’re just trying to change <em>AUTOLEVELSKIP</em>, but
+since we never set one in our original layout, more instructions are needed.
+This demonstrates how any layout command or variable can be edited, but usually
+it’s easier to do this in the Tecplot® GUI.</p>
+<p>The result of this modified layout is shown in <a class="reference internal" href="#fig-pyover-bullet-05"><span class="std std-numref">Figure 6.5</span></a>.</p>
+<blockquote>
+<div><figure class="align-default" id="id7">
+<span id="fig-pyover-bullet-05"></span><a class="reference internal image-reference" href="../../../_images/MachSlice-orange.png"><img alt="../../../_images/MachSlice-orange.png" src="../../../_images/MachSlice-orange.png" style="width: 4.0in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 6.5 </span><span class="caption-text">OVERFLOW bullet <em>MachSlice-orange</em> flow viz with sonic line</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>The actual JSON file used to create these plots is saved as
+<code class="docutils literal notranslate"><span class="pre">pyOver-completed.json</span></code> in the <code class="docutils literal notranslate"><span class="pre">01_bullet/</span></code> folder.  Users may run the
+other four cases and rerun the report command (<code class="docutils literal notranslate"><span class="pre">pyover</span> <span class="pre">--report</span></code>) to inspect
+results for all four cases.  Other modifications are encouraged, too, as this
+is a fairly simple setup to extend and customize.</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6.1.1. OVERFLOW Bullet Example</a><ul>
+<li><a class="reference internal" href="#grid-generation">6.1.1.1. Grid generation</a><ul>
+<li><a class="reference internal" href="#geometry-definitions">6.1.1.1.1. Geometry definitions</a></li>
+<li><a class="reference internal" href="#grid-script-setup">6.1.1.1.2. Grid script setup</a></li>
+<li><a class="reference internal" href="#surface-grid-generation">6.1.1.1.3. Surface grid generation</a></li>
+<li><a class="reference internal" href="#volume-grid-generation">6.1.1.1.4. Volume grid generation</a></li>
+<li><a class="reference internal" href="#grid-assembly">6.1.1.1.5. Grid assembly</a></li>
+<li><a class="reference internal" href="#assembling-inputs">6.1.1.1.6. Assembling inputs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#execution">6.1.1.2. Execution</a><ul>
+<li><a class="reference internal" href="#case-folders">6.1.1.2.1. Case folders</a></li>
+<li><a class="reference internal" href="#report-generation">6.1.1.2.2. Report generation</a></li>
+<li><a class="reference internal" href="#extending-a-case">6.1.1.2.3. Extending a case</a></li>
+<li><a class="reference internal" href="#adding-a-new-phase">6.1.1.2.4. Adding a new phase</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-tecplot">6.1.1.3. Using Tecplot®</a><ul>
+<li><a class="reference internal" href="#creating-a-layout">6.1.1.3.1. Creating a layout</a></li>
+<li><a class="reference internal" href="#tweaking-layout-file">6.1.1.3.2. Tweaking layout file</a></li>
+<li><a class="reference internal" href="#setting-up-a-tecplot-subfigure">6.1.1.3.3. Setting up a Tecplot® subfigure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../index.html"
+                          title="previous chapter"><span class="section-number">6.1. </span>Examples using pyOver</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../02-powered_nacelle/index.html"
+                          title="next chapter"><span class="section-number">6.1.2. </span>OVERFLOW Powered Nacelle Example</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/pyover/examples/01-bullet/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../02-powered_nacelle/index.html" title="6.1.2. OVERFLOW Powered Nacelle Example"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="6.1. Examples using pyOver"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.0.2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">6. </span>pyOver Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">6.1. </span>Examples using pyOver</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.1.1. </span>OVERFLOW Bullet Example</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>
