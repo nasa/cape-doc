@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Test results: test.004_optdict.test_15_clsmethod.test_clsmethod &#8212; CAPE 1.1.0beta2</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Test results: test.004_optdict.test_16_subsec.test_subsec" href="../004_optdict-16_subsec-subsec/index.html" />
+    <link rel="prev" title="Test results: test.004_optdict.test_14_optval.test_optval" href="../004_optdict-14_optval-optval/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../004_optdict-16_subsec-subsec/index.html" title="Test results: test.004_optdict.test_16_subsec.test_subsec"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../004_optdict-14_optval-optval/index.html" title="Test results: test.004_optdict.test_14_optval.test_optval"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape1.1</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_15_clsmethod.test_clsmethod</span></code></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="test-results-test-004-optdict-test-15-clsmethod-test-clsmethod">
+<h1>Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_15_clsmethod.test_clsmethod</span></code><a class="headerlink" href="#test-results-test-004-optdict-test-15-clsmethod-test-clsmethod" title="Permalink to this heading">¶</a></h1>
+<p>This page documents from the folder</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test/004_optdict/test_15_clsmethod</span></code></p>
+</div></blockquote>
+<p>using the file</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test_clsmethod.py</span></code></p>
+</div></blockquote>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 264 </span><span class="caption-text">test_clsmethod.py</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="c1"># Third party</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="c1"># Local imports</span>
+<span class="kn">from</span> <span class="nn">cape.optdict</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">OptionsDict</span><span class="p">,</span>
+    <span class="n">OptdictAttributeError</span><span class="p">,</span>
+    <span class="n">OptdictTypeError</span><span class="p">,</span>
+    <span class="n">FLOAT_TYPES</span><span class="p">,</span>
+    <span class="n">INT_TYPES</span><span class="p">)</span>
+
+
+<span class="c1"># Create some classes</span>
+<span class="k">class</span> <span class="nc">MyOpts</span><span class="p">(</span><span class="n">OptionsDict</span><span class="p">):</span>
+    <span class="n">_optlist</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">}</span>
+    <span class="n">_rc</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">MyOpts1</span><span class="p">(</span><span class="n">MyOpts</span><span class="p">):</span>
+    <span class="n">_optlist</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">}</span>
+    <span class="n">_rc</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="s2">&quot;fun&quot;</span>
+    <span class="p">}</span>
+    <span class="n">_optvals</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;fun&quot;</span><span class="p">,</span> <span class="s2">&quot;lame&quot;</span><span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">_opttypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span>
+        <span class="s2">&quot;e&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;f&quot;</span><span class="p">:</span> <span class="n">INT_TYPES</span><span class="p">,</span>
+        <span class="s2">&quot;g&quot;</span><span class="p">:</span> <span class="n">FLOAT_TYPES</span>
+    <span class="p">}</span>
+    <span class="n">_rst_descriptions</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="s2">&quot;Number of apps&quot;</span>
+    <span class="p">}</span>
+    <span class="n">_rst_types</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;d&quot;</span><span class="p">:</span> <span class="s2">&quot;:class:`str`&quot;</span>
+    <span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">MyOpts2</span><span class="p">(</span><span class="n">MyOpts</span><span class="p">):</span>
+    <span class="n">_optlist</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;f&quot;</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">}</span>
+
+
+<span class="c1"># Create some getters and setters</span>
+<span class="n">MyOpts1</span><span class="o">.</span><span class="n">add_property</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="n">MyOpts1</span><span class="o">.</span><span class="n">add_property</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;my_&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;c&quot;</span><span class="p">)</span>
+<span class="n">MyOpts2</span><span class="o">.</span><span class="n">add_properties</span><span class="p">([</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">])</span>
+<span class="n">MyOpts2</span><span class="o">.</span><span class="n">add_getters</span><span class="p">((</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">))</span>
+<span class="n">MyOpts2</span><span class="o">.</span><span class="n">add_setters</span><span class="p">((</span><span class="s2">&quot;f&quot;</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">))</span>
+
+
+<span class="c1"># Test _rc</span>
+<span class="k">def</span> <span class="nf">test_clsmethod01</span><span class="p">():</span>
+    <span class="c1"># Use default value</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">getx_cls_key</span><span class="p">(</span><span class="s2">&quot;_rc&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">getx_cls_key</span><span class="p">(</span><span class="s2">&quot;_rc&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;fun&quot;</span>
+    <span class="c1"># Create instance</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">MyOpts1</span><span class="p">()</span>
+    <span class="c1"># Use functions</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_a</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_my_c</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;fun&quot;</span>
+    <span class="c1"># Use the setter</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">set_a</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span>
+
+
+<span class="c1"># Test _optlist</span>
+<span class="k">def</span> <span class="nf">test_clsattr01</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">getx_cls_set</span><span class="p">(</span><span class="s2">&quot;_optlist&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">}</span>
+
+
+<span class="c1"># Test @property errors</span>
+<span class="k">def</span> <span class="nf">test_clsprop01</span><span class="p">():</span>
+    <span class="c1"># Attempt to set getter for OptionsDict</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">OptdictTypeError</span><span class="p">):</span>
+        <span class="n">OptionsDict</span><span class="o">.</span><span class="n">add_getter</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="c1"># Attempt to set setter for OptionsDict</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">OptdictTypeError</span><span class="p">):</span>
+        <span class="n">OptionsDict</span><span class="o">.</span><span class="n">add_setter</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="c1"># Add duplicates</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">OptdictAttributeError</span><span class="p">):</span>
+        <span class="n">MyOpts1</span><span class="o">.</span><span class="n">add_getter</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">OptdictAttributeError</span><span class="p">):</span>
+        <span class="n">MyOpts1</span><span class="o">.</span><span class="n">add_setter</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Test docstrings</span>
+<span class="k">def</span> <span class="nf">test_clsprop02</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">_genr8_rst_opttypes</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;:class:`str`&quot;</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">_genr8_rst_opttypes</span><span class="p">(</span><span class="s2">&quot;e&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;`str`&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">_genr8_rst_opttypes</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;`int`&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="s2">&quot;`float`&quot;</span> <span class="ow">in</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">_genr8_rst_opttypes</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">_genr8_rst_opttypes</span><span class="p">(</span><span class="s2">&quot;h&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;{``None``} | :class:`object`&quot;</span>
+
+
+<span class="c1"># Test properties from list generators</span>
+<span class="k">def</span> <span class="nf">test_clsprop03</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">callable</span><span class="p">(</span><span class="n">MyOpts2</span><span class="o">.</span><span class="n">get_b</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">callable</span><span class="p">(</span><span class="n">MyOpts2</span><span class="o">.</span><span class="n">get_d</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">callable</span><span class="p">(</span><span class="n">MyOpts2</span><span class="o">.</span><span class="n">set_f</span><span class="p">)</span>
+
+
+<span class="c1"># Test extra args docstring</span>
+<span class="k">def</span> <span class="nf">test_cls_getterdocstring01</span><span class="p">():</span>
+    <span class="c1"># Extra arguments</span>
+    <span class="n">extra_args</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;:class:`str`&quot;</span><span class="p">,</span> <span class="s2">&quot;*a* category&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;subtype&quot;</span><span class="p">:</span> <span class="s2">&quot;*a* subtype&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="c1"># Create a docstring for a getter w/ an extra arg for category</span>
+    <span class="n">docstr</span> <span class="o">=</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">genr8_getter_docstring</span><span class="p">(</span>
+        <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">extra_args</span><span class="o">=</span><span class="n">extra_args</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">docstr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Get first word after open-paren in signature line</span>
+    <span class="n">first_arg</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">first_rst</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Test signature line and first arg in :Inputs: sec</span>
+    <span class="k">assert</span> <span class="n">first_arg</span> <span class="o">==</span> <span class="s2">&quot;category&quot;</span>
+    <span class="k">assert</span> <span class="n">first_rst</span> <span class="o">==</span> <span class="s2">&quot;*category*&quot;</span>
+    <span class="c1"># Try simple list of extra args</span>
+    <span class="n">docstr</span> <span class="o">=</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">genr8_getter_docstring</span><span class="p">(</span>
+        <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">extra_args</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">])</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">docstr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Get first word after open-paren in signature line</span>
+    <span class="n">first_arg</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">first_rst</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Test signature line and first arg in :Inputs: sec</span>
+    <span class="k">assert</span> <span class="n">first_arg</span> <span class="o">==</span> <span class="s2">&quot;category&quot;</span>
+    <span class="k">assert</span> <span class="n">first_rst</span> <span class="o">==</span> <span class="s2">&quot;*category*&quot;</span>
+</pre></div>
+</div>
+</div>
+<section id="test-case-test-clsmethod01">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_clsmethod01()</span></code><a class="headerlink" href="#test-case-test-clsmethod01" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">Listing 265 </span><span class="caption-text">test_clsmethod01</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_clsmethod01</span><span class="p">():</span>
+    <span class="c1"># Use default value</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">getx_cls_key</span><span class="p">(</span><span class="s2">&quot;_rc&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">getx_cls_key</span><span class="p">(</span><span class="s2">&quot;_rc&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;fun&quot;</span>
+    <span class="c1"># Create instance</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">MyOpts1</span><span class="p">()</span>
+    <span class="c1"># Use functions</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_a</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_my_c</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;fun&quot;</span>
+    <span class="c1"># Use the setter</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">set_a</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-clsattr01">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_clsattr01()</span></code><a class="headerlink" href="#test-case-test-clsattr01" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">Listing 266 </span><span class="caption-text">test_clsattr01</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_clsattr01</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">getx_cls_set</span><span class="p">(</span><span class="s2">&quot;_optlist&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-clsprop01">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_clsprop01()</span></code><a class="headerlink" href="#test-case-test-clsprop01" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">Listing 267 </span><span class="caption-text">test_clsprop01</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_clsprop01</span><span class="p">():</span>
+    <span class="c1"># Attempt to set getter for OptionsDict</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">OptdictTypeError</span><span class="p">):</span>
+        <span class="n">OptionsDict</span><span class="o">.</span><span class="n">add_getter</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="c1"># Attempt to set setter for OptionsDict</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">OptdictTypeError</span><span class="p">):</span>
+        <span class="n">OptionsDict</span><span class="o">.</span><span class="n">add_setter</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="c1"># Add duplicates</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">OptdictAttributeError</span><span class="p">):</span>
+        <span class="n">MyOpts1</span><span class="o">.</span><span class="n">add_getter</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">OptdictAttributeError</span><span class="p">):</span>
+        <span class="n">MyOpts1</span><span class="o">.</span><span class="n">add_setter</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-clsprop02">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_clsprop02()</span></code><a class="headerlink" href="#test-case-test-clsprop02" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-number">Listing 268 </span><span class="caption-text">test_clsprop02</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_clsprop02</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">_genr8_rst_opttypes</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;:class:`str`&quot;</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">_genr8_rst_opttypes</span><span class="p">(</span><span class="s2">&quot;e&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;`str`&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">_genr8_rst_opttypes</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;`int`&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="s2">&quot;`float`&quot;</span> <span class="ow">in</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">_genr8_rst_opttypes</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">_genr8_rst_opttypes</span><span class="p">(</span><span class="s2">&quot;h&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;{``None``} | :class:`object`&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-clsprop03">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_clsprop03()</span></code><a class="headerlink" href="#test-case-test-clsprop03" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-number">Listing 269 </span><span class="caption-text">test_clsprop03</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_clsprop03</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">callable</span><span class="p">(</span><span class="n">MyOpts2</span><span class="o">.</span><span class="n">get_b</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">callable</span><span class="p">(</span><span class="n">MyOpts2</span><span class="o">.</span><span class="n">get_d</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">callable</span><span class="p">(</span><span class="n">MyOpts2</span><span class="o">.</span><span class="n">set_f</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-cls-getterdocstring01">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_cls_getterdocstring01()</span></code><a class="headerlink" href="#test-case-test-cls-getterdocstring01" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-number">Listing 270 </span><span class="caption-text">test_cls_getterdocstring01</span><a class="headerlink" href="#id7" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_cls_getterdocstring01</span><span class="p">():</span>
+    <span class="c1"># Extra arguments</span>
+    <span class="n">extra_args</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;:class:`str`&quot;</span><span class="p">,</span> <span class="s2">&quot;*a* category&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;subtype&quot;</span><span class="p">:</span> <span class="s2">&quot;*a* subtype&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="c1"># Create a docstring for a getter w/ an extra arg for category</span>
+    <span class="n">docstr</span> <span class="o">=</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">genr8_getter_docstring</span><span class="p">(</span>
+        <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">extra_args</span><span class="o">=</span><span class="n">extra_args</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">docstr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Get first word after open-paren in signature line</span>
+    <span class="n">first_arg</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">first_rst</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Test signature line and first arg in :Inputs: sec</span>
+    <span class="k">assert</span> <span class="n">first_arg</span> <span class="o">==</span> <span class="s2">&quot;category&quot;</span>
+    <span class="k">assert</span> <span class="n">first_rst</span> <span class="o">==</span> <span class="s2">&quot;*category*&quot;</span>
+    <span class="c1"># Try simple list of extra args</span>
+    <span class="n">docstr</span> <span class="o">=</span> <span class="n">MyOpts1</span><span class="o">.</span><span class="n">genr8_getter_docstring</span><span class="p">(</span>
+        <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">extra_args</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">])</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">docstr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Get first word after open-paren in signature line</span>
+    <span class="n">first_arg</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">first_rst</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Test signature line and first arg in :Inputs: sec</span>
+    <span class="k">assert</span> <span class="n">first_arg</span> <span class="o">==</span> <span class="s2">&quot;category&quot;</span>
+    <span class="k">assert</span> <span class="n">first_rst</span> <span class="o">==</span> <span class="s2">&quot;*category*&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_15_clsmethod.test_clsmethod</span></code></a><ul>
+<li><a class="reference internal" href="#test-case-test-clsmethod01">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_clsmethod01()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-clsattr01">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_clsattr01()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-clsprop01">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_clsprop01()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-clsprop02">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_clsprop02()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-clsprop03">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_clsprop03()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-cls-getterdocstring01">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_cls_getterdocstring01()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../004_optdict-14_optval-optval/index.html"
+                          title="previous chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_14_optval.test_optval</span></code></a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../004_optdict-16_subsec-subsec/index.html"
+                          title="next chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_16_subsec.test_subsec</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/test/004_optdict-15_clsmethod-clsmethod/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../004_optdict-16_subsec-subsec/index.html" title="Test results: test.004_optdict.test_16_subsec.test_subsec"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../004_optdict-14_optval-optval/index.html" title="Test results: test.004_optdict.test_14_optval.test_optval"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape1.1</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_15_clsmethod.test_clsmethod</span></code></a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

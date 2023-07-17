@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Test results: test.001_cape.001_runmatrix.test_02_nofile &#8212; CAPE 1.1.0beta2</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Test results: test.001_cape.002_argread.test_01_readkeys" href="../001_cape-002_argread-01_readkeys/index.html" />
+    <link rel="prev" title="Test results: test.001_cape.001_runmatrix.test_01_subset" href="../001_cape-001_runmatrix-01_subset/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../001_cape-002_argread-01_readkeys/index.html" title="Test results: test.001_cape.002_argread.test_01_readkeys"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../001_cape-001_runmatrix-01_subset/index.html" title="Test results: test.001_cape.001_runmatrix.test_01_subset"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape1.1</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.001_cape.001_runmatrix.test_02_nofile</span></code></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="test-results-test-001-cape-001-runmatrix-test-02-nofile">
+<h1>Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.001_cape.001_runmatrix.test_02_nofile</span></code><a class="headerlink" href="#test-results-test-001-cape-001-runmatrix-test-02-nofile" title="Permalink to this heading">¶</a></h1>
+<p>This page documents from the folder</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test/001_cape/001_runmatrix</span></code></p>
+</div></blockquote>
+<p>using the file</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test_02_nofile.py</span></code></p>
+</div></blockquote>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 5 </span><span class="caption-text">test_02_nofile.py</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># Standard library</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># Third party modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">testutils</span>
+
+<span class="c1"># Local imorts</span>
+<span class="kn">import</span> <span class="nn">cape.runmatrix</span>
+
+
+<span class="c1"># Universal test tolerance</span>
+<span class="n">TOL</span> <span class="o">=</span> <span class="mf">1e-4</span>
+
+
+<span class="c1"># Settings for run matrix</span>
+<span class="n">TEST_OPTS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Keys&quot;</span><span class="p">:</span>   <span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;mach&quot;</span><span class="p">:</span>   <span class="mf">1.4</span><span class="p">,</span>
+    <span class="s2">&quot;alpha&quot;</span><span class="p">:</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]),</span>
+    <span class="s2">&quot;beta&quot;</span><span class="p">:</span>   <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]),</span>
+    <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="s2">&quot;poweroff&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Prefix&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1"># Test from options</span>
+<span class="k">def</span> <span class="nf">test_01_opts</span><span class="p">():</span>
+    <span class="c1"># Create run matrix</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span><span class="o">**</span><span class="n">TEST_OPTS</span><span class="p">)</span>
+    <span class="c1"># Check folder name</span>
+    <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">GetFolderNames</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;m1.4a0.0b0.0&quot;</span>
+    <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">GetFullFolderNames</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;poweroff/m1.4a4.0b0.0&quot;</span>
+
+
+<span class="c1"># Test 02: definitions</span>
+<span class="k">def</span> <span class="nf">test_02_defns</span><span class="p">():</span>
+    <span class="c1"># Create run matrix with extra option</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span>
+        <span class="n">Definitions</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;mach&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%.2f</span><span class="s2">&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Abbreviation&quot;</span><span class="p">:</span> <span class="s2">&quot;_a&quot;</span><span class="p">},</span>
+        <span class="p">},</span>
+        <span class="o">**</span><span class="n">TEST_OPTS</span><span class="p">)</span>
+    <span class="c1"># Check modified format</span>
+    <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">GetFolderNames</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;m1.40_a0.0b4.0&quot;</span>
+
+
+<span class="c1"># Test 03: write conditions file</span>
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_sandbox</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test03_conditions_json</span><span class="p">():</span>
+    <span class="c1"># Create run matrix</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span><span class="o">**</span><span class="n">TEST_OPTS</span><span class="p">)</span>
+    <span class="c1"># Write conditions file for case 1</span>
+    <span class="n">x</span><span class="o">.</span><span class="n">WriteConditionsJSON</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Read the file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;conditions.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+        <span class="n">conds</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+    <span class="c1"># Test conditions</span>
+    <span class="k">assert</span> <span class="n">conds</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;poweroff&quot;</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">conds</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.4</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+
+
+<span class="c1"># Test 04: convert *aoap*, *phip* to *a*, *b*</span>
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_04_ab</span><span class="p">():</span>
+    <span class="c1"># Create run matrix</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span>
+        <span class="n">Keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;aoap&quot;</span><span class="p">,</span> <span class="s2">&quot;phip&quot;</span><span class="p">],</span>
+        <span class="n">aoap</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]),</span>
+        <span class="n">phip</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">45.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">,</span> <span class="mf">235.0</span><span class="p">]))</span>
+    <span class="c1"># Check some lookups</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetAlphaTotal</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">4.0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetPhi</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="mf">90.0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetAlpha</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.8307</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetBeta</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mf">3.2757</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+
+
+<span class="c1"># Test 05: convert *a*, *b* to *aoap*, *phip*</span>
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_05_ab</span><span class="p">():</span>
+    <span class="c1"># Create run matrix</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span>
+        <span class="n">Keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">],</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">]),</span>
+        <span class="n">beta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">]))</span>
+    <span class="c1"># Test some values</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetAlphaTotal</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">5.6546</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetAlphaManeuver</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="mf">4.4714</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetPhiManeuver</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="mf">26.5930</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+
+
+<span class="c1"># Test 06: convert *mach*, *q* to *p*</span>
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_06_mq</span><span class="p">():</span>
+    <span class="c1"># Create run matrix</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span>
+        <span class="n">Keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">],</span>
+        <span class="n">mach</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">beta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">]))</span>
+    <span class="c1"># Check some values</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetMach</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetDynamicPressure</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetPressure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">89.2857</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetTotalPressure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">838.3338</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+
+
+<span class="c1"># Test 07: convert *mach*, *q*, *T* to *Re*</span>
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_07_reynolds</span><span class="p">():</span>
+    <span class="c1"># Create run matrix</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span>
+        <span class="n">Keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">],</span>
+        <span class="n">mach</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">beta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">]),</span>
+        <span class="n">T</span><span class="o">=</span><span class="mf">450.0</span><span class="p">)</span>
+    <span class="c1"># Check values</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetTemperature</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">450.0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetReynoldsNumber</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">23996.4884</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+
+
+</pre></div>
+</div>
+</div>
+<section id="test-case-test-01-opts">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_01_opts()</span></code><a class="headerlink" href="#test-case-test-01-opts" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">Listing 6 </span><span class="caption-text">test_01_opts</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_01_opts</span><span class="p">():</span>
+    <span class="c1"># Create run matrix</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span><span class="o">**</span><span class="n">TEST_OPTS</span><span class="p">)</span>
+    <span class="c1"># Check folder name</span>
+    <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">GetFolderNames</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;m1.4a0.0b0.0&quot;</span>
+    <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">GetFullFolderNames</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;poweroff/m1.4a4.0b0.0&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-02-defns">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_02_defns()</span></code><a class="headerlink" href="#test-case-test-02-defns" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">Listing 7 </span><span class="caption-text">test_02_defns</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_02_defns</span><span class="p">():</span>
+    <span class="c1"># Create run matrix with extra option</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span>
+        <span class="n">Definitions</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;mach&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%.2f</span><span class="s2">&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Abbreviation&quot;</span><span class="p">:</span> <span class="s2">&quot;_a&quot;</span><span class="p">},</span>
+        <span class="p">},</span>
+        <span class="o">**</span><span class="n">TEST_OPTS</span><span class="p">)</span>
+    <span class="c1"># Check modified format</span>
+    <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">GetFolderNames</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;m1.40_a0.0b4.0&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test03-conditions-json">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test03_conditions_json()</span></code><a class="headerlink" href="#test-case-test03-conditions-json" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">Listing 8 </span><span class="caption-text">test03_conditions_json</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_sandbox</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test03_conditions_json</span><span class="p">():</span>
+    <span class="c1"># Create run matrix</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span><span class="o">**</span><span class="n">TEST_OPTS</span><span class="p">)</span>
+    <span class="c1"># Write conditions file for case 1</span>
+    <span class="n">x</span><span class="o">.</span><span class="n">WriteConditionsJSON</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Read the file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;conditions.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+        <span class="n">conds</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+    <span class="c1"># Test conditions</span>
+    <span class="k">assert</span> <span class="n">conds</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;poweroff&quot;</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">conds</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.4</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-04-ab">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_04_ab()</span></code><a class="headerlink" href="#test-case-test-04-ab" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-number">Listing 9 </span><span class="caption-text">test_04_ab</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_04_ab</span><span class="p">():</span>
+    <span class="c1"># Create run matrix</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span>
+        <span class="n">Keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;aoap&quot;</span><span class="p">,</span> <span class="s2">&quot;phip&quot;</span><span class="p">],</span>
+        <span class="n">aoap</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]),</span>
+        <span class="n">phip</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">45.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">,</span> <span class="mf">235.0</span><span class="p">]))</span>
+    <span class="c1"># Check some lookups</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetAlphaTotal</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">4.0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetPhi</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="mf">90.0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetAlpha</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.8307</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetBeta</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mf">3.2757</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-05-ab">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_05_ab()</span></code><a class="headerlink" href="#test-case-test-05-ab" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-number">Listing 10 </span><span class="caption-text">test_05_ab</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_05_ab</span><span class="p">():</span>
+    <span class="c1"># Create run matrix</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span>
+        <span class="n">Keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">],</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">]),</span>
+        <span class="n">beta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">]))</span>
+    <span class="c1"># Test some values</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetAlphaTotal</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">5.6546</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetAlphaManeuver</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="mf">4.4714</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetPhiManeuver</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="mf">26.5930</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-06-mq">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_06_mq()</span></code><a class="headerlink" href="#test-case-test-06-mq" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-number">Listing 11 </span><span class="caption-text">test_06_mq</span><a class="headerlink" href="#id7" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_06_mq</span><span class="p">():</span>
+    <span class="c1"># Create run matrix</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span>
+        <span class="n">Keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">],</span>
+        <span class="n">mach</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">beta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">]))</span>
+    <span class="c1"># Check some values</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetMach</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetDynamicPressure</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetPressure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">89.2857</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetTotalPressure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">838.3338</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-07-reynolds">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_07_reynolds()</span></code><a class="headerlink" href="#test-case-test-07-reynolds" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-number">Listing 12 </span><span class="caption-text">test_07_reynolds</span><a class="headerlink" href="#id8" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_07_reynolds</span><span class="p">():</span>
+    <span class="c1"># Create run matrix</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">runmatrix</span><span class="o">.</span><span class="n">RunMatrix</span><span class="p">(</span>
+        <span class="n">Keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">],</span>
+        <span class="n">mach</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">beta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">]),</span>
+        <span class="n">T</span><span class="o">=</span><span class="mf">450.0</span><span class="p">)</span>
+    <span class="c1"># Check values</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetTemperature</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">450.0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">GetReynoldsNumber</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">23996.4884</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">TOL</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.001_cape.001_runmatrix.test_02_nofile</span></code></a><ul>
+<li><a class="reference internal" href="#test-case-test-01-opts">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_01_opts()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-02-defns">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_02_defns()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test03-conditions-json">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test03_conditions_json()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-04-ab">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_04_ab()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-05-ab">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_05_ab()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-06-mq">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_06_mq()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-07-reynolds">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_07_reynolds()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../001_cape-001_runmatrix-01_subset/index.html"
+                          title="previous chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.001_cape.001_runmatrix.test_01_subset</span></code></a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../001_cape-002_argread-01_readkeys/index.html"
+                          title="next chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.001_cape.002_argread.test_01_readkeys</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/test/001_cape-001_runmatrix-02_nofile/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../001_cape-002_argread-01_readkeys/index.html" title="Test results: test.001_cape.002_argread.test_01_readkeys"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../001_cape-001_runmatrix-01_subset/index.html" title="Test results: test.001_cape.001_runmatrix.test_01_subset"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape1.1</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.001_cape.001_runmatrix.test_02_nofile</span></code></a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

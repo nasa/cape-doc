@@ -1,0 +1,562 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Test results: test.004_optdict.test_13_getopt.test_getopt &#8212; CAPE 1.1.0beta2</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Test results: test.004_optdict.test_13_getopt.test_getsubopt" href="../004_optdict-13_getopt-getsubopt/index.html" />
+    <link rel="prev" title="Test results: test.004_optdict.test_12_opttype.test_check_opttype" href="../004_optdict-12_opttype-check_opttype/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../004_optdict-13_getopt-getsubopt/index.html" title="Test results: test.004_optdict.test_13_getopt.test_getsubopt"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../004_optdict-12_opttype-check_opttype/index.html" title="Test results: test.004_optdict.test_12_opttype.test_check_opttype"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape1.1</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_13_getopt.test_getopt</span></code></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="test-results-test-004-optdict-test-13-getopt-test-getopt">
+<h1>Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_13_getopt.test_getopt</span></code><a class="headerlink" href="#test-results-test-004-optdict-test-13-getopt-test-getopt" title="Permalink to this heading">¶</a></h1>
+<p>This page documents from the folder</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test/004_optdict/test_13_getopt</span></code></p>
+</div></blockquote>
+<p>using the file</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test_getopt.py</span></code></p>
+</div></blockquote>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 242 </span><span class="caption-text">test_getopt.py</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="c1"># Third-party</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Local imports</span>
+<span class="kn">from</span> <span class="nn">cape.optdict</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">OptionsDict</span><span class="p">,</span>
+    <span class="n">FLOAT_TYPES</span><span class="p">,</span>
+    <span class="n">INT_TYPES</span><span class="p">,</span>
+    <span class="n">WARNMODE_NONE</span>
+<span class="p">)</span>
+
+
+<span class="c1"># Subsection class to test recursion of setx_i()</span>
+<span class="k">class</span> <span class="nc">MySubOpts</span><span class="p">(</span><span class="n">OptionsDict</span><span class="p">):</span>
+    <span class="n">_optring</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">_rc</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># Options class</span>
+<span class="k">class</span> <span class="nc">MyOpts</span><span class="p">(</span><span class="n">OptionsDict</span><span class="p">):</span>
+    <span class="n">_opttypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="n">MySubOpts</span><span class="p">,</span>
+        <span class="s2">&quot;v&quot;</span><span class="p">:</span> <span class="n">FLOAT_TYPES</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">_rc</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;v&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">_optlistdepth</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># Options</span>
+<span class="n">MYOPTS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;v&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;@expr&quot;</span><span class="p">:</span> <span class="s2">&quot;$mach * np.sin($aoa * $DEG)&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="c1"># Conditions</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;mach&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="s2">&quot;aoa&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">]),</span>
+    <span class="s2">&quot;DEG&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+<span class="p">}</span>
+
+<span class="c1"># Options with parent</span>
+<span class="n">MYPARENT</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1"># Access condition</span>
+<span class="k">def</span> <span class="nf">test_01_getoptx</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">OptionsDict</span><span class="p">(</span><span class="n">MYOPTS</span><span class="p">)</span>
+    <span class="c1"># Set conditions</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">save_x</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="c1"># Get normal component of Mach</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="c1"># Calculate target</span>
+    <span class="n">wtarg</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="s2">&quot;aoa&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">X</span><span class="p">[</span><span class="s2">&quot;DEG&quot;</span><span class="p">])</span>
+    <span class="c1"># Test</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">wtarg</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="mf">1e-6</span>
+
+
+<span class="c1"># Access to run matrix</span>
+<span class="k">def</span> <span class="nf">test_02_getx</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">OptionsDict</span><span class="p">()</span>
+    <span class="c1"># Test w/o opts.x</span>
+    <span class="n">mach</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">getx_xvals</span><span class="p">(</span><span class="s2">&quot;mach&quot;</span><span class="p">)</span>
+    <span class="c1"># Test</span>
+    <span class="k">assert</span> <span class="n">mach</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="c1"># Save *x*</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">save_x</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="c1"># Get all values</span>
+    <span class="n">mach</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">getx_xvals</span><span class="p">(</span><span class="s2">&quot;mach&quot;</span><span class="p">)</span>
+    <span class="c1"># Test</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mach</span> <span class="o">-</span> <span class="n">X</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">]))</span> <span class="o">&lt;=</span> <span class="mf">1e-6</span>
+
+
+<span class="c1"># Test phase/index compound</span>
+<span class="k">def</span> <span class="nf">test_03_getoptj</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">OptionsDict</span><span class="p">(</span>
+        <span class="n">a</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;@expr&quot;</span><span class="p">:</span> <span class="s2">&quot;$mach&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;@expr&quot;</span><span class="p">:</span> <span class="s2">&quot;10*$mach&quot;</span><span class="p">}</span>
+        <span class="p">])</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">save_x</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="c1"># Sample phased expression</span>
+    <span class="n">a0</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Test</span>
+    <span class="k">assert</span> <span class="n">a0</span> <span class="o">==</span> <span class="n">X</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">a1</span> <span class="o">==</span> <span class="n">X</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span>
+
+
+<span class="c1"># Get an invalid value that couldn&#39;t be checked at assign</span>
+<span class="k">def</span> <span class="nf">test_04_getopt_invalid</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">OptionsDict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;@expr&quot;</span><span class="p">:</span> <span class="s2">&quot;(4*$mach) // 2&quot;</span><span class="p">})</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">save_x</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="c1"># Set types</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">add_xopttype</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">INT_TYPES</span><span class="p">)</span>
+    <span class="c1"># Try to evaluate</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="c1"># Without checks, should get 1.0</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">WARNMODE_NONE</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.0</span>
+
+
+<span class="c1"># Test defaults</span>
+<span class="k">def</span> <span class="nf">test_05_getopt_rc</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">MyOpts</span><span class="p">()</span>
+    <span class="c1"># Get a default value for *v*</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">opts</span><span class="o">.</span><span class="n">_rc</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span>
+    <span class="c1"># Override with *vdef*</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">vdef</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">==</span> <span class="mf">2.0</span>
+    <span class="c1"># Set an instance-specific default</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">_xrc</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">w</span>
+    <span class="c1"># Override with *vdef*</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">vdef</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+
+
+<span class="c1"># Test fall-back</span>
+<span class="k">def</span> <span class="nf">test_06_parent</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">OptionsDict</span><span class="p">(</span><span class="n">MYOPTS</span><span class="p">)</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">setx_parent</span><span class="p">(</span><span class="n">MYPARENT</span><span class="p">)</span>
+    <span class="c1"># Test fallback</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">MYPARENT</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span>
+
+
+<span class="c1"># Test -&gt; list</span>
+<span class="k">def</span> <span class="nf">test_07_getopt_list</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">MyOpts</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s2">&quot;r1&quot;</span><span class="p">)</span>
+    <span class="c1"># Ensure list</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;r1&quot;</span><span class="p">]</span>
+
+
+<span class="c1"># Test recursion of setx_i()</span>
+<span class="k">def</span> <span class="nf">test_08_setx</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">MyOpts</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="p">{})</span>
+    <span class="c1"># Apply run matrix</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">save_x</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="c1"># Set case index</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">setx_i</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># Get subsection</span>
+    <span class="n">secopts</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">]</span>
+    <span class="c1"># Test class</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">secopts</span><span class="p">,</span> <span class="n">MySubOpts</span><span class="p">)</span>
+    <span class="c1"># Test passage of *i* to subsection</span>
+    <span class="k">assert</span> <span class="n">secopts</span><span class="o">.</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span>
+
+
+<span class="c1"># Test sampling</span>
+<span class="k">def</span> <span class="nf">test_09_sampledict</span><span class="p">():</span>
+    <span class="c1"># Initialize with *r* for &quot;ring&quot;</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">MyOpts</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">]})</span>
+    <span class="c1"># Sample the whole thing for *j*</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">optsj</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">sample_dict</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Get value for *r*</span>
+    <span class="n">vj</span> <span class="o">=</span> <span class="n">optsj</span><span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">][</span><span class="s2">&quot;r&quot;</span><span class="p">]</span>
+    <span class="n">vr</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">][</span><span class="s2">&quot;r&quot;</span><span class="p">]</span>
+    <span class="c1"># Test value</span>
+    <span class="k">assert</span> <span class="n">vj</span> <span class="o">==</span> <span class="n">vr</span><span class="p">[</span><span class="n">j</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">vr</span><span class="p">)]</span>
+
+
+<span class="c1"># Test sampling w/o use of OptionsDict subsection</span>
+<span class="k">def</span> <span class="nf">test_10_samplesub</span><span class="p">():</span>
+    <span class="c1"># Initialize with section other than &quot;s&quot;</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">MyOpts</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;u&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;v&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">]}})</span>
+    <span class="c1"># Sample an option for *j*</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">vj</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_subopt</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">,</span> <span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="p">)[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span>
+    <span class="c1"># Get value for *r*</span>
+    <span class="n">vr</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">][</span><span class="s2">&quot;u&quot;</span><span class="p">][</span><span class="s2">&quot;v&quot;</span><span class="p">]</span>
+    <span class="c1"># Test value; &quot;ring&quot; option not set</span>
+    <span class="k">assert</span> <span class="n">vj</span> <span class="o">==</span> <span class="n">vr</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">vr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="c1"># Sample entire *t* using get_opt</span>
+    <span class="n">tj</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="p">)</span>
+    <span class="c1"># Test results</span>
+    <span class="k">assert</span> <span class="n">tj</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">][</span><span class="s2">&quot;v&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">vj</span>
+</pre></div>
+</div>
+</div>
+<section id="test-case-test-01-getoptx">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_01_getoptx()</span></code><a class="headerlink" href="#test-case-test-01-getoptx" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">Listing 243 </span><span class="caption-text">test_01_getoptx</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_01_getoptx</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">OptionsDict</span><span class="p">(</span><span class="n">MYOPTS</span><span class="p">)</span>
+    <span class="c1"># Set conditions</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">save_x</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="c1"># Get normal component of Mach</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="c1"># Calculate target</span>
+    <span class="n">wtarg</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="s2">&quot;aoa&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">X</span><span class="p">[</span><span class="s2">&quot;DEG&quot;</span><span class="p">])</span>
+    <span class="c1"># Test</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">wtarg</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="mf">1e-6</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-02-getx">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_02_getx()</span></code><a class="headerlink" href="#test-case-test-02-getx" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">Listing 244 </span><span class="caption-text">test_02_getx</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_02_getx</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">OptionsDict</span><span class="p">()</span>
+    <span class="c1"># Test w/o opts.x</span>
+    <span class="n">mach</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">getx_xvals</span><span class="p">(</span><span class="s2">&quot;mach&quot;</span><span class="p">)</span>
+    <span class="c1"># Test</span>
+    <span class="k">assert</span> <span class="n">mach</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="c1"># Save *x*</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">save_x</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="c1"># Get all values</span>
+    <span class="n">mach</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">getx_xvals</span><span class="p">(</span><span class="s2">&quot;mach&quot;</span><span class="p">)</span>
+    <span class="c1"># Test</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mach</span> <span class="o">-</span> <span class="n">X</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">]))</span> <span class="o">&lt;=</span> <span class="mf">1e-6</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-03-getoptj">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_03_getoptj()</span></code><a class="headerlink" href="#test-case-test-03-getoptj" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">Listing 245 </span><span class="caption-text">test_03_getoptj</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_03_getoptj</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">OptionsDict</span><span class="p">(</span>
+        <span class="n">a</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;@expr&quot;</span><span class="p">:</span> <span class="s2">&quot;$mach&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;@expr&quot;</span><span class="p">:</span> <span class="s2">&quot;10*$mach&quot;</span><span class="p">}</span>
+        <span class="p">])</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">save_x</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="c1"># Sample phased expression</span>
+    <span class="n">a0</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Test</span>
+    <span class="k">assert</span> <span class="n">a0</span> <span class="o">==</span> <span class="n">X</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">a1</span> <span class="o">==</span> <span class="n">X</span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-04-getopt-invalid">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_04_getopt_invalid()</span></code><a class="headerlink" href="#test-case-test-04-getopt-invalid" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-number">Listing 246 </span><span class="caption-text">test_04_getopt_invalid</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_04_getopt_invalid</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">OptionsDict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;@expr&quot;</span><span class="p">:</span> <span class="s2">&quot;(4*$mach) // 2&quot;</span><span class="p">})</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">save_x</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="c1"># Set types</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">add_xopttype</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">INT_TYPES</span><span class="p">)</span>
+    <span class="c1"># Try to evaluate</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="c1"># Without checks, should get 1.0</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">WARNMODE_NONE</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-05-getopt-rc">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_05_getopt_rc()</span></code><a class="headerlink" href="#test-case-test-05-getopt-rc" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-number">Listing 247 </span><span class="caption-text">test_05_getopt_rc</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_05_getopt_rc</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">MyOpts</span><span class="p">()</span>
+    <span class="c1"># Get a default value for *v*</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">opts</span><span class="o">.</span><span class="n">_rc</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span>
+    <span class="c1"># Override with *vdef*</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">vdef</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">==</span> <span class="mf">2.0</span>
+    <span class="c1"># Set an instance-specific default</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">_xrc</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">w</span>
+    <span class="c1"># Override with *vdef*</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">vdef</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-06-parent">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_06_parent()</span></code><a class="headerlink" href="#test-case-test-06-parent" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-number">Listing 248 </span><span class="caption-text">test_06_parent</span><a class="headerlink" href="#id7" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_06_parent</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">OptionsDict</span><span class="p">(</span><span class="n">MYOPTS</span><span class="p">)</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">setx_parent</span><span class="p">(</span><span class="n">MYPARENT</span><span class="p">)</span>
+    <span class="c1"># Test fallback</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">MYPARENT</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-07-getopt-list">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_07_getopt_list()</span></code><a class="headerlink" href="#test-case-test-07-getopt-list" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-number">Listing 249 </span><span class="caption-text">test_07_getopt_list</span><a class="headerlink" href="#id8" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_07_getopt_list</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">MyOpts</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s2">&quot;r1&quot;</span><span class="p">)</span>
+    <span class="c1"># Ensure list</span>
+    <span class="k">assert</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;r1&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-08-setx">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_08_setx()</span></code><a class="headerlink" href="#test-case-test-08-setx" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-number">Listing 250 </span><span class="caption-text">test_08_setx</span><a class="headerlink" href="#id9" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_08_setx</span><span class="p">():</span>
+    <span class="c1"># Initialize</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">MyOpts</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="p">{})</span>
+    <span class="c1"># Apply run matrix</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">save_x</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="c1"># Set case index</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">setx_i</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># Get subsection</span>
+    <span class="n">secopts</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">]</span>
+    <span class="c1"># Test class</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">secopts</span><span class="p">,</span> <span class="n">MySubOpts</span><span class="p">)</span>
+    <span class="c1"># Test passage of *i* to subsection</span>
+    <span class="k">assert</span> <span class="n">secopts</span><span class="o">.</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-09-sampledict">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_09_sampledict()</span></code><a class="headerlink" href="#test-case-test-09-sampledict" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-number">Listing 251 </span><span class="caption-text">test_09_sampledict</span><a class="headerlink" href="#id10" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_09_sampledict</span><span class="p">():</span>
+    <span class="c1"># Initialize with *r* for &quot;ring&quot;</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">MyOpts</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">]})</span>
+    <span class="c1"># Sample the whole thing for *j*</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">optsj</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">sample_dict</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Get value for *r*</span>
+    <span class="n">vj</span> <span class="o">=</span> <span class="n">optsj</span><span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">][</span><span class="s2">&quot;r&quot;</span><span class="p">]</span>
+    <span class="n">vr</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">][</span><span class="s2">&quot;r&quot;</span><span class="p">]</span>
+    <span class="c1"># Test value</span>
+    <span class="k">assert</span> <span class="n">vj</span> <span class="o">==</span> <span class="n">vr</span><span class="p">[</span><span class="n">j</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">vr</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-10-samplesub">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_10_samplesub()</span></code><a class="headerlink" href="#test-case-test-10-samplesub" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-number">Listing 252 </span><span class="caption-text">test_10_samplesub</span><a class="headerlink" href="#id11" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_10_samplesub</span><span class="p">():</span>
+    <span class="c1"># Initialize with section other than &quot;s&quot;</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">MyOpts</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;u&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;v&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">]}})</span>
+    <span class="c1"># Sample an option for *j*</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">vj</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_subopt</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">,</span> <span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="p">)[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span>
+    <span class="c1"># Get value for *r*</span>
+    <span class="n">vr</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">][</span><span class="s2">&quot;u&quot;</span><span class="p">][</span><span class="s2">&quot;v&quot;</span><span class="p">]</span>
+    <span class="c1"># Test value; &quot;ring&quot; option not set</span>
+    <span class="k">assert</span> <span class="n">vj</span> <span class="o">==</span> <span class="n">vr</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">vr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="c1"># Sample entire *t* using get_opt</span>
+    <span class="n">tj</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_opt</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="p">)</span>
+    <span class="c1"># Test results</span>
+    <span class="k">assert</span> <span class="n">tj</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">][</span><span class="s2">&quot;v&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">vj</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_13_getopt.test_getopt</span></code></a><ul>
+<li><a class="reference internal" href="#test-case-test-01-getoptx">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_01_getoptx()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-02-getx">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_02_getx()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-03-getoptj">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_03_getoptj()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-04-getopt-invalid">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_04_getopt_invalid()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-05-getopt-rc">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_05_getopt_rc()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-06-parent">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_06_parent()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-07-getopt-list">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_07_getopt_list()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-08-setx">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_08_setx()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-09-sampledict">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_09_sampledict()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-10-samplesub">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_10_samplesub()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../004_optdict-12_opttype-check_opttype/index.html"
+                          title="previous chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_12_opttype.test_check_opttype</span></code></a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../004_optdict-13_getopt-getsubopt/index.html"
+                          title="next chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_13_getopt.test_getsubopt</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/test/004_optdict-13_getopt-getopt/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../004_optdict-13_getopt-getsubopt/index.html" title="Test results: test.004_optdict.test_13_getopt.test_getsubopt"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../004_optdict-12_opttype-check_opttype/index.html" title="Test results: test.004_optdict.test_12_opttype.test_check_opttype"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape1.1</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_13_getopt.test_getopt</span></code></a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

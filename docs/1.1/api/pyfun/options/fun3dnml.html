@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.pyfun.options.fun3dnml: FUN3D namelist options &#8212; CAPE 1.1.0beta2</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.pyfun.options.runctlopts: FUN3D run control options" href="runctlopts.html" />
+    <link rel="prev" title="cape.pyfun.options.configopts: FUn3D surface config opts" href="configopts.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="runctlopts.html" title="cape.pyfun.options.runctlopts: FUN3D run control options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="configopts.html" title="cape.pyfun.options.configopts: FUn3D surface config opts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.options</span></code>: FUN3D and pyFun settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.options.fun3dnml</span></code>: FUN3D namelist options</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.pyfun.options.fun3dnmlopts"></span><section id="cape-pyfun-options-fun3dnml-fun3d-namelist-options">
+<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.options.fun3dnml</span></code>: FUN3D namelist options<a class="headerlink" href="#cape-pyfun-options-fun3dnml-fun3d-namelist-options" title="Permalink to this heading">¶</a></h1>
+<p>This module provides a class to interpret JSON options that are converted to
+Fortran namelist format for FUN3D.  The
+module provides a class, <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.options.fun3dnml.Fun3DNml</span></code>, which
+interprets the settings of the <code class="docutils literal notranslate"><span class="pre">&quot;Fun3D&quot;</span></code> section of the master JSON file.
+These settings are then applied to the main OVERFLOW input file, the
+<code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> namelist.</p>
+<p>An example JSON setting is shown below.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Fun3D&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;nonlinear_solver_parameters&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;schedule_cfl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">5.0</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mf">5.0</span><span class="p">,</span><span class="w"> </span><span class="mf">20.0</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mf">20.0</span><span class="p">,</span><span class="w"> </span><span class="mf">20.0</span><span class="p">]],</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;time_accuracy&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;steady&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;steady&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;2ndorder&quot;</span><span class="p">],</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;time_step_nondim&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;subiterations&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;boundary_output_variables&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;boundary_list&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;7-52&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;turres1&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;p_tavg&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will cause the following settings to be applied to <code class="docutils literal notranslate"><span class="pre">fun3d.00.nml</span></code>.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&amp;nonlinear_solver_parameters
+    schedule_cfl = 1.0 5.0
+    time_accuracy = &#39;steady&#39;
+    time_step_nondim = 2.0
+    subiterations = 5
+/
+&amp;boundary_output_variables
+    boundary_list = &#39;7-52&#39;
+    turres1 = .true.
+    p_tavg = .false.
+/
+</pre></div>
+</div>
+</div></blockquote>
+<p>The edits to <code class="docutils literal notranslate"><span class="pre">fun3d.02.nml</span></code> are from the third entries of each list:</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&amp;nonlinear_solver_parameters
+    schedule_cfl = 20.0 20.0
+    time_accuracy = &#39;2ndorder&#39;
+    time_step_nondim = 2.0
+    subiterations = 5
+/
+&amp;boundary_output_variables
+    boundary_list = &#39;7-52&#39;
+    turres1 = .true.
+    p_tavg = .true.
+/
+</pre></div>
+</div>
+</div></blockquote>
+<p>Each setting and section in the <code class="docutils literal notranslate"><span class="pre">&quot;Fun3D&quot;</span></code> section may be either present in
+the template namelist or missing.  It will be either edited or added as
+appropriate, even if the specified section does not exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../namelist.html#module-cape.pyfun.namelist" title="cape.pyfun.namelist"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.namelist</span></code></a></p></li>
+<li><p><a class="reference internal" href="../fun3d.html#module-cape.pyfun.cntl" title="cape.pyfun.cntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.cntl</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../cape/filecntl/namelist.html#module-cape.filecntl.namelist" title="cape.filecntl.namelist"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.namelist</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyfun.options.fun3dnmlopts.</span></span><span class="sig-name descname"><span class="pre">Fun3DNmlOpts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary-based interface for FUN3D namelists</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.get_grid_format">
+<span class="sig-name descname"><span class="pre">get_grid_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.get_grid_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the grid format</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fmat</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_grid_format</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fmat</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Grid format</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-05-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; use <code class="docutils literal notranslate"><span class="pre">OptionsDict</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.get_namelist_var">
+<span class="sig-name descname"><span class="pre">get_namelist_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.get_namelist_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select a namelist key from a specified section</p>
+<p>Roughly, this returns <code class="docutils literal notranslate"><span class="pre">opts[sec][key]</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_namelist_var</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>sec</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Section name</p>
+</dd>
+<dt><em>key</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Variable name</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>val</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></dt><dd><p>Value from JSON options</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-05-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; <code class="docutils literal notranslate"><span class="pre">OptionsDict</span></code> tools</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.get_project">
+<span class="sig-name descname"><span class="pre">get_project</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.get_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">project</span></code> namelist</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>d</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.options.odict</span></code></dt><dd><p>Project namelist</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-05-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; use <code class="docutils literal notranslate"><span class="pre">OptionsDict</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.get_project_rootname">
+<span class="sig-name descname"><span class="pre">get_project_rootname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.get_project_rootname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the project root name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rname</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_project_rootname</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>rname</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Project root name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-05-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; use <code class="docutils literal notranslate"><span class="pre">OptionsDict</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.get_raw_grid">
+<span class="sig-name descname"><span class="pre">get_raw_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.get_raw_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">raw_grid</span></code> namelist</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_raw_grid</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>d</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.options.odict</span></code></dt><dd><p>Grid namelist</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-05-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; use <code class="docutils literal notranslate"><span class="pre">OptionsDict</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.select_namelist">
+<span class="sig-name descname"><span class="pre">select_namelist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.select_namelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample namelist at particular conditions</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">select_namelist</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>d</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Namelist sampled for phase and case indices</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-05-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; <code class="docutils literal notranslate"><span class="pre">OptionsDict</span></code> tools</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.set_namelist_var">
+<span class="sig-name descname"><span class="pre">set_namelist_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.options.fun3dnmlopts.Fun3DNmlOpts.set_namelist_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a namelist key for a specified phase or phases</p>
+<p>Roughly, this sets <code class="docutils literal notranslate"><span class="pre">opts[&quot;Fun3D&quot;][sec][key]</span></code> or
+<code class="docutils literal notranslate"><span class="pre">opts[&quot;Fun3D&quot;][sec][key][i]</span></code> equal to <em>val</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">set_namelist_var</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>sec</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Section name</p>
+</dd>
+<dt><em>key</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Variable name</p>
+</dd>
+<dt><em>val</em>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></dt><dd><p>Value from JSON options</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-04-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="configopts.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.options.configopts</span></code>: FUn3D surface config opts</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="runctlopts.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.options.runctlopts</span></code>: FUN3D run control options</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/pyfun/options/fun3dnml.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="runctlopts.html" title="cape.pyfun.options.runctlopts: FUN3D run control options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="configopts.html" title="cape.pyfun.options.configopts: FUn3D surface config opts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.options</span></code>: FUN3D and pyFun settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.options.fun3dnml</span></code>: FUN3D namelist options</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

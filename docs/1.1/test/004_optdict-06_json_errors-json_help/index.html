@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Test results: test.004_optdict.test_06_json_errors.test_json_help &#8212; CAPE 1.1.0beta2</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Test results: test.004_optdict.test_07_optitem.test_check_array" href="../004_optdict-07_optitem-check_array/index.html" />
+    <link rel="prev" title="Test results: test.004_optdict.test_05_exceptions.test_signature_exceptions" href="../004_optdict-05_exceptions-signature_exceptions/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../004_optdict-07_optitem-check_array/index.html" title="Test results: test.004_optdict.test_07_optitem.test_check_array"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../004_optdict-05_exceptions-signature_exceptions/index.html" title="Test results: test.004_optdict.test_05_exceptions.test_signature_exceptions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape1.1</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_06_json_errors.test_json_help</span></code></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="test-results-test-004-optdict-test-06-json-errors-test-json-help">
+<h1>Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_06_json_errors.test_json_help</span></code><a class="headerlink" href="#test-results-test-004-optdict-test-06-json-errors-test-json-help" title="Permalink to this heading">¶</a></h1>
+<p>This page documents from the folder</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test/004_optdict/test_06_json_errors</span></code></p>
+</div></blockquote>
+<p>using the file</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test_json_help.py</span></code></p>
+</div></blockquote>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 186 </span><span class="caption-text">test_json_help.py</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="c1"># Third-party</span>
+<span class="kn">import</span> <span class="nn">testutils</span>
+
+<span class="c1"># Local</span>
+<span class="kn">from</span> <span class="nn">cape.optdict</span> <span class="kn">import</span> <span class="n">OptionsDict</span><span class="p">,</span> <span class="n">OptdictJSONError</span>
+
+
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_error01</span><span class="p">():</span>
+    <span class="c1"># Reliable path</span>
+    <span class="n">fjson</span> <span class="o">=</span> <span class="s2">&quot;error01.json&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Read broken file</span>
+        <span class="n">OptionsDict</span><span class="p">(</span><span class="n">fjson</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">OptdictJSONError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Get error message</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Test lines</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Error occurred on line 10&quot;</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Expecting &#39;,&#39; delimiter&quot;</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;--&gt; 10&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># File should not have been read</span>
+        <span class="k">assert</span> <span class="kc">False</span>
+
+
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_error02</span><span class="p">():</span>
+    <span class="c1"># Reliable path</span>
+    <span class="n">fjson</span> <span class="o">=</span> <span class="s2">&quot;error02.json&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Read broken file</span>
+        <span class="n">OptionsDict</span><span class="p">(</span><span class="n">fjson</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">OptdictJSONError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Get error message</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error occurred on line 13&quot;</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;--&gt; 13 }&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># File should not have been read</span>
+        <span class="k">assert</span> <span class="kc">False</span>
+
+
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_error06</span><span class="p">():</span>
+    <span class="c1"># Reliable path</span>
+    <span class="n">fjson</span> <span class="o">=</span> <span class="s2">&quot;error06.json&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Read broken file</span>
+        <span class="n">OptionsDict</span><span class="p">(</span><span class="n">fjson</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">OptdictJSONError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Get error message</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Test lines</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error occurred on line 2 of &#39;error06a.json&#39;&quot;</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Expecting &#39;:&#39; delimiter&quot;</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;--&gt;    1    2&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;1: error06a.json&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># File should not have been read</span>
+        <span class="k">assert</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</div>
+<section id="test-case-test-error01">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_error01()</span></code><a class="headerlink" href="#test-case-test-error01" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">Listing 187 </span><span class="caption-text">test_error01</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_error01</span><span class="p">():</span>
+    <span class="c1"># Reliable path</span>
+    <span class="n">fjson</span> <span class="o">=</span> <span class="s2">&quot;error01.json&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Read broken file</span>
+        <span class="n">OptionsDict</span><span class="p">(</span><span class="n">fjson</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">OptdictJSONError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Get error message</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Test lines</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Error occurred on line 10&quot;</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Expecting &#39;,&#39; delimiter&quot;</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;--&gt; 10&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># File should not have been read</span>
+        <span class="k">assert</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-error02">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_error02()</span></code><a class="headerlink" href="#test-case-test-error02" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">Listing 188 </span><span class="caption-text">test_error02</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_error02</span><span class="p">():</span>
+    <span class="c1"># Reliable path</span>
+    <span class="n">fjson</span> <span class="o">=</span> <span class="s2">&quot;error02.json&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Read broken file</span>
+        <span class="n">OptionsDict</span><span class="p">(</span><span class="n">fjson</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">OptdictJSONError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Get error message</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error occurred on line 13&quot;</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;--&gt; 13 }&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># File should not have been read</span>
+        <span class="k">assert</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+<section id="test-case-test-error06">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_error06()</span></code><a class="headerlink" href="#test-case-test-error06" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">Listing 189 </span><span class="caption-text">test_error06</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_testdir</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_error06</span><span class="p">():</span>
+    <span class="c1"># Reliable path</span>
+    <span class="n">fjson</span> <span class="o">=</span> <span class="s2">&quot;error06.json&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Read broken file</span>
+        <span class="n">OptionsDict</span><span class="p">(</span><span class="n">fjson</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">OptdictJSONError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Get error message</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Test lines</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error occurred on line 2 of &#39;error06a.json&#39;&quot;</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Expecting &#39;:&#39; delimiter&quot;</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;--&gt;    1    2&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;1: error06a.json&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># File should not have been read</span>
+        <span class="k">assert</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_06_json_errors.test_json_help</span></code></a><ul>
+<li><a class="reference internal" href="#test-case-test-error01">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_error01()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-error02">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_error02()</span></code></a></li>
+<li><a class="reference internal" href="#test-case-test-error06">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_error06()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../004_optdict-05_exceptions-signature_exceptions/index.html"
+                          title="previous chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_05_exceptions.test_signature_exceptions</span></code></a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../004_optdict-07_optitem-check_array/index.html"
+                          title="next chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_07_optitem.test_check_array</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/test/004_optdict-06_json_errors-json_help/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../004_optdict-07_optitem-check_array/index.html" title="Test results: test.004_optdict.test_07_optitem.test_check_array"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../004_optdict-05_exceptions-signature_exceptions/index.html" title="Test results: test.004_optdict.test_05_exceptions.test_signature_exceptions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape1.1</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.004_optdict.test_06_json_errors.test_json_help</span></code></a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

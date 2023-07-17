@@ -1,0 +1,563 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.attdb.ftypes.mat: MATLAB data interface &#8212; CAPE 1.1.0beta2</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.attdb.ftypes.textdata: Generic textual data interface" href="textdata.html" />
+    <link rel="prev" title="cape.attdb.ftypes.csfilev: Comma-separated value read/write" href="csvfile.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="textdata.html" title="cape.attdb.ftypes.textdata: Generic textual data interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="csvfile.html" title="cape.attdb.ftypes.csfilev: Comma-separated value read/write"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code>: Data file type interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.mat</span></code>: MATLAB data interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.attdb.ftypes.matfile"></span><section id="cape-attdb-ftypes-mat-matlab-data-interface">
+<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.mat</span></code>: MATLAB data interface<a class="headerlink" href="#cape-attdb-ftypes-mat-matlab-data-interface" title="Permalink to this heading">¶</a></h1>
+<p>This module provides a class <a class="reference internal" href="#cape.attdb.ftypes.matfile.MATFile" title="cape.attdb.ftypes.matfile.MATFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">MATFile</span></code></a> for reading and writing
+data from files using version 5.0 of MATLAB’s <code class="docutils literal notranslate"><span class="pre">.mat</span></code> format.  Later
+versions of <code class="docutils literal notranslate"><span class="pre">.mat</span></code> files utilize HDF5 and are not supported here.
+It relies on two third-party libraries readily available from the Python
+Package Index (PyPI):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.io</span></code> for reading many files</p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.io.matlab.mio5_params</span></code> for MATLAB files</p></li>
+</ul>
+</div></blockquote>
+<p>These can be readily installed on any machine with both Python and
+access to the internet (even without elevated privileges) using the
+commands below:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip install --user scipy
+</pre></div>
+</div>
+</div></blockquote>
+<p>Because CAPE may also be used on machines without regular access to the
+internet, this module does not raise an <code class="docutils literal notranslate"><span class="pre">ImportError</span></code> in the case that
+these third-party modules are not available.  However, the module will
+provide no functionality if these modules are not available.</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.MATFile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.matfile.</span></span><span class="sig-name descname"><span class="pre">MATFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.MATFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for reading <code class="docutils literal notranslate"><span class="pre">.mat</span></code> files (version 5)</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">MATFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sheet</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.xls.XLSFile</span></code></dt><dd><p>XLS file interface</p>
+</dd>
+<dt><em>db.cols</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of columns read</p>
+</dd>
+<dt><em>db.opts</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Options for this interface</p>
+</dd>
+<dt><em>db[col]</em>: <a class="reference internal" href="../../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> | <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></dt><dd><p>Numeric array or list of strings for each column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.MATFile.from_mat_field">
+<span class="sig-name descname"><span class="pre">from_mat_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.MATFile.from_mat_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process an array and save it as a column</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">from_mat_field</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">V</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.mat.MATFile</span></code></dt><dd><p>MAT file interface</p>
+</dd>
+<dt><em>V</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | <a class="reference internal" href="../../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> | <a class="reference internal" href="../../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Numeric or string data to save</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.MATFile.from_mat_struct">
+<span class="sig-name descname"><span class="pre">from_mat_struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.MATFile.from_mat_struct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read fields of a struct</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">from_mat_struct</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.mat.MATFile</span></code></dt><dd><p>MAT file interface</p>
+</dd>
+<dt><em>V</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">siom.mat_struct</span></code></dt><dd><p>Struct read from <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file</p>
+</dd>
+<dt><em>prefix</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>} | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Prefix to append to <em>col</em> names from <em>V._fieldnames</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.MATFile.genr8_mat">
+<span class="sig-name descname"><span class="pre">genr8_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.MATFile.genr8_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> for output as <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dbmat</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">genr8_mat</span><span class="p">(</span><span class="n">dbmat</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.mat.MATFile</span></code></dt><dd><p>MAT file interface</p>
+</dd>
+<dt><em>dbmat</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary to add contents of <em>db</em> to before writing</p>
+</dd>
+<dt><em>attrs</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of additional attributes to save in <em>dbmat</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>dbmat</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dict in format ready for <code class="xref py py-func docutils literal notranslate"><span class="pre">sio.savemat()</span></code></p>
+</dd>
+<dt><em>dbmat[“DB”]</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.io.matlab.mat_struct</span></code></dt><dd><p>Struct containing primary data cols from <em>db</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.MATFile.read_mat">
+<span class="sig-name descname"><span class="pre">read_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.MATFile.read_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a MATLAB <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file</p>
+<p>The primary data is assumed to be in a variable called <em>DB</em>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_mat</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_mat</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.mat.MATFile</span></code></dt><dd><p>MAT file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File open for reading (at position <code class="docutils literal notranslate"><span class="pre">0</span></code>)</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2020-02-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Utilize <code class="xref py py-class docutils literal notranslate"><span class="pre">KwargHandler</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.MATFile.read_mat_legacy">
+<span class="sig-name descname"><span class="pre">read_mat_legacy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.MATFile.read_mat_legacy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a MATLAB <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file</p>
+<p>The primary data is assumed to be in a variable called <em>DB</em>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_mat</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read_mat</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.mat.MATFile</span></code></dt><dd><p>MAT file interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File open for reading (at position <code class="docutils literal notranslate"><span class="pre">0</span></code>)</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-11-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.MATFile.write_mat">
+<span class="sig-name descname"><span class="pre">write_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.MATFile.write_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write database to <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">write_mat</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.mat.MATFile</span></code></dt><dd><p>MAT file interface</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file to write</p>
+</dd>
+<dt><em>attrs</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of additional attributes to save in <em>dbmat</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.attdb.ftypes.matfile.MATFile.genr8_mat" title="cape.attdb.ftypes.matfile.MATFile.genr8_mat"><code class="xref py py-func docutils literal notranslate"><span class="pre">genr8_mat()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.MATFileDefn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.matfile.</span></span><span class="sig-name descname"><span class="pre">MATFileDefn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_optsdict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_warnmode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.MATFileDefn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.MATFileOpts">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.matfile.</span></span><span class="sig-name descname"><span class="pre">MATFileOpts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_optsdict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_warnmode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.MATFileOpts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.dict_to_struct">
+<span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.matfile.</span></span><span class="sig-name descname"><span class="pre">dict_to_struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.dict_to_struct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Python <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> to a MATLAB <code class="docutils literal notranslate"><span class="pre">struct</span></code></p>
+<p>This function is recursive if necessary.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">dict_to_struct</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>d</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dict with keys from <em>s._fieldnames</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>s</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.io.matlab.mio5_params.mat_struct</span></code></dt><dd><p>Interface to MATLAB struct</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.from_matlab">
+<span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.matfile.</span></span><span class="sig-name descname"><span class="pre">from_matlab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.from_matlab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a generic MATLAB object to Python</p>
+<p>This function recurses if necessary</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>MATLAB</p></th>
+<th class="head"><p>Python</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">struct</span></code></p></td>
+<td><p><a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">from_matlab</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">any</span></code> (MATLAB)</dt><dd><p>Item read from <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">any</span></code> (Python)</dt><dd><p>Python interpretation</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.merge_structs">
+<span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.matfile.</span></span><span class="sig-name descname"><span class="pre">merge_structs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">DB1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DB2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.merge_structs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge two MATLAB structs</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">merge_structs</span><span class="p">(</span><span class="n">DB1</span><span class="p">,</span> <span class="n">DB2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DB1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.io.matlab.mio5_params.mat_struct</span></code></dt><dd><p>Primary struct</p>
+</dd>
+<dt><em>DB2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.io.matlab.mio5_params.mat_struct</span></code></dt><dd><p>Second struct</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>DB1</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.io.matlab.mio5_params.mat_struct</span></code></dt><dd><p>Data from <em>DB2</em> added to <em>DB1</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.struct_to_dict">
+<span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.matfile.</span></span><span class="sig-name descname"><span class="pre">struct_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.struct_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert aMATLAB <code class="docutils literal notranslate"><span class="pre">struct</span></code> to a Python <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+<p>This function is recursive if necessary.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">struct_to_dict</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>s</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.io.matlab.mio5_params.mat_struct</span></code></dt><dd><p>Interface to MATLAB struct</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>d</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dict with keys from <em>s._fieldnames</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.matfile.to_matlab">
+<span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.matfile.</span></span><span class="sig-name descname"><span class="pre">to_matlab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.matfile.to_matlab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a generic MATLAB object to Python</p>
+<p>This function recurses if necessary</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>MATLAB</p></th>
+<th class="head"><p>Python</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">struct</span></code></p></td>
+<td><p><a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">to_matlab</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>v</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">any</span></code> (Python)</dt><dd><p>Python interpretation</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">any</span></code> (MATLAB)</dt><dd><p>Item ready for <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="csvfile.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csfilev</span></code>: Comma-separated value read/write</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="textdata.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.textdata</span></code>: Generic textual data interface</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/attdb/ftypes/matfile.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="textdata.html" title="cape.attdb.ftypes.textdata: Generic textual data interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="csvfile.html" title="cape.attdb.ftypes.csfilev: Comma-separated value read/write"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code>: Data file type interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.mat</span></code>: MATLAB data interface</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

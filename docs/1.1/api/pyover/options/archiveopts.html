@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.pyover.options.archiveopts: OVERFLOW archiving options &#8212; CAPE 1.1.0beta2</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.pyover.options.runctlopts: OVERFLOW run control options" href="runctlopts.html" />
+    <link rel="prev" title="cape.pyover.options: OVERFLOW and pyOver Settings" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="runctlopts.html" title="cape.pyover.options.runctlopts: OVERFLOW run control options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.pyover.options: OVERFLOW and pyOver Settings"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options</span></code>: OVERFLOW and pyOver Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options.archiveopts</span></code>: OVERFLOW archiving options</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.pyover.options.archiveopts"></span><section id="cape-pyover-options-archiveopts-overflow-archiving-options">
+<h1><a class="reference internal" href="#module-cape.pyover.options.archiveopts" title="cape.pyover.options.archiveopts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options.archiveopts</span></code></a>: OVERFLOW archiving options<a class="headerlink" href="#cape-pyover-options-archiveopts-overflow-archiving-options" title="Permalink to this heading">¶</a></h1>
+<p>This module provides OVERFLOW-specific modifications to the base
+archiving options module.</p>
+<p>Default behavior for OVERFLOW case archiving, which is defined in this
+module, is to copy several of the large files (such as mesh, solution,
+etc.) and create several tar bombs. The default tar balls that are
+created within an archive folder are specified in two separate commands.
+For each dictionary, the name of the key is the name of the tar file,
+and the list on the right-hand side is a list of file globs that go into
+the tar file. These are set or modified in the <em>ArchivePostTarGroups</em>
+setting.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot3D files</span>
+<span class="n">Plot3DDict</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;brkset.[0-9]*&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;q.[0-9]*&quot;</span><span class="p">:</span>      <span class="mi">1</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;x.[0-9]*&quot;</span><span class="p">:</span>      <span class="mi">1</span><span class="p">},</span>
+<span class="p">]</span>
+<span class="c1"># Run output files</span>
+<span class="n">RunDict</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;run&quot;</span><span class="p">:</span> <span class="s2">&quot;run.[0-9frtls][0-9oeup]*&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;out&quot;</span><span class="p">:</span> <span class="s2">&quot;*.out&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;SurfBC&quot;</span><span class="p">:</span> <span class="s2">&quot;SurfBC*.dat&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;pyover&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;pyover*&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;case.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;conditions.json&quot;</span>
+    <span class="p">]},</span>
+    <span class="p">{</span><span class="s2">&quot;meshinfo&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;Config.xml&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;grdwghts.save&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mixsur.save&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;walldist.save&quot;</span>
+    <span class="p">]}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Grid, solution, and post-processing files that are directly copied to
+the archive (without being added to a tar file) are set using the
+following code. This affects the <em>ArchiveFiles</em> setting.  The
+bewildering file glob for <code class="docutils literal notranslate"><span class="pre">q</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code>, and <code class="docutils literal notranslate"><span class="pre">brkset</span></code> files are
+trying to capture both <code class="docutils literal notranslate"><span class="pre">x.restart</span></code> and <code class="docutils literal notranslate"><span class="pre">x.save</span></code> with one glob.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Flow files</span>
+<span class="n">CopyFiles</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;INTOUT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;XINTOUT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;q.avg&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;q.srf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;x.srf&quot;</span><span class="p">,</span>
+    <span class="p">{</span><span class="s2">&quot;q.[sr0-9][ae0-9][vs0-9][et0-9]*&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;x.[sr0-9][ae0-9][vs0-9][et0-9]*&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;brkset.[sr0-9][ae0-9][vs0-9][et0-9]*&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Further files to be deleted upon use of the <code class="docutils literal notranslate"><span class="pre">--skeleton</span></code> command are
+defined using the following code. This is the <em>SkeletonFiles</em> and
+<em>TailFiles</em> settings. Note that <em>SkeletonFiles</em> are defined in reverse
+order; the user specifies the files to <strong>keep</strong>, not delete.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Skeleton</span>
+<span class="n">SkeletonFiles</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;case.json&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;conditions.json&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;archive.log&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;run.[0-9]*.inp&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;run.[0-9]*.[0-9]*&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lineload/grid.i.triq&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="c1"># Tail files</span>
+<span class="n">TailFiles</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;run.resid&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;run.tail.resid&quot;</span><span class="p">]},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <em>TailFiles</em> settings causes pyOver to run the command</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tail -n <span class="m">1</span> run.resid &gt; run.tail.resid
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../../cape/cfdx/options/archiveopts.html#module-cape.cfdx.options.archiveopts" title="cape.cfdx.options.archiveopts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.options.archiveopts</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../cape/cfdx/options/archiveopts.html#cape.cfdx.options.archiveopts.ArchiveOpts" title="cape.cfdx.options.archiveopts.ArchiveOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.archiveopts.ArchiveOpts</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../cape/manage.html#module-cape.manage" title="cape.manage"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.manage</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyover.options.archiveopts.ArchiveOpts">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyover.options.archiveopts.</span></span><span class="sig-name descname"><span class="pre">ArchiveOpts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.archiveopts.ArchiveOpts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Archiving options interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span> <span class="o">=</span> <span class="n">ArchiveOpts</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-09-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2016-03-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; custom settings</p></li>
+<li><p>2022-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; use <a class="reference internal" href="../../cape/optdict/index.html#module-cape.optdict" title="cape.optdict"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.optdict</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.options.archiveopts.ArchiveOpts.apply_ArchiveTemplate">
+<span class="sig-name descname"><span class="pre">apply_ArchiveTemplate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.archiveopts.ArchiveOpts.apply_ArchiveTemplate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply OVERFLOW-specific archiving defaults</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">apply_ArchiveTemplate</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.pyover.options.archiveopts.ArchiveOpts" title="cape.pyover.options.archiveopts.ArchiveOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArchiveOpts</span></code></a></dt><dd><p>Options interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-02-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.options.archiveopts.ArchiveOpts.init_post">
+<span class="sig-name descname"><span class="pre">init_post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.archiveopts.ArchiveOpts.init_post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialization hook for OVERFLOW archiving options</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">init_post</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.pyover.options.archiveopts.ArchiveOpts" title="cape.pyover.options.archiveopts.ArchiveOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArchiveOpts</span></code></a></dt><dd><p>Archiving options interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2022-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyover.options.archiveopts.auto_Archive">
+<span class="sig-prename descclassname"><span class="pre">cape.pyover.options.archiveopts.</span></span><span class="sig-name descname"><span class="pre">auto_Archive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.options.archiveopts.auto_Archive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatically convert dict to pyover <a class="reference internal" href="#cape.pyover.options.archiveopts.ArchiveOpts" title="cape.pyover.options.archiveopts.ArchiveOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArchiveOpts</span></code></a></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span> <span class="o">=</span> <span class="n">auto_Archive</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dict of either global, “RunControl” or “Archive” options</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.pyover.options.archiveopts.ArchiveOpts" title="cape.pyover.options.archiveopts.ArchiveOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArchiveOpts</span></code></a></dt><dd><p>Instance of archiving options</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2022-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; generic call</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options</span></code>: OVERFLOW and pyOver Settings</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="runctlopts.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options.runctlopts</span></code>: OVERFLOW run control options</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/pyover/options/archiveopts.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="runctlopts.html" title="cape.pyover.options.runctlopts: OVERFLOW run control options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.pyover.options: OVERFLOW and pyOver Settings"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options</span></code>: OVERFLOW and pyOver Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.options.archiveopts</span></code>: OVERFLOW archiving options</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>

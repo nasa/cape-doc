@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Test results: test.003_tnakit.001_subplot_col.test_01_plotcol &#8212; CAPE 1.1.0beta2</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Test results: test.003_tnakit.002_pmpl_opts.test_01_plotopts" href="../003_tnakit-002_pmpl_opts-01_plotopts/index.html" />
+    <link rel="prev" title="Test results: test.002_attdb.022_matfile.test_02_mat_lineload" href="../002_attdb-022_matfile-02_mat_lineload/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../003_tnakit-002_pmpl_opts-01_plotopts/index.html" title="Test results: test.003_tnakit.002_pmpl_opts.test_01_plotopts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../002_attdb-022_matfile-02_mat_lineload/index.html" title="Test results: test.002_attdb.022_matfile.test_02_mat_lineload"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape1.1</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.003_tnakit.001_subplot_col.test_01_plotcol</span></code></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="test-results-test-003-tnakit-001-subplot-col-test-01-plotcol">
+<h1>Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.003_tnakit.001_subplot_col.test_01_plotcol</span></code><a class="headerlink" href="#test-results-test-003-tnakit-001-subplot-col-test-01-plotcol" title="Permalink to this heading">¶</a></h1>
+<p>This page documents from the folder</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test/003_tnakit/001_subplot_col</span></code></p>
+</div></blockquote>
+<p>using the file</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">test_01_plotcol.py</span></code></p>
+</div></blockquote>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 165 </span><span class="caption-text">test_01_plotcol.py</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># Standard library</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">op</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Third-party modules</span>
+<span class="kn">import</span> <span class="nn">testutils</span>
+
+<span class="c1"># Local imports</span>
+<span class="kn">import</span> <span class="nn">cape.attdb.rdb</span> <span class="k">as</span> <span class="nn">rdb</span>
+<span class="kn">import</span> <span class="nn">cape.tnakit.plot_mpl</span> <span class="k">as</span> <span class="nn">pmpl</span>
+
+
+<span class="c1"># File names</span>
+<span class="n">FDIR</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">MATFILE</span> <span class="o">=</span> <span class="s2">&quot;bullet-mab.mat&quot;</span>
+<span class="n">PNGFILE</span> <span class="o">=</span> <span class="s2">&quot;bullet-xz.png&quot;</span>
+<span class="n">TESTFILES</span> <span class="o">=</span> <span class="p">(</span><span class="n">MATFILE</span><span class="p">,</span> <span class="n">PNGFILE</span><span class="p">)</span>
+
+
+<span class="c1"># Test subplots of columns</span>
+<span class="nd">@testutils</span><span class="o">.</span><span class="n">run_sandbox</span><span class="p">(</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">TESTFILES</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_01_subplot_bullet_ll</span><span class="p">():</span>
+    <span class="c1"># Read a line load datbase</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">rdb</span><span class="o">.</span><span class="n">DataKit</span><span class="p">(</span><span class="n">MATFILE</span><span class="p">)</span>
+    <span class="c1"># Initial plot of a column</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">pmpl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">db</span><span class="p">[</span><span class="s2">&quot;bullet.x&quot;</span><span class="p">],</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;bullet.dCN&quot;</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">YLabel</span><span class="o">=</span><span class="s2">&quot;dCN/d(x/Lref)&quot;</span><span class="p">)</span>
+    <span class="c1"># Add an axes</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+    <span class="c1"># Plot the image</span>
+    <span class="n">pmpl</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">PNGFILE</span><span class="p">,</span> <span class="n">ImageXMin</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">ImageXMax</span><span class="o">=</span><span class="mf">4.12</span><span class="p">)</span>
+    <span class="c1"># Format nicely</span>
+    <span class="n">pmpl</span><span class="o">.</span><span class="n">axes_adjust_col</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="n">SubplotRubber</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Tie horizontal limits</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">())</span>
+    <span class="c1"># Image file name</span>
+    <span class="n">fimg</span> <span class="o">=</span> <span class="s2">&quot;python</span><span class="si">%i</span><span class="s2">-bullet-ll.png&quot;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span>
+    <span class="c1"># Save figure</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fimg</span><span class="p">)</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="c1"># Compare figure</span>
+    <span class="n">testutils</span><span class="o">.</span><span class="n">assert_png</span><span class="p">(</span><span class="n">fimg</span><span class="p">,</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FDIR</span><span class="p">,</span> <span class="n">fimg</span><span class="p">))</span>
+
+</pre></div>
+</div>
+</div>
+<section id="test-case-test-01-subplot-bullet-ll">
+<h2>Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_01_subplot_bullet_ll()</span></code><a class="headerlink" href="#test-case-test-01-subplot-bullet-ll" title="Permalink to this heading">¶</a></h2>
+<p>This test case runs the function:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">Listing 166 </span><span class="caption-text">test_01_subplot_bullet_ll</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@testutils</span><span class="o">.</span><span class="n">run_sandbox</span><span class="p">(</span><span class="vm">__file__</span><span class="p">,</span> <span class="n">TESTFILES</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_01_subplot_bullet_ll</span><span class="p">():</span>
+    <span class="c1"># Read a line load datbase</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">rdb</span><span class="o">.</span><span class="n">DataKit</span><span class="p">(</span><span class="n">MATFILE</span><span class="p">)</span>
+    <span class="c1"># Initial plot of a column</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">pmpl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">db</span><span class="p">[</span><span class="s2">&quot;bullet.x&quot;</span><span class="p">],</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;bullet.dCN&quot;</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">YLabel</span><span class="o">=</span><span class="s2">&quot;dCN/d(x/Lref)&quot;</span><span class="p">)</span>
+    <span class="c1"># Add an axes</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+    <span class="c1"># Plot the image</span>
+    <span class="n">pmpl</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">PNGFILE</span><span class="p">,</span> <span class="n">ImageXMin</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">ImageXMax</span><span class="o">=</span><span class="mf">4.12</span><span class="p">)</span>
+    <span class="c1"># Format nicely</span>
+    <span class="n">pmpl</span><span class="o">.</span><span class="n">axes_adjust_col</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="n">SubplotRubber</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Tie horizontal limits</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">())</span>
+    <span class="c1"># Image file name</span>
+    <span class="n">fimg</span> <span class="o">=</span> <span class="s2">&quot;python</span><span class="si">%i</span><span class="s2">-bullet-ll.png&quot;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span>
+    <span class="c1"># Save figure</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fimg</span><span class="p">)</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="c1"># Compare figure</span>
+    <span class="n">testutils</span><span class="o">.</span><span class="n">assert_png</span><span class="p">(</span><span class="n">fimg</span><span class="p">,</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FDIR</span><span class="p">,</span> <span class="n">fimg</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>PASS</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.003_tnakit.001_subplot_col.test_01_plotcol</span></code></a><ul>
+<li><a class="reference internal" href="#test-case-test-01-subplot-bullet-ll">Test case: <code class="xref py py-func docutils literal notranslate"><span class="pre">test_01_subplot_bullet_ll()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../002_attdb-022_matfile-02_mat_lineload/index.html"
+                          title="previous chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.002_attdb.022_matfile.test_02_mat_lineload</span></code></a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../003_tnakit-002_pmpl_opts-01_plotopts/index.html"
+                          title="next chapter">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.003_tnakit.002_pmpl_opts.test_01_plotopts</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/test/003_tnakit-001_subplot_col-01_plotcol/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../003_tnakit-002_pmpl_opts-01_plotopts/index.html" title="Test results: test.003_tnakit.002_pmpl_opts.test_01_plotopts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../002_attdb-022_matfile-02_mat_lineload/index.html" title="Test results: test.002_attdb.022_matfile.test_02_mat_lineload"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Test report for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape1.1</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Test results: <code class="xref py py-mod docutils literal notranslate"><span class="pre">test.003_tnakit.001_subplot_col.test_01_plotcol</span></code></a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.0a2 documentation, 2021.
+  </div>
+
+
+  </body>
+</html>
