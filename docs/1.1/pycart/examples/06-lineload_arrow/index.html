@@ -6,17 +6,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>4.1.6. Demo 6: Line Loads on the Arrow Example &#8212; CAPE 1.1.0beta2</title>
+    <title>4.1.6. Demo 6: Line Loads on the Arrow Example &#8212; CAPE 1.1.1</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/sphinx_highlight.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link rel="shortcut icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="4.1.7. Demo 7: Data Book Plots and Reports" href="../07-data_arrow/index.html" />
@@ -37,7 +34,7 @@
         <li class="right" >
           <a href="../05-adapt_bJet/index.html" title="4.1.5. Demo 5: Mesh Adaptation on a Business Jet"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.1.1</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.6. </span>Demo 6: Line Loads on the Arrow Example</a></li> 
@@ -62,10 +59,10 @@ use the <a class="reference external" href="https://software.nasa.gov/software/A
 the analysis and adds computation of sectional loads. To get started, clone
 this repository and run the following easy commands:</p>
 <blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git clone https://github.com/nasa-ddalle/pycart05-adapt_bJet.git
-<span class="gp">$ </span><span class="nb">cd</span> pycart06-lineload_arrow
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/nasa-ddalle/pycart05-adapt_bJet.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>pycart06-lineload_arrow
 <span class="gp">$ </span>./copy-files.py
-<span class="gp">$ </span><span class="nb">cd</span> work/
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>work/
 </pre></div>
 </div>
 </div></blockquote>
@@ -87,7 +84,7 @@ shown below.</p>
 <p>This example is set up with a small run matrix to demonstrate line loads on a
 few related cases.</p>
 <blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart -c
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c
 <span class="go">Case Config/Run Directory   Status  Iterations  Que CPU Time</span>
 <span class="go">---- ---------------------- ------- ----------- --- --------</span>
 <span class="go">0    poweroff/m1.25a0.0b0.0 ---     /           .</span>
@@ -110,35 +107,35 @@ performs a similar task, but it is not quite consistent with what’s needed for
 an averaged line load.  To get pyCart to perform this unusual task, we have the
 following <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> section in <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>.</p>
 <blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Iteration control and command-line inputs</span><span class="w"></span>
-<span class="s2">&quot;RunControl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Run sequence</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;PhaseSequece&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;PhaseIters&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">200</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// System configuration</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;nProc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">4</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;MPI&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;Adaptive&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Options for ``flowCart``</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;flowCart&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;it_fc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;it_avg&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;it_start&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;cfl&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1.1</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;mg_fc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;y_is_spanwise&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Defines the flow domain automatically</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;autoInputs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Volume mesh options</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;cubes&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;maxR&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;pre&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;preSpec.c3d.cntl&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;cubes_a&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;cubes_b&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;reorder&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Iteration control and command-line inputs</span>
+<span class="s2">&quot;RunControl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Run sequence</span>
+<span class="w">    </span><span class="s2">&quot;PhaseSequece&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;PhaseIters&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">200</span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// System configuration</span>
+<span class="w">    </span><span class="s2">&quot;nProc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">4</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;MPI&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Adaptive&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Options for ``flowCart``</span>
+<span class="w">    </span><span class="s2">&quot;flowCart&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;it_fc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;it_avg&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;it_start&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cfl&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1.1</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;mg_fc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;y_is_spanwise&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Defines the flow domain automatically</span>
+<span class="w">    </span><span class="s2">&quot;autoInputs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Volume mesh options</span>
+<span class="w">    </span><span class="s2">&quot;cubes&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;maxR&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;pre&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;preSpec.c3d.cntl&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cubes_a&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cubes_b&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;reorder&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -154,7 +151,7 @@ something like this.  The output has been truncated.</p>
 <p><strong>Note:</strong> This is set up to run on four threads and take
 less than one minute.</p>
 <blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart -I <span class="m">0</span>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-I<span class="w"> </span><span class="m">0</span>
 <span class="go">Case Config/Run Directory   Status  Iterations  Que CPU Time</span>
 <span class="go">---- ---------------------- ------- ----------- --- --------</span>
 <span class="go">0    poweroff/m1.25a0.0b0.0 ---     /           .</span>
@@ -191,7 +188,7 @@ Specifically, it says that the file contains input from 11 iterations between
 100 and 200.</p>
 <p>Let’s run the last two cases in the run matrix, too.</p>
 <blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart -n <span class="m">2</span>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span>
 <span class="go">Case Config/Run Directory   Status  Iterations  Que CPU Time</span>
 <span class="go">---- ---------------------- ------- ----------- --- --------</span>
 <span class="go">0    poweroff/m1.25a0.0b0.0 DONE    200/200     .        0.0</span>
@@ -223,27 +220,27 @@ Specifically, it says that the file contains input from 11 iterations between
 part.  To instruct pyCart which components on which to compute line loads, we
 go to the <code class="docutils literal notranslate"><span class="pre">&quot;DataBook&quot;</span></code> section of <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>.</p>
 <blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Database info</span><span class="w"></span>
-<span class="s2">&quot;DataBook&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// List of data book components</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;Components&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;arrow_no_base&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ll_arrow&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Location of data book</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;Folder&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;data/&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Parameters for collecting data</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;nFirst&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;nStats&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;nMin&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Basic component</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;bullet_no_base&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;FM&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Line load</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;ll_arrow&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;LineLoad&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;CompID&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow_no_base&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;nCut&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Database info</span>
+<span class="s2">&quot;DataBook&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// List of data book components</span>
+<span class="w">    </span><span class="s2">&quot;Components&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;arrow_no_base&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ll_arrow&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Location of data book</span>
+<span class="w">    </span><span class="s2">&quot;Folder&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;data/&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Parameters for collecting data</span>
+<span class="w">    </span><span class="s2">&quot;nFirst&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;nStats&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;nMin&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Basic component</span>
+<span class="w">    </span><span class="s2">&quot;bullet_no_base&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;FM&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Line load</span>
+<span class="w">    </span><span class="s2">&quot;ll_arrow&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;LineLoad&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;CompID&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow_no_base&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;nCut&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -263,7 +260,7 @@ a line load computation.  To actually calculate the line loads, run the
 following commands.</p>
 <p><strong>Note:</strong> This command should take less than five seconds to run.</p>
 <blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart --ll
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>--ll
 <span class="go">Updating line load data book &#39;ll_arrow&#39; ...</span>
 <span class="go">poweroff/m1.25a0.0b0.0</span>
 <span class="go">  Adding new databook entry at iteration 200.</span>
@@ -333,7 +330,7 @@ results nondimensional but also removes dependence on the number of cuts.</p>
 <p>Line load plots are fairly easy to set up.  First let’s just create the report
 and then describe the <code class="docutils literal notranslate"><span class="pre">&quot;Report&quot;</span></code> section of <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>.</p>
 <blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart --report
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>--report
 <span class="go">poweroff/m1.25a0.0b0.0</span>
 <span class="go">  CaseConds: New subfig at iteration 200.0</span>
 <span class="go">  FMTable: New subfig at iteration 200.0</span>
@@ -403,37 +400,37 @@ up each of these plots and also how these subfigures are assembled into a
 report.  The basic skeleton of the <code class="docutils literal notranslate"><span class="pre">&quot;Report&quot;</span></code> section of <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>
 is shown below.</p>
 <blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Report&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// List of reports</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;Reports&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;case&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Define the report</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;case&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Title&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Automated Cart3D Report with Line Load Plots&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Subtitle&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Example \\texttt{06\\_lineload\\_arrow}&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Restriction&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;pyCart Example - Distribution Unlimited&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Figures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;CaseTables&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;CasePlots&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Define the figures</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;Figures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;CaseTables&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="s2">&quot;Alignment&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;left&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;CaseConds&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;FMTable&quot;</span><span class="p">]</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;CasePlots&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="s2">&quot;Header&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Iterative analysis and sectional loads&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="s2">&quot;Alignment&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">                </span><span class="s2">&quot;arrow_CA&quot;</span><span class="p">,</span><span class="w">  </span><span class="s2">&quot;arrow_CY&quot;</span><span class="p">,</span><span class="w">  </span><span class="s2">&quot;arrow_CN&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                </span><span class="s2">&quot;arrow_CLL&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;arrow_CLN&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;arrow_CLM&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                </span><span class="s2">&quot;L1&quot;</span><span class="p">,</span><span class="w">        </span><span class="s2">&quot;LL_CY&quot;</span><span class="p">,</span><span class="w">     </span><span class="s2">&quot;LL_CN&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">]</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Definitions for subfigures</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;Subfigures&quot;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="p">...</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Report&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// List of reports</span>
+<span class="w">    </span><span class="s2">&quot;Reports&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;case&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Define the report</span>
+<span class="w">    </span><span class="s2">&quot;case&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Title&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Automated Cart3D Report with Line Load Plots&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Subtitle&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Example \\texttt{06\\_lineload\\_arrow}&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Restriction&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;pyCart Example - Distribution Unlimited&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Figures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;CaseTables&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;CasePlots&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Define the figures</span>
+<span class="w">    </span><span class="s2">&quot;Figures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;CaseTables&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;Alignment&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;CaseConds&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;FMTable&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;CasePlots&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;Header&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Iterative analysis and sectional loads&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Alignment&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;arrow_CA&quot;</span><span class="p">,</span><span class="w">  </span><span class="s2">&quot;arrow_CY&quot;</span><span class="p">,</span><span class="w">  </span><span class="s2">&quot;arrow_CN&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;arrow_CLL&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;arrow_CLN&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;arrow_CLM&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;L1&quot;</span><span class="p">,</span><span class="w">        </span><span class="s2">&quot;LL_CY&quot;</span><span class="p">,</span><span class="w">     </span><span class="s2">&quot;LL_CN&quot;</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Definitions for subfigures</span>
+<span class="w">    </span><span class="s2">&quot;Subfigures&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -454,28 +451,28 @@ To learn more about the two tables, the actual example <code class="docutils lit
 is relatively easy to understand.  Defining syntax for the line load plots is
 shown below.</p>
 <blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;LL_arrow&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;PlotLineLoad&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Component&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;ll_arrow&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5.5</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;FigHeight&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Width&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.33</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;SeamCurves&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;smy&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;SeamLocation&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;bottom&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;LL_CY&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;LL_arrow&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Caption&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow\\_no\\_base/CY&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CY&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;LL_CN&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;LL_arrow&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Caption&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow\\_no\\_base/CN&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CN&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="s2">&quot;LL_arrow&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;PlotLineLoad&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Component&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;ll_arrow&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5.5</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;FigHeight&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Width&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.33</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;SeamCurves&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;smy&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;SeamLocation&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;bottom&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;LL_CY&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;LL_arrow&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Caption&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow\\_no\\_base/CY&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CY&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;LL_CN&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;LL_arrow&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Caption&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow\\_no\\_base/CN&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CN&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -514,17 +511,17 @@ aspect ratios will lead to problematic seam curve plots.</p>
 this plot uses a different <em>FigHeight</em> in order to match the aspect ratio of
 the neighboring line load plots.</p>
 <blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;L1&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;PlotL1&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5.5</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;FigHeight&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Width&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.33</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Caption&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;$L_1$ Density Residual&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="s2">&quot;L1&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;PlotL1&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5.5</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;FigHeight&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Width&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.33</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Caption&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;$L_1$ Density Residual&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -534,23 +531,23 @@ the neighboring line load plots.</p>
 <p>The iterative history plots are relatively simple for this case since we are
 only plotting one component.</p>
 <blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;arrow&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;PlotCoeff&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Component&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow_no_base&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5.5</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;FigHeight&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">4.2</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Width&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.33</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;arrow_CA&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CA&quot;</span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;arrow_CY&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CY&quot;</span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;arrow_CN&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CN&quot;</span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;arrow_CLL&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLL&quot;</span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;arrow_CLM&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLM&quot;</span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;arrow_CLN&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLN&quot;</span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="s2">&quot;arrow&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;PlotCoeff&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Component&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow_no_base&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5.5</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;FigHeight&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">4.2</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Width&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.33</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CA&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CA&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CY&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CY&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CN&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CN&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CLL&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLL&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CLM&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLM&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CLN&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLN&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -559,22 +556,22 @@ only plotting one component.</p>
 least make the figures look readable by using scientific notation for the mean
 value and removing the standard deviation.</p>
 <blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;arrow_CLL&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLL&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;MuFormat&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;%.2e&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;ShowSigma&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="s2">&quot;arrow_CLN&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLN&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;MuFormat&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;%.2e&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">&quot;ShowSigma&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CLL&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLL&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;MuFormat&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;%.2e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;ShowSigma&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CLN&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLN&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;MuFormat&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;%.2e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;ShowSigma&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -667,7 +664,7 @@ a thorough description of options.</p>
         <li class="right" >
           <a href="../05-adapt_bJet/index.html" title="4.1.5. Demo 5: Mesh Adaptation on a Business Jet"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.1.1</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.6. </span>Demo 6: Line Loads on the Arrow Example</a></li> 
@@ -675,7 +672,7 @@ a thorough description of options.</p>
     </div>
 
   <div class="footer">
-   CAPE version 1.0a2 documentation, 2021.
+   CAPE version 1.1.0b2 documentation, 2023
   </div>
 
 

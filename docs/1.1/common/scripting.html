@@ -6,20 +6,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>3.8. Advanced Setup: Python Scripting &#8212; CAPE 1.1.0beta2</title>
+    <title>3.8. Advanced Setup: Python Scripting &#8212; CAPE 1.1.1</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
-    <link rel="shortcut icon" href="../_static/NASA_logo_icon.png"/>
+    <link rel="icon" href="../_static/NASA_logo_icon.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="4. pyCart Documentation" href="../pycart/index.html" />
-    <link rel="prev" title="3.7.11. Options for Slurm section" href="json/Slurm.html" /> 
+    <link rel="prev" title="3.7.5. Automated Tecplot Figures" href="report/tecplot.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -34,9 +31,9 @@
           <a href="../pycart/index.html" title="4. pyCart Documentation"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="json/Slurm.html" title="3.7.11. Options for Slurm section"
+          <a href="report/tecplot.html" title="3.7.5. Automated Tecplot Figures"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 1.1.1</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.8. </span>Advanced Setup: Python Scripting</a></li> 
       </ul>
@@ -80,7 +77,7 @@ command-line call sees <code class="docutils literal notranslate"><span class="p
 then uses <code class="xref py py-func docutils literal notranslate"><span class="pre">execfile()</span></code> to execute that script.</p>
 <p>Consider the following example.</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pyfun -f poweroff.json -x poweroff.py -x report.py
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pyfun<span class="w"> </span>-f<span class="w"> </span>poweroff.json<span class="w"> </span>-x<span class="w"> </span>poweroff.py<span class="w"> </span>-x<span class="w"> </span>report.py
 </pre></div>
 </div>
 </div></blockquote>
@@ -156,9 +153,9 @@ file.</p>
 <code class="docutils literal notranslate"><span class="pre">&quot;InitFunction&quot;</span></code> setting.  Consider the following example from a master JSON
 input file.</p>
 <blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;PythonPath&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tools&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="s2">&quot;Modules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tfm&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="s2">&quot;InitFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tfm.InitArchive&quot;</span><span class="p">],</span><span class="w"></span>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;PythonPath&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tools&quot;</span><span class="p">],</span>
+<span class="s2">&quot;Modules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tfm&quot;</span><span class="p">],</span>
+<span class="s2">&quot;InitFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tfm.InitArchive&quot;</span><span class="p">],</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -175,7 +172,7 @@ below:</p>
 
 <span class="c1"># Define an initialization function</span>
 <span class="k">def</span> <span class="nf">InitArchive</span><span class="p">(</span><span class="n">cntl</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Change archive folder to appropriate value for calling user&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Change archive folder to appropriate value for calling user&quot;&quot;&quot;</span>
     <span class="c1"># Set the *ArchiveFolder* option using an environment variable</span>
     <span class="n">cntl</span><span class="o">.</span><span class="n">opts</span><span class="o">.</span><span class="n">set_ArchiveFolder</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;/u/&#39;</span><span class="p">,</span>
         <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;USER&#39;</span><span class="p">],</span> <span class="s1">&#39;sls&#39;</span><span class="p">,</span> <span class="s1">&#39;10008&#39;</span><span class="p">,</span> <span class="s1">&#39;f3_tfm&#39;</span><span class="p">))</span>
@@ -226,10 +223,10 @@ boundary conditions</p></li>
 </div></blockquote>
 <p>An example input from the JSON file is shown below.</p>
 <blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;PythonPath&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tools&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="s2">&quot;Modules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tfm&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;freeair&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="s2">&quot;InitFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tfm.InitArchive&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="s2">&quot;CaseFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;freeair.ApplyLabel&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;freeair.ApplyTag&quot;</span><span class="p">]</span><span class="w"></span>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;PythonPath&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tools&quot;</span><span class="p">],</span>
+<span class="s2">&quot;Modules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tfm&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;freeair&quot;</span><span class="p">],</span>
+<span class="s2">&quot;InitFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tfm.InitArchive&quot;</span><span class="p">],</span>
+<span class="s2">&quot;CaseFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;freeair.ApplyLabel&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;freeair.ApplyTag&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -297,8 +294,8 @@ number <em>i</em>.</p>
   </div>
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="json/Slurm.html"
-                          title="previous chapter"><span class="section-number">3.7.11. </span>Options for <code class="docutils literal notranslate"><span class="pre">Slurm</span></code> section</a></p>
+    <p class="topless"><a href="report/tecplot.html"
+                          title="previous chapter"><span class="section-number">3.7.5. </span>Automated Tecplot Figures</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
@@ -339,16 +336,16 @@ number <em>i</em>.</p>
           <a href="../pycart/index.html" title="4. pyCart Documentation"
              >next</a> |</li>
         <li class="right" >
-          <a href="json/Slurm.html" title="3.7.11. Options for Slurm section"
+          <a href="report/tecplot.html" title="3.7.5. Automated Tecplot Figures"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 1.1.1</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.8. </span>Advanced Setup: Python Scripting</a></li> 
       </ul>
     </div>
 
   <div class="footer">
-   CAPE version 1.0a2 documentation, 2021.
+   CAPE version 1.1.0b2 documentation, 2023
   </div>
 
 

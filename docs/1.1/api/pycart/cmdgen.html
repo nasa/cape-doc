@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.pycart.cmd: Create commands for Cart3D executables &#8212; CAPE 1.1.1</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pycart.bin: Cart3D executable interface module" href="cmdrun.html" />
+    <link rel="prev" title="cape.pycart.tri: Cart3D Triangulation Module" href="tri.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cmdrun.html" title="cape.pycart.bin: Cart3D executable interface module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tri.html" title="cape.pycart.tri: Cart3D Triangulation Module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cmd</span></code>: Create commands for Cart3D executables</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.pycart.cmdgen"></span><section id="cape-pycart-cmd-create-commands-for-cart3d-executables">
+<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cmd</span></code>: Create commands for Cart3D executables<a class="headerlink" href="#cape-pycart-cmd-create-commands-for-cart3d-executables" title="Permalink to this heading">¶</a></h1>
+<p>This module creates system commands as lists of strings for executables
+or scripts for Cart3D.  It is closely tied to <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.bin</span></code>,
+which actually runs the executables.</p>
+<p>Commands are created in the form of a list of strings.  This is the
+format used in the built-in module <code class="xref py py-mod docutils literal notranslate"><span class="pre">subprocess</span></code> and also with
+<code class="xref py py-func docutils literal notranslate"><span class="pre">cape.bin.calli()</span></code>. As a very simple example, the system command
+<code class="docutils literal notranslate"><span class="pre">&quot;ls</span> <span class="pre">-lh&quot;</span></code> becomes the list <code class="docutils literal notranslate"><span class="pre">[&quot;ls&quot;,</span> <span class="pre">&quot;-lh&quot;]</span></code>.</p>
+<p>Calls to the main Cart3D flow solver via <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> or
+<code class="docutils literal notranslate"><span class="pre">mpix_flowCart</span></code> include a great deal of command-line options. This
+module simplifies the creation of this command by determining those
+inputs from a <a class="reference internal" href="options/index.html#cape.pycart.options.Options" title="cape.pycart.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.options.Options</span></code></a> or
+<a class="reference internal" href="options/runctlopts.html#cape.pycart.options.runctlopts.RunControlOpts" title="cape.pycart.options.runctlopts.RunControlOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.options.runctlopts.RunControlOpts</span></code></a> instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cmd</span></code></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.bin</span></code></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.bin</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pycart.cmdgen.autoInputs">
+<span class="sig-prename descclassname"><span class="pre">cape.pycart.cmdgen.</span></span><span class="sig-name descname"><span class="pre">autoInputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cmdgen.autoInputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface to Cart3D executable <code class="docutils literal notranslate"><span class="pre">autoInputs</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">=</span> <span class="n">autoInputs</span><span class="p">(</span><span class="n">opts</span><span class="o">=</span><span class="n">opts</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Options</span></code> | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+<dt><em>r</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Mesh radius</p>
+</dd>
+<dt><em>ftri</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of surface triangulation file</p>
+</dd>
+<dt><em>maxR</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of refinements to make</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cmd</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Command split into a list of strings</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-09-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-08-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; use isolate_subsection()</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pycart.cmdgen.cubes">
+<span class="sig-prename descclassname"><span class="pre">cape.pycart.cmdgen.</span></span><span class="sig-name descname"><span class="pre">cubes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cmdgen.cubes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface to Cart3D script <code class="docutils literal notranslate"><span class="pre">cubes</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">=</span> <span class="n">cubes</span><span class="p">(</span><span class="n">opts</span><span class="o">=</span><span class="n">opts</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Options</span></code> | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Options interface, run control options instance, raw dict</p>
+</dd>
+<dt><em>maxR</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of refinements to make</p>
+</dd>
+<dt><em>reorder</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to reorder mesh</p>
+</dd>
+<dt><em>a</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p><cite>cubes</cite> angle criterion</p>
+</dd>
+<dt><em>b</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of buffer layers</p>
+</dd>
+<dt><em>sf</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of extra refinements around sharp edges</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cmd</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Command split into a list of strings</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2014-09-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; new options paradigm</p></li>
+<li><p>2014-09-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v3.0; two modules: <code class="docutils literal notranslate"><span class="pre">cmd</span></code>, <code class="docutils literal notranslate"><span class="pre">bin</span></code></p></li>
+<li><p>2014-12-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v3.1; add kwargs, add <em>sf</em></p></li>
+<li><p>2023-08-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v4.0; elim <em>cntl</em> arg, use isolate_()</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pycart.cmdgen.flowCart">
+<span class="sig-prename descclassname"><span class="pre">cape.pycart.cmdgen.</span></span><span class="sig-name descname"><span class="pre">flowCart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cmdgen.flowCart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface to Cart3D executable <code class="docutils literal notranslate"><span class="pre">flowCart</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cmdi</span> <span class="o">=</span> <span class="n">flowCart</span><span class="p">(</span><span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Options</span></code> | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Iteration number from which to start (affects <code class="docutils literal notranslate"><span class="pre">-N</span></code> setting)</p>
+</dd>
+<dt><em>clic</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to create <code class="docutils literal notranslate"><span class="pre">Components.i.triq</span></code> file</p>
+</dd>
+<dt><em>mpi_fc</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to use MPI version</p>
+</dd>
+<dt><em>it_fc</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of iterations to run <code class="docutils literal notranslate"><span class="pre">flowCart</span></code></p>
+</dd>
+<dt><em>mg_fc</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of multigrid levels to use</p>
+</dd>
+<dt><em>it_avg</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Iterations between averaging break; overrides <em>it_fc</em></p>
+</dd>
+<dt><em>it_start</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Startup iterations before starting averaging</p>
+</dd>
+<dt><em>fmg</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether to use full multigrid (adds <code class="docutils literal notranslate"><span class="pre">-no_fmg</span></code> flag if <code class="docutils literal notranslate"><span class="pre">False</span></code>)</p>
+</dd>
+<dt><em>pmg</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to use poly multigrid</p>
+</dd>
+<dt><em>cfl</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Nominal CFL number</p>
+</dd>
+<dt><em>cflmin</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Minimum CFL number allowed for problem cells or iterations</p>
+</dd>
+<dt><em>tm</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to use second-order cut cells</p>
+</dd>
+<dt><em>buffLim</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to use buffer limiting to smear shocks</p>
+</dd>
+<dt><em>binaryIO</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to use binary format for input/output files</p>
+</dd>
+<dt><em>limiter</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Limiter index</p>
+</dd>
+<dt><em>y_is_spanwise</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to consider angle of attack in <em>z</em> direction</p>
+</dd>
+<dt><em>nProc</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of threads to use for <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> operation</p>
+</dd>
+<dt><em>buffLim</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to use buffer limits for strong off-body shocks</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cmdi</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Command split into a list of strings</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-09-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-08-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; use isolate_subsection()</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pycart.cmdgen.mgPrep">
+<span class="sig-prename descclassname"><span class="pre">cape.pycart.cmdgen.</span></span><span class="sig-name descname"><span class="pre">mgPrep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cmdgen.mgPrep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface to Cart3D executable <code class="docutils literal notranslate"><span class="pre">mgPrep</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span> <span class="o">=</span> <span class="n">mgPrep</span><span class="p">(</span><span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Options</span></code> | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+<dt><em>mg_fc</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of multigrid levels to prepare</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cmd</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Command split into a list of strings</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-09-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-08-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; use isolate_subsection()</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="tri.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.tri</span></code>: Cart3D Triangulation Module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="cmdrun.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.bin</span></code>: Cart3D executable interface module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pycart/cmdgen.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cmdrun.html" title="cape.pycart.bin: Cart3D executable interface module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tri.html" title="cape.pycart.tri: Cart3D Triangulation Module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cmd</span></code>: Create commands for Cart3D executables</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.0b2 documentation, 2023
+  </div>
+
+
+  </body>
+</html>

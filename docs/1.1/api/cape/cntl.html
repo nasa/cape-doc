@@ -6,17 +6,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>cape.cntl: Base module for CFD operations and processing &#8212; CAPE 1.1.0beta2</title>
+    <title>cape.cntl: Base module for CFD operations and processing &#8212; CAPE 1.1.1</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link rel="shortcut icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="cape.config: Surface configuration module" href="config.html" />
@@ -37,7 +34,7 @@
         <li class="right" >
           <a href="cgns.html" title="cape.cgns: CGNS File Interface"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.1</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cntl</span></code>: Base module for CFD operations and processing</a></li> 
       </ul>
@@ -218,8 +215,8 @@ an input and the case number <em>i</em>. The function(s) are usually
 from a module imported via the <code class="docutils literal notranslate"><span class="pre">&quot;Modules&quot;</span></code> option. See the
 following example:</p>
 <blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Modules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;testmod&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="s2">&quot;CaseFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;testmod.testfunc&quot;</span><span class="p">]</span><span class="w"></span>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Modules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;testmod&quot;</span><span class="p">],</span>
+<span class="s2">&quot;CaseFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;testmod.testfunc&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -296,6 +293,39 @@ class.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="cape.cntl.Cntl.CheckBatch">
+<span class="sig-name descname"><span class="pre">CheckBatch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cntl.Cntl.CheckBatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check to see if we are running inside a batch job</p>
+<p>This looks for environment variables to see if this is running
+inside a batch job.  Currently supports slurm and PBS.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">CheckBatch</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.cntl.Cntl" title="cape.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cntl.Cntl</span></code></a></dt><dd><p>Overall CAPE control instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>jobid</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p><code class="docutils literal notranslate"><span class="pre">0</span></code> if no batch environment was detected</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2023-12-13 <code class="docutils literal notranslate"><span class="pre">&#64;dvicker</span></code>: v1.0</p></li>
+<li><p>2023-12-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; debug</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="cape.cntl.Cntl.CheckCase">
 <span class="sig-name descname"><span class="pre">CheckCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cntl.Cntl.CheckCase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check current status of case <em>i</em></p>
@@ -332,6 +362,7 @@ however, can be kept to the functions
 <li><p>2015-09-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; generic</p></li>
 <li><p>2015-10-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.1; no <code class="xref py py-mod docutils literal notranslate"><span class="pre">case</span></code> req</p></li>
 <li><p>2017-02-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.2; add verbose flag</p></li>
+<li><p>2023-11-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.3; call <code class="docutils literal notranslate"><span class="pre">setx_i(i)</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -363,6 +394,7 @@ however, can be kept to the functions
 <dd class="field-odd"><ul class="simple">
 <li><p>2014-10-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
 <li><p>2014-10-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1, check queue status</p></li>
+<li><p>2023-12-13 <code class="docutils literal notranslate"><span class="pre">&#64;dvicker</span></code>: v1.2, check for THIS_JOB</p></li>
 </ul>
 </dd>
 </dl>
@@ -749,6 +781,83 @@ delete any files</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="cape.cntl.Cntl.CountQueuedCases">
+<span class="sig-name descname"><span class="pre">CountQueuedCases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">I</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></span><a class="headerlink" href="#cape.cntl.Cntl.CountQueuedCases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count cases that have currently active PBS/Slurm jobs</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">CountQueuedCases</span><span class="p">(</span><span class="n">I</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.cntl.Cntl" title="cape.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cntl.Cntl</span></code></a></dt><dd><p>Overall CAPE control instance</p>
+</dd>
+<dt><em>I</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>List of indices</p>
+</dd>
+<dt><em>jobs</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Information on each job by ID number</p>
+</dd>
+<dt><em>u</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>User name (defaults to process username)</p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Other kwargs used to subset the run matrix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of running or queued jobs (not counting the job
+from which function is called, if applicable)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2024-01-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2024-01-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; check for <em>this_job</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cntl.Cntl.CountRunningCases">
+<span class="sig-name descname"><span class="pre">CountRunningCases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">I</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cntl.Cntl.CountRunningCases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count number of running cases via the batch system</p>
+<p>Also print a status of the running jobs.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">CountRunningCases</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.cntl.Cntl" title="cape.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cntl.Cntl</span></code></a></dt><dd><p>Overall CAPE control instance</p>
+</dd>
+<dt><em>I</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>List of indices</p>
+</dd>
+<dt><em>jobs</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Information on each job by ID number</p>
+</dd>
+<dt><em>u</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>User name (defaults to process username)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of running or queued jobs</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2023-12-08 <code class="docutils literal notranslate"><span class="pre">&#64;dvicker</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="cape.cntl.Cntl.DeleteCase">
 <span class="sig-name descname"><span class="pre">DeleteCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cntl.Cntl.DeleteCase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a case</p>
@@ -1087,6 +1196,7 @@ class.</p>
 <dt class="field-even">Versions<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p>2014-10-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2024-01-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; remove CheckCase() for speed</p></li>
 </ul>
 </dd>
 </dl>
@@ -1314,7 +1424,7 @@ name to import the module as. For example, the user may import a
 module called <code class="xref py py-mod docutils literal notranslate"><span class="pre">tri</span></code> as <code class="xref py py-mod docutils literal notranslate"><span class="pre">mytri</span></code> using the following
 JSON syntax.</p>
 <blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Modules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[{</span><span class="s2">&quot;tri&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;mytri&quot;</span><span class="p">}]</span><span class="w"></span>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Modules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[{</span><span class="s2">&quot;tri&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;mytri&quot;</span><span class="p">}]</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -1349,8 +1459,8 @@ option from the JSON file.  These functions must take <em>cntl</em> as
 an input, and they are usually from a module imported via the
 <code class="docutils literal notranslate"><span class="pre">&quot;Modules&quot;</span></code> option.  See the following example:</p>
 <blockquote>
-<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Modules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;testmod&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="s2">&quot;InitFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;testmod.testfunc&quot;</span><span class="p">]</span><span class="w"></span>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Modules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;testmod&quot;</span><span class="p">],</span>
+<span class="s2">&quot;InitFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;testmod.testfunc&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -2189,6 +2299,7 @@ each CFD solver.</p>
 <dt class="field-odd">Versions<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p>2017-03-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-10-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; arbitrary-depth <em>frun</em></p></li>
 </ul>
 </dd>
 </dl>
@@ -2446,7 +2557,8 @@ each CFD solver.</p>
 <dt class="field-odd">Versions<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p>2015-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
-<li><p>2013-03-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0, manual options input</p></li>
+<li><p>2023-03-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; manual options input</p></li>
+<li><p>2023-08-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.1; calle sample_dict()</p></li>
 </ul>
 </dd>
 </dl>
@@ -2698,6 +2810,42 @@ interface has already been read according to the <code class="docutils literal n
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="cape.cntl.Cntl.get_pbs_jobs">
+<span class="sig-name descname"><span class="pre">get_pbs_jobs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cntl.Cntl.get_pbs_jobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dictionary of current jobs active by one user</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">jobs</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">get_pbs_jobs</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.cntl.Cntl" title="cape.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cntl.Cntl</span></code></a></dt><dd><p>Overall CAPE control instance</p>
+</dd>
+<dt><em>force</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Query current queue even if <em>cntl.jobs</em> exists</p>
+</dd>
+<dt><em>jobs</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Preexisting PBS/Slurm job information</p>
+</dd>
+<dt><em>u</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>User name (defaults to process username)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>jobs</em>:<a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Information on each job by ID number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2024-01-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="cape.cntl.Cntl.init_post">
 <span class="sig-name descname"><span class="pre">init_post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cntl.Cntl.init_post" title="Permalink to this definition">¶</a></dt>
 <dd><p>Do <code class="docutils literal notranslate"><span class="pre">py{x}</span></code> specific initialization actions</p>
@@ -2716,6 +2864,33 @@ interface has already been read according to the <code class="docutils literal n
 <dt class="field-odd">Versions<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p>2023-05-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cntl.Cntl.make_case_folder">
+<span class="sig-name descname"><span class="pre">make_case_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cntl.Cntl.make_case_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create folder(s) if needed for case <em>i</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">make_case_folder</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.cntl.Cntl" title="cape.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cntl.Cntl</span></code></a></dt><dd><p>Overall CAPE control instance</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of case to analyze</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2023-08-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (CreateFolder)</p></li>
+<li><p>2023-10-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; support arbitrary depth</p></li>
 </ul>
 </dd>
 </dl>
@@ -2805,6 +2980,7 @@ variable.</p>
 <dt class="field-odd">Versions<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p>2023-05-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0; forked from __init__()</p></li>
+<li><p>2023-12-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; add <em>RootDir</em> and <em>JSONFile</em></p></li>
 </ul>
 </dd>
 </dl>
@@ -2869,14 +3045,14 @@ variable.</p>
         <li class="right" >
           <a href="cgns.html" title="cape.cgns: CGNS File Interface"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.0beta2</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.1</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cntl</span></code>: Base module for CFD operations and processing</a></li> 
       </ul>
     </div>
 
   <div class="footer">
-   CAPE version 1.0a2 documentation, 2021.
+   CAPE version 1.1.0b2 documentation, 2023
   </div>
 
 

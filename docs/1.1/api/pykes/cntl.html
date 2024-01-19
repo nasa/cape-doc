@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.pykes.cntl: Kestrel control module &#8212; CAPE 1.1.1</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pykes.options: Options interface for pyKes/Kestrel" href="options/index.html" />
+    <link rel="prev" title="The cape.pykes module" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="options/index.html" title="cape.pykes.options: Options interface for pyKes/Kestrel"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="The cape.pykes module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes.cntl</span></code>: Kestrel control module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.pykes.cntl"></span><section id="cape-pykes-cntl-kestrel-control-module">
+<h1><a class="reference internal" href="#module-cape.pykes.cntl" title="cape.pykes.cntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes.cntl</span></code></a>: Kestrel control module<a class="headerlink" href="#cape-pykes-cntl-kestrel-control-module" title="Permalink to this heading">¶</a></h1>
+<p>This module provides tools to quickly setup basic or complex Kestrel run
+matrices and serve as an executive for pre-processing, running,
+post-processing, and managing the solutions. A collection of cases
+combined into a run matrix can be loaded using the following commands.</p>
+<blockquote>
+<div><div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cape.pykes.cntl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">pykes</span><span class="o">.</span><span class="n">cntl</span><span class="o">.</span><span class="n">Cntl</span><span class="p">(</span><span class="s2">&quot;pyKes.json&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span>
+<span class="go">&lt;cape.pyfun.Cntl(nCase=892)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">GetFullFolderNames</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">&#39;poweroff/m1.5a0.0b0.0&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>An instance of this <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pykes.cntl.Cntl</span></code></a> class has many
+attributes, which include the run matrix (<code class="docutils literal notranslate"><span class="pre">cntl.x</span></code>), the options
+interface (<code class="docutils literal notranslate"><span class="pre">cntl.opts</span></code>), and optionally the data book
+(<code class="docutils literal notranslate"><span class="pre">cntl.DataBook</span></code>), the appropriate input files (such as
+<code class="docutils literal notranslate"><span class="pre">cntl.</span></code>), and possibly others.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><em>cntl.x</em></p></td>
+<td><p><a class="reference internal" href="../cape/runmatrix.html#cape.runmatrix.RunMatrix" title="cape.runmatrix.RunMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>cntl.opts</em></p></td>
+<td><p><a class="reference internal" href="options/index.html#cape.pykes.options.Options" title="cape.pykes.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pykes.options.Options</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><em>cntl.DataBook</em></p></td>
+<td><p><a class="reference internal" href="dataBook.html#cape.pykes.dataBook.DataBook" title="cape.pykes.dataBook.DataBook"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pykes.dataBook.DataBook</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>cntl.JobXML</em></p></td>
+<td><p><a class="reference internal" href="jobxml.html#cape.pykes.jobxml.JobXML" title="cape.pykes.jobxml.JobXML"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pykes.jobxml.JobXML</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p><a class="reference internal" href="../cape/cntl.html#cape.cntl.Cntl" title="cape.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cntl.Cntl</span></code></a> class, so any methods available to the CAPE
+class are also available here.</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pykes.cntl.</span></span><span class="sig-name descname"><span class="pre">Cntl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for handling global options and setup for Kestrel</p>
+<p>This class is intended to handle all settings used to describe a
+group of Kestrel cases.</p>
+<p>The settings are read from a JSON file.</p>
+<p>Defaults are read from the file
+<code class="docutils literal notranslate"><span class="pre">options/pyKes.default.json</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span> <span class="o">=</span> <span class="n">Cntl</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s2">&quot;pyKes.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of pyKes input file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pykes.cntl.Cntl</span></code></a></dt><dd><p>Instance of the pyKes control class</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Data members<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl.opts</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of options for this case (directly from <em>fname</em>)</p>
+</dd>
+<dt><em>cntl.x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.runmatrix.RunMatrix</span></code></dt><dd><p>Values and definitions for variables in the run matrix</p>
+</dd>
+<dt><em>cntl.RootDir</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Absolute path to the root directory</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Started</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.ApplyCase">
+<span class="sig-name descname"><span class="pre">ApplyCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nPhase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.ApplyCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply settings from <em>cntl.opts</em> to an individual case</p>
+<p>This rewrites each run namelist file and the <code class="file docutils literal notranslate"><span class="pre">case.json</span></code>
+file in the specified directories.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ApplyCase</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">nPhase</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../pyfun/fun3d.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a></dt><dd><p>FUN3D control interface</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case number</p>
+</dd>
+<dt><em>nPhase</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | positive <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Last phase number (default determined by <em>PhaseSequence</em>)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-03-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.ArchivePWD">
+<span class="sig-name descname"><span class="pre">ArchivePWD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phantom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.ArchivePWD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Archive a single case in the current folder ($PWD)</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ArchivePWD</span><span class="p">(</span><span class="n">phantom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../pyfun/fun3d.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a></dt><dd><p>CAPE main control instance</p>
+</dd>
+<dt><em>phantom</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Write actions to <code class="docutils literal notranslate"><span class="pre">archive.log</span></code>; only delete if
+<code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-03-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First <a class="reference internal" href="../pyfun/index.html#module-cape.pyfun" title="cape.pyfun"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code></a> version</p></li>
+<li><p>2017-12-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <em>phantom</em> option</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.CheckMesh">
+<span class="sig-name descname"><span class="pre">CheckMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.CheckMesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the mesh for case <em>i</em> is prepared</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">CheckMesh</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Main CAPE control instance</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>q</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not mesh for case <em>i</em> is prepared</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.CleanPWD">
+<span class="sig-name descname"><span class="pre">CleanPWD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phantom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.CleanPWD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Archive a single case in the current folder ($PWD)</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">CleanPWD</span><span class="p">(</span><span class="n">phantom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../pyfun/fun3d.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a></dt><dd><p>Instance of control interface</p>
+</dd>
+<dt><em>phantom</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Write actions to <code class="docutils literal notranslate"><span class="pre">archive.log</span></code>; only delete if
+<code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-03-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2017-12-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <em>phantom</em> option</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.ExtendCase">
+<span class="sig-name descname"><span class="pre">ExtendCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.ExtendCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add iterations to case <em>i</em> by repeating the last phase</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ExtendCase</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">imax</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pykes.cntl.Cntl</span></code></a></dt><dd><p>CAPE main control instance</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Run index</p>
+</dd>
+<dt><em>n</em>: {<code class="docutils literal notranslate"><span class="pre">1</span></code>} | positive <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Add <em>n</em> times <em>steps</em> to the total iteration count</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | nonnegative <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Apply to phase <em>j</em>, by default use the last phase</p>
+</dd>
+<dt><em>imax</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | nonnegative <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Use <em>imax</em> as the maximum iteration count</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2022-07-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.FindXMLPaths">
+<span class="sig-name descname"><span class="pre">FindXMLPaths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.FindXMLPaths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all <em>Path</em> and <em>File</em> elements</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">elems</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">FindXMLPaths</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pykes.cntl.Cntl</span></code></a></dt><dd><p>Run matrix control interface</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>elems</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code>]</dt><dd><p>List of XML elements</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.GetMeshFileNames">
+<span class="sig-name descname"><span class="pre">GetMeshFileNames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.GetMeshFileNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of copy/link files from both JSON and XML</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">meshfiles</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">GetMeshFiles</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>CAPE main control instance</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>meshfiles</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of files to copy/link</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.PrepareCase">
+<span class="sig-name descname"><span class="pre">PrepareCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.PrepareCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare a case for running if necessary</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">PrepareCase</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>CAPE main control instance</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-10-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.PrepareJobXML">
+<span class="sig-name descname"><span class="pre">PrepareJobXML</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.PrepareJobXML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">pykes.xml</span></code> file(s) for case <em>i</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">PrepareJobXML</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>CAPE main control instance</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-10-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.PrepareMesh">
+<span class="sig-name descname"><span class="pre">PrepareMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.PrepareMesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare the mesh for case <em>i</em> if necessary</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">PrepareMesh</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>CAPE main control instance</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-10-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.ReadJobXML">
+<span class="sig-name descname"><span class="pre">ReadJobXML</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.ReadJobXML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the <code class="file docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ReadNamelist</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pykes.cntl.Cntl</span></code></a></dt><dd><p>Run matrix control interface</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+<dt><em>q</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <a href="#id1"><span class="problematic" id="id2">``</span></a>False</dt><dd><p>Option read to <em>JobXML</em>, else <em>JobXML0</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-10-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.SkeletonPWD">
+<span class="sig-name descname"><span class="pre">SkeletonPWD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phantom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.SkeletonPWD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete most files in current folder, leaving only a skeleton</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">SkeletonPWD</span><span class="p">(</span><span class="n">phantom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../pyfun/fun3d.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a></dt><dd><p>CAPE main control instance</p>
+</dd>
+<dt><em>phantom</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Write actions to <code class="docutils literal notranslate"><span class="pre">archive.log</span></code>; only delete if
+<code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-12-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.WritePBS">
+<span class="sig-name descname"><span class="pre">WritePBS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.WritePBS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the PBS script(s) for a given case</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">WritePBS</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Main CAPE control instance</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-10-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.cli">
+<span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.cli" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command-line interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">cli</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pykes.cntl.Cntl</span></code></a></dt><dd><p>CAPE main control instance</p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> (<code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)</dt><dd><p>Unprocessed keyword arguments</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cmd</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of command that was processed, if any</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Content from <code class="docutils literal notranslate"><span class="pre">bin/</span></code> executables</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.get_job_name">
+<span class="sig-name descname"><span class="pre">get_job_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.get_job_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get “job name” for phase <em>j</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">name</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">get_job_name</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pykes.cntl.Cntl" title="cape.pykes.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cntl</span></code></a></dt><dd><p>Instance of main CAPE control class</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>name</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Job name for phase <em>j</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-1-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.cntl.Cntl.init_post">
+<span class="sig-name descname"><span class="pre">init_post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.cntl.Cntl.init_post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> actions specific to <code class="docutils literal notranslate"><span class="pre">pyfun</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">init_post</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../cape/cntl.html#cape.cntl.Cntl" title="cape.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cntl.Cntl</span></code></a></dt><dd><p>CAPE run matrix control instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes</span></code> module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="options/index.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes.options</span></code>: Options interface for pyKes/Kestrel</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pykes/cntl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="options/index.html" title="cape.pykes.options: Options interface for pyKes/Kestrel"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="The cape.pykes module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.1.1</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes.cntl</span></code>: Kestrel control module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.0b2 documentation, 2023
+  </div>
+
+
+  </body>
+</html>
