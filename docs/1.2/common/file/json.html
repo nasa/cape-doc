@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>3.4. Syntax for CAPE JSON Files &#8212; CAPE 1.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="3.5. Syntax for Run Matrix Files" href="matrix.html" />
+    <link rel="prev" title="3.3. Command-Line Interface" href="../command-line.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="matrix.html" title="3.5. Syntax for Run Matrix Files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../command-line.html" title="3.3. Command-Line Interface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U"><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.4. </span>Syntax for CAPE JSON Files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="syntax-for-cape-json-files">
+<span id="json-syntax"></span><h1><span class="section-number">3.4. </span>Syntax for CAPE JSON Files<a class="headerlink" href="#syntax-for-cape-json-files" title="Permalink to this heading">¶</a></h1>
+<p>The various Cape utilities and modules extensively utilize the
+<a class="reference external" href="http://www.json.org">JSON</a> format, which is a simple file type that is
+easily read into Python and many other languages (a
+<a class="reference external" href="http://www.json.org">list of interpreters</a> can be found on the official
+website).  In CAPE, these files are used to store many types of information.
+In fact, using CAPE mostly boils down to three tasks:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>preparation of input files for the CFD solver, including mesh generation;</p></li>
+<li><p>interacting with JSON files; and</p></li>
+<li><p>issuing the appropriate command-line commands</p></li>
+</ul>
+</div></blockquote>
+<p>The JSON format originated with Javascript in mind, but we can think of it as
+lightly modified Python syntax without too much trouble.  In Python terms, a
+JSON file contains the definition for a single dictionary (that is,
+<a class="reference internal" href="../../api/python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>).  The keys of the <a class="reference internal" href="../../api/python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> must all be strings using double
+quotes, and the value of each key can be <a class="reference internal" href="../../api/python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../../api/python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>,
+<a class="reference internal" href="../../api/python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference internal" href="../../api/python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">NoneType</span></code>, <a class="reference internal" href="../../api/python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, or
+<a class="reference internal" href="../../api/python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
+<p>The following example shows all of the valid types that can be used in a JSON
+file.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;RunControl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;PhaseSequence&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;PhaseIters&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">200</span><span class="p">,</span><span class="w"> </span><span class="mf">400</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;nProc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;MPI&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;Config&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;File&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Config.xml&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;RefArea&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">3.141593</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;RefLength&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;RefPoint&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This would be interpreted in Python as the following <a class="reference internal" href="../../api/python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;RunControl&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;PhaseSequence&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="s2">&quot;PhaseIters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">],</span>
+        <span class="s2">&quot;nProc&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+        <span class="s2">&quot;MPI&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;Config&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;File&quot;</span><span class="p">:</span> <span class="s2">&quot;Config.xml&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;RefArea&quot;</span><span class="p">:</span> <span class="mf">3.141593</span><span class="p">,</span>
+        <span class="s2">&quot;RefLength&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+        <span class="s2">&quot;RefPoint&quot;</span><span class="p">:</span> <span class="kc">None</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In Python 2.7,  the strings are interpreted as class <code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code>,
+so for example the configuration file here would be <code class="docutils literal notranslate"><span class="pre">u&quot;Config.xml&quot;</span></code>.
+The Python 3.x <a class="reference internal" href="../../api/python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> class is Unicode by default, so the <code class="docutils literal notranslate"><span class="pre">u</span></code>
+markers do not appear.</p>
+</div>
+</div></blockquote>
+<p>There are a few conversions between Python and JSON syntax:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Boolean parameters are not capitalized; e.g. <code class="docutils literal notranslate"><span class="pre">true</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p>None-type variable has a different name; <code class="docutils literal notranslate"><span class="pre">null</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p>Strings must use double quotes</p></li>
+<li><p>The key names, i.e. the things to the left of the <code class="docutils literal notranslate"><span class="pre">:</span></code>, must be strings</p></li>
+<li><p>The last key may not have a trailing comma</p></li>
+</ul>
+</div></blockquote>
+<p>In CAPE, the most common reason for using <code class="docutils literal notranslate"><span class="pre">null</span></code> as a value for a setting is
+to force the program to ignore any defaults.  This could be the case if you
+have set some parameter in an input file and don’t want CAPE to touch it.</p>
+<p>Finally, there are two major additions to CAPE’s implementation of JSON:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Lines beginning with <code class="docutils literal notranslate"><span class="pre">//</span></code> or <code class="docutils literal notranslate"><span class="pre">#</span></code> will be ignored as comments</p></li>
+<li><p>It is possible to include the contents of other JSON files</p></li>
+</ul>
+</div></blockquote>
+<p>Going back to the example contents used above, suppose we have two JSON files.</p>
+<blockquote>
+<div><p><code class="file docutils literal notranslate"><span class="pre">cape.json</span></code>:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Specific run control settings</span>
+<span class="w">    </span><span class="s2">&quot;RunControl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;PhaseSequence&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;PhaseIters&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">200</span><span class="p">,</span><span class="w"> </span><span class="mf">400</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;nProc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;MPI&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Common problem configuration settings</span>
+<span class="w">    </span><span class="s2">&quot;Config&quot;</span><span class="o">:</span><span class="w"> </span><span class="nx">JSONFile</span><span class="p">(</span><span class="s2">&quot;Config.json&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><code class="file docutils literal notranslate"><span class="pre">Config.json</span></code>:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;File&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Config.xml&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;RefArea&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">3.141593</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;RefLength&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;RefPoint&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+<p>The various CAPE modules will then automatically replace
+<code class="docutils literal notranslate"><span class="pre">JSONFile(&quot;Config.json&quot;)</span></code> with the contents of <code class="file docutils literal notranslate"><span class="pre">Config.json</span></code>.  This can
+be very useful when conducting sensitivity studies in which most of the
+contents of the input file remain constant.</p>
+<p>A downside of this approach is that most CAPE input files end up being invalid
+JSON files.  A script is provided that replaces comments with empty lines and
+expands any <code class="docutils literal notranslate"><span class="pre">JSONFile()</span></code> commands (which can be recursive).</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pc_ExpandJSON.py<span class="w"> </span>-i<span class="w"> </span>cape.json<span class="w"> </span>-o<span class="w"> </span>expand.json
+</pre></div>
+</div>
+</div></blockquote>
+<p>The file resulting from this command, <code class="file docutils literal notranslate"><span class="pre">expand.json</span></code>, is shown below.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+
+<span class="w">    </span><span class="s2">&quot;RunControl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;PhaseSequence&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;PhaseIters&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">200</span><span class="p">,</span><span class="w"> </span><span class="mf">400</span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;nProc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;MPI&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="s2">&quot;Config&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;File&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Config.xml&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;RefArea&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">3.141593</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;RefLength&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;RefPoint&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Finally, CAPE provides helpful error messages when typos are present in the
+JSON file. This is usually a missing <code class="docutils literal notranslate"><span class="pre">:</span></code>, extra <code class="docutils literal notranslate"><span class="pre">,</span></code>, or something similar.
+They can be very difficult to track down, but such syntax errors are
+accompanied with the line containing the problem and the line above and below.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The usefulness of these syntax error helpers are generally better in
+the Python 3 version.</p>
+</div>
+</div></blockquote>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../command-line.html"
+                          title="previous chapter"><span class="section-number">3.3. </span>Command-Line Interface</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="matrix.html"
+                          title="next chapter"><span class="section-number">3.5. </span>Syntax for Run Matrix Files</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/common/file/json.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="matrix.html" title="3.5. Syntax for Run Matrix Files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../command-line.html" title="3.3. Command-Line Interface"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.4. </span>Syntax for CAPE JSON Files</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.1 documentation, 2023
+  </div>
+
+
+  </body>
+</html>

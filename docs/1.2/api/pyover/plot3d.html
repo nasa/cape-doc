@@ -1,0 +1,612 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.pyover.plot3d: Interface to OVERFLOW Plot3D files &#8212; CAPE 1.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pyover.report: Automated report interface" href="report.html" />
+    <link rel="prev" title="cape.pyover.overNamelist: OVERFLOW namelist module" href="overNamelist.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="report.html" title="cape.pyover.report: Automated report interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="overNamelist.html" title="cape.pyover.overNamelist: OVERFLOW namelist module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.plot3d</span></code>: Interface to OVERFLOW Plot3D files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.pyover.plot3d">
+<span id="cape-pyover-plot3d-interface-to-overflow-plot3d-files"></span><h1><a class="reference internal" href="#module-cape.pyover.plot3d" title="cape.pyover.plot3d"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.plot3d</span></code></a>: Interface to OVERFLOW Plot3D files<a class="headerlink" href="#module-cape.pyover.plot3d" title="Permalink to this heading">¶</a></h1>
+<p>This module provides a generic Plot3D file interface for reading
+OVERFLOW grid system and solution files using the classes
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.X</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.Q</span></code>.</p>
+<p>These classes contain customizations of the generic Plot3D grid interface
+<code class="xref py py-class docutils literal notranslate"><span class="pre">cape.plot3d.X</span></code> for OVERFLOW. In addition to reading the
+custommized header from OVERFLOW <code class="docutils literal notranslate"><span class="pre">q</span></code> files, it also contains special
+calculators such as <a class="reference internal" href="#cape.pyover.plot3d.Q.get_Cp" title="cape.pyover.plot3d.Q.get_Cp"><code class="xref py py-func docutils literal notranslate"><span class="pre">Q.get_Cp()</span></code></a> that calculate derived quantities
+from the native OVERFLOW output state variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../cape/plot3d.html#module-cape.plot3d" title="cape.plot3d"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.plot3d</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyover.plot3d.Q">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyover.plot3d.</span></span><span class="sig-name descname"><span class="pre">Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.plot3d.Q" title="Permalink to this definition">¶</a></dt>
+<dd><p>General OVERFLOW <code class="docutils literal notranslate"><span class="pre">q</span></code> file interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">pyOver</span><span class="o">.</span><span class="n">plot3d</span><span class="o">.</span><span class="n">Q</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">endian</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+<dt><em>endian</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | “big” | “little”</dt><dd><p>Manually-specified byte order</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.Q</span></code></dt><dd><p>General OVERFLOW q-file interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.plot3d.Q.GetGridDims">
+<span class="sig-name descname"><span class="pre">GetGridDims</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.plot3d.Q.GetGridDims" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the dimensions for each grid</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">GetGridDims</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.Q</span></code></dt><dd><p>General OVERFLOW q-file interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Data members<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>q.JD</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> (<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> size=*q.nGrid*)</dt><dd><p><em>J</em> dimensions of each grid</p>
+</dd>
+<dt><em>q.KD</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> (<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> size=*q.nGrid*)</dt><dd><p><em>K</em> dimensions of each grid</p>
+</dd>
+<dt><em>q.LD</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> (<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> size=*q.nGrid*)</dt><dd><p><em>L</em> dimensions of each grid</p>
+</dd>
+<dt><em>q.NQ</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of conserved variables plus one for <em>gamma</em></p>
+</dd>
+<dt><em>q.NQC</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of species concentrations, <code class="docutils literal notranslate"><span class="pre">0</span></code> if not using</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.plot3d.Q.GetNGrid">
+<span class="sig-name descname"><span class="pre">GetNGrid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.plot3d.Q.GetNGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the number of grids and determine multiple grid status</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nGrid</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">GetNGrid</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.Q</span></code></dt><dd><p>General OVERFLOW q-file interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>nGrid</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of grids</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.plot3d.Q.InitHeaders">
+<span class="sig-name descname"><span class="pre">InitHeaders</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.plot3d.Q.InitHeaders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize reference quantities for each grid</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">InitHeaders</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.Q</span></code></dt><dd><p>Generic OVERFLOW module</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-02-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.plot3d.Q.Read">
+<span class="sig-name descname"><span class="pre">Read</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.plot3d.Q.Read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an OVERFLOW generic Q file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">Read</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.Q</span></code></dt><dd><p>General OVERFLOW q-file interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Data members<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>q.nGrid</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of grids</p>
+</dd>
+<dt><em>q.mGrid</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not file is a multiple-grid file</p>
+</dd>
+<dt><em>q.Q</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>)</dt><dd><p>List of solution arrays</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.plot3d.Q.ReadQData">
+<span class="sig-name descname"><span class="pre">ReadQData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IG</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.plot3d.Q.ReadQData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the data</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">ReadQData</span><span class="p">(</span><span class="n">IG</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.Q</span></code></dt><dd><p>General OVERFLOW q-file interface</p>
+</dd>
+<dt><em>IG</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Grid number to read, defaults to <code class="docutils literal notranslate"><span class="pre">len(q.Q)+1</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Data members<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">q.Q[IG-1]</span></code>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Solution array</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.plot3d.Q.ReadQHeader">
+<span class="sig-name descname"><span class="pre">ReadQHeader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IG</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.plot3d.Q.ReadQHeader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read header info assuming the file marker is in the correct place</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">ReadQHeader</span><span class="p">(</span><span class="n">IG</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.Q</span></code></dt><dd><p>Generic OVERFLOW module</p>
+</dd>
+<dt><em>IG</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Grid number to read, defaults to <code class="docutils literal notranslate"><span class="pre">len(q.Q)+1</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-02-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.plot3d.Q.get_Cp">
+<span class="sig-name descname"><span class="pre">get_Cp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IG</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.plot3d.Q.get_Cp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get pressure coefficients from a grid</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Cp</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">get_Cp</span><span class="p">(</span><span class="n">IG</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.Q</span></code></dt><dd><p>General OVERFLOW q-file interface</p>
+</dd>
+<dt><em>IG</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Grid number (one-based index)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Keyword arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>J</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>Single grid index, <em>j</em> direction</p>
+</dd>
+<dt><em>JS</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Start index, <em>j</em> direction</p>
+</dd>
+<dt><em>JE</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>End index, <em>j</em> direction</p>
+</dd>
+<dt><em>K</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>Single grid index, <em>k</em> direction</p>
+</dd>
+<dt><em>KS</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Start index, <em>k</em> direction</p>
+</dd>
+<dt><em>KE</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>End index, <em>k</em> direction</p>
+</dd>
+<dt><em>L</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>Single grid index, <em>l</em> direction</p>
+</dd>
+<dt><em>LS</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Start index, <em>l</em> direction</p>
+</dd>
+<dt><em>LE</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>End index, <em>l</em> direction</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>Cp</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Pressure coefficient or array of pressure coefficients</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-func docutils literal notranslate"><span class="pre">expand_grid_indices()</span></code></p>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.plot3d.Q.get_M">
+<span class="sig-name descname"><span class="pre">get_M</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IG</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.plot3d.Q.get_M" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Mach numbers from a grid</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">get_M</span><span class="p">(</span><span class="n">IG</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.Q</span></code></dt><dd><p>General OVERFLOW q-file interface</p>
+</dd>
+<dt><em>IG</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Grid number (one-based index)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Keyword arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>J</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>Single grid index, <em>j</em> direction</p>
+</dd>
+<dt><em>JS</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Start index, <em>j</em> direction</p>
+</dd>
+<dt><em>JE</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>End index, <em>j</em> direction</p>
+</dd>
+<dt><em>K</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>Single grid index, <em>k</em> direction</p>
+</dd>
+<dt><em>KS</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Start index, <em>k</em> direction</p>
+</dd>
+<dt><em>KE</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>End index, <em>k</em> direction</p>
+</dd>
+<dt><em>L</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>Single grid index, <em>l</em> direction</p>
+</dd>
+<dt><em>LS</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Start index, <em>l</em> direction</p>
+</dd>
+<dt><em>LE</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>End index, <em>l</em> direction</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Mach number or array of Mach numbers</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-func docutils literal notranslate"><span class="pre">expand_grid_indices()</span></code></p>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.plot3d.Q.get_T">
+<span class="sig-name descname"><span class="pre">get_T</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IG</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.plot3d.Q.get_T" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dimensional point temperatures from a grid in degrees Rankine</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">get_p</span><span class="p">(</span><span class="n">IG</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.Q</span></code></dt><dd><p>General OVERFLOW q-file interface</p>
+</dd>
+<dt><em>IG</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Grid number (one-based index)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Keyword arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>J</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>Single grid index, <em>j</em> direction</p>
+</dd>
+<dt><em>JS</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Start index, <em>j</em> direction</p>
+</dd>
+<dt><em>JE</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>End index, <em>j</em> direction</p>
+</dd>
+<dt><em>K</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>Single grid index, <em>k</em> direction</p>
+</dd>
+<dt><em>KS</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Start index, <em>k</em> direction</p>
+</dd>
+<dt><em>KE</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>End index, <em>k</em> direction</p>
+</dd>
+<dt><em>L</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>Single grid index, <em>l</em> direction</p>
+</dd>
+<dt><em>LS</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Start index, <em>l</em> direction</p>
+</dd>
+<dt><em>LE</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>End index, <em>l</em> direction</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>T</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Temperature or array of temperatures [R]</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-func docutils literal notranslate"><span class="pre">expand_grid_indices()</span></code></p>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.plot3d.Q.get_p">
+<span class="sig-name descname"><span class="pre">get_p</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IG</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.plot3d.Q.get_p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dimensional point pressures from a grid in lb/ft^2</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">get_p</span><span class="p">(</span><span class="n">IG</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>q</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.Q</span></code></dt><dd><p>General OVERFLOW q-file interface</p>
+</dd>
+<dt><em>IG</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Grid number (one-based index)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Keyword arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>J</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>Single grid index, <em>j</em> direction</p>
+</dd>
+<dt><em>JS</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Start index, <em>j</em> direction</p>
+</dd>
+<dt><em>JE</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>End index, <em>j</em> direction</p>
+</dd>
+<dt><em>K</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>Single grid index, <em>k</em> direction</p>
+</dd>
+<dt><em>KS</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Start index, <em>k</em> direction</p>
+</dd>
+<dt><em>KE</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>End index, <em>k</em> direction</p>
+</dd>
+<dt><em>L</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>Single grid index, <em>l</em> direction</p>
+</dd>
+<dt><em>LS</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Start index, <em>l</em> direction</p>
+</dd>
+<dt><em>LE</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>End index, <em>l</em> direction</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>p</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Pressure or array of pressures [psf]</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-func docutils literal notranslate"><span class="pre">expand_grid_indices()</span></code></p>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyover.plot3d.X">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyover.plot3d.</span></span><span class="sig-name descname"><span class="pre">X</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.plot3d.X" title="Permalink to this definition">¶</a></dt>
+<dd><p>General OVERFLOW <code class="docutils literal notranslate"><span class="pre">x</span></code> file interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">pyOver</span><span class="o">.</span><span class="n">plot3d</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">endian</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+<dt><em>endian</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | “big” | “little”</dt><dd><p>Manually-specified byte order</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.plot3d.X</span></code></dt><dd><p>General OVERFLOW x-file interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-08-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="overNamelist.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.overNamelist</span></code>: OVERFLOW namelist module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="report.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.report</span></code>: Automated report interface</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pyover/plot3d.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="report.html" title="cape.pyover.report: Automated report interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="overNamelist.html" title="cape.pyover.overNamelist: OVERFLOW namelist module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.plot3d</span></code>: Interface to OVERFLOW Plot3D files</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.1 documentation, 2023
+  </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,715 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.msh: FLUENT mesh module &#8212; CAPE 1.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="optdict: Advanced dict-based options interface" href="optdict/index.html" />
+    <link rel="prev" title="cape.manage: Manage CFD case folders" href="manage.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="optdict/index.html" title="optdict: Advanced dict-based options interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="manage.html" title="cape.manage: Manage CFD case folders"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.msh</span></code>: FLUENT mesh module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.msh">
+<span id="cape-msh-fluent-mesh-module"></span><h1><a class="reference internal" href="#module-cape.msh" title="cape.msh"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.msh</span></code></a>: FLUENT mesh module<a class="headerlink" href="#module-cape.msh" title="Permalink to this heading">¶</a></h1>
+<p>It provides a class <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">Msh</span></code></a> whose primary goal is to read a FLUENT
+mesh and write an AFLR3 UGRID mesh.</p>
+<p>The class provided in this module, <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a>, is only
+partially implemented, so extensive usage may run into limitations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.msh.Msh">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.msh.</span></span><span class="sig-name descname"><span class="pre">Msh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for FUN3D meshes based on Fluent(R) file format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Cell types<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Faces<span class="colon">:</span></dt>
+<dd class="field-even"><p>In <em>M.FaceCells</em>, the normal of <em>M.Face[k]</em> points into cell
+<em>M.FaceCells[k,0]</em> and out of cell <em>M.FaceCells[k,1]</em></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.GetBoundaryZoneIDs">
+<span class="sig-name descname"><span class="pre">GetBoundaryZoneIDs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.GetBoundaryZoneIDs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the zone IDs that match a list of names</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">K</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">GetZoneIDsByType</span><span class="p">(</span><span class="n">typs</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>typs</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of types</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>K</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>List of zone IDs</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Placeholder</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.GetCells">
+<span class="sig-name descname"><span class="pre">GetCells</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.GetCells" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the volume cells from the face connectivity</p>
+<p>The results are saved to the following <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>
+arrays of <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>s.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>M.Cells</em>:  (<em>M.nCell</em>, 8)</p></li>
+<li><p><em>M.Tets</em>:   (<em>M.nTet</em>, 4)</p></li>
+<li><p><em>M.Pyrs</em>:   (<em>M.nPyr</em>, 5)</p></li>
+<li><p><em>M.Prisms</em>: (<em>M.nPrism</em>, 6)</p></li>
+<li><p><em>M.Hexes</em>:  (<em>M.nHex</em>, 8)</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">GetCells</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.GetFluentLineType">
+<span class="sig-name descname"><span class="pre">GetFluentLineType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.GetFluentLineType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the line type and whether or not the line ends</p>
+<p>Entity types are tabulated below.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: comment</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: dimensional specification</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">10</span></code>: nodes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">12</span></code>: cells (volumes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">13</span></code>: faces</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">39</span></code>: zone labels</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">typ</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">GetFluentLineType</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>line</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text from a Fluent line</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>typ</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Entity type</p>
+</dd>
+<dt><em>vals</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</dt><dd><p>List of specification indices or text if a comment</p>
+</dd>
+<dt><em>q</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether a line ends with ‘)’ and is therefore closed</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.GetHexes">
+<span class="sig-name descname"><span class="pre">GetHexes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.GetHexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the hexahedron volume cells from the face connectivity</p>
+<p>The results are saved to <em>M.Hexes</em> as <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>
+((<em>M.nHex</em>, 8), <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">GetHexe</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Placeholder</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.GetPrisms">
+<span class="sig-name descname"><span class="pre">GetPrisms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.GetPrisms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the prism volume cells from the face connectivity</p>
+<p>The results are saved to <em>M.Prisms</em> as <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>
+((<em>M.nPrism</em>, 6), <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">GetPrisms</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.GetPyrs">
+<span class="sig-name descname"><span class="pre">GetPyrs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.GetPyrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pyramid volume cells from the face connectivity</p>
+<p>The results are saved to <em>M.Pyrs</em> as <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>
+((<em>M.nPyr</em>, 5), <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">GetPyrs</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Placeholder</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.GetTets">
+<span class="sig-name descname"><span class="pre">GetTets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.GetTets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the tetrahedron volume cells from the face connectivity</p>
+<p>The results are saved to <em>M.Tets</em> as <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>
+((<em>M.nTet</em>, 4), <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">GetTets</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.GetZoneIDsByType">
+<span class="sig-name descname"><span class="pre">GetZoneIDsByType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.GetZoneIDsByType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the zone IDs that match a list of names</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">K</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">GetZoneIDsByType</span><span class="p">(</span><span class="n">typs</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>typs</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of types</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>K</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>List of zone IDs</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Placeholder</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.ProcessPrismsQuad">
+<span class="sig-name descname"><span class="pre">ProcessPrismsQuad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.ProcessPrismsQuad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the prism cell information of one quad</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">ProcessPrismsQuad</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>f</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>] <em>shape</em>: 4,</dt><dd><p>List of vertex indices in a face (should be a tri)</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of neighboring cell</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.ProcessPrismsTri">
+<span class="sig-name descname"><span class="pre">ProcessPrismsTri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.ProcessPrismsTri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the prism cell information of one tri</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">ProcessPrismsTri</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>f</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>] <em>shape</em>: 4,</dt><dd><p>List of vertex indices in a face (should be a tri)</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of neighboring cell</p>
+</dd>
+<dt><em>L</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index for left (1) or right (0)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.ProcessPyrsQuad">
+<span class="sig-name descname"><span class="pre">ProcessPyrsQuad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.ProcessPyrsQuad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the pyramid cell information of one quad</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">ProcessPyrsQuad</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>f</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>] <em>shape</em>: 4,</dt><dd><p>List of vertex indices in a face (should be a quad)</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of neighboring cell</p>
+</dd>
+<dt><em>L</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index for left (1) or right (0)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-11-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.ProcessPyrsTri">
+<span class="sig-name descname"><span class="pre">ProcessPyrsTri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.ProcessPyrsTri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the pyramid cell information of one tri</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">ProcessPyrsTri</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>f</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>] <em>shape</em>: 4,</dt><dd><p>List of vertex indices in a face (should be a quad)</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of neighboring cell</p>
+</dd>
+<dt><em>L</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index for left (1) or right (0)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-11-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.ProcessTetsTri">
+<span class="sig-name descname"><span class="pre">ProcessTetsTri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.ProcessTetsTri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the tetrahedron cell information of one tri</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">ProcessTetsTri</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>f</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>] <em>shape</em>: 4,</dt><dd><p>List of vertex indices in a face (should be a tri)</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of neighboring cell</p>
+</dd>
+<dt><em>L</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index for left (1) or right (0)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.ReadFluentASCII">
+<span class="sig-name descname"><span class="pre">ReadFluentASCII</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.ReadFluentASCII" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read ASCII Fluent(R) mesh file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">ReadFluentASCII</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">.msh</span></code> file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.ReadFluentMixedFacesASCII">
+<span class="sig-name descname"><span class="pre">ReadFluentMixedFacesASCII</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.ReadFluentMixedFacesASCII" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a block of mixed-type faces from ASCII Fluent mesh file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">ReadFluentQuadsASCII</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">i0</span><span class="p">,</span> <span class="n">i1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File handle in correct location</p>
+</dd>
+<dt><em>k</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Component ID for these faces</p>
+</dd>
+<dt><em>i0</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index (1-based) of first node to read</p>
+</dd>
+<dt><em>i1</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index (1-based) of last node to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.ReadFluentNodesASCII">
+<span class="sig-name descname"><span class="pre">ReadFluentNodesASCII</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.ReadFluentNodesASCII" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read nodes from an ASCII Fluent mesh file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">ReadFluentNodesASCII</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">i0</span><span class="p">,</span> <span class="n">i1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File handle in correct location</p>
+</dd>
+<dt><em>i0</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index (1-based) of first node to read</p>
+</dd>
+<dt><em>i1</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index (1-based) of last node to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.ReadFluentQuadsASCII">
+<span class="sig-name descname"><span class="pre">ReadFluentQuadsASCII</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.ReadFluentQuadsASCII" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a block of quad faces from an ASCII Fluent mesh file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">ReadFluentQuadsASCII</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">i0</span><span class="p">,</span> <span class="n">i1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File handle in correct location</p>
+</dd>
+<dt><em>k</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Component ID for these faces</p>
+</dd>
+<dt><em>i0</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index (1-based) of first node to read</p>
+</dd>
+<dt><em>i1</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index (1-based) of last node to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.ReadFluentTrisASCII">
+<span class="sig-name descname"><span class="pre">ReadFluentTrisASCII</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.ReadFluentTrisASCII" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a block of tri faces from an ASCII Fluent mesh file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">ReadFluentTrisASCII</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">i0</span><span class="p">,</span> <span class="n">i1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File handle in correct location</p>
+</dd>
+<dt><em>k</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Component ID for these faces</p>
+</dd>
+<dt><em>i0</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index (1-based) of first node to read</p>
+</dd>
+<dt><em>i1</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index (1-based) of last node to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.msh.Msh.WriteAFLR3ASCII">
+<span class="sig-name descname"><span class="pre">WriteAFLR3ASCII</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.msh.Msh.WriteAFLR3ASCII" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write AFLR3 mesh file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">WriteAFLR3ASCII</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>M</em>: <a class="reference internal" href="#cape.msh.Msh" title="cape.msh.Msh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.msh.Msh</span></code></a></dt><dd><p>Volume mesh interface</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">.ugrid</span></code> file to write</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="manage.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.manage</span></code>: Manage CFD case folders</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="optdict/index.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">optdict</span></code>: Advanced <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>-based options interface</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cape/msh.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="optdict/index.html" title="optdict: Advanced dict-based options interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="manage.html" title="cape.manage: Manage CFD case folders"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.msh</span></code>: FLUENT mesh module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.1 documentation, 2023
+  </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.pycart.preSpecCntl: Cart3D preSpec.c3d.cntl Interface &#8212; CAPE 1.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pycart.report: Automated report interface" href="report.html" />
+    <link rel="prev" title="cape.pycart.pointSensor: Cart3D point sensors module" href="pointSensor.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="report.html" title="cape.pycart.report: Automated report interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pointSensor.html" title="cape.pycart.pointSensor: Cart3D point sensors module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.preSpecCntl</span></code>: Cart3D <em>preSpec.c3d.cntl</em> Interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.pycart.preSpecCntl">
+<span id="cape-pycart-prespeccntl-cart3d-prespec-c3d-cntl-interface"></span><h1><a class="reference internal" href="#module-cape.pycart.preSpecCntl" title="cape.pycart.preSpecCntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.preSpecCntl</span></code></a>: Cart3D <em>preSpec.c3d.cntl</em> Interface<a class="headerlink" href="#module-cape.pycart.preSpecCntl" title="Permalink to this heading">¶</a></h1>
+<p>This is a module built off of the <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.FileCntl</span></code> class
+customized for manipulating <code class="file docutils literal notranslate"><span class="pre">preSpec.c3d.cntl</span></code> files.  Such files are
+split into section by lines of the format</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">$__Prespecified_Adaptation_Regions</span></code></p>
+</div></blockquote>
+<p>and this module is designed to recognize such sections, although this is the
+only section.  The main feature of this module is to add or remove additional
+refinement boxes and additional <em>XLev</em> surface refinements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See Also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../cape/filecntl/index.html#module-cape.filecntl" title="cape.filecntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl</span></code></a></p></li>
+<li><p><a class="reference internal" href="cntl.html#module-cape.pycart.cntl" title="cape.pycart.cntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cntl</span></code></a></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.options.Mesh</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pycart.preSpecCntl.PreSpecCntl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pycart.preSpecCntl.</span></span><span class="sig-name descname"><span class="pre">PreSpecCntl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'preSpec.c3d.cntl'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.preSpecCntl.PreSpecCntl" title="Permalink to this definition">¶</a></dt>
+<dd><p>File control class for <code class="file docutils literal notranslate"><span class="pre">preSpec.c3d.cntl</span></code> files</p>
+<p>This class is derived from the <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.fileCntl.FileCntl</span></code> class, so
+all methods applicable to that class can also be used for instances of this
+class.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">preSpec</span> <span class="o">=</span> <span class="n">pyCart</span><span class="o">.</span><span class="n">PreSpecCntl</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preSpec</span> <span class="o">=</span> <span class="n">pyCart</span><span class="o">.</span><span class="n">PreSpecCntl</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of CNTL file to read, defaults to <code class="docutils literal notranslate"><span class="pre">'preSpec.c3d.cntl'</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.preSpecCntl.PreSpecCntl.AddBBox">
+<span class="sig-name descname"><span class="pre">AddBBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.preSpecCntl.PreSpecCntl.AddBBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an additional bounding box to the <code class="file docutils literal notranslate"><span class="pre">cubes</span></code> input control file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">preSpec</span><span class="o">.</span><span class="n">AddBBox</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">xlim</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>preSpec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.preSpecCntl.PreSpecCntl</span></code></dt><dd><p>Instance of the <code class="file docutils literal notranslate"><span class="pre">preSpec.c3d.cntl</span></code> interface</p>
+</dd>
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of refinements to use in the box</p>
+</dd>
+<dt><em>xlim</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> or <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>List of <em>xmin</em>, <em>xmax</em>, <em>ymin</em>, <em>ymax</em>, <em>zmin</em>, <em>zmax</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Adds a bounding box line to the existing boxes</p>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.preSpecCntl.PreSpecCntl.AddXLev">
+<span class="sig-name descname"><span class="pre">AddXLev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.preSpecCntl.PreSpecCntl.AddXLev" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a refinement level on a component or list of components</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">preSpec</span><span class="o">.</span><span class="n">AddXLev</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">compID</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>preSpec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.preSpecCntl.PreSpecCntl</span></code></dt><dd><p>Instance of the <code class="file docutils literal notranslate"><span class="pre">preSpec.c3d.cntl</span></code> interface</p>
+</dd>
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of refinements to use in the box</p>
+</dd>
+<dt><em>compID</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>List of component IDs</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-10-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-03-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; use <code class="xref py py-func docutils literal notranslate"><span class="pre">RangeString()</span></code></p></li>
+<li><p>2023-03-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; just write comps on new lines</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.preSpecCntl.PreSpecCntl.ClearBBox">
+<span class="sig-name descname"><span class="pre">ClearBBox</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.preSpecCntl.PreSpecCntl.ClearBBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all existing bounding boxes</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">preSpec</span><span class="o">.</span><span class="n">ClearBBox</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>preSpec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.preSpecCntl.PreSpecCntl</span></code></dt><dd><p>Instance of the <code class="file docutils literal notranslate"><span class="pre">preSpec.c3d.cntl</span></code> interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.preSpecCntl.PreSpecCntl.ClearXLev">
+<span class="sig-name descname"><span class="pre">ClearXLev</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.preSpecCntl.PreSpecCntl.ClearXLev" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all existing XLev specifications</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">preSpec</span><span class="o">.</span><span class="n">ClearXLev</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>preSpec</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.preSpecCntl.PreSpecCntl</span></code></dt><dd><p>Instance of the <code class="file docutils literal notranslate"><span class="pre">preSpec.c3d.cntl</span></code> interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-10-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="pointSensor.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.pointSensor</span></code>: Cart3D point sensors module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="report.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.report</span></code>: Automated report interface</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pycart/preSpecCntl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="report.html" title="cape.pycart.report: Automated report interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pointSensor.html" title="cape.pycart.pointSensor: Cart3D point sensors module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.preSpecCntl</span></code>: Cart3D <em>preSpec.c3d.cntl</em> Interface</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.1 documentation, 2023
+  </div>
+
+
+  </body>
+</html>

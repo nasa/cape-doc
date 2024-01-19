@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.pykes.options.archiveopts: Kestrel archiving options &#8212; CAPE 1.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.pykes.options.meshopts: Options for Kestrel grids" href="meshopts.html" />
+    <link rel="prev" title="cape.pykes.options: Options interface for pyKes/Kestrel" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="meshopts.html" title="cape.pykes.options.meshopts: Options for Kestrel grids"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.pykes.options: Options interface for pyKes/Kestrel"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes.options</span></code>: Options interface for pyKes/Kestrel</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes.options.archiveopts</span></code>: Kestrel archiving options</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.pykes.options.archiveopts"></span><section id="cape-pykes-options-archiveopts-kestrel-archiving-options">
+<h1><a class="reference internal" href="#module-cape.pykes.options.archiveopts" title="cape.pykes.options.archiveopts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes.options.archiveopts</span></code></a>: Kestrel archiving options<a class="headerlink" href="#cape-pykes-options-archiveopts-kestrel-archiving-options" title="Permalink to this heading">¶</a></h1>
+<p>This module provides Kestrel-specific modifications to the base
+archiving options module in <code class="xref py py-mod docutils literal notranslate"><span class="pre">archiveopts</span></code>.  Default
+options for which files to delete or tar are specific to each solver,
+and thus a few modifications are necessary for each solver in order to
+define good default values for archiving.</p>
+<p>The following default values are copied from the source code of this
+module.</p>
+<p>Default behavior for Kestrel case archiving is to copy several of the
+large files (such as mesh, solution, etc.) and create several tar balls.
+The default tar balls that are created within an archive folder are
+specified in two separate commands.  For each dictionary, the name of
+the key is the name of the tar ball and the list on the right-hand side
+is a list of file globs that go into the tar. These are set or modified
+in the <em>ArchivePostTarGroups</em> setting of the archiving section.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tecplot files</span>
+<span class="n">PltDict</span> <span class="o">=</span> <span class="p">[</span>
+<span class="p">]</span>
+
+<span class="c1"># Base files</span>
+<span class="n">RunDict</span> <span class="o">=</span> <span class="p">[</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Grid, solution, and post-processing files that are directly copied to the
+archive are set using the following code.  This affects the <em>ArchiveFiles</em>
+setting.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Flow files</span>
+<span class="n">CopyFiles</span> <span class="o">=</span> <span class="p">[</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Further files to be deleted upon use of the <code class="docutils literal notranslate"><span class="pre">--skeleton</span></code> command are defined
+using the following code.  This is the <em>SkeletonFiles</em> setting.  Note that
+<em>SkeletonFiles</em> are defined in reverse order; the user specifies the files to
+<strong>keep</strong>, not delete.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Files to keep</span>
+<span class="n">SkeletonFiles</span> <span class="o">=</span> <span class="p">[</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../../cape/cfdx/options/archiveopts.html#module-cape.cfdx.options.archiveopts" title="cape.cfdx.options.archiveopts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.options.archiveopts</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../cape/cfdx/options/archiveopts.html#cape.cfdx.options.archiveopts.ArchiveOpts" title="cape.cfdx.options.archiveopts.ArchiveOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.archiveopts.ArchiveOpts</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../cape/manage.html#module-cape.manage" title="cape.manage"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.manage</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pykes.options.archiveopts.ArchiveOpts">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pykes.options.archiveopts.</span></span><span class="sig-name descname"><span class="pre">ArchiveOpts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.options.archiveopts.ArchiveOpts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Archiving options for <a class="reference internal" href="../index.html#module-cape.pykes" title="cape.pykes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes</span></code></a></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span> <span class="o">=</span> <span class="n">Archive</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-09-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2022-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; use <a class="reference internal" href="../../cape/optdict/index.html#module-cape.optdict" title="cape.optdict"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.optdict</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.options.archiveopts.ArchiveOpts.apply_ArchiveTemplate">
+<span class="sig-name descname"><span class="pre">apply_ArchiveTemplate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.options.archiveopts.ArchiveOpts.apply_ArchiveTemplate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply named template to set default files to delete/archive</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">apply_ArchiveTemplate</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyFun.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2023-03-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v0.0; no templates yet</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pykes.options.archiveopts.ArchiveOpts.init_post">
+<span class="sig-name descname"><span class="pre">init_post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.options.archiveopts.ArchiveOpts.init_post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialization hook for Kestrel archiving options</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">init_post</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.pykes.options.archiveopts.ArchiveOpts" title="cape.pykes.options.archiveopts.ArchiveOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArchiveOpts</span></code></a></dt><dd><p>Archiving options interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2022-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pykes.options.archiveopts.auto_Archive">
+<span class="sig-prename descclassname"><span class="pre">cape.pykes.options.archiveopts.</span></span><span class="sig-name descname"><span class="pre">auto_Archive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pykes.options.archiveopts.auto_Archive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure <a class="reference internal" href="#cape.pykes.options.archiveopts.ArchiveOpts" title="cape.pykes.options.archiveopts.ArchiveOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArchiveOpts</span></code></a> instance</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span> <span class="o">=</span> <span class="n">auto_Archive</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dict of either global, “RunControl” or “Archive” options</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.pykes.options.archiveopts.ArchiveOpts" title="cape.pykes.options.archiveopts.ArchiveOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArchiveOpts</span></code></a></dt><dd><p>Instance of archiving options</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2022-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; solver-agnostic template</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes.options</span></code>: Options interface for pyKes/Kestrel</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="meshopts.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes.options.meshopts</span></code>: Options for Kestrel grids</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/pykes/options/archiveopts.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="meshopts.html" title="cape.pykes.options.meshopts: Options for Kestrel grids"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.pykes.options: Options interface for pyKes/Kestrel"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes.options</span></code>: Options interface for pyKes/Kestrel</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes.options.archiveopts</span></code>: Kestrel archiving options</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.1 documentation, 2023
+  </div>
+
+
+  </body>
+</html>

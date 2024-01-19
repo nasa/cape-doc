@@ -1,0 +1,522 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>4.1.8. Demo 8: Powered Rocket and Thrust Vectoring &#8212; CAPE 1.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="4.2. Control Files for pyCart (pyCart.json)" href="../../json/index.html" />
+    <link rel="prev" title="4.1.7. Demo 7: Data Book Plots and Reports" href="../07-data_arrow/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../json/index.html" title="4.2. Control Files for pyCart (pyCart.json)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../07-data_arrow/index.html" title="4.1.7. Demo 7: Data Book Plots and Reports"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.8. </span>Demo 8: Powered Rocket and Thrust Vectoring</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="demo-8-powered-rocket-and-thrust-vectoring">
+<span id="pycart-ex-thrust"></span><h1><span class="section-number">4.1.8. </span>Demo 8: Powered Rocket and Thrust Vectoring<a class="headerlink" href="#demo-8-powered-rocket-and-thrust-vectoring" title="Permalink to this heading">¶</a></h1>
+<p>This example explains how to use powered boundary conditions in Cart3D with
+pyCart along with a triangulation rotation and intersection as part of a thrust
+vector model.  Primarily, this example seeks to introduce how to simulate
+rocket engines.  In addition, component rotations and intersections are
+demonstrated, and a detailed report including a customized Tecplot layout are
+also included.</p>
+<p>To get started, clone this repository and run the following easy commands:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/nasa-ddalle/pycart08-thrust.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>pycart08-thrust
+<span class="gp">$ </span>./copy-files.py
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>work/
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will copy all of the files into a newly created <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder. Follow
+the instructions below by entering that <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder; the purpose is that
+you can easily delete the <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder and restart the tutorial at any
+time.</p>
+<p>To demonstrate these capabilities, we begin with the arrow example of previous
+examples as shown in <a class="reference internal" href="#fig-pycart-ex08-arrow"><span class="std std-numref">Figure 4.17</span></a> and add a stand-alone
+engine geometry as shown in <a class="reference internal" href="#fig-pycart-ex08-engine"><span class="std std-numref">Figure 4.18</span></a>.</p>
+<blockquote>
+<div><figure class="align-default" id="id1">
+<span id="fig-pycart-ex08-arrow"></span><a class="reference internal image-reference" href="../../../_images/arrow011.png"><img alt="../../../_images/arrow011.png" src="../../../_images/arrow011.png" style="width: 3.0in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 4.17 </span><span class="caption-text">Trimmed arrow surface from previous examples</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id2">
+<span id="fig-pycart-ex08-engine"></span><a class="reference internal image-reference" href="../../../_images/engine01.png"><img alt="../../../_images/engine01.png" src="../../../_images/engine01.png" style="width: 3.0in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 4.18 </span><span class="caption-text">Stand-alone engine block triangulation</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>These are two water-tight closed geometries so that they can be used with
+<code class="docutils literal notranslate"><span class="pre">intersect</span></code>.  In their unmodified positions, the engine intersects the back
+plane of the arrow and produces thrust aligned with the centerline of the
+arrow.  In this example, we add a pitch angle to the engine so that it is
+rotated by an amount set in the run matrix, and this rotation is performed
+prior to the intersection.</p>
+<p>This example can be found in <code class="docutils literal notranslate"><span class="pre">pycart08-thrust</span></code>, and as
+always the <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code> file in that folder is a good supplement to this
+document.  <a class="reference internal" href="#fig-pycart-ex08-slice-y0"><span class="std std-numref">Figure 4.19</span></a> shows the main product of the
+example.</p>
+<blockquote>
+<div><figure class="align-default" id="id3">
+<span id="fig-pycart-ex08-slice-y0"></span><a class="reference internal image-reference" href="../../../_images/slice-y0-mach.png"><img alt="../../../_images/slice-y0-mach.png" src="../../../_images/slice-y0-mach.png" style="width: 3.5in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 4.19 </span><span class="caption-text">Surface pressure coefficient and <span class="math notranslate nohighlight">\(y{=}0\)</span> Mach number slice for
+the Mach 1.5 conditions from the example.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<section id="inputs-and-run-matrix-description">
+<h2><span class="section-number">4.1.8.1. </span>Inputs and Run Matrix Description<a class="headerlink" href="#inputs-and-run-matrix-description" title="Permalink to this heading">¶</a></h2>
+<p>Setting up variables to change the thrust of an example is usually contained
+within the <code class="docutils literal notranslate"><span class="pre">&quot;RunMatrix&quot;</span></code> section of the JSON file.  The following
+definitions are used for this example:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Keys&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;mach&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;q&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;T&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;tilt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;CT&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;config&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Label&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;File&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;matrix.csv&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;GroupMesh&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Definitions&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;mach&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;Format&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;%0.2f&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;tilt&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;rotation&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Value&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;float&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Group&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Center&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">8.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">],</span>
+<span class="w">            </span><span class="s2">&quot;Axis&quot;</span><span class="o">:</span><span class="w">   </span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">],</span>
+<span class="w">            </span><span class="s2">&quot;CompID&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;engine_mount&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;noz_exterior&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;noz_interior&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;noz_bc&quot;</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="s2">&quot;Abbreviation&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;_t&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Format&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;%.1f&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;CT&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;SurfCT&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Value&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;float&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;TotalTemperature&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8500.0</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;AreaRatio&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">4.0</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;RefPressure&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;freestream&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;RefTemperature&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;freestream&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;RefDynamicPressure&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;freestream&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;CompID&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;noz_bc&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Abbreviation&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;T&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Format&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;%.1f&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In addition to our usual <em>mach</em>, <em>alpha</em>, <em>config</em>, and <em>Label</em> parameters that
+are part of the standard pyCart setup, we have added a few <em>RunMatrix&gt;Keys</em>.
+The first two are dynamic pressure (<em>q</em>) and freestream static temperature
+(<em>T</em>).  These are both recognized by pyCart as standard variables, and no
+descriptions are needed in the <em>RunMatrix&gt;Definitions</em> section.</p>
+<p>The next trajectory key is <em>tilt</em>, which is defined so that it pitches the
+engine block from <a class="reference internal" href="#fig-pycart-ex08-engine"><span class="std std-numref">Figure 4.18</span></a> by an angle equal to the
+value of this variable.  The fact that this is a rotation is set in the <em>Type</em>
+option within <em>RunMatrix&gt;Definitions&gt;tilt</em>.  The center of rotation is set as
+<code class="docutils literal notranslate"><span class="pre">[8.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0]</span></code>, which is the center of the back plane of the arrow.  The
+value of <em>Axis</em> makes this a pitch rotation.  <em>CompID</em> is a list of components
+that are rotated, which can be either strings or component numbers.  This is a
+pretty standard rotation, but users are advised that there are many more
+rotation &amp; translation options available.</p>
+<p>The last key is <em>CT</em>, whose <em>Type</em> of <code class="docutils literal notranslate"><span class="pre">&quot;SurfCT&quot;</span></code> tells pyCart that the value
+of this key is used to set a surface boundary condition with the intent of
+setting a nozzle to attain a desired thrust.  The <code class="docutils literal notranslate"><span class="pre">&quot;SurfCT&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;SurfBC&quot;</span></code>
+types are both targeted at powered boundary conditions, but <code class="docutils literal notranslate"><span class="pre">&quot;SurfBC&quot;</span></code>
+generally targets a desired stagnation pressure while <code class="docutils literal notranslate"><span class="pre">&quot;SurfCT&quot;</span></code>  targets a
+desired thrust.</p>
+<p>We should also take this opportunity to discuss the effects of including <em>q</em>
+and <em>T</em>.  Normally, since Cart3D is an inviscid solver, these dimensional
+parameters have no effect at all, and the results are truly nondimensional.
+However, introducing an engine partially breaks this symmetry to freestream
+conditions.  For one thing, a rocket producing an amount of thrust in pounds
+will have a different thrust coefficient depending on the freestream dynamic
+pressure.  Similarly, a particular temperature at the rocket boundary has
+different normalized temperatures for different freestream temperatures.  While
+it is possible in pyCart to use a <code class="docutils literal notranslate"><span class="pre">&quot;SurfCT&quot;</span></code> key without <em>q</em> and <em>T</em>, this is
+unlikely to be a physically relevant setup.</p>
+<p>Going back to the JSON settings for <em>CT</em>, we see a <em>TotalTemperature</em> of
+8500.0, which sets the stagnation temperature at the boundary condition plane
+to a constant temperature in degrees Rankine.  If we wanted to set the
+<em>TotalTemperature</em> relative to the freestream temperature instead of a fixed
+dimensional value, we would set <em>RefTemperature</em> to <code class="docutils literal notranslate"><span class="pre">1.0</span></code> instead of its
+<code class="docutils literal notranslate"><span class="pre">&quot;freestream&quot;</span></code> value.  It is also possible to use the value of another
+variable to change the stagnation temperature from case to case by setting the
+value of <em>TotalTemperature</em> to the name of another trajectory key.  See the
+following example for how this could work.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;CT&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;SurfCT&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Value&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;float&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;TotalTemperature&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;T0&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">},</span>
+<span class="s2">&quot;T0&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Value&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;float&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>We have also set <em>AreaRatio</em> here; for Cart3D thrust setup we usually need this
+parameter for Cart3D’s internal calculation of anticipated thrust.  It is
+typically recommended to set the boundary condition on a plane where the Mach
+number is 1.0 in Cart3D, but the Mach number on the plane can be set to a
+different value using <em>Mach</em> within the <em>Definitions&gt;CT</em>.  pyCart then uses
+this information to calculate the static pressure and density at the boundary
+condition plane that should give the corresponding thrust.</p>
+<p>While pyCart automatically calculates the surface normal of that plane (since
+the velocity has to be set on that plane including its three components), this
+simplified thrust calculation is not perfect. In order to get the correct
+thrust, there is also a <em>PressureCalibration</em> option that can be used to
+linearly scale the surface pressure.</p>
+</section>
+<section id="intersection-process">
+<span id="pycart-ex08-intersect"></span><h2><span class="section-number">4.1.8.2. </span>Intersection Process<a class="headerlink" href="#intersection-process" title="Permalink to this heading">¶</a></h2>
+<p>Intersecting closed volumes that each have multiple component IDs marked is a
+nontrivial process.  Because <code class="docutils literal notranslate"><span class="pre">intersect</span></code> is expecting an input triangulation
+in which each component is a water-tight surface with one component, pyCart has
+to do some extra preprocessing and postprocessing steps.  To get things to work
+properly, we use two separate <code class="docutils literal notranslate"><span class="pre">tri</span></code> files and set the following settings in
+the JSON.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Mesh&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Surface triangulation</span>
+<span class="w">    </span><span class="s2">&quot;TriFile&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;arrow.tri&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;engine.tri&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Extra refinements</span>
+<span class="w">    </span><span class="s2">&quot;XLev&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="s2">&quot;n&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;compID&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;noz_bc&quot;</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="s2">&quot;n&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;compID&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;noz_interior&quot;</span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Extra bounding boxes for adaptation regions</span>
+<span class="w">    </span><span class="s2">&quot;BBox&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="s2">&quot;n&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;compID&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;noz_exterior&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;xp&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2.5</span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The key parameter here is that <em>Mesh&gt;TriFile</em> is a list of two files.  As a
+result, pyCart assumes that each individual file is a single closed volume.
+The <em>XLev</em> descriptions specify additional refinements on any cut cells that
+intersect specified components, while <em>BBox</em> gives rectangular prisms in which
+to make a specified number <em>n</em> of refinements.</p>
+<p><a class="reference internal" href="#fig-pycart-ex08-c-png"><span class="std std-numref">Figure 4.20</span></a> shows the original surface triangulation after
+rotations but before performing the intersection  operation.  It contains the
+same component breakdown as the original input files and is labeled
+<code class="docutils literal notranslate"><span class="pre">Components.c.tri</span></code> in the folder.  pyCart also writes the file
+<code class="docutils literal notranslate"><span class="pre">Components.tri</span></code> which contains the same nodes and triangles but only has
+two components, and a visualization is shown in <a class="reference internal" href="#fig-pycart-ex08-png"><span class="std std-numref">Figure 4.21</span></a>.</p>
+<blockquote>
+<div><figure class="align-default" id="id4">
+<span id="fig-pycart-ex08-c-png"></span><a class="reference internal image-reference" href="../../../_images/Components_c.png"><img alt="../../../_images/Components_c.png" src="../../../_images/Components_c.png" style="width: 3.2in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 4.20 </span><span class="caption-text">Raw self-intersecting surface with original component IDs,
+<code class="docutils literal notranslate"><span class="pre">Components.c.tri</span></code></span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id5">
+<span id="fig-pycart-ex08-png"></span><a class="reference internal image-reference" href="../../../_images/Components.png"><img alt="../../../_images/Components.png" src="../../../_images/Components.png" style="width: 3.2in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 4.21 </span><span class="caption-text">Self-intersecting surface with one component ID for each closed volume,
+<code class="docutils literal notranslate"><span class="pre">Components.tri</span></code></span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>Then a call is made to Cart3D’s <code class="docutils literal notranslate"><span class="pre">intersect</span></code> tool such that the input is
+<code class="docutils literal notranslate"><span class="pre">Components.tri</span></code>, and the output is <code class="docutils literal notranslate"><span class="pre">Components.o.tri</span></code>, which is
+shown in <a class="reference internal" href="#fig-pycart-ex08-o-png"><span class="std std-numref">Figure 4.22</span></a>.</p>
+<blockquote>
+<div><figure class="align-default" id="id6">
+<span id="fig-pycart-ex08-o-png"></span><a class="reference internal image-reference" href="../../../_images/Components_o.png"><img alt="../../../_images/Components_o.png" src="../../../_images/Components_o.png" style="width: 3.2in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 4.22 </span><span class="caption-text">Intersected or trimmed surface with one component ID for each original
+closed volume, <code class="docutils literal notranslate"><span class="pre">Components.o.tri</span></code></span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>In order to get the original components requested by the user, pyCart then
+performs an additional step of remapping the component IDs to create
+<code class="docutils literal notranslate"><span class="pre">Components.i.tri</span></code>, shown in <a class="reference internal" href="#fig-pycart-ex08-i-png"><span class="std std-numref">Figure 4.23</span></a>.  Each
+triangle has the component ID copied from the closest triangle of
+<code class="docutils literal notranslate"><span class="pre">Components.c.tri</span></code>.</p>
+<blockquote>
+<div><figure class="align-default" id="id7">
+<span id="fig-pycart-ex08-i-png"></span><a class="reference internal image-reference" href="../../../_images/Components_i.png"><img alt="../../../_images/Components_i.png" src="../../../_images/Components_i.png" style="width: 3.2in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 4.23 </span><span class="caption-text">Intersected or trimmed surface with original component IDs mapped,
+<code class="docutils literal notranslate"><span class="pre">Components.i.tri</span></code></span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+</section>
+<section id="results-and-report-generation">
+<h2><span class="section-number">4.1.8.3. </span>Results and Report Generation<a class="headerlink" href="#results-and-report-generation" title="Permalink to this heading">¶</a></h2>
+<p>The run matrix in <code class="docutils literal notranslate"><span class="pre">pycart08-thrust/matrix.csv</span></code> has only one
+case, which has a Mach number of 1.5, an angle of attack of 2 degrees.  The
+engine is pitched downward 4.5 degrees and a thrust coefficient of 8.5.  A
+status while running the case would look something like the following.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c
+<span class="go">Case Config/Run Directory       Status  Iterations  Que CPU Time</span>
+<span class="go">---- -------------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweron/m1.50a2.0_t4.5T8.5 RUN     50/700      .      452.9</span>
+
+<span class="go">RUN=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><a class="reference internal" href="#fig-pycart-ex08-slice-y0-mesh"><span class="std std-numref">Figure 4.24</span></a> shows a flow visualization of this case
+that is generated using the <code class="docutils literal notranslate"><span class="pre">&quot;slice-y0-mesh&quot;</span></code> subfigure from
+<code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>.  (The results of the <code class="docutils literal notranslate"><span class="pre">&quot;slice-y0&quot;</span></code> subfigure is shown in
+<a class="reference internal" href="#fig-pycart-ex08-slice-y0"><span class="std std-numref">Figure 4.19</span></a>.)  These figures show some of the more
+advanced procedures from customizing a Tecplot layout.</p>
+<blockquote>
+<div><figure class="align-default" id="id8">
+<span id="fig-pycart-ex08-slice-y0-mesh"></span><a class="reference internal image-reference" href="../../../_images/slice-y0-mach-mesh.png"><img alt="../../../_images/slice-y0-mach-mesh.png" src="../../../_images/slice-y0-mach-mesh.png" style="width: 4in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 4.24 </span><span class="caption-text">Surface pressure coefficient (<span class="math notranslate nohighlight">\(C_p\)</span>) and <span class="math notranslate nohighlight">\(y{=}0\)</span> Mach
+number slice showing volume mesh</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>The process for this example begins with opening the output flow visualization
+files created by Cart3D: <code class="docutils literal notranslate"><span class="pre">Components.i.plt</span></code> and <code class="docutils literal notranslate"><span class="pre">cutPlanes.plt</span></code>.
+Actually those files are in the <code class="docutils literal notranslate"><span class="pre">adapt03/</span></code> folder in this case, but pyCart
+automatically creates symbolic links to the most recent <code class="docutils literal notranslate"><span class="pre">plt</span></code> files.</p>
+<p>Then, after opening those files, the user should create the desired image and
+save it as a layout.  A hidden step necessary for this example is that the user
+has to customize the color map for the Mach slice.  Since layout files do not
+have <code class="docutils literal notranslate"><span class="pre">CREATECOLORMAP</span></code> commands for built-in color maps, there is no color map
+in the layout file to edit.  It may be possible without this step, but this
+documents one known process.  Simply enter the contour details dialouge in
+Tecplot and change one of the colors or slide one of the handles in the color
+map interface.  This needs to be performed for both color maps since we are
+using separate contours on the surface and the slice.</p>
+<p>The JSON description for the two flow visualization subfigures is shown below:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;TecBase&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Tecplot&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1024</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Width&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.48</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Caption&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Surface $C_p$ and $y{=}0$ Mach slice&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;ContourLevels&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;NContour&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;MinLevel&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">0.4</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;MaxLevel&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1.2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Delta&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.1</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;NContour&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;MinLevel&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;MaxLevel&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">4.0</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Delta&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.1</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;ColorMaps&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;NContour&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;ColorMap&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;-0.4&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;0.0&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;1.2&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;red&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;NContour&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Constraints&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;mach &gt; 1.25&quot;</span><span class="p">],</span>
+<span class="w">            </span><span class="s2">&quot;ColorMap&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;0.0&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;darkpurple&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;1.0&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;#b55fbf&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;green&quot;</span><span class="p">],</span>
+<span class="w">                </span><span class="s2">&quot;$mach&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;4.0&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;darkorange&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">},</span>
+<span class="c1">// With mesh</span>
+<span class="s2">&quot;slice-y0-mach&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;TecBase&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Layout&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;slice-y0-mach.lay&quot;</span>
+<span class="p">},</span>
+<span class="s2">&quot;slice-y0-mach-mesh&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;TecBase&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Layout&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;slice-y0-mach-mesh.lay&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The two subfigures share most of their options, so they cascade from a common
+subfigure called <code class="docutils literal notranslate"><span class="pre">&quot;TecBase&quot;</span></code>.  Only the name of the layout file is changed.
+However, the two layouts are very similar; we could use the following alternate
+definition.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;slice-y0-mach-mesh&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;TecBase&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Layout&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;slice-y0-mach.lay&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Keys&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;FIELDLAYERS&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;SHOWMESH&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;YES&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The minimum and maximum values for the two contour maps are set in the
+<em>ContourLevels</em> section.  Of course, these fixed values could have just been
+set within Tecplot, but this allows for min and max values to depend on the
+trajectory keys.</p>
+<p>To see how this works, see the more complex <em>ColorMaps</em> section. Here we set
+the surface pressure map so that <code class="docutils literal notranslate"><span class="pre">&quot;blue&quot;</span></code> is at the minimum pressure of
+<code class="docutils literal notranslate"><span class="pre">&quot;-0.4&quot;</span></code>, white is at <em>Cp=0</em>, and the maximum value is red. This simplifies
+the process of getting white to lie on <em>Cp=0</em> with an asymmetric range of
+values.</p>
+<p>The color map for the Mach slice is more complicated.  Here we have set
+<code class="docutils literal notranslate"><span class="pre">&quot;darkpurple&quot;</span></code> at Mach 0, a lighter purple of <code class="docutils literal notranslate"><span class="pre">&quot;#b55fbf&quot;</span></code> on the lower side
+of Mach 1, <code class="docutils literal notranslate"><span class="pre">&quot;green&quot;</span></code> on the upper side of Mach 1.  This list of two colors at
+Mach 1 leads to a sharp purple/green divide at the sonic line.  Then we set
+<code class="docutils literal notranslate"><span class="pre">&quot;white&quot;</span></code> as the color for <code class="docutils literal notranslate"><span class="pre">&quot;$mach&quot;</span></code>; the <code class="docutils literal notranslate"><span class="pre">$</span></code> tells pyCart to replace
+this with the value of the trajectory key <em>mach</em> for this color.  Finally, we
+use <code class="docutils literal notranslate"><span class="pre">&quot;darkorange&quot;</span></code> for top of the color map.</p>
+<p>The result is a very informative color map that clearly identifies subsonic
+flow, low supersonic flow, the freestream Mach condition, and high supersonic
+flow.  Furthermore, this color map setup, by setting <code class="docutils literal notranslate"><span class="pre">&quot;$mach&quot;:</span> <span class="pre">&quot;white&quot;</span></code>, it
+applies to a range of conditions.  The color map shown above could lead to
+problems if the Mach number is lower than about 1.2, so the actual JSON file
+contains three different color map specifications.  Which one gets applied is
+determined by the <em>Constraints</em> key, which is visible in the code snippet show
+above.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4.1.8. Demo 8: Powered Rocket and Thrust Vectoring</a><ul>
+<li><a class="reference internal" href="#inputs-and-run-matrix-description">4.1.8.1. Inputs and Run Matrix Description</a></li>
+<li><a class="reference internal" href="#intersection-process">4.1.8.2. Intersection Process</a></li>
+<li><a class="reference internal" href="#results-and-report-generation">4.1.8.3. Results and Report Generation</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../07-data_arrow/index.html"
+                          title="previous chapter"><span class="section-number">4.1.7. </span>Demo 7: Data Book Plots and Reports</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../../json/index.html"
+                          title="next chapter"><span class="section-number">4.2. </span>Control Files for pyCart (<code class="file docutils literal notranslate"><span class="pre">pyCart.json</span></code>)</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/pycart/examples/08-thrust/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../json/index.html" title="4.2. Control Files for pyCart (pyCart.json)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../07-data_arrow/index.html" title="4.1.7. Demo 7: Data Book Plots and Reports"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.8. </span>Demo 8: Powered Rocket and Thrust Vectoring</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.1 documentation, 2023
+  </div>
+
+
+  </body>
+</html>

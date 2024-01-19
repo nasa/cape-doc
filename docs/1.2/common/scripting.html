@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>3.8. Advanced Setup: Python Scripting &#8212; CAPE 1.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. pyCart Documentation" href="../pycart/index.html" />
+    <link rel="prev" title="3.7.5. Automated Tecplot Figures" href="report/tecplot.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../pycart/index.html" title="4. pyCart Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="report/tecplot.html" title="3.7.5. Automated Tecplot Figures"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.8. </span>Advanced Setup: Python Scripting</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="advanced-setup-python-scripting">
+<span id="cape-scripting"></span><h1><span class="section-number">3.8. </span>Advanced Setup: Python Scripting<a class="headerlink" href="#advanced-setup-python-scripting" title="Permalink to this heading">¶</a></h1>
+<p>In addition to the many settings which can be typed into the main JSON file,
+users can create Python scripts and/or modules which can either add settings to
+what’s in the JSON file or change settings depending on the run matrix.  For
+example, a complex run configuration with 100 or more databook components could
+define them in a Python loop rather than with many lines of ASCII text in the
+JSON file.</p>
+<p>Use of Python can be done in two main ways: linking to modules via certain
+options within the JSON file that point to Python modules and functions or
+executing scripts which modify the settings via the command-line option <code class="docutils literal notranslate"><span class="pre">-x</span></code>.
+The JSON options that result in the use of Python functions are <em>PythonPath</em>,
+<em>Modules</em>, <em>InitFunction</em>, and <em>CaseFunction</em>.</p>
+<p>The <em>PythonPath</em> key is an option simply appends folder names to the environment
+variable <code class="docutils literal notranslate"><span class="pre">$PYTHONPATH</span></code> so that <code class="docutils literal notranslate"><span class="pre">.py</span></code> files in that folder can be directly
+imported.  Next, <em>Modules</em> simply gives a list of Python files to import as
+modules whenever the JSON file is read.  Once these modules have been imported,
+the <em>InitFunction</em> specifies one or more functions that is called as soon as
+pyCart is done interpreting the JSON file.  Thus <em>InitFunction</em> is usually most
+useful to determine settings that are universal to the whole run matrix but for
+whatever reason are easier to program in Python than write out in JSON text.
+The last option, <em>CaseFunction</em>, specifies one or more functions to call before
+submitting a new case (or running the <code class="docutils literal notranslate"><span class="pre">--apply</span></code> command).  These functions
+take the case number as an argument and can be used to change any setting
+depending on what the conditions for that case are.</p>
+<section id="using-scripts-to-modify-or-add-settings">
+<span id="cape-scripting-x"></span><h2><span class="section-number">3.8.1. </span>Using Scripts to Modify or Add Settings<a class="headerlink" href="#using-scripts-to-modify-or-add-settings" title="Permalink to this heading">¶</a></h2>
+<p>Probably the simplest but least reliable method to move some of the work of
+creating the settings from JSON to Python is the <code class="docutils literal notranslate"><span class="pre">-x</span></code> option.  When a
+command-line call sees <code class="docutils literal notranslate"><span class="pre">-x</span> <span class="pre">SCRIPT</span></code>, it first reads the relevant JSON file and
+then uses <code class="xref py py-func docutils literal notranslate"><span class="pre">execfile()</span></code> to execute that script.</p>
+<p>Consider the following example.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pyfun<span class="w"> </span>-f<span class="w"> </span>poweroff.json<span class="w"> </span>-x<span class="w"> </span>poweroff.py<span class="w"> </span>-x<span class="w"> </span>report.py
+</pre></div>
+</div>
+</div></blockquote>
+<p>When the executable script <code class="docutils literal notranslate"><span class="pre">pyfun</span></code> sees this command, it first loads the
+settings from <code class="file docutils literal notranslate"><span class="pre">poweroff.json</span></code> and then runs the scripts
+<code class="file docutils literal notranslate"><span class="pre">poweroff.py</span></code> and <code class="file docutils literal notranslate"><span class="pre">report.py</span></code> (in that order) using
+<code class="xref py py-func docutils literal notranslate"><span class="pre">execfile()</span></code>.  To do the same thing with a manually-created script, the
+following syntax would work.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load relevant module</span>
+<span class="kn">import</span> <span class="nn">cape.pyfun</span>
+<span class="c1"># Read JSON file</span>
+<span class="n">cntl</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">pyfun</span><span class="o">.</span><span class="n">Cntl</span><span class="p">(</span><span class="s1">&#39;poweroff.json&#39;</span><span class="p">)</span>
+<span class="c1"># Apply scripts</span>
+<span class="n">execfile</span><span class="p">(</span><span class="s1">&#39;poweroff.py&#39;</span><span class="p">)</span>
+<span class="n">execfile</span><span class="p">(</span><span class="s1">&#39;report.py&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>As the example somewhat indirectly shows (at least to those familiar with
+<code class="xref py py-func docutils literal notranslate"><span class="pre">execfile()</span></code>), the global variable <em>fun3d</em> is accessible within the two
+<code class="docutils literal notranslate"><span class="pre">.py</span></code> scripts, and modifications to the settings must reference the variable
+<em>fun3d</em>.  For example, if the goal of <code class="file docutils literal notranslate"><span class="pre">poweroff.py</span></code> is to set some extra
+data book components, the following example might work.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List of components to add</span>
+<span class="n">comps</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nozzle1&#39;, &quot;</span><span class="n">nozzle2</span><span class="s2">&quot;, &quot;</span><span class="n">nozzle3</span><span class="s2">&quot;, &quot;</span><span class="n">attachment</span><span class="s2">&quot;]</span>
+<span class="c1"># Add them as default force and moment components</span>
+<span class="n">cntl</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s2">&quot;DataBook&quot;</span><span class="p">][</span><span class="s2">&quot;Components&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">comps</span>
+
+<span class="c1"># Loop through four boosters</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="c1"># Name of booster</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;booster</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Name of line load component</span>
+    <span class="n">comp</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_ll&quot;</span> <span class="o">%</span> <span class="n">name</span>
+    <span class="c1"># Clocking angle so that *CN* points away from core rocket</span>
+    <span class="n">clock</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="mf">90.0</span>
+    <span class="c1"># Add the component</span>
+    <span class="n">cntl</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s2">&quot;DataBook&quot;</span><span class="p">][</span><span class="s2">&quot;Components&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+    <span class="c1"># Add the definition</span>
+    <span class="n">cntl</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s2">&quot;DataBook&quot;</span><span class="p">][</span><span class="n">comp</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Type&quot;</span><span class="p">:</span> <span class="s2">&quot;LineLoad&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CompID&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+        <span class="s2">&quot;Transformations&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span> <span class="s2">&quot;Euler321&quot;</span><span class="p">,</span> <span class="s2">&quot;phi&quot;</span><span class="p">:</span><span class="n">clock</span><span class="p">}]</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>As this example might make clear, these scripting capabilities have a tendency
+to require or at least benefit from knowledge of the pyCart API. However, while
+API functions may be useful for generating these scripts, all settings <em>can</em> be
+accessed as if they were in a standard Python <a class="reference internal" href="../api/python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>. The JSON file is
+basically read in as a dictionary that is saved in <em>fun3d.opts</em>. For example,
+the <code class="docutils literal notranslate"><span class="pre">&quot;Report&quot;</span></code> section of the JSON file becomes <code class="docutils literal notranslate"><span class="pre">fun3d.opts[&quot;Report&quot;]</span></code>, and
+the <em>Report</em> <span class="menuselection">‣</span> <em>Subfigures</em> subsection is
+<code class="docutils literal notranslate"><span class="pre">fun3d.opts[&quot;Report&quot;][&quot;Subfigures&quot;]</span></code>, etc.</p>
+<p>Finally, because this <code class="docutils literal notranslate"><span class="pre">-x</span></code> command uses global variables, the scripts must
+use the correct variable name for the global settings handle, which is
+<code class="docutils literal notranslate"><span class="pre">cntl</span></code>.</p>
+</section>
+<section id="global-settings-from-python-modules">
+<span id="cape-scripting-initfunction"></span><h2><span class="section-number">3.8.2. </span>Global Settings from Python Modules<a class="headerlink" href="#global-settings-from-python-modules" title="Permalink to this heading">¶</a></h2>
+<p>A more reliable method for altering settings from Python instead of JSON
+(reliable in the sense that users might forget to add all the correct <code class="docutils literal notranslate"><span class="pre">-x</span></code>
+options while <em>InitFunction</em> contains the proper information right within the
+JSON file) is to use initialization functions.</p>
+<p>In a way, using modules instead of scripts is slightly more work than using
+scripts with the <code class="docutils literal notranslate"><span class="pre">-x</span></code> option because it requires creating a module (which is
+similar to creating a script) and also setting a few options within the JSON
+file.</p>
+<p>These functions are controlled in the JSON file using the global
+<code class="docutils literal notranslate"><span class="pre">&quot;InitFunction&quot;</span></code> setting.  Consider the following example from a master JSON
+input file.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;PythonPath&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tools&quot;</span><span class="p">],</span>
+<span class="s2">&quot;Modules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tfm&quot;</span><span class="p">],</span>
+<span class="s2">&quot;InitFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tfm.InitArchive&quot;</span><span class="p">],</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>These options import a module called <code class="xref py py-mod docutils literal notranslate"><span class="pre">tfm</span></code>, which may be defined in the
+file <code class="file docutils literal notranslate"><span class="pre">tools/tfm.py</span></code> or <code class="file docutils literal notranslate"><span class="pre">tools/tfm/__init__.py</span></code>.  The function
+<code class="xref py py-func docutils literal notranslate"><span class="pre">tfm.InitArchive()</span></code> is called immediately after the JSON file is
+interpreted, and it can be used to change the settings otherwise specified in
+the JSON file.</p>
+<p>Example contents of the <code class="xref py py-mod docutils literal notranslate"><span class="pre">tfm</span></code> module defined in <code class="file docutils literal notranslate"><span class="pre">tools/tfm.py</span></code> are
+below:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># System modules</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># Define an initialization function</span>
+<span class="k">def</span> <span class="nf">InitArchive</span><span class="p">(</span><span class="n">cntl</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Change archive folder to appropriate value for calling user&quot;&quot;&quot;</span>
+    <span class="c1"># Set the *ArchiveFolder* option using an environment variable</span>
+    <span class="n">cntl</span><span class="o">.</span><span class="n">opts</span><span class="o">.</span><span class="n">set_ArchiveFolder</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;/u/&#39;</span><span class="p">,</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;USER&#39;</span><span class="p">],</span> <span class="s1">&#39;sls&#39;</span><span class="p">,</span> <span class="s1">&#39;10008&#39;</span><span class="p">,</span> <span class="s1">&#39;f3_tfm&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This function is not terribly complex but accomplishes a task that cannot be
+performed directly in the JSON file.  The example is useful under the
+assumption that multiple users are running cases from the same input file, and
+this allows each user to set the archive location to their own home folder even
+while using identical input files.</p>
+<p>The input to the <em>InitFunction</em> is the <a class="reference internal" href="../api/cape/cntl.html#cape.cntl.Cntl" title="cape.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cntl.Cntl</span></code></a>,
+<a class="reference internal" href="../api/pycart/cntl.html#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a>, <a class="reference internal" href="../api/pyfun/cntl.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a>, etc. global
+object that contains all of the settings from the JSON file and an interface to
+act on them. The JSON settings are stored within <em>cntl.opts</em>.</p>
+<p>The <em>InitFunction</em> can be used to accomplish many more complex tasks.  For
+example you may have many different databook components that have their own
+definitions, which may or may not be simple.  It is usually possible to define
+these within the JSON file, but it may require many lines of repetitive text.
+The <em>InitFunction</em> allows the user define these components within a loop using
+Python code and the Cape API.</p>
+</section>
+<section id="special-settings-for-individual-runs-from-python-modules">
+<span id="cape-scripting-casefunction"></span><h2><span class="section-number">3.8.3. </span>Special Settings for Individual Runs from Python Modules<a class="headerlink" href="#special-settings-for-individual-runs-from-python-modules" title="Permalink to this heading">¶</a></h2>
+<p>A related capability to the <em>InitFunction</em> is the so-called <em>CaseFunction</em>.
+This specifies one or more Python functions to be executed from a user-defined
+module(s) after all other setup tasks for a case have been performed.  This
+allows the user to customize CFD settings or any other aspect of the inputs in
+ways that might not be possible with other Cape capabilities.  In short, this
+can be used as a method of last resort if the environment does not support the
+level of customization required by the user.</p>
+<p>Some common examples of <em>CaseFunction</em> include:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Specifying a different CFL number or some other CFD input as a function
+of freestream Mach number or angle of attack</p></li>
+<li><p>Using different meshes according to Mach number or, for example, a
+control surface deflection setting</p></li>
+<li><p>Adding an extra <em>Label</em> or <em>tag</em> input variable that allows the user to
+select from various options using the run matrix</p></li>
+<li><p>Translating and/or rotating part of the mesh according to values in the
+run matrix (although this is typically better supported with the
+<em>TriFunction</em>, <em>translation</em>, <em>rotation</em>, or <em>ConfigFunction</em> keys)</p></li>
+<li><p>Defining a run matrix variable and using it to turn on/off powered
+boundary conditions</p></li>
+<li><p>Creating a function to alter the PBS setting s for each case</p></li>
+</ul>
+</div></blockquote>
+<p>An example input from the JSON file is shown below.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;PythonPath&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tools&quot;</span><span class="p">],</span>
+<span class="s2">&quot;Modules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tfm&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;freeair&quot;</span><span class="p">],</span>
+<span class="s2">&quot;InitFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tfm.InitArchive&quot;</span><span class="p">],</span>
+<span class="s2">&quot;CaseFunction&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;freeair.ApplyLabel&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;freeair.ApplyTag&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This instructs Cape to run the functions <code class="xref py py-func docutils literal notranslate"><span class="pre">freeair.ApplyLabel()</span></code> and then
+<code class="xref py py-func docutils literal notranslate"><span class="pre">freeair.ApplyTag()</span></code> after the case has been mostly set up but CFD input
+files have not been written yet.  Some of the Python syntax for an example for
+FUN3D is shown below.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Filter options based on the *Label* trajectory key</span>
+<span class="k">def</span> <span class="nf">ApplyLabel</span><span class="p">(</span><span class="n">cntl</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="c1"># Get nahdle to FUN3D namelist</span>
+    <span class="n">f3d</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s2">&quot;Fun3D&quot;</span><span class="p">]</span>
+    <span class="c1"># Key section names</span>
+    <span class="n">nsp</span> <span class="o">=</span> <span class="s2">&quot;nonlinear_solver_parameters&quot;</span>
+    <span class="n">lsp</span> <span class="o">=</span> <span class="s2">&quot;linear_solver_parameers&quot;</span>
+    <span class="n">ifm</span> <span class="o">=</span> <span class="s2">&quot;inviscid_flux_method&quot;</span>
+    <span class="c1"># Get *Label* value from the run matrix for case *i*</span>
+    <span class="n">lbl</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">Label</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="c1"># Select default label if empty</span>
+    <span class="k">if</span> <span class="n">lbl</span><span class="p">:</span>
+        <span class="c1"># Status update</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Using Label &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">lbl</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Check Mach number for this case</span>
+        <span class="n">mach</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">mach</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="c1"># Filter the default value based on Mach</span>
+        <span class="k">if</span> <span class="n">mach</span> <span class="o">&lt;</span> <span class="mf">1.4</span><span class="p">:</span>
+            <span class="c1"># Select label to run uRANS</span>
+            <span class="n">lbl</span> <span class="o">=</span> <span class="s1">&#39;d&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Different label to run RANS</span>
+            <span class="n">lbl</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span>
+    <span class="c1"># Actually change the settings ...</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>As can be seen from this example, the inputs to a <em>CaseFunction</em> are the
+overall control object (<a class="reference internal" href="../api/pycart/cntl.html#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a>,
+<a class="reference internal" href="../api/pyover/cntl.html#cape.pyover.cntl.Cntl" title="cape.pyover.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.cntl.Cntl</span></code></a>, or <a class="reference internal" href="../api/pyfun/cntl.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a>) and the case
+number <em>i</em>.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.8. Advanced Setup: Python Scripting</a><ul>
+<li><a class="reference internal" href="#using-scripts-to-modify-or-add-settings">3.8.1. Using Scripts to Modify or Add Settings</a></li>
+<li><a class="reference internal" href="#global-settings-from-python-modules">3.8.2. Global Settings from Python Modules</a></li>
+<li><a class="reference internal" href="#special-settings-for-individual-runs-from-python-modules">3.8.3. Special Settings for Individual Runs from Python Modules</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="report/tecplot.html"
+                          title="previous chapter"><span class="section-number">3.7.5. </span>Automated Tecplot Figures</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../pycart/index.html"
+                          title="next chapter"><span class="section-number">4. </span>pyCart Documentation</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/common/scripting.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../pycart/index.html" title="4. pyCart Documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="report/tecplot.html" title="3.7.5. Automated Tecplot Figures"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.8. </span>Advanced Setup: Python Scripting</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.1 documentation, 2023
+  </div>
+
+
+  </body>
+</html>

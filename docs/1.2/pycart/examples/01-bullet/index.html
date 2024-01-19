@@ -1,0 +1,302 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>4.1.1. Demo 1: Basic Usage on a Bullet Shape &#8212; CAPE 1.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="4.1.2. Demo 2: Closer Analysis of Simple Arrow Shape" href="../02-arrow/index.html" />
+    <link rel="prev" title="4.1. Examples Using pyCart" href="../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../02-arrow/index.html" title="4.1.2. Demo 2: Closer Analysis of Simple Arrow Shape"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="4.1. Examples Using pyCart"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.1. </span>Demo 1: Basic Usage on a Bullet Shape</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="demo-1-basic-usage-on-a-bullet-shape">
+<span id="pycart-ex-bullet"></span><h1><span class="section-number">4.1.1. </span>Demo 1: Basic Usage on a Bullet Shape<a class="headerlink" href="#demo-1-basic-usage-on-a-bullet-shape" title="Permalink to this heading">¶</a></h1>
+<p>The first example demonstrates how pyCart and other CAPE interfaces generate
+parametrically named files, interact with the master JSON file, and set up
+Cart3D input files.</p>
+<p>To get started, clone this repo and run the following commands:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/nasa-ddalle/pycart01-bullet.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>pycart01-bullet
+<span class="gp">$ </span>./copy-files.py
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>work/
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will copy all of the files into a newly created <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder. Follow
+the instructions below by entering that <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder; the purpose is that
+you can easily delete the <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder and restart the tutorial at any
+time.</p>
+<p>The geometry used for this shape is a simple capped cylinder with 4890 faces
+and three components.  The surface triangulation, <code class="docutils literal notranslate"><span class="pre">bullet.tri</span></code>, is shown
+below.</p>
+<blockquote>
+<div><figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../../../_images/bullet01.png"><img alt="../../../_images/bullet01.png" src="../../../_images/bullet01.png" style="width: 4in;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 4.1 </span><span class="caption-text">Simple bullet shape triangulation with three components</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>The files in the folder before starting the demo are shown below.  The required
+Cart3D input file <code class="docutils literal notranslate"><span class="pre">input.cntl</span></code> is not present.  In this case, pyCart will
+use a template file without any problems.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>: Master input file for pyCart</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matrix.csv</span></code>: List of run conditions for each variable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bullet.tri</span></code>: Surface triangulation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Config.xml</span></code>: Names for surface components</p></li>
+</ul>
+</div></blockquote>
+<p>A good first test command is the following, which checks the status of each
+case in the matrix.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pycart<span class="w"> </span>-c
+Case<span class="w"> </span>Config/Run<span class="w"> </span>Directory<span class="w">  </span>Status<span class="w">  </span>Iterations<span class="w">  </span>Que<span class="w"> </span>CPU<span class="w"> </span>Time
+----<span class="w"> </span>---------------------<span class="w"> </span>-------<span class="w"> </span>-----------<span class="w"> </span>---<span class="w"> </span>--------
+<span class="m">0</span><span class="w">    </span>poweroff/m1.5a0.0b0.0<span class="w"> </span>---<span class="w">     </span>/<span class="w">           </span>.
+<span class="m">1</span><span class="w">    </span>poweroff/m2.0a0.0b0.0<span class="w"> </span>---<span class="w">     </span>/<span class="w">           </span>.
+<span class="m">2</span><span class="w">    </span>poweroff/m2.0a2.0b0.0<span class="w"> </span>---<span class="w">     </span>/<span class="w">           </span>.
+<span class="m">3</span><span class="w">    </span>poweroff/m2.0a2.0b2.0<span class="w"> </span>---<span class="w">     </span>/<span class="w">           </span>.
+
+---<span class="o">=</span><span class="m">4</span>,
+</pre></div>
+</div>
+</div></blockquote>
+<p>Somehow pyCart has determined that there are four configurations to run at a
+variety of Mach numbers, angles of attack, and sideslip angles.  Since the
+master input file <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code> has the default name, the script finds it
+automatically.  We could have used <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-c</span> <span class="pre">-f</span> <span class="pre">pyCart.json</span></code> as well.</p>
+<p>Now let’s set up and run the first case using the command <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-n</span> <span class="pre">1</span></code>.
+This will create the results folder <code class="docutils literal notranslate"><span class="pre">poweroff/</span></code>, create a volume mesh in that
+folder, create a case folder for the first set of conditions to run, and call
+<code class="docutils literal notranslate"><span class="pre">flowCart</span></code> to analyze the first case.  The output is shown below.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m1.5a0.0b0.0 ---     /           .</span>
+<span class="go">  Group name: &#39;poweroff&#39; (index 0)</span>
+<span class="go">  Preparing surface triangulation...</span>
+<span class="go">  Reading tri file(s) from root directory.</span>
+<span class="go">     Writing triangulation: &#39;Components.i.tri&#39;</span>
+<span class="go"> &gt; autoInputs -r 8 -t Components.i.tri -maxR 10</span>
+<span class="go"> &gt; cubes -pre preSpec.c3d.cntl -maxR 10 -reorder -a 10 -b 2</span>
+<span class="go"> &gt; mgPrep -n 3</span>
+<span class="go">Using template for &#39;input.cntl&#39; file</span>
+<span class="go">     Starting case &#39;poweroff/m1.5a0.0b0.0&#39;.</span>
+<span class="go"> &gt; flowCart -his -clic -N 200 -y_is_spanwise -limiter 2 -T -cfl 1.1 -mg 3 -binaryIO -tm 0</span>
+
+<span class="go">Submitted or ran 1 job(s).</span>
+
+<span class="go">---=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Obviously in these examples the value of <code class="docutils literal notranslate"><span class="pre">PWD</span></code> will differ from what is shown
+in these examples. This command tells pyCart to loop through the cases until if
+finds the first case to run. Because no cases had been run prior to executing
+this command, the following steps are taken as a result of this command.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Read project settings from <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code> and conditions from
+<code class="docutils literal notranslate"><span class="pre">matrix.csv</span></code></p></li>
+<li><p>Create the mesh</p></li>
+</ol>
+<blockquote>
+<div><ol class="upperalpha simple">
+<li><p>Create the <code class="docutils literal notranslate"><span class="pre">poweroff</span></code> folder</p></li>
+<li><p>Read the <code class="docutils literal notranslate"><span class="pre">bullet.tri</span></code> file and write it to the <code class="docutils literal notranslate"><span class="pre">poweroff</span></code> folder</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">autoInputs</span></code> to create <code class="docutils literal notranslate"><span class="pre">input.c3d</span></code> and <code class="docutils literal notranslate"><span class="pre">preSpec.c3d.cntl</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">cubes</span></code> to create volume mesh <code class="docutils literal notranslate"><span class="pre">Mesh.c3d</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">mgPrep</span></code> to prepare the grid for multigrid</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Prepare the case</p></li>
+</ol>
+<blockquote>
+<div><ol class="upperalpha simple">
+<li><p>Create the <code class="docutils literal notranslate"><span class="pre">m1.50a0.0b0.0</span></code> folder</p></li>
+<li><p>Link the mesh files created in the previous step</p></li>
+<li><p>Copy the template <code class="docutils literal notranslate"><span class="pre">input.cntl</span></code> and set Mach, alpha, and beta</p></li>
+<li><p>Create a PBS script <code class="docutils literal notranslate"><span class="pre">run_cart3d.pbs</span></code></p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Run the case by calling <code class="docutils literal notranslate"><span class="pre">bash</span> <span class="pre">run_cart3d.pbs</span></code></p></li>
+</ol>
+</div></blockquote>
+<p>Let’s run another case.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m1.5a0.0b0.0 DONE    200/200     .   0.0</span>
+<span class="go">1    poweroff/m2.0a0.0b0.0 ---     /           .</span>
+<span class="go">Using template for &#39;input.cntl&#39; file</span>
+<span class="go">     Starting case &#39;poweroff/m2.0a0.0b0.0&#39;.</span>
+<span class="go"> &gt; flowCart -his -clic -N 200 -y_is_spanwise -limiter 2 -T -cfl 1.1 -mg 3 -binaryIO -tm 0</span>
+
+<span class="go">Submitted or ran 1 job(s).</span>
+
+<span class="go">---=1, DONE=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This time, there is a lot less output because the different cases can use the
+same mesh.  In the description of the tasks performed for the first case, step
+2 can be skipped for subsequent runs.</p>
+<p>Now let’s check the status again using <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-c</span></code>.  The CPU time is listed as
+0.0 for both cases because this simple case takes about 0.02 total hours, and
+the display is rounded down to the nearest tenth of an hour.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m1.5a0.0b0.0 DONE    200/200     .   0.0</span>
+<span class="go">1    poweroff/m2.0a0.0b0.0 DONE    200/200     .   0.0</span>
+<span class="go">2    poweroff/m2.0a2.0b0.0 ---     /           .</span>
+<span class="go">3    poweroff/m2.0a2.0b2.0 ---     /           .</span>
+
+<span class="go">---=2, DONE=2,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>That’s it.  Now we have two cases run in separate folders, and each looks like a
+standard Cart3D run.  Finally, the default call to <code class="docutils literal notranslate"><span class="pre">pycart</span></code> is equivalent to
+<code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-f</span> <span class="pre">pyCart.json</span> <span class="pre">-n</span> <span class="pre">10</span></code>.  Running this case in the current folder gives
+the following results.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m1.5a0.0b0.0 DONE    200/200     .   0.0</span>
+<span class="go">1    poweroff/m2.0a0.0b0.0 DONE    200/200     .   0.0</span>
+<span class="go">2    poweroff/m2.0a2.0b0.0 ---     /           .</span>
+<span class="go">Using template for &#39;input.cntl&#39; file</span>
+<span class="go">     Starting case &#39;poweroff/m2.0a2.0b0.0&#39;.</span>
+<span class="go"> &gt; flowCart -his -clic -N 200 -y_is_spanwise -limiter 2 -T -cfl 1.1 -mg 3 -binaryIO -tm 0</span>
+<span class="go">3    poweroff/m2.0a2.0b2.0 ---     /           .</span>
+<span class="go">Using template for &#39;input.cntl&#39; file</span>
+<span class="go">     Starting case &#39;poweroff/m2.0a2.0b2.0&#39;.</span>
+<span class="go"> &gt; flowCart -his -clic -N 200 -y_is_spanwise -limiter 2 -T -cfl 1.1 -mg 3 -binaryIO -tm 0</span>
+
+<span class="go">Submitted or ran 2 job(s).</span>
+
+<span class="go">---=2, DONE=2,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This attempts to run 10 cases, but the first two cases are already completed.
+Since there are only two cases remaining, the job quits before it can get to 10
+cases.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../index.html"
+                          title="previous chapter"><span class="section-number">4.1. </span>Examples Using pyCart</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../02-arrow/index.html"
+                          title="next chapter"><span class="section-number">4.1.2. </span>Demo 2: Closer Analysis of Simple Arrow Shape</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/pycart/examples/01-bullet/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../02-arrow/index.html" title="4.1.2. Demo 2: Closer Analysis of Simple Arrow Shape"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="4.1. Examples Using pyCart"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.1. </span>Demo 1: Basic Usage on a Bullet Shape</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.1 documentation, 2023
+  </div>
+
+
+  </body>
+</html>

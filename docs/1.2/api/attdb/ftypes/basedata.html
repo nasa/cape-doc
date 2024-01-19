@@ -1,0 +1,1075 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.attdb.ftypes.basedata: Common ATTDB data container &#8212; CAPE 1.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.attdb.ftypes.basefile: Common ATTDB file type attributes" href="basefile.html" />
+    <link rel="prev" title="cape.attdb.ftypes: Data file type interfaces" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="basefile.html" title="cape.attdb.ftypes.basefile: Common ATTDB file type attributes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.attdb.ftypes: Data file type interfaces"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code>: Data file type interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata</span></code>: Common ATTDB data container</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.attdb.ftypes.basedata">
+<span id="cape-attdb-ftypes-basedata-common-attdb-data-container"></span><h1><a class="reference internal" href="#module-cape.attdb.ftypes.basedata" title="cape.attdb.ftypes.basedata"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata</span></code></a>: Common ATTDB data container<a class="headerlink" href="#module-cape.attdb.ftypes.basedata" title="Permalink to this heading">¶</a></h1>
+<p>This module provides the class <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseData</span></code></a> as a subclass of
+<a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> that contains methods common to each of the other
+data-like file readers and writers.  It defines common attributes that
+each other such data-file class will have and provides several other
+common methods.</p>
+<p>For example, it defines a <code class="xref py py-func docutils literal notranslate"><span class="pre">__repr__()</span></code> method that updates with the
+name of any other classes subclassed to this one.</p>
+<p>Finally, having this common template class provides a single point of
+entry for testing if an object is based on a product of the
+<a class="reference internal" href="index.html#module-cape.attdb.ftypes" title="cape.attdb.ftypes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code></a> module.  The following Python sample tests if
+any Python object <em>db</em> is an instance of any class from this data-file
+collection.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">isinstance</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">cape</span><span class="o">.</span><span class="n">attdb</span><span class="o">.</span><span class="n">ftypes</span><span class="o">.</span><span class="n">BaseData</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.basedata.</span></span><span class="sig-name descname"><span class="pre">BaseData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic class for storing data from a data-style file</p>
+<p>This class has no initialization method, and as such it is unlikely
+that there will be instances of this class in use.  It provides
+methods and structure to other classes.</p>
+<p>This class inherits from <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> and can be used in that
+matter in the unlikely event that it’s useful.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csv.CSVFile</span></code></dt><dd><p>CSV file interface</p>
+</dd>
+<dt><em>db.cols</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of columns read</p>
+</dd>
+<dt><em>db.opts</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataOpts" title="cape.attdb.ftypes.basedata.BaseDataOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataOpts</span></code></a> | <em>db._optscls</em></dt><dd><p>Options for this instance</p>
+</dd>
+<dt><em>db.defns</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataDefn" title="cape.attdb.ftypes.basedata.BaseDataDefn"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataDefn</span></code></a>]</dt><dd><p>Definitions for each data column</p>
+</dd>
+<dt><em>db[col]</em>: <a class="reference internal" href="../../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> | <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></dt><dd><p>Numeric array or list of strings for column <em>col</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">See also<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csv.CSVFile</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.csv.CSVSimple</span></code></p></li>
+<li><p><a class="reference internal" href="textdata.html#cape.attdb.ftypes.textdata.TextDataFile" title="cape.attdb.ftypes.textdata.TextDataFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.textdata.TextDataFile</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-11-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2020-02-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Second version</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.apply_defn_tag">
+<span class="sig-name descname"><span class="pre">apply_defn_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tagdef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.apply_defn_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply default <em>Tag</em> to each definition</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">apply_defn_tag</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">tagdef</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column for which to set default tag</p>
+</dd>
+<dt><em>tagdef</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Manually specified default tag</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-03-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.apply_defns_tag">
+<span class="sig-name descname"><span class="pre">apply_defns_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.apply_defns_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply all default <em>Tag</em> properties based on col name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">apply_defns_tag</span><span class="p">(</span><span class="n">cols</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>cols</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-03-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.burst_col">
+<span class="sig-name descname"><span class="pre">burst_col</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.burst_col" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a column and its definition is possible</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">V</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">burst_col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>V</em>: <a class="reference internal" href="../../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> | <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">scalar</span></code></dt><dd><p>Value(s) to save for specified column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-03-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.create_defn">
+<span class="sig-name descname"><span class="pre">create_defn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.create_defn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and save a new definition based on values</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">defn</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">create_defn</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column (used for “Tag” option)</p>
+</dd>
+<dt><em>V</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | <a class="reference internal" href="../../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a></dt><dd><p>Values for column <em>col</em></p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Optional overrides or additions to definition</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>defn</em>: <em>db._defncls</em></dt><dd><p>Definition based on values <em>V</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Effects<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>db[col]</em>: <em>defn</em></p>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-03-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.create_tagcols">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_tagcols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.create_tagcols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invert <em>cls._tagmap</em> as <em>cls._tagcols</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="bp">cls</span><span class="o">.</span><span class="n">create_tagcols</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cls</em>: <a class="reference internal" href="../../python.html#type" title="type"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></dt><dd><p>Data container class</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-03-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.finish_defn">
+<span class="sig-name descname"><span class="pre">finish_defn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.finish_defn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply any defaults to a data column definition</p>
+<p>This first checks instance options like <code class="docutils literal notranslate"><span class="pre">&quot;DefaultType&quot;</span></code> and
+then the global defaults such as <code class="docutils literal notranslate"><span class="pre">defn._rc[&quot;Type&quot;]</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">finish_defn</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Data column name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-03-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Split from <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData.finish_defns" title="cape.attdb.ftypes.basedata.BaseData.finish_defns"><code class="xref py py-func docutils literal notranslate"><span class="pre">finish_defns()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.finish_defns">
+<span class="sig-name descname"><span class="pre">finish_defns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.finish_defns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply any defaults to data column definitions</p>
+<p>This first checks instance options like <code class="docutils literal notranslate"><span class="pre">&quot;DefaultType&quot;</span></code> and
+then the global defaults such as <code class="docutils literal notranslate"><span class="pre">defn._rc[&quot;Type&quot;]</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">finish_defns</span><span class="p">(</span><span class="n">cols</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>cols</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of column names</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-02-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2020-03-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Handled <em>db.opts</em> properly</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.genr8_defn">
+<span class="sig-name descname"><span class="pre">genr8_defn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.genr8_defn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a new definition based on values</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">defn</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">genr8_defn</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column (used for “Tag” option)</p>
+</dd>
+<dt><em>V</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | <a class="reference internal" href="../../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a></dt><dd><p>Values for column <em>col</em></p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Optional overrides or additions to definition</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>defn</em>: <em>db._defncls</em></dt><dd><p>Definition based on values <em>V</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-03-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.get_col_by_tag">
+<span class="sig-name descname"><span class="pre">get_col_by_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coldef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.get_col_by_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the first <em>col</em> with specified “Tag”, if any</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_col_by_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>tag</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target “Tag” from column definitions</p>
+</dd>
+<dt><em>coldef</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Default column name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>col</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column for which to set default tag</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-03-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.get_col_dtype">
+<span class="sig-name descname"><span class="pre">get_col_dtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.get_col_dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data type for specific column</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="bp">cls</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_col_type</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cls</em>: <code class="docutils literal notranslate"><span class="pre">&quot;int&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;float&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;str&quot;</span></code> | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of data type</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.get_col_prop">
+<span class="sig-name descname"><span class="pre">get_col_prop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vdef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.get_col_prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get property for specific column</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_col_prop</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">vdef</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column</p>
+</dd>
+<dt><em>prop</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of property</p>
+</dd>
+<dt><em>vdef</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">any</span></code></dt><dd><p>Default value if not specified in <em>db.opts</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">any</span></code></dt><dd><p>Value of <code class="docutils literal notranslate"><span class="pre">defns[col][prop]</span></code> if possible; defaulting to
+<code class="docutils literal notranslate"><span class="pre">defns[&quot;_&quot;][prop]</span></code> or <em>vdef</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2019-12-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Moved from <code class="xref py py-mod docutils literal notranslate"><span class="pre">basefile</span></code></p></li>
+<li><p>2020-02-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Using <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataDefn" title="cape.attdb.ftypes.basedata.BaseDataDefn"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataDefn</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.get_col_type">
+<span class="sig-name descname"><span class="pre">get_col_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.get_col_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data type for specific column</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="bp">cls</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_col_type</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cls</em>: <code class="docutils literal notranslate"><span class="pre">&quot;int&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;float&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;str&quot;</span></code> | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of data type</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.get_cols_by_tag">
+<span class="sig-name descname"><span class="pre">get_cols_by_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.get_cols_by_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all <em>col</em> with specified “Tag”</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_cols_by_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>tag</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target “Tag” from column definitions</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cols</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Name of column for which to set default tag</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-03-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.get_defn">
+<span class="sig-name descname"><span class="pre">get_defn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.get_defn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get column definition for data column <em>col</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">defn</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_defn</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>defn</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataDefn" title="cape.attdb.ftypes.basedata.BaseDataDefn"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataDefn</span></code></a></dt><dd><p>Definition for column <em>col</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-02-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.get_defns">
+<span class="sig-name descname"><span class="pre">get_defns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.get_defns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dictionary of column definitions</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">defns</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_defns</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>defns</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataDefn" title="cape.attdb.ftypes.basedata.BaseDataDefn"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataDefn</span></code></a>]</dt><dd><p>Definitions for each column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2020-02-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Move from <code class="docutils literal notranslate"><span class="pre">opts[&quot;Definitions&quot;]</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.get_option">
+<span class="sig-name descname"><span class="pre">get_option</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vdef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.get_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an option, appealing to default if necessary</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">vdef</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>key</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of option to access</p>
+</dd>
+<dt><em>vdef</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">any</span></code></dt><dd><p>Default option for fallback</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>val</em>: <em>db.opts[key]</em> | <em>db.opts._rc[key]</em> | <em>vdef</em></dt><dd><p>Value of option with fallback</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2020-02-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Using <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataOpts" title="cape.attdb.ftypes.basedata.BaseDataOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataOpts</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.keeponly_cols">
+<span class="sig-name descname"><span class="pre">keeponly_cols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.keeponly_cols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all columns outside specified list</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">keeponly_cols</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>cols</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | <a class="reference internal" href="../../python.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a></dt><dd><p>Name of columns to <strong>keep</strong></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-12-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.make_defn">
+<span class="sig-name descname"><span class="pre">make_defn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.make_defn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access or create new definition based on values</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">defn</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">make_defn</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column (used for “Tag” option)</p>
+</dd>
+<dt><em>V</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | <a class="reference internal" href="../../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a></dt><dd><p>Values for column <em>col</em></p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Optional overrides or additions to definition</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>defn</em>: <em>db._defncls</em></dt><dd><p>Definition based on values <em>V</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Effects<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>db[col]</em>: <em>defn</em></p>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-03-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2020-06-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; merge defns</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.process_kw">
+<span class="sig-name descname"><span class="pre">process_kw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.process_kw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process options from keyword arguments</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">process_kw</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Arbitrary keyword arguments</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataOpts" title="cape.attdb.ftypes.basedata.BaseDataOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataOpts</span></code></a> | <em>db._optscls</em></dt><dd><p>Validated options from <em>kw</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-02-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.process_kw_values">
+<span class="sig-name descname"><span class="pre">process_kw_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.process_kw_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process <em>Values</em> argument for manual column values</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">process_kw_values</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>Values</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of values for some columns</p>
+</dd>
+<dt><em>ExpandScalars</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Option to expand scalars to match dimension of arrays</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-11-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2019-12-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; Remove pop() and output</p></li>
+<li><p>2020-02-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; Delete <em>kw</em> as input</p></li>
+<li><p>2023-02-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.3; ExpandScalars -&gt; False</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.rename_col">
+<span class="sig-name descname"><span class="pre">rename_col</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.rename_col" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename a column <em>col1</em> to <em>col2</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">rename_col</span><span class="p">(</span><span class="n">col1</span><span class="p">,</span> <span class="n">col2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="basefile.html#cape.attdb.ftypes.basefile.BaseFile" title="cape.attdb.ftypes.basefile.BaseFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basefile.BaseFile</span></code></a></dt><dd><p>Data file interface</p>
+</dd>
+<dt><em>col1</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Existing column name</p>
+</dd>
+<dt><em>col2</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>New column name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-07-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.save_col">
+<span class="sig-name descname"><span class="pre">save_col</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.save_col" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a column value, updating other metadata as needed</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">save_col</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column</p>
+</dd>
+<dt><em>v</em>: <a class="reference internal" href="../../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> | <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">scalar</span></code></dt><dd><p>Value(s) to save for specified column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-11-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Started</p></li>
+<li><p>2020-02-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Tweak rules for <em>cols</em> append</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseData.set_col_prop">
+<span class="sig-name descname"><span class="pre">set_col_prop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseData.set_col_prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set property for specific column</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">set_col_prop</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">vdef</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseData" title="cape.attdb.ftypes.basedata.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata.BaseData</span></code></a></dt><dd><p>Data container</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column</p>
+</dd>
+<dt><em>prop</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of property</p>
+</dd>
+<dt><em>v</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">any</span></code></dt><dd><p>Value to set to <code class="docutils literal notranslate"><span class="pre">defns[col][prop]</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-01-22 <code class="docutils literal notranslate"><span class="pre">&#64;aburkhea</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseDataDefn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.basedata.</span></span><span class="sig-name descname"><span class="pre">BaseDataDefn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_optsdict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_warnmode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseDataDefn" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseDataDefn.finish">
+<span class="sig-name descname"><span class="pre">finish</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseDataDefn.finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply default values from <em>defn._rc</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">defn</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>defn</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataDefn" title="cape.attdb.ftypes.basedata.BaseDataDefn"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataDefn</span></code></a></dt><dd><p>Data column definition</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-01-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2020-03-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Rename <code class="xref py py-func docutils literal notranslate"><span class="pre">apply_defaults()</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseDataDefn.get_dtype">
+<span class="sig-name descname"><span class="pre">get_dtype</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseDataDefn.get_dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get (and save) data type (<em>DType</em>) based on <em>Type</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dtype</span> <span class="o">=</span> <span class="n">defn</span><span class="o">.</span><span class="n">get_dtype</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>defn</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataDefn" title="cape.attdb.ftypes.basedata.BaseDataDefn"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataDefn</span></code></a></dt><dd><p>Data column definition</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>dtype</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Data type, looks up <em>Type</em> in <em>defn._dtypemap</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-02-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseDataOpts">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.attdb.ftypes.basedata.</span></span><span class="sig-name descname"><span class="pre">BaseDataOpts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_optsdict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_warnmode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseDataOpts" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseDataOpts.finish_defn">
+<span class="sig-name descname"><span class="pre">finish_defn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseDataOpts.finish_defn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply any defaults to a data column definition</p>
+<p>This first checks instance options like <code class="docutils literal notranslate"><span class="pre">&quot;DefaultType&quot;</span></code> and
+then the global defaults such as <code class="docutils literal notranslate"><span class="pre">defn._rc[&quot;Type&quot;]</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">finish_defn</span><span class="p">(</span><span class="n">defn</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataOpts" title="cape.attdb.ftypes.basedata.BaseDataOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataOpts</span></code></a></dt><dd><p>Options interface for <a class="reference internal" href="index.html#module-cape.attdb.ftypes" title="cape.attdb.ftypes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code></a></p>
+</dd>
+<dt><em>defn</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataDefn" title="cape.attdb.ftypes.basedata.BaseDataDefn"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataDefn</span></code></a> | <em>opts._defncls</em></dt><dd><p>Data column definition</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-01-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseDataOpts.get_defn">
+<span class="sig-name descname"><span class="pre">get_defn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseDataOpts.get_defn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the processed definition, without applying defaults</p>
+<p>This method returns a definition-type instance that checks the
+<em>Definition</em> option and dict-like options like <em>Types</em>.
+Defaults, both from the definition class’s <em>_rc</em> attribute and
+options like <em>DefaultType</em>, are not applied so that they can be
+automatically guessed from the data.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">defn</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_defn</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataOpts" title="cape.attdb.ftypes.basedata.BaseDataOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataOpts</span></code></a></dt><dd><p>Options interface for <a class="reference internal" href="index.html#module-cape.attdb.ftypes" title="cape.attdb.ftypes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code></a></p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of data column</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>defn</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataDefn" title="cape.attdb.ftypes.basedata.BaseDataDefn"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataDefn</span></code></a> | <em>opts._defncls</em></dt><dd><p>Column definition for <em>col</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-01-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.attdb.ftypes.basedata.BaseDataOpts.set_defncls">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_defncls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defncls</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.attdb.ftypes.basedata.BaseDataOpts.set_defncls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add all the “default” options from a definition class</p>
+<p>This loops through the options in <em>defncls._optlist</em> and adds
+two versions of them to <em>cls._optlist</em>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Prefixed with “Default”</p></li>
+<li><p>Suffixed with “s”</p></li>
+</ul>
+</div></blockquote>
+<p>For example if <em>defncls._optlist</em> has <code class="docutils literal notranslate"><span class="pre">&quot;Type&quot;</span></code>, this adds
+<code class="docutils literal notranslate"><span class="pre">&quot;DefaultType&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;Types&quot;</span></code> to <em>cls._optlist</em>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="bp">cls</span><span class="o">.</span><span class="n">set_defncls</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">defncls</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cls</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataOpts" title="cape.attdb.ftypes.basedata.BaseDataOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataOpts</span></code></a></dt><dd><p>Parent options class</p>
+</dd>
+<dt><em>defncls</em>: <a class="reference internal" href="#cape.attdb.ftypes.basedata.BaseDataDefn" title="cape.attdb.ftypes.basedata.BaseDataDefn"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataDefn</span></code></a></dt><dd><p>Definition options class</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-01-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code>: Data file type interfaces</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="basefile.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basefile</span></code>: Common ATTDB file type attributes</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/attdb/ftypes/basedata.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="basefile.html" title="cape.attdb.ftypes.basefile: Common ATTDB file type attributes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.attdb.ftypes: Data file type interfaces"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes</span></code>: Data file type interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.attdb.ftypes.basedata</span></code>: Common ATTDB data container</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.1 documentation, 2023
+  </div>
+
+
+  </body>
+</html>

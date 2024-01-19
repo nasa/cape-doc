@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>7.3. pykes: Python interface for Kestrel &#8212; CAPE 1.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7.4. pyover: Python interface for OVERFLOW" href="pyover.html" />
+    <link rel="prev" title="7.2. pyfun: Python interface for FUN3D" href="pyfun.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyover.html" title="7.4. pyover: Python interface for OVERFLOW"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyfun.html" title="7.2. pyfun: Python interface for FUN3D"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">7. </span>CAPE Executables</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7.3. </span><strong>pykes</strong>: Python interface for Kestrel</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-cape.clidoc.pykes"></span><section id="pykes-python-interface-for-kestrel">
+<h1><span class="section-number">7.3. </span><strong>pykes</strong>: Python interface for Kestrel<a class="headerlink" href="#pykes-python-interface-for-kestrel" title="Permalink to this heading">¶</a></h1>
+<p>This function provides a master interface for pyKes.  All of the
+functionality from this script is also accessible from the
+<a class="reference internal" href="../api/pykes/index.html#module-cape.pykes" title="cape.pykes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes</span></code></a> module using relatively simple commands.</p>
+<dl class="field-list">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pykes<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Examples<span class="colon">:</span></dt>
+<dd class="field-even"><p>The basic call submits all (up to 10) jobs prescribed in the file
+<code class="docutils literal notranslate"><span class="pre">pyKes.json</span></code></p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pykes
+</pre></div>
+</div>
+</div></blockquote>
+<p>This command uses the inputs from <code class="docutils literal notranslate"><span class="pre">poweron.json</span></code> and only displays
+statuses.  No jobs are submitted.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pykes<span class="w"> </span>-f<span class="w"> </span>poweron.json<span class="w"> </span>-c
+</pre></div>
+</div>
+</div></blockquote>
+<p>This command submits at most 5 jobs, but only cases with “Mach”
+greater than 1.5 and “alpha” equal to 0.0 are considered as
+candidates.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pykes<span class="w"> </span>-n<span class="w"> </span><span class="m">5</span><span class="w"> </span>--cons<span class="w"> </span><span class="s2">&quot;Mach&gt;0.5, alpha==0.0&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="option-list">
+<dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
+<dd><p>Display this help message and quit</p>
+</dd>
+<dt><kbd><span class="option">-c</span></kbd></dt>
+<dd><p>Check status and don’t submit new jobs</p>
+</dd>
+<dt><kbd><span class="option">-j</span></kbd></dt>
+<dd><p>Show the PBS job numbers as well</p>
+</dd>
+<dt><kbd><span class="option">-f <var>FJSON</var></span></kbd></dt>
+<dd><p>Use pykes input file <em>FJSON</em> (default: <code class="docutils literal notranslate"><span class="pre">&quot;pyKes.json&quot;</span></code>)</p>
+</dd>
+<dt><kbd><span class="option">-x <var>FPY</var></span></kbd></dt>
+<dd><p>Executes Python script <em>FPY</em> using <code class="docutils literal notranslate"><span class="pre">execfile()</span></code> prior to
+taking other actions; can be stacked using
+<code class="docutils literal notranslate"><span class="pre">-x</span> <span class="pre">FPY1</span> <span class="pre">-x</span> <span class="pre">FPY2</span> <span class="pre">-x</span> <span class="pre">FPY3</span></code>, etc.</p>
+</dd>
+<dt><kbd><span class="option">-n <var>NJOB</var></span></kbd></dt>
+<dd><p>Submit at most <em>NJOB</em> PBS scripts (default: 10)</p>
+</dd>
+<dt><kbd><span class="option">--auto</span></kbd></dt>
+<dd><p>Automatically submit enough jobs so that “RunControl” &gt; “NJob”
+cases are running or queued (default)</p>
+</dd>
+<dt><kbd><span class="option">--no-auto</span></kbd></dt>
+<dd><p>Ignore “RunControl” &gt; “NJob”</p>
+</dd>
+<dt><kbd><span class="option">--kill</span>, <span class="option">--qdel</span></kbd></dt>
+<dd><p>Remove jobs from the queue and stop them abruptly</p>
+</dd>
+<dt><kbd><span class="option">--cons <var>CNS</var></span></kbd></dt>
+<dd><p>Only consider cases that pass a list of inequalities separated
+by commas.  Constraints must use variable names (not
+abbreviations) from the trajectory described in <em>FJSON</em>.</p>
+</dd>
+<dt><kbd><span class="option">-I <var>INDS</var></span></kbd></dt>
+<dd><p>Specify a list of cases to consider directly by index</p>
+</dd>
+<dt><kbd><span class="option">--re <var>REGEX</var></span></kbd></dt>
+<dd><p>Restrict to cases whose name matches regular expression <em>REGEX</em></p>
+</dd>
+<dt><kbd><span class="option">--filter <var>TXT</var></span></kbd></dt>
+<dd><p>Restrict to cases whose name contains the exact text <em>TXT</em></p>
+</dd>
+<dt><kbd><span class="option">--glob <var>TXT</var></span></kbd></dt>
+<dd><p>Restrict to cases whose name matches the glob <em>TXT</em></p>
+</dd>
+<dt><kbd><span class="option">--unmarked</span></kbd></dt>
+<dd><p>Find only cases that are not marked PASS or ERROR</p>
+</dd>
+<dt><kbd><span class="option">--report <var>RP</var></span></kbd></dt>
+<dd><p>Update report named <em>RP</em> (default: first report in JSON file)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>–report RP –force</dt><dd><p>Update report and ignore cache for all subfigures</p>
+</dd>
+<dt>–report RP –no-compile</dt><dd><p>Create images for a report but don’t compile into PDF</p>
+</dd>
+<dt>–report RP –rm</dt><dd><p>Delete existing caches of report subfigure images instead of
+creating them</p>
+</dd>
+</dl>
+<dl class="option-list">
+<dt><kbd><span class="option">--dezombie</span></kbd></dt>
+<dd><p>Clean up ZOMBIE cases, which appear to be RUNNING but have no
+recently modified files</p>
+</dd>
+<dt><kbd><span class="option">--exec</span>, <span class="option">-e <var>CMD</var></span></kbd></dt>
+<dd><p>Execute command <em>CMD</em> in each folder</p>
+</dd>
+<dt><kbd><span class="option">--aero</span>, <span class="option">--fm</span>, <span class="option">--fm <var>GLOB</var></span></kbd></dt>
+<dd><p>Loop through cases and extract force and moment coefficients and
+statistics for force &amp; moment components described in the
+“DataBook” section of <em>FJSON</em>; only process components whose
+names wildcard <em>GLOB</em> if used</p>
+</dd>
+<dt><kbd><span class="option">--ll</span>, <span class="option">--ll <var>GLOB</var></span></kbd></dt>
+<dd><p>Loop through cases and extract force and moment coefficients and
+statistics for LineLoad components described in the “DataBook”
+section of <em>FJSON</em>; only process components whose names match
+wildcard <em>GLOB</em> if used</p>
+</dd>
+<dt><kbd><span class="option">--triqfm</span>, <span class="option">--triqfm <var>GLOB</var></span></kbd></dt>
+<dd><p>Loop through cases and extract force and moment coefficients and
+statistics for TriqFM components described in the “DataBook”
+section of <em>FJSON</em>; only process components whose names match
+wildcard <em>GLOB</em> if used</p>
+</dd>
+<dt><kbd><span class="option">--PASS</span></kbd></dt>
+<dd><p>Mark cases with “p” in run matrix to denote completion</p>
+</dd>
+<dt><kbd><span class="option">--ERROR</span></kbd></dt>
+<dd><p>Mark cases with “E” in run matrix to denote that they cannot run</p>
+</dd>
+<dt><kbd><span class="option">--unmark</span></kbd></dt>
+<dd><p>Remove PASS or ERROR markings from selected cases</p>
+</dd>
+<dt><kbd><span class="option">--clean</span></kbd></dt>
+<dd><p>Delete any files as described by <em>ProgressDeleteFiles</em> in
+“Archive” section of <em>FJSON</em>; can be run at any time</p>
+</dd>
+<dt><kbd><span class="option">--archive</span></kbd></dt>
+<dd><p>Create archive according to options in “Archive” section of
+<em>FJSON</em> and clean up run folder if case is marked PASS</p>
+</dd>
+<dt><kbd><span class="option">--skeleton</span></kbd></dt>
+<dd><p>Do <code class="docutils literal notranslate"><span class="pre">--archive</span></code> actions and also delete even more files
+according to <em>FJSON</em> settings like <em>SkeletonDeleteFiles</em></p>
+</dd>
+<dt><kbd><span class="option">--rm</span></kbd></dt>
+<dd><p>Delete a cases folder [<code class="docutils literal notranslate"><span class="pre">--no-prompt</span></code> w/o interactive prompt]</p>
+</dd>
+<dt><kbd><span class="option">--apply</span></kbd></dt>
+<dd><p>Apply the settings in <em>FJSON</em> to all cases; way to quickly
+change settings for one or more runs</p>
+</dd>
+<dt><kbd><span class="option">--extend</span>, <span class="option">--extend <var>E</var></span></kbd></dt>
+<dd><p>Add another run of the current last phase <em>E</em> times (default: 1)</p>
+</dd>
+<dt><kbd><span class="option">--imax <var>M</var></span></kbd></dt>
+<dd><p>Do not extend a case (when using –extend) beyond iteration <em>M</em></p>
+</dd>
+<dt><kbd><span class="option">--no-start</span></kbd></dt>
+<dd><p>When running a command that would otherwise submit jobs, set
+them up but do not start (or submit) them</p>
+</dd>
+<dt><kbd><span class="option">--no-restart</span></kbd></dt>
+<dd><p>When submitting new jobs, only submit new cases (status ‘—‘)</p>
+</dd>
+<dt><kbd><span class="option">-q <var>QUEUE</var></span></kbd></dt>
+<dd><p>Submit to a specific queue, overrides value in JSON file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (of <code class="docutils literal notranslate"><span class="pre">pycart</span></code>)</p></li>
+<li><p>2021-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="pyfun.html"
+                          title="previous chapter"><span class="section-number">7.2. </span><strong>pyfun</strong>: Python interface for FUN3D</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="pyover.html"
+                          title="next chapter"><span class="section-number">7.4. </span><strong>pyover</strong>: Python interface for OVERFLOW</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/bin/pykes.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyover.html" title="7.4. pyover: Python interface for OVERFLOW"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pyfun.html" title="7.2. pyfun: Python interface for FUN3D"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">7. </span>CAPE Executables</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7.3. </span><strong>pykes</strong>: Python interface for Kestrel</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.1 documentation, 2023
+  </div>
+
+
+  </body>
+</html>

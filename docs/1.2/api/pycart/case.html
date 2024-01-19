@@ -1,0 +1,915 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.pycart.case: Case Control Module &#8212; CAPE 1.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pycart.cmdgen: Create commands for Cart3D executables" href="cmdgen.html" />
+    <link rel="prev" title="cape.pycart.aeroCsh: Cart3D aero.csh interface" href="aeroCsh.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cmdgen.html" title="cape.pycart.cmdgen: Create commands for Cart3D executables"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="aeroCsh.html" title="cape.pycart.aeroCsh: Cart3D aero.csh interface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.case</span></code>: Case Control Module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.pycart.case">
+<span id="cape-pycart-case-case-control-module"></span><h1><a class="reference internal" href="#module-cape.pycart.case" title="cape.pycart.case"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.case</span></code></a>: Case Control Module<a class="headerlink" href="#module-cape.pycart.case" title="Permalink to this heading">¶</a></h1>
+<section id="id1">
+<h2><a class="reference internal" href="#module-cape.pycart.case" title="cape.pycart.case"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.case</span></code></a>: Case Control Module<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h2>
+<p>This module contains the important function <code class="xref py py-func docutils literal notranslate"><span class="pre">case.run_flowCart()</span></code>,
+which actually runs <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> or <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code>, along with the
+utilities that support it.</p>
+<p>For instance, it contains function to determine how many iterations have
+been run, what the working folder is (e.g. <code class="docutils literal notranslate"><span class="pre">.</span></code>, <code class="docutils literal notranslate"><span class="pre">adapt00</span></code>, etc.),
+and what command-line options to run.</p>
+<p>It also contains Cart3D-specific versions of some of the generic methods
+from <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.case</span></code>.  All of the functions in that module are also
+available here.</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pycart.case.</span></span><span class="sig-name descname"><span class="pre">CaseRunner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.check_error">
+<span class="sig-name descname"><span class="pre">check_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.check_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check iteration counts and residual change for most recent run</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runner</span><span class="o">.</span><span class="n">check_error</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>ierr</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Return code</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">CheckSuccess</span></code>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.check_unsteady_history">
+<span class="sig-name descname"><span class="pre">check_unsteady_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'history.dat'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#bool" title="bool"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#cape.pycart.case.CaseRunner.check_unsteady_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the current history ends with an unsteady iteration</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">check_unsteady_history</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;history.dat&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>q</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether the last iteration of <em>fname</em> has a ‘.’ in it</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-12-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">CheckUnsteadyHistory</span></code>)</p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.finalize_files">
+<span class="sig-name descname"><span class="pre">finalize_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.finalize_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up files names after running one cycle of phase <em>j</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runner</span><span class="o">.</span><span class="n">finalize_files</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-03-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">FinalizeFiles</span></code>)</p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.get_check_resub_iter">
+<span class="sig-name descname"><span class="pre">get_check_resub_iter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.get_check_resub_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get total iteration number of most recent check file</p>
+<p>This is the sum of the most recent steady iteration number and
+unsteady iteration number.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_check_resub_iter</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of most recent check file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-11-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">GetRestartIter</span></code>)</p></li>
+<li><p>2014-11-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1 (<code class="docutils literal notranslate"><span class="pre">GetCheckResubIter</span></code>)</p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.get_current_resid">
+<span class="sig-name descname"><span class="pre">get_current_resid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.get_current_resid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the most recent iteration including unsaved progress</p>
+<p>Iteration numbers from time-accurate restarts are corrected to match
+the global iteration numbering.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L1</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">get_current_resid</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>L1</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Last L1 residual</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-01-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">GetCurrentResid</span></code>)</p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.get_first_resid">
+<span class="sig-name descname"><span class="pre">get_first_resid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.get_first_resid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the first iteration</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L1</span> <span class="o">=</span> <span class="n">GetFirstResid</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>L1</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>First L1 residual</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-07-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">GetFirstResid</span></code>)</p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.get_history_iter">
+<span class="sig-name descname"><span class="pre">get_history_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'history.dat'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#float" title="float"><span class="pre">float</span></a></span></span><a class="headerlink" href="#cape.pycart.case.CaseRunner.get_history_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read last iteration number from a <code class="docutils literal notranslate"><span class="pre">history.dat</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">get_history_iter</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;history.dat&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;history.dat&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Last iteration number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-11-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">GetHistoryIter</span></code>)</p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.get_history_resid">
+<span class="sig-name descname"><span class="pre">get_history_resid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'history.dat'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.get_history_resid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the last residual in a <code class="file docutils literal notranslate"><span class="pre">history.dat</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L1</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">get_history_resid</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;history.dat&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>L1</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Last L1 residual</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-01-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">GetHistoryResid</span></code>)</p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.get_steady_iter">
+<span class="sig-name descname"><span class="pre">get_steady_iter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.get_steady_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get iteration number of most recent steady check file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">get_steady_iter</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of most recent check file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">GetRestartIter</span></code>)</p></li>
+<li><p>2014-11-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1 (<code class="docutils literal notranslate"><span class="pre">GetSteadyIter</span></code>)</p></li>
+<li><p>2023-06-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; support <code class="docutils literal notranslate"><span class="pre">BEST/FLOW/</span></code></p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.3; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.get_unsteady_iter">
+<span class="sig-name descname"><span class="pre">get_unsteady_iter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.get_unsteady_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get iteration number of most recent unsteady check file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">get_unsteady_iter</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of most recent check file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-11-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">GetUnsteadyIter</span></code>)</p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.get_working_folder">
+<span class="sig-name descname"><span class="pre">get_working_folder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.pycart.case.CaseRunner.get_working_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get working folder, <code class="docutils literal notranslate"><span class="pre">.</span></code>,  <code class="docutils literal notranslate"><span class="pre">adapt??/</span></code>, or <code class="docutils literal notranslate"><span class="pre">adapt??/FLOW/</span></code></p>
+<p>This function must be called from the top level of a case.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fdir</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">get_working_folder</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fdir</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Most recently used working folder with a history file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-11-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">GetWorkingFolder</span></code>)</p></li>
+<li><p>2023-06-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; support <code class="docutils literal notranslate"><span class="pre">adapt??/FLOW/</span></code></p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.1; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.getx_iter">
+<span class="sig-name descname"><span class="pre">getx_iter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.getx_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the residual of the most recent iteration</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">getx_iter</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Most recent index written to <code class="file docutils literal notranslate"><span class="pre">history.dat</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-11-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">GetCurrentIter</span></code>)</p></li>
+<li><p>2023-06-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; check <code class="docutils literal notranslate"><span class="pre">adapt??/FLOW/</span></code></p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.getx_restart_iter">
+<span class="sig-name descname"><span class="pre">getx_restart_iter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.getx_restart_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get total iteration number of most recent check file</p>
+<p>This is the sum of the most recent steady iteration and the most
+recent unsteady iteration.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">getx_restart_iter</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of most recent check file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-11-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">GetRestartIter</span></code>)</p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.prepare_files">
+<span class="sig-name descname"><span class="pre">prepare_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.prepare_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare file names appropriate to run phase <em>i</em> of Cart3D</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runner</span><span class="o">.</span><span class="n">prepare_files</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-03-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">PrepareFiles</span></code>)</p></li>
+<li><p>2023-07-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.run_autoInputs">
+<span class="sig-name descname"><span class="pre">run_autoInputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.run_autoInputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">autoInputs</span></code> if necessary</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runner</span><span class="o">.</span><span class="n">run_autoInputs</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-04-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">CaseAutoInputs</span></code>)</p></li>
+<li><p>2023-07-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.run_cubes">
+<span class="sig-name descname"><span class="pre">run_cubes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.run_cubes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">cubes</span></code> and <code class="docutils literal notranslate"><span class="pre">mgPrep</span></code> to create multigrid volume mesh</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runner</span><span class="o">.</span><span class="n">run_cubes</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-04-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">CaseCubes</span></code>)</p></li>
+<li><p>2023-07-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.run_phase">
+<span class="sig-name descname"><span class="pre">run_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.run_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run one phase using appropriate commands</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runner</span><span class="o">.</span><span class="n">run_phase</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-03-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">RunPhase</span></code>)</p></li>
+<li><p>2023-06-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1</p></li>
+<li><p>2023-07-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.run_phase_adaptive">
+<span class="sig-name descname"><span class="pre">run_phase_adaptive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></span><a class="headerlink" href="#cape.pycart.case.CaseRunner.run_phase_adaptive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run one phase using adaptive commands</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ierr</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">run_phase_adaptive</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>ierr</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Return code</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">RunAdaptive</span></code>)</p></li>
+<li><p>2023-07-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; rename; instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.run_phase_fixed">
+<span class="sig-name descname"><span class="pre">run_phase_fixed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></span><a class="headerlink" href="#cape.pycart.case.CaseRunner.run_phase_fixed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> the nominal way</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ierr</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">run_phase_fixed</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>ierr</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Return code</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">RunFixed</span></code>)</p></li>
+<li><p>2023-07-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.run_phase_with_restarts">
+<span class="sig-name descname"><span class="pre">run_phase_with_restarts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.run_phase_with_restarts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> a few iters at a time for averaging purposes</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">RunWithRestarts</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>ierr</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Return code</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.case.CaseRunner.set_restart_iter">
+<span class="sig-name descname"><span class="pre">set_restart_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ntd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.CaseRunner.set_restart_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a given check file as the restart point</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">runner</span><span class="o">.</span><span class="n">set_restart_iter</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ntd</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>runner</em>: <a class="reference internal" href="#cape.pycart.case.CaseRunner" title="cape.pycart.case.CaseRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseRunner</span></code></a></dt><dd><p>Controller to run one case of solver</p>
+</dd>
+<dt><em>n</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Restart iteration number, defaults to most recent available</p>
+</dd>
+<dt><em>ntd</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Unsteady iteration number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-10-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">SetRestartIter</span></code>)</p></li>
+<li><p>2014-11-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; support time-accurate</p></li>
+<li><p>2023-07-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; rename, instance method</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pycart.case.GetTriqFile">
+<span class="sig-prename descclassname"><span class="pre">cape.pycart.case.</span></span><span class="sig-name descname"><span class="pre">GetTriqFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.GetTriqFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get most recent <code class="docutils literal notranslate"><span class="pre">triq</span></code> file and its associated iterations</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ftriq</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">i0</span><span class="p">,</span> <span class="n">i1</span> <span class="o">=</span> <span class="n">GetTriqFile</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>ftriq</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">triq</span></code> file</p>
+</dd>
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of iterations included</p>
+</dd>
+<dt><em>i0</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>First iteration in the averaging</p>
+</dd>
+<dt><em>i1</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Last iteration in the averaging</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-09-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><dl class="simple">
+<dt>2021-12-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1</dt><dd><ul>
+<li><p>Check for <code class="docutils literal notranslate"><span class="pre">adapt??/</span></code> folder w/o <code class="docutils literal notranslate"><span class="pre">triq</span></code> file</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>2022-06-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; check <code class="docutils literal notranslate"><span class="pre">adapt??/FLOW/</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pycart.case.LinkFromGlob">
+<span class="sig-prename descclassname"><span class="pre">cape.pycart.case.</span></span><span class="sig-name descname"><span class="pre">LinkFromGlob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fglb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isplit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csplit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.LinkFromGlob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Link the most recent file to a basic unmarked file name</p>
+<p>The function will attempt to map numbered or adapted file names using the
+most recent iteration or adaptation.  The following gives examples of links
+that could be created using <code class="docutils literal notranslate"><span class="pre">Components.i.plt</span></code> for <em>fname</em> and
+<code class="docutils literal notranslate"><span class="pre">Components.[0-9]*.plt</span></code> for <em>fglb</em>.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Components.i.plt</span></code> (no link)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Components.01000.plt</span></code> –&gt; <code class="docutils literal notranslate"><span class="pre">Components.i.plt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adapt03/Components.i.plt</span></code> –&gt; <code class="docutils literal notranslate"><span class="pre">Components.i.plt</span></code></p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LinkFromGlob</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fglb</span><span class="p">,</span> <span class="n">isplit</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">csplit</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of unmarked file, like <code class="docutils literal notranslate"><span class="pre">Components.i.plt</span></code></p>
+</dd>
+<dt><em>fglb</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Glob for marked file names</p>
+</dd>
+<dt><em>isplit</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Which value of <code class="docutils literal notranslate"><span class="pre">f.split()</span></code> to use to get index number</p>
+</dd>
+<dt><em>csplit</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Character on which to split to find indices, usually <code class="docutils literal notranslate"><span class="pre">'.'</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-11-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pycart.case.LinkPLT">
+<span class="sig-prename descclassname"><span class="pre">cape.pycart.case.</span></span><span class="sig-name descname"><span class="pre">LinkPLT</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.LinkPLT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Link the most recent Tecplot files to fixed file names</p>
+<p>Uses file names <code class="file docutils literal notranslate"><span class="pre">Components.i.plt</span></code> and <code class="file docutils literal notranslate"><span class="pre">cutPlanes.plt</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LinkPLT</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-03-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2015-11-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Delegate work and support <code class="docutils literal notranslate"><span class="pre">*.dat</span></code> files</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pycart.case.run_flowCart">
+<span class="sig-prename descclassname"><span class="pre">cape.pycart.case.</span></span><span class="sig-name descname"><span class="pre">run_flowCart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.case.run_flowCart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup and run <code class="docutils literal notranslate"><span class="pre">flowCart</span></code>, <code class="docutils literal notranslate"><span class="pre">mpi_flowCart</span></code> command</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run_flowCart</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2014-12-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; Added <code class="xref py py-func docutils literal notranslate"><span class="pre">TarAdapt()</span></code></p></li>
+<li><p>2021-10-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; removed args</p></li>
+<li><p>2023-07-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; use CaseRunner</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.case</span></code>: Case Control Module</a><ul>
+<li><a class="reference internal" href="#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.case</span></code>: Case Control Module</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="aeroCsh.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.aeroCsh</span></code>: Cart3D <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> interface</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="cmdgen.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cmdgen</span></code>: Create commands for Cart3D executables</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pycart/case.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cmdgen.html" title="cape.pycart.cmdgen: Create commands for Cart3D executables"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="aeroCsh.html" title="cape.pycart.aeroCsh: Cart3D aero.csh interface"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.case</span></code>: Case Control Module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.1 documentation, 2023
+  </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,922 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>cape.tnakit.rstutils: Tools for writing ReST files &#8212; CAPE 1.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.tnakit.statutils: Statistics tools" href="statutils.html" />
+    <link rel="prev" title="cape.tnakit.promptutils: Interactive Console Prompt" href="promptutils.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="statutils.html" title="cape.tnakit.statutils: Statistics tools"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="promptutils.html" title="cape.tnakit.promptutils: Interactive Console Prompt"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit</span></code>: Basic TNA Python tool kit</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit.rstutils</span></code>: Tools for writing ReST files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.tnakit.rstutils">
+<span id="cape-tnakit-rstutils-tools-for-writing-rest-files"></span><h1><a class="reference internal" href="#module-cape.tnakit.rstutils" title="cape.tnakit.rstutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit.rstutils</span></code></a>: Tools for writing ReST files<a class="headerlink" href="#module-cape.tnakit.rstutils" title="Permalink to this heading">¶</a></h1>
+<p>This module contains tools to write text formatted for reStructuredText
+(reST). This includes various markup options and tools for creating the
+directives to include images.  Of particular interest are the functions
+<a class="reference internal" href="#cape.tnakit.rstutils.rst_image_table_lines" title="cape.tnakit.rstutils.rst_image_table_lines"><code class="xref py py-func docutils literal notranslate"><span class="pre">rst_image_table_lines()</span></code></a> and <a class="reference internal" href="#cape.tnakit.rstutils.rst_image_table" title="cape.tnakit.rstutils.rst_image_table"><code class="xref py py-func docutils literal notranslate"><span class="pre">rst_image_table()</span></code></a>, which
+simplifies the important task of creating a table that includes several
+images.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.py2rst">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">py2rst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.py2rst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a generic Python object to reST text</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">py2rst</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>v</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></dt><dd><p>Generic Python value</p>
+</dd>
+<dt><em>repr_types</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#type" title="type"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a> | <a class="reference internal" href="../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></dt><dd><p>Type or tuple of types for which to use <code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code></p>
+</dd>
+<dt><em>str_types</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#type" title="type"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a> | <a class="reference internal" href="../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></dt><dd><p>Type or tuple of types for which to use <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a></p>
+</dd>
+<dt><em>strict</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to raise exception for other types</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Marked up reST text</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-04-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.py2rst_any_repr">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">py2rst_any_repr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.py2rst_any_repr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Python to reST text using <code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">py2rst_any_repr</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">markup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>v</em>: any</dt><dd><p>Quantity to convert using <code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code></p>
+</dd>
+<dt><em>markup</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to add backticks around converted text</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text representation for reST</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-04-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.py2rst_any_str">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">py2rst_any_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.py2rst_any_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Python to reST text using <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">py2rst_any_str</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">markup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>v</em>: any</dt><dd><p>Quantity to convert using <code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code></p>
+</dd>
+<dt><em>markup</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to add backticks around converted text</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text representation for reST</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-04-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.py2rst_bool">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">py2rst_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.py2rst_bool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Python <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> to reST text</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">py2rst_bool</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">markup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>q</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code> | <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Boolean or subclass quantity to represent</p>
+</dd>
+<dt><em>markup</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to add backticks around converted text</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text representation for reST</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-04-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.py2rst_dict">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">py2rst_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.py2rst_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> to reST text</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">py2rst_dict</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>v</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Python dictionary to convert to reST text</p>
+</dd>
+<dt><em>alignfields</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to align right-hand side if text fits on one row</p>
+</dd>
+<dt><em>sort</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to sort dictionary keys</p>
+</dd>
+<dt><em>sortkey</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">function</span></code></dt><dd><p>Function to use for sorting if <em>sort</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+<dt><em>sortreverse</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to reverse the sort if <em>sort</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+<dt><em>markup</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Default value for option to add backticks</p>
+</dd>
+<dt><em>indent</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> ≥ 0</dt><dd><p>Number of spaces of indentation</p>
+</dd>
+<dt><em>hang</em>: {<em>indent</em>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> ≥ 0</dt><dd><p>Number of spaces of indent for continuation lines</p>
+</dd>
+<dt><em>tab</em>: {<code class="docutils literal notranslate"><span class="pre">4</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> ≥ 0</dt><dd><p>Number of spaces to add to deeper indentation levels</p>
+</dd>
+<dt><em>maxcols</em>: {<code class="docutils literal notranslate"><span class="pre">79</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> &gt; 0</dt><dd><p>Maximum number of columns in a line</p>
+</dd>
+<dt><em>markuplength</em>: {<code class="docutils literal notranslate"><span class="pre">50</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> ≥ 0</dt><dd><p>Cutoff length for default marked strings</p>
+</dd>
+<dt><em>fmt</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Format string for <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> and <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> entries</p>
+</dd>
+<dt><em>markups</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</dt><dd><p>Specific <em>markup</em> for types <code class="docutils literal notranslate"><span class="pre">&quot;int&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;float&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;str&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;__repr__&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;__str__&quot;</span></code></p>
+</dd>
+<dt><em>fmts</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Specific <em>fmt</em> for types <code class="docutils literal notranslate"><span class="pre">&quot;int&quot;</span></code> and/or <code class="docutils literal notranslate"><span class="pre">&quot;float&quot;</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-04-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.py2rst_float">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">py2rst_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%s'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.py2rst_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Python <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> to reST text</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">py2rst_float</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">markup</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>x</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Floating-point number to represent</p>
+</dd>
+<dt><em>markup</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to add backticks around converted text</p>
+</dd>
+<dt><em>fmt</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;%s&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Format string to convert <em>i</em> (printf style)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text representation for reST</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-04-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.py2rst_int">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">py2rst_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%s'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.py2rst_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Python <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> to reST text</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">py2rst_int</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">markup</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Integer to represent</p>
+</dd>
+<dt><em>markup</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to add backticks around converted text</p>
+</dd>
+<dt><em>fmt</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;%s&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Format string to convert <em>i</em> (printf style)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text representation for reST</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-04-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.py2rst_list">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">py2rst_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.py2rst_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a list to reST text</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">py2rst_list</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>V</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | <a class="reference internal" href="../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></dt><dd><p>List of Python quantitites to convert</p>
+</dd>
+<dt><em>markup</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Default value for option to add backticks</p>
+</dd>
+<dt><em>indent</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> ≥ 0</dt><dd><p>Number of spaces of indentation</p>
+</dd>
+<dt><em>hang</em>: {<em>indent</em>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> ≥ 0</dt><dd><p>Number of spaces of indent for continuation lines</p>
+</dd>
+<dt><em>maxcols</em>: {<code class="docutils literal notranslate"><span class="pre">79</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> &gt; 0</dt><dd><p>Maximum number of columns in a line</p>
+</dd>
+<dt><em>markuplength</em>: {<code class="docutils literal notranslate"><span class="pre">50</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> ≥ 0</dt><dd><p>Cutoff length for default marked strings</p>
+</dd>
+<dt><em>fmt</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Format string for <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> and <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> entries</p>
+</dd>
+<dt><em>markups</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</dt><dd><p>Specific <em>markup</em> for types <code class="docutils literal notranslate"><span class="pre">&quot;int&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;float&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;str&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;__repr__&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;__str__&quot;</span></code></p>
+</dd>
+<dt><em>fmts</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Specific <em>fmt</em> for types <code class="docutils literal notranslate"><span class="pre">&quot;int&quot;</span></code> and/or <code class="docutils literal notranslate"><span class="pre">&quot;float&quot;</span></code></p>
+</dd>
+<dt><em>strlist</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to always use list for lists of strings</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-04-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Versopm 1.0</p></li>
+<li><p>2021-03-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; <em>strlist</em> option</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.py2rst_mod">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">py2rst_mod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.py2rst_mod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Python module to reST text</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">py2rst_mod</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">markup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>mod</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">module</span></code></dt><dd><p>A Python module</p>
+</dd>
+<dt><em>markup</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Option to use reST <code class="docutils literal notranslate"><span class="pre">:mod:</span></code> role</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text representation for reST</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.py2rst_none">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">py2rst_none</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">markup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.py2rst_none" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert Python <code class="docutils literal notranslate"><span class="pre">None</span></code> to reST text</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">py2rst_none</span><span class="p">(</span><span class="n">markup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>markup</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to add backticks around converted text</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text representation for reST</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-04-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.py2rst_str">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">py2rst_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.py2rst_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Python <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> to reST text</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">py2rst_str</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>s</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>String to convert</p>
+</dd>
+<dt><em>indent</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> ≥ 0</dt><dd><p>Number of spaces of indentation</p>
+</dd>
+<dt><em>hang</em>: {<em>indent</em>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> ≥ 0</dt><dd><p>Number of spaces of indent for continuation lines</p>
+</dd>
+<dt><em>maxcols</em>: {<code class="docutils literal notranslate"><span class="pre">79</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> &gt; 0</dt><dd><p>Maximum number of columns in a line</p>
+</dd>
+<dt><em>markuplength</em>: {<code class="docutils literal notranslate"><span class="pre">50</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> ≥ 0</dt><dd><p>Cutoff length for default marked strings</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Marked up reST text</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-04-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.rst_directive_option">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">rst_directive_option</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.rst_directive_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an option name and value to an reST directive option</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">rst_directive_option</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>k</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of the option</p>
+</dd>
+<dt><em>v</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">any</span></code></dt><dd><p>Value for the option</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></dt><dd><p>reST version of the option declaration</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Cases<span class="colon">:</span></dt>
+<dd class="field-even"><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><em>v</em></p></th>
+<th class="head"><p><em>txt</em></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;:%s:&quot;</span> <span class="pre">%</span> <span class="pre">k</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><em>Else</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;:%s:</span> <span class="pre">%s&quot;</span> <span class="pre">%</span> <span class="pre">(k,</span> <span class="pre">v)</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-02-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.rst_figure">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">rst_figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ffig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.rst_figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the reST command to include an image</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">rst_figure</span><span class="p">(</span><span class="n">ffig</span><span class="p">,</span> <span class="n">caption</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>ffig</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of image to include (often like <code class="docutils literal notranslate"><span class="pre">&quot;myimage.*&quot;</span></code>)</p>
+</dd>
+<dt><em>caption</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></dt><dd><p>Caption to use to describe figure</p>
+</dd>
+<dt><em>tab</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;</span>&#160;&#160;&#160; <span class="pre">&quot;</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Indent character for a tab (default is 4 spaces)</p>
+</dd>
+<dt><em>indent</em>: {<em>tab</em>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Indentation to place before each line</p>
+</dd>
+<dt><em>width</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Image width option value</p>
+</dd>
+<dt><em>maxcol</em>, <em>maxcols</em>, <em>cwidth</em>: {<code class="docutils literal notranslate"><span class="pre">79</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> &gt; 0</dt><dd><p>Column number at which to wrap caption</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.tnakit.rstutils.rst_image_lines" title="cape.tnakit.rstutils.rst_image_lines"><code class="xref py py-func docutils literal notranslate"><span class="pre">rst_image_lines()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text of directive</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-02-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.rst_image">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">rst_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ffig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.rst_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the reST command to include an image</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">rst_image</span><span class="p">(</span><span class="n">ffig</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>ffig</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of image to include (often like <code class="docutils literal notranslate"><span class="pre">&quot;myimage.*&quot;</span></code>)</p>
+</dd>
+<dt><em>caption</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Caption to use to describe image</p>
+</dd>
+<dt><em>indent</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Indentation to place before each line</p>
+</dd>
+<dt><em>tab</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;</span>&#160;&#160;&#160; <span class="pre">&quot;</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Indent character for a tab (default is 4 spaces)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.tnakit.rstutils.rst_image_lines" title="cape.tnakit.rstutils.rst_image_lines"><code class="xref py py-func docutils literal notranslate"><span class="pre">rst_image_lines()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text of directive</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2019-02-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.rst_image_lines">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">rst_image_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ffig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'image'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.rst_image_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the reST command to include a figure</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span> <span class="o">=</span> <span class="n">rst_image_lines</span><span class="p">(</span><span class="n">ffig</span><span class="p">,</span> <span class="n">directive</span><span class="o">=</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>ffig</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of image to include (often like <code class="docutils literal notranslate"><span class="pre">&quot;myimage.*&quot;</span></code>)</p>
+</dd>
+<dt><em>directive</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;image&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;figure&quot;</span></code></dt><dd><p>Which image-inclusion command to use</p>
+</dd>
+<dt><em>tab</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;</span>&#160;&#160;&#160; <span class="pre">&quot;</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Indent character for a tab (default is 4 spaces)</p>
+</dd>
+<dt><em>sub</em>, <em>tag</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Abbreviated name  to use for a substitution instruction</p>
+</dd>
+<dt><em>width</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Image width option value</p>
+</dd>
+<dt><em>name</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Reference “name” to be used by later <code class="docutils literal notranslate"><span class="pre">:ref:</span></code> calls</p>
+</dd>
+<dt><em>target</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>URI for clickable image</p>
+</dd>
+<dt><em>alt</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Alternate text if image cannot be displayed</p>
+</dd>
+<dt><em>figwidth</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Width for figure, which contains an image (<code class="docutils literal notranslate"><span class="pre">&quot;figure&quot;</span></code> only)</p>
+</dd>
+<dt><em>maxcol</em>, <em>maxcols</em>, <em>cwidth</em>: {<code class="docutils literal notranslate"><span class="pre">79</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> &gt; 0</dt><dd><p>Column number at which to wrap</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>lines</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)</dt><dd><p>List of lines of text</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-02-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.rst_image_table">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">rst_image_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imgtable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'table'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.rst_image_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process lines used to create a reST table of images</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">rst_image_table</span><span class="p">(</span><span class="n">imgtable</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>imgtable</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>)</dt><dd><p>List of rows; each row is a list of cell contents</p>
+</dd>
+<dt><em>cell11</em>: <a class="reference internal" href="../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>See <a class="reference internal" href="#cape.tnakit.rstutils.unpack_image_cell" title="cape.tnakit.rstutils.unpack_image_cell"><code class="xref py py-func docutils literal notranslate"><span class="pre">unpack_image_cell()</span></code></a></p>
+</dd>
+<dt><em>colwidth</em>, <em>cellwidth</em>: {<code class="docutils literal notranslate"><span class="pre">72/ncol</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> &gt; 0</dt><dd><p>Minimum column width</p>
+</dd>
+<dt><em>cell_options</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Default cell options, passed to <a class="reference internal" href="#cape.tnakit.rstutils.rst_image_table_lines" title="cape.tnakit.rstutils.rst_image_table_lines"><code class="xref py py-func docutils literal notranslate"><span class="pre">rst_image_table_lines()</span></code></a></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>lines</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)</dt><dd><p>List of lines describing the table itself, without indentation</p>
+</dd>
+<dt><em>subs</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Substitution definition text to insert after the table</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-02-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.rst_image_table_lines">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">rst_image_table_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imgtable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.rst_image_table_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process lines used to create a reST table of images</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lines</span><span class="p">,</span> <span class="n">subs</span> <span class="o">=</span> <span class="n">rst_image_table_lines</span><span class="p">(</span><span class="n">imgtable</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>imgtable</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>)</dt><dd><p>List of rows; each row is a list of cell contents</p>
+</dd>
+<dt><em>cell11</em>: <a class="reference internal" href="../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>See <a class="reference internal" href="#cape.tnakit.rstutils.unpack_image_cell" title="cape.tnakit.rstutils.unpack_image_cell"><code class="xref py py-func docutils literal notranslate"><span class="pre">unpack_image_cell()</span></code></a></p>
+</dd>
+<dt><em>colwidth</em>, <em>cellwidth</em>: {<code class="docutils literal notranslate"><span class="pre">72/ncol</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> &gt; 0</dt><dd><p>Minimum column width</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>lines</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)</dt><dd><p>List of lines describing the table itself, without indentation</p>
+</dd>
+<dt><em>subs</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Substitution definition text to insert after the table</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-02-26 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.rst_param_list">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">rst_param_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.rst_param_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a docstring for a list of parameters</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">rst_param_list</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">types</span><span class="p">,</span> <span class="n">descrs</span><span class="p">,</span> <span class="n">alts</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>keys</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of parameters to describe</p>
+</dd>
+<dt><em>types</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Docstring of types for each <em>key</em> in <em>keys</em></p>
+</dd>
+<dt><em>descrs</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Docstring of descriptions for each <em>key</em> in <em>keys</em></p>
+</dd>
+<dt><em>alts</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Dictionary of optional names for certain keys</p>
+</dd>
+<dt><em>indent</em>: {<code class="docutils literal notranslate"><span class="pre">4</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> &gt; 0</dt><dd><p>Indent spaces for each line</p>
+</dd>
+<dt><em>tab</em>: {<code class="docutils literal notranslate"><span class="pre">4</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> &gt; 0</dt><dd><p>Additional spaces for further indentation</p>
+</dd>
+<dt><em>width</em>: {<code class="docutils literal notranslate"><span class="pre">72</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Maximum width for line of text (including spaces)</p>
+</dd>
+<dt><em>strict</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">False</span></code>, skip keys with missing type or description</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text in CAPE docstring format describing <em>keys</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.rst_title">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">rst_title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">char</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.rst_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ReST title from string</p>
+<p>This adds characters before (optionally) and after the title, creating
+valid syntax for ReStructuredText titles.  Examples of valid titles with
+the input string <code class="docutils literal notranslate"><span class="pre">&quot;Sample</span> <span class="pre">Title&quot;</span></code> are shown below:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Sample Title</span>
+<span class="gh">--------------</span>
+
+<span class="gh">==============</span>
+<span class="gh">Sample Title</span>
+<span class="gh">==============</span>
+
+<span class="gh">************</span>
+<span class="gh">Sample Title</span>
+<span class="gh">************</span>
+</pre></div>
+</div>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">rst_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">char</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>title</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></dt><dd><p>Input string, must be one line</p>
+</dd>
+<dt><em>char</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;-&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;=&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;*&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;^&quot;</span></code></dt><dd><p>Valid reST title adornment character (there are more than 4)</p>
+</dd>
+<dt><em>margin</em>: {<code class="docutils literal notranslate"><span class="pre">2</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> &gt;= 0</dt><dd><p>Extra characters to place after end of character</p>
+</dd>
+<dt><em>before</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to use and adornment line before title</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></dt><dd><p>String with title, adornment line(s), and 2 or 3 newline chars</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-02-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tnakit.rstutils.unpack_image_cell">
+<span class="sig-prename descclassname"><span class="pre">cape.tnakit.rstutils.</span></span><span class="sig-name descname"><span class="pre">unpack_image_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tnakit.rstutils.unpack_image_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unpack contents of an image table cell</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ffig</span><span class="p">,</span> <span class="n">cap</span><span class="p">,</span> <span class="n">kwj</span> <span class="o">=</span> <span class="n">unpack_image_cell</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ffig</span><span class="p">,</span> <span class="n">cap</span><span class="p">,</span> <span class="n">kwj</span> <span class="o">=</span> <span class="n">unpack_image_cell</span><span class="p">(</span><span class="n">ffig</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ffig</span><span class="p">,</span> <span class="n">cap</span><span class="p">,</span> <span class="n">kwj</span> <span class="o">=</span> <span class="n">unpack_image_cell</span><span class="p">((</span><span class="n">ffig</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ffig</span><span class="p">,</span> <span class="n">cap</span><span class="p">,</span> <span class="n">kwj</span> <span class="o">=</span> <span class="n">unpack_image_cell</span><span class="p">((</span><span class="n">ffig</span><span class="p">,</span> <span class="n">cap</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ffig</span><span class="p">,</span> <span class="n">cap</span><span class="p">,</span> <span class="n">kwj</span> <span class="o">=</span> <span class="n">unpack_image_cell</span><span class="p">((</span><span class="n">ffig</span><span class="p">,</span> <span class="n">kwj</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ffig</span><span class="p">,</span> <span class="n">cap</span><span class="p">,</span> <span class="n">kwj</span> <span class="o">=</span> <span class="n">unpack_image_cell</span><span class="p">((</span><span class="n">ffig</span><span class="p">,</span> <span class="n">cap</span><span class="p">,</span> <span class="n">kwj</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cell</em>: <a class="reference internal" href="../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Tuple of figure name, caption, and options or just figure name</p>
+</dd>
+<dt><em>ffig</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of figure to include</p>
+</dd>
+<dt><em>cap</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Caption to use with cell contents</p>
+</dd>
+<dt><em>kwj</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of specific options for this cell</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>ffig</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of figure to include</p>
+</dd>
+<dt><em>cap</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Caption to use with cell contents</p>
+</dd>
+<dt><em>kwj</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of specific options for this cell</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-02-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="promptutils.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit.promptutils</span></code>: Interactive Console Prompt</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="statutils.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit.statutils</span></code>: Statistics tools</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/tnakit/rstutils.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="statutils.html" title="cape.tnakit.statutils: Statistics tools"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="promptutils.html" title="cape.tnakit.promptutils: Interactive Console Prompt"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 1.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit</span></code>: Basic TNA Python tool kit</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tnakit.rstutils</span></code>: Tools for writing ReST files</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 1.1.1 documentation, 2023
+  </div>
+
+
+  </body>
+</html>
