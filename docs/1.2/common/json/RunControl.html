@@ -49,14 +49,22 @@
 <h1><span class="section-number">3.1.10. </span>Options for <code class="docutils literal notranslate"><span class="pre">RunControl</span></code> section<a class="headerlink" href="#options-for-runcontrol-section" title="Permalink to this heading">¶</a></h1>
 <p><strong>Option aliases:</strong></p>
 <ul class="simple">
+<li><p><em>CAPEFile</em> -&gt; <em>JSONFile</em></p></li>
+<li><p><em>Continue</em> -&gt; <em>ContinuePhase</em></p></li>
 <li><p><em>PostCmds</em> -&gt; <em>PostShellCmds</em></p></li>
+<li><p><em>Resubmit</em> -&gt; <em>ResubmitNextPhase</em></p></li>
+<li><p><em>nJob</em> -&gt; <em>NJob</em></p></li>
 <li><p><em>sbatch</em> -&gt; <em>slurm</em></p></li>
 </ul>
 <p><strong>Recognized options:</strong></p>
 <dl class="simple">
-<dt><em>Continue</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>whether restarts of same phase can use same job</p>
+<dt><em>ContinuePhase</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>whether restarts of same phase can use same job</p>
+</dd>
+<dt><em>JSONFile</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../api/python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>name of JSON file from which settings originated</p>
 </dd>
 <dt><em>MPI</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>} | <code class="docutils literal notranslate"><span class="pre">True</span></code></dt><dd><p>whether or not to run MPI in phase</p>
+</dd>
+<dt><em>NJob</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../../api/python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>number of jobs to run concurrently</p>
 </dd>
 <dt><em>PhaseIters</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../api/python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>check-point iterations for phase <em>j</em></p>
 </dd>
@@ -66,7 +74,15 @@
 </dd>
 <dt><em>PreMesh</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>} | <code class="docutils literal notranslate"><span class="pre">True</span></code></dt><dd><p>whether or not to generate volume mesh before submitting</p>
 </dd>
-<dt><em>Resubmit</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>} | <code class="docutils literal notranslate"><span class="pre">True</span></code></dt><dd><p>whether or not to submit new job at end of phase <em>j</em></p>
+<dt><em>RestartSamePhase</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>whether to restart same phase if needed</p>
+</dd>
+<dt><em>ResubmitNextPhase</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>} | <code class="docutils literal notranslate"><span class="pre">True</span></code></dt><dd><p>whether new job submits at end of phase</p>
+</dd>
+<dt><em>ResubmitSamePhase</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>} | <code class="docutils literal notranslate"><span class="pre">True</span></code></dt><dd><p>whether same-phase repeats need new job</p>
+</dd>
+<dt><em>RootDir</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../api/python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>(absolute) base folder from which CAPE settings were read</p>
+</dd>
+<dt><em>StartNextPhase</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>whether to start next phase or stop CAPE</p>
 </dd>
 <dt><em>Verbose</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>} | <code class="docutils literal notranslate"><span class="pre">True</span></code></dt><dd><p>“RunControl” verbosity flag</p>
 </dd>
@@ -78,11 +94,11 @@
 </dd>
 <dt><em>nIter</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../api/python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>number of iterations to run in phase <em>j</em></p>
 </dd>
-<dt><em>nProc</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../api/python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>number of cores/threads to run</p>
+<dt><em>nProc</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../api/python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>number of cores/threads to use per case</p>
 </dd>
-<dt><em>qsub</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>wheter or not to submit jobs with PBS</p>
+<dt><em>qsub</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>} | <code class="docutils literal notranslate"><span class="pre">True</span></code></dt><dd><p>whether or not to submit jobs with PBS</p>
 </dd>
-<dt><em>slurm</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>} | <code class="docutils literal notranslate"><span class="pre">True</span></code></dt><dd><p>wheter or not to submit jobs with Slurm</p>
+<dt><em>slurm</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>} | <code class="docutils literal notranslate"><span class="pre">True</span></code></dt><dd><p>whether or not to submit jobs with Slurm</p>
 </dd>
 </dl>
 <p><strong>Subsections:</strong></p>
@@ -161,7 +177,7 @@
     </div>
 
   <div class="footer">
-   CAPE version 1.1.1 documentation, 2023
+   CAPE version 1.2.0 documentation, 2024
   </div>
 
 
