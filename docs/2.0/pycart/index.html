@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4. pyCart Documentation &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=87629129" />
+    <script src="../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4.1. Examples Using pyCart" href="examples/index.html" />
+    <link rel="prev" title="3.8. Advanced Setup: Python Scripting" href="../common/scripting.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples/index.html" title="4.1. Examples Using pyCart"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../common/scripting.html" title="3.8. Advanced Setup: Python Scripting"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 2.0.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4. </span>pyCart Documentation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="pycart-documentation">
+<h1><span class="section-number">4. </span>pyCart Documentation<a class="headerlink" href="#pycart-documentation" title="Link to this heading">¶</a></h1>
+<p>Welcome to the documentation for pyCart, which provides a Python module for
+interacting with Cart3D cases.</p>
+<p>The basic usage for this module is to create a file called <code class="file docutils literal notranslate"><span class="pre">pyCart.json</span></code>
+and use the executable <code class="docutils literal notranslate"><span class="pre">pycart</span></code>. In addition to this control file for pyCart,
+several other Cart3D input files (or, more accurately, input template files)
+must be provided.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Cart3D input control file, <code class="file docutils literal notranslate"><span class="pre">input.cntl</span></code></p></li>
+<li><p>Surface triangulation file, <code class="file docutils literal notranslate"><span class="pre">Components.i.tri</span></code></p></li>
+<li><p>Optionally, <code class="file docutils literal notranslate"><span class="pre">Config.xml</span></code> to name and group surface components</p></li>
+<li><p>If an adaptive run, an adaptive run script, <code class="file docutils literal notranslate"><span class="pre">aero.csh</span></code></p></li>
+<li><p>There must also be a run matrix, which can either be specified within
+<code class="file docutils literal notranslate"><span class="pre">pyCart.json</span></code> or within a separate file</p></li>
+</ul>
+</div></blockquote>
+<p>All of these files can have different names for cases when that helps in the
+organization of runs, but these are the default file names.  If all these files
+exist in the same folder, the following is the basic command that will start up
+to 10 cases.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pycart
+</pre></div>
+</div>
+</div></blockquote>
+<p>The following will start up to <em>N</em> cases.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pycart<span class="w"> </span>-n<span class="w"> </span><span class="nv">$N</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will start no cases but show you the status of all the runs.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pycart<span class="w"> </span>-c
+</pre></div>
+</div>
+</div></blockquote>
+<p>Changing the flag to <code class="docutils literal notranslate"><span class="pre">-cj</span></code> will also show PBS job numbers for cases where a
+current job is either running or in the queue.  Supposing that the file is not
+called <code class="file docutils literal notranslate"><span class="pre">pyCart.json</span></code> but <code class="file docutils literal notranslate"><span class="pre">run.json</span></code>, the <code class="docutils literal notranslate"><span class="pre">-f</span></code> flag can be used.
+If at least some cases have partially run, the command to update or create the
+data book (i.e. analyze force and moment coefficients and statistics as
+specified in the control file), the <code class="docutils literal notranslate"><span class="pre">--aero</span></code> flag will lead to that action.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pycart<span class="w"> </span>-f<span class="w"> </span>run.json<span class="w"> </span>--aero
+</pre></div>
+</div>
+</div></blockquote>
+<p>The last option to be highlighted on the front page is the automated report
+generation capability.  This command generates a multipage PDF based on settings
+in the “Report” section of <code class="file docutils literal notranslate"><span class="pre">run.json</span></code> that usually gives a summary of each
+case in the run directory on its own page.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pycart<span class="w"> </span>-f<span class="w"> </span>run.json<span class="w"> </span>--report
+</pre></div>
+</div>
+</div></blockquote>
+<p>There are many more flags to <cite>pycart</cite>, including options to compress or archive
+folders, plot iterative histories, and constrain to only a subset of the run
+matrix.</p>
+<p>Controlling runs with pyCart really focuses on the <code class="file docutils literal notranslate"><span class="pre">pyCart.json</span></code> file.
+This file is divided into sections, some of which are mandatory.  The three
+most important sections describe the inputs to <cite>flowCart</cite>, the meshing options,
+and the nature of the run matrix including variable definitions.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">4.1. Examples Using pyCart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/01-bullet/index.html">4.1.1. Demo 1: Basic Usage on a Bullet Shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/02-arrow/index.html">4.1.2. Demo 2: Closer Analysis of Simple Arrow Shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/03-fins/index.html">4.1.3. Demo 3: Moving Fins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/04-bJet/index.html">4.1.4. Demo 4: Business Jet, Data Book, and Automated Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/05-adapt_bJet/index.html">4.1.5. Demo 5: Mesh Adaptation on a Business Jet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/06-lineload_arrow/index.html">4.1.6. Demo 6: Line Loads on the Arrow Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/07-data_arrow/index.html">4.1.7. Demo 7: Data Book Plots and Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/08-thrust/index.html">4.1.8. Demo 8: Powered Rocket and Thrust Vectoring</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="json/index.html">4.2. Control Files for pyCart (<code class="file docutils literal notranslate"><span class="pre">pyCart.json</span></code>)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="json/BatchPBS.html">4.2.1. Options for <code class="docutils literal notranslate"><span class="pre">BatchPBS</span></code> Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json/BatchSlurm.html">4.2.2. Options for <code class="docutils literal notranslate"><span class="pre">BatchSlurm</span></code> Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json/Config.html">4.2.3. Options for <code class="docutils literal notranslate"><span class="pre">Config</span></code> Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json/DataBook.html">4.2.4. Options for <code class="docutils literal notranslate"><span class="pre">DataBook</span></code> Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json/Functional.html">4.2.5. Options for <code class="docutils literal notranslate"><span class="pre">Functional</span></code> Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json/Mesh.html">4.2.6. Options for <code class="docutils literal notranslate"><span class="pre">Mesh</span></code> Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json/Report.html">4.2.7. Options for <code class="docutils literal notranslate"><span class="pre">Report</span></code> Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json/RunControl.html">4.2.8. Options for <code class="docutils literal notranslate"><span class="pre">RunControl</span></code> Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json/PBS.html">4.2.9. Options for <code class="docutils literal notranslate"><span class="pre">PBS</span></code> Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json/PostPBS.html">4.2.10. Options for <code class="docutils literal notranslate"><span class="pre">PostPBS</span></code> Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json/PostSlurm.html">4.2.11. Options for <code class="docutils literal notranslate"><span class="pre">PostSlurm</span></code> Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json/Slurm.html">4.2.12. Options for <code class="docutils literal notranslate"><span class="pre">Slurm</span></code> Section</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cart3D/index.html">4.3. Cart3D Documentation for pyCart</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../common/scripting.html"
+                          title="previous chapter"><span class="section-number">3.8. </span>Advanced Setup: Python Scripting</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="examples/index.html"
+                          title="next chapter"><span class="section-number">4.1. </span>Examples Using pyCart</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/pycart/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples/index.html" title="4.1. Examples Using pyCart"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../common/scripting.html" title="3.8. Advanced Setup: Python Scripting"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 2.0.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4. </span>pyCart Documentation</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

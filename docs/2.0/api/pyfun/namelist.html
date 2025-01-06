@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.pyfun.namelist: FUN3D namelist module &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pyfun.pointsensor: FUN3D point sensors module" href="pointsensor.html" />
+    <link rel="prev" title="cape.pyfun.mapbc: FUN3D boundary condition module" href="mapbc.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pointsensor.html" title="cape.pyfun.pointsensor: FUN3D point sensors module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mapbc.html" title="cape.pyfun.mapbc: FUN3D boundary condition module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code>: FUN3D interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.namelist</span></code>: FUN3D namelist module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-pyfun-namelist-fun3d-namelist-module">
+<span id="module-cape.pyfun.namelist"></span><h1><a class="reference internal" href="#module-cape.pyfun.namelist" title="cape.pyfun.namelist"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.namelist</span></code></a>: FUN3D namelist module<a class="headerlink" href="#cape-pyfun-namelist-fun3d-namelist-module" title="Link to this heading">¶</a></h1>
+<p>This is a module built off of the <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.nmlfile.namelist</span></code> module
+customized for manipulating FUN3D’s namelist files. Such files are
+split into sections which are called “namelists.” Each namelist has
+syntax similar to the following.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&amp;project
+    project_rootname = &quot;pyfun&quot;
+    case_title = &quot;Test case&quot;
+/
+</pre></div>
+</div>
+</div></blockquote>
+<p>and this module is designed to recognize such sections. The main
+feature of this module is methods to set specific properties of a
+namelist file, for example the Mach number or CFL number.</p>
+<p>Namelists are the primary FUN3D input file, and one is written for each
+phase of a FUN3D casecntl.  The namelist files prepared using this module
+are written to <code class="docutils literal notranslate"><span class="pre">fun3d.00.nml</span></code>, <code class="docutils literal notranslate"><span class="pre">fun3d.01.nml</span></code>, etc.  These must be
+linked to a hard-coded file name <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> as appropriate for the
+currently running phase.</p>
+<p>See also:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../cape/nmlfile/index.html#module-cape.nmlfile" title="cape.nmlfile"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.nmlfile</span></code></a></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pyfun.GetNamelist()</span></code></p></li>
+<li><p><a class="reference internal" href="cntl.html#cape.pyfun.cntl.Cntl.ReadNamelist" title="cape.pyfun.cntl.Cntl.ReadNamelist"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl.ReadNamelist()</span></code></a></p></li>
+<li><p><a class="reference internal" href="cntl.html#cape.pyfun.cntl.Cntl.PrepareNamelist" title="cape.pyfun.cntl.Cntl.PrepareNamelist"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl.PrepareNamelist()</span></code></a></p></li>
+</ul>
+</div></blockquote>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyfun.namelist.</span></span><span class="sig-name descname"><span class="pre">Namelist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist" title="Link to this definition">¶</a></dt>
+<dd><p>File control class for <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span> <span class="o">=</span> <span class="n">Namelist</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span> <span class="o">=</span> <span class="n">Namelist</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of namelist file to read, defaults to <code class="docutils literal notranslate"><span class="pre">'fun3d.nml'</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v0.1; started</p></li>
+<li><p>2015-12-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0; using <code class="docutils literal notranslate"><span class="pre">filecntl.namelist</span></code></p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; use <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.GetAdaptRootname">
+<span class="sig-name descname"><span class="pre">GetAdaptRootname</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.GetAdaptRootname" title="Link to this definition">¶</a></dt>
+<dd><p>Get the post-adaptation project root name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">name</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">GetAdaptRootname</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>name</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of adapted project</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-12-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.GetGridFormat">
+<span class="sig-name descname"><span class="pre">GetGridFormat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.GetGridFormat" title="Link to this definition">¶</a></dt>
+<dd><p>Get the mesh file extention</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fext</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">GetGridFormat</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fext</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;b8.ugrid&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Mesh file extension</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-04-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.GetMach">
+<span class="sig-name descname"><span class="pre">GetMach</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.GetMach" title="Link to this definition">¶</a></dt>
+<dd><p>Find the current Mach number</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mach</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">GetMach</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>mach</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Mach number specified in <code class="file docutils literal notranslate"><span class="pre">input.cntl</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.GetNFlowInitVolumes">
+<span class="sig-name descname"><span class="pre">GetNFlowInitVolumes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.GetNFlowInitVolumes" title="Link to this definition">¶</a></dt>
+<dd><p>Get the current number of flow initialization volumes</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">GetNFlowInitVolumes</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of flow initialization volumes</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.GetRestart">
+<span class="sig-name descname"><span class="pre">GetRestart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.GetRestart" title="Link to this definition">¶</a></dt>
+<dd><p>Get the current FUN3D restart flag</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="p">,</span> <span class="n">nohist</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">SetRestart</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>q</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Restart option, <code class="docutils literal notranslate"><span class="pre">None</span></code> turns flag to <code class="docutils literal notranslate"><span class="pre">&quot;on&quot;</span></code></p>
+</dd>
+<dt><em>nohist</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>If true, use ‘on_nohistorykept’ for ‘restart_read’</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2024-07-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.GetRootname">
+<span class="sig-name descname"><span class="pre">GetRootname</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.GetRootname" title="Link to this definition">¶</a></dt>
+<dd><p>Get the project root name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">name</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">GetRootname</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>name</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of project</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetAdaptRootname">
+<span class="sig-name descname"><span class="pre">SetAdaptRootname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetAdaptRootname" title="Link to this definition">¶</a></dt>
+<dd><p>Set the post-adaptation project root name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetAdaptRootname</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>name</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of adapted project</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-12-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetAlpha">
+<span class="sig-name descname"><span class="pre">SetAlpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetAlpha" title="Link to this definition">¶</a></dt>
+<dd><p>Set the angle of attack</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetAlpha</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>alpha</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Angle of attack</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetBeta">
+<span class="sig-name descname"><span class="pre">SetBeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetBeta" title="Link to this definition">¶</a></dt>
+<dd><p>Set the sideslip angle</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetBeta</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>beta</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Sideslip angle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetDensity">
+<span class="sig-name descname"><span class="pre">SetDensity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetDensity" title="Link to this definition">¶</a></dt>
+<dd><p>Set the freestream density</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetDensity</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>rho</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Freestream density [kg/m^3]</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2018-04-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetMach">
+<span class="sig-name descname"><span class="pre">SetMach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mach</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetMach" title="Link to this definition">¶</a></dt>
+<dd><p>Set the freestream Mach number</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetMach</span><span class="p">(</span><span class="n">mach</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>mach</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Mach number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetNFlowInitVolumes">
+<span class="sig-name descname"><span class="pre">SetNFlowInitVolumes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetNFlowInitVolumes" title="Link to this definition">¶</a></dt>
+<dd><p>Set the number of flow initialization volumes</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetNFlowInitVolumes</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of flow initialization volumes</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-03-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetRestart">
+<span class="sig-name descname"><span class="pre">SetRestart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nohist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetRestart" title="Link to this definition">¶</a></dt>
+<dd><p>Set the FUN3D restart flag on or off</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetRestart</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nohist</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>q</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Restart option, <code class="docutils literal notranslate"><span class="pre">None</span></code> turns flag to <code class="docutils literal notranslate"><span class="pre">&quot;on&quot;</span></code></p>
+</dd>
+<dt><em>nohist</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>If true, use ‘on_nohistorykept’ for ‘restart_read’</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-11-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetReynoldsNumber">
+<span class="sig-name descname"><span class="pre">SetReynoldsNumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Re</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetReynoldsNumber" title="Link to this definition">¶</a></dt>
+<dd><p>Set the Reynolds number per unit length</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetReynoldsNumber</span><span class="p">(</span><span class="n">Re</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>Re</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Reynolds number per unit length</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetRootname">
+<span class="sig-name descname"><span class="pre">SetRootname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetRootname" title="Link to this definition">¶</a></dt>
+<dd><p>Set the project root name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetRootname</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>name</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of project</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-12-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetTemperature">
+<span class="sig-name descname"><span class="pre">SetTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetTemperature" title="Link to this definition">¶</a></dt>
+<dd><p>Set the freestream temperature</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetTemperature</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>T</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Freestream temperature</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetTemperatureUnits">
+<span class="sig-name descname"><span class="pre">SetTemperatureUnits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetTemperatureUnits" title="Link to this definition">¶</a></dt>
+<dd><p>Set the temperature units</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetTemperatureUnits</span><span class="p">(</span><span class="n">units</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>units</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Units, defaults to <code class="docutils literal notranslate"><span class="pre">&quot;Rankine&quot;</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetVelocity">
+<span class="sig-name descname"><span class="pre">SetVelocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetVelocity" title="Link to this definition">¶</a></dt>
+<dd><p>Set the freestream velocity magnitude</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetTemperature</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>V</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Magnitude of freestream velocity [m/s]</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2018-04-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.namelist.Namelist.SetnIter">
+<span class="sig-name descname"><span class="pre">SetnIter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nIter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.namelist.Namelist.SetnIter" title="Link to this definition">¶</a></dt>
+<dd><p>Set the number of iterations</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span><span class="o">.</span><span class="n">SetnIter</span><span class="p">(</span><span class="n">nIter</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namelist</span></code></a></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> file</p>
+</dd>
+<dt><em>nIter</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of iterations to run</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; switch to <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="mapbc.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.mapbc</span></code>: FUN3D boundary condition module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="pointsensor.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.pointsensor</span></code>: FUN3D point sensors module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pyfun/namelist.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pointsensor.html" title="cape.pyfun.pointsensor: FUN3D point sensors module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mapbc.html" title="cape.pyfun.mapbc: FUN3D boundary condition module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code>: FUN3D interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.namelist</span></code>: FUN3D namelist module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4.1.6. Demo 6: Line Loads on the Arrow Example &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="4.1.7. Demo 7: Data Book Plots and Reports" href="../07-data_arrow/index.html" />
+    <link rel="prev" title="4.1.5. Demo 5: Mesh Adaptation on a Business Jet" href="../05-adapt_bJet/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../07-data_arrow/index.html" title="4.1.7. Demo 7: Data Book Plots and Reports"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../05-adapt_bJet/index.html" title="4.1.5. Demo 5: Mesh Adaptation on a Business Jet"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.6. </span>Demo 6: Line Loads on the Arrow Example</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="demo-6-line-loads-on-the-arrow-example">
+<span id="pycart-ex-lineload-arrow"></span><h1><span class="section-number">4.1.6. </span>Demo 6: Line Loads on the Arrow Example<a class="headerlink" href="#demo-6-line-loads-on-the-arrow-example" title="Link to this heading">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This example requires <a class="reference external" href="https://www.nas.nasa.gov/publications/software/docs/chimera/index.html">Chimera Grid Tools</a>
+to calculate sectional loads. Specifically, the <a class="reference external" href="https://www.nas.nasa.gov/publications/software/docs/chimera/pages/triload.html">triload</a>
+command is used. To acquire Chimera Grid Tools, free software from NASA,
+use the <a class="reference external" href="https://software.nasa.gov/software/ARC-16025-1A">NASA Software Catalog</a>.</p>
+</div>
+<p>Using the geometry from <a class="reference internal" href="../02-arrow/index.html#pycart-ex-arrow"><span class="std std-ref">Example 2</span></a>, this case continues
+the analysis and adds computation of sectional loads. To get started, clone
+this repository and run the following easy commands:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/nasa-ddalle/pycart05-adapt_bJet.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>pycart06-lineload_arrow
+<span class="gp">$ </span>./copy-files.py
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>work/
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will copy all of the files into a newly created <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder. Follow
+the instructions below by entering that <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder; the purpose is that
+you can easily delete the <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder and restart the tutorial at any
+time.</p>
+<p>The geometry used for this shape is a capped cylinder with four fins and 9216
+faces and seven components.  The surface triangulation, <code class="docutils literal notranslate"><span class="pre">arrow.tri</span></code>, is
+shown below.</p>
+<blockquote>
+<div><figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../../../_images/arrow01.png"><img alt="../../../_images/arrow01.png" src="../../../_images/arrow01.png" style="width: 4in;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4.6 </span><span class="caption-text">Simple bullet shape triangulation with four fins</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>This example is set up with a small run matrix to demonstrate line loads on a
+few related cases.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c
+<span class="go">Case Config/Run Directory   Status  Iterations  Que CPU Time</span>
+<span class="go">---- ---------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m1.25a0.0b0.0 ---     /           .</span>
+<span class="go">1    poweroff/m1.25a2.0b0.0 ---     /           .</span>
+<span class="go">2    poweroff/m1.25a0.0b2.0 ---     /           .</span>
+</pre></div>
+</div>
+</div></blockquote>
+<section id="running-cases">
+<h2><span class="section-number">4.1.6.1. </span>Running Cases<a class="headerlink" href="#running-cases" title="Link to this heading">¶</a></h2>
+<p>When doing post-processing of Cart3D results, it is often desirable to perform
+time-averaging or iteration-averaging before doing analysis.  When Cart3D exits
+(either <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> or <code class="docutils literal notranslate"><span class="pre">mpix_flowCart</span></code> called with the <code class="docutils literal notranslate"><span class="pre">-clic</span></code> option), it
+writes a <code class="docutils literal notranslate"><span class="pre">Components.i.triq</span></code> file.  This is a surface triangulation with some
+results from the last iteration.  It contains the pressure coefficient and the
+five native Cart3D state variables at each node of the triangulation.</p>
+<p>To get a <code class="docutils literal notranslate"><span class="pre">triq</span></code> file with averaged results, we have to run <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> a few
+iterations at a time and manually perform averaging.  The <code class="docutils literal notranslate"><span class="pre">-stats</span></code> option
+performs a similar task, but it is not quite consistent with what’s needed for
+an averaged line load.  To get pyCart to perform this unusual task, we have the
+following <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> section in <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Iteration control and command-line inputs</span>
+<span class="s2">&quot;RunControl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Run sequence</span>
+<span class="w">    </span><span class="s2">&quot;PhaseSequece&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;PhaseIters&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">200</span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// System configuration</span>
+<span class="w">    </span><span class="s2">&quot;nProc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">4</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;MPI&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Adaptive&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Options for ``flowCart``</span>
+<span class="w">    </span><span class="s2">&quot;flowCart&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;it_fc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;it_avg&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;it_start&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cfl&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1.1</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;mg_fc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;y_is_spanwise&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Defines the flow domain automatically</span>
+<span class="w">    </span><span class="s2">&quot;autoInputs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Volume mesh options</span>
+<span class="w">    </span><span class="s2">&quot;cubes&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;maxR&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;pre&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;preSpec.c3d.cntl&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cubes_a&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cubes_b&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;reorder&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>As previously, the <em>RunControl&gt;flowCart&gt;it_fc</em> option controls how many
+iterations <code class="docutils literal notranslate"><span class="pre">flowCart</span></code> runs for.  The <em>it_avg</em> and <em>it_start</em> are new options.
+The idea is that Cart3D will be run for <em>it_avg</em> iterations at a time.  pyCart
+then calculates a cumulative average <code class="docutils literal notranslate"><span class="pre">triq</span></code> file that updates after each
+<em>it_avg</em> iterations.  However, it first runs <em>it_start</em> iterations before
+initiating this start-stop behavior.  This prevents initial iterations from
+corrupting the average.</p>
+<p>If we run one case, there is a lot of output printed to STDOUT, and it looks
+something like this.  The output has been truncated.</p>
+<p><strong>Note:</strong> This is set up to run on four threads and take
+less than one minute.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-I<span class="w"> </span><span class="m">0</span>
+<span class="go">Case Config/Run Directory   Status  Iterations  Que CPU Time</span>
+<span class="go">---- ---------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m1.25a0.0b0.0 ---     /           .</span>
+<span class="go">  Group name: &#39;poweroff&#39; (index 0)</span>
+<span class="go">  Preparing surface triangulation...</span>
+<span class="go">  Reading tri file(s) from root directory.</span>
+<span class="go"> &gt; autoInputs -r 6 -t Components.i.tri -maxR 8 -nDiv 4</span>
+<span class="go"> &gt; cubes -pre preSpec.c3d.cntl -maxR 8 -reorder -a 8 -b 2</span>
+<span class="go"> &gt; mgPrep -n 3</span>
+<span class="go">     Starting case &#39;poweroff/m1.25a0.0b0.0&#39;</span>
+<span class="go"> &gt; flowCart -his -clic -N 100 ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 110 ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 120 ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 130 ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 140 ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 150 ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 160 ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 170 ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 180 ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 190 ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 200 ...</span>
+<span class="go">     Writing triangulation: &#39;Components.11.100.200.triq&#39;</span>
+
+<span class="go">Submitted or ran 1 job(s).</span>
+
+<span class="go">---=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This lengthy output explains more clearly what is meant by running <code class="docutils literal notranslate"><span class="pre">flowCart</span></code>
+10 iterations at a time.  The iteration-averaged surface file that gets created
+at the end, <code class="docutils literal notranslate"><span class="pre">Components.11.100.200.triq</span></code>, explains the contents of the file.
+Specifically, it says that the file contains input from 11 iterations between
+100 and 200.</p>
+<p>Let’s run the last two cases in the run matrix, too.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span>
+<span class="go">Case Config/Run Directory   Status  Iterations  Que CPU Time</span>
+<span class="go">---- ---------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m1.25a0.0b0.0 DONE    200/200     .        0.0</span>
+<span class="go">1    poweroff/m1.25a2.0b0.0 ---     /           .</span>
+<span class="go">     Starting case &#39;poweroff/m1.25a2.0b0.0&#39;</span>
+<span class="go"> &gt; flowCart -his -clic -N 100 ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 110 ...</span>
+<span class="go"> ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 200 ...</span>
+<span class="go">     Writing triangulation: &#39;Components.11.100.200.triq&#39;</span>
+<span class="go">2    poweroff/m1.25a0.0b2.0 ---     /           .</span>
+<span class="go">     Starting case &#39;poweroff/m1.25a0.0b2.0&#39;</span>
+<span class="go"> &gt; flowCart -his -clic -N 100 ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 110 ...</span>
+<span class="go"> ...</span>
+<span class="go"> &gt; flowCart -his -clic -restart -N 200 ...</span>
+<span class="go">     Writing triangulation: &#39;Components.11.100.200.triq&#39;</span>
+
+<span class="go">Submitted or ran 2 job(s).</span>
+
+<span class="go">---=2, DONE=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="calculating-line-loads">
+<h2><span class="section-number">4.1.6.2. </span>Calculating Line Loads<a class="headerlink" href="#calculating-line-loads" title="Link to this heading">¶</a></h2>
+<p>The purpose of this example was to create line loads, so let’s investigate that
+part.  To instruct pyCart which components on which to compute line loads, we
+go to the <code class="docutils literal notranslate"><span class="pre">&quot;DataBook&quot;</span></code> section of <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Database info</span>
+<span class="s2">&quot;DataBook&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// List of data book components</span>
+<span class="w">    </span><span class="s2">&quot;Components&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;arrow_no_base&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ll_arrow&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Location of data book</span>
+<span class="w">    </span><span class="s2">&quot;Folder&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;data/&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Parameters for collecting data</span>
+<span class="w">    </span><span class="s2">&quot;nFirst&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;nStats&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;nMin&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Basic component</span>
+<span class="w">    </span><span class="s2">&quot;bullet_no_base&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;FM&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Line load</span>
+<span class="w">    </span><span class="s2">&quot;ll_arrow&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;LineLoad&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;CompID&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow_no_base&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;nCut&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This specifies that the databook contains two “Components”.  One of them is the
+the statistically averaged forces and moments on the <code class="docutils literal notranslate"><span class="pre">arrow_no_base</span></code> CompID,
+and the other is the sectional load on the same.  Recall from <a class="reference internal" href="../02-arrow/index.html#pycart-ex-arrow"><span class="std std-ref">Example 2</span></a> that the <code class="docutils literal notranslate"><span class="pre">arrow_no_base</span></code> component includes all the
+surfaces except the base.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;ll_arrow&quot;</span></code> databook component is defined as a <code class="docutils literal notranslate"><span class="pre">&quot;LineLoad&quot;</span></code> component
+on the <code class="docutils literal notranslate"><span class="pre">arrow_no_base</span></code> CompID, and it is instructed to calculate the
+sectional loads on 100 slices of that component.  By default, these slices will
+be at constant-<em>x</em> planes.</p>
+<p>This <code class="docutils literal notranslate"><span class="pre">&quot;CompID&quot;</span></code> option allows users to calculate line loads on parts of the
+vehicle (for example a wing) and also have multiple line load databooks for the
+same vehicle.</p>
+<p>Adding this little section to the <code class="docutils literal notranslate"><span class="pre">&quot;DataBook&quot;</span></code> is all that’s needed to set up
+a line load computation.  To actually calculate the line loads, run the
+following commands.</p>
+<p><strong>Note:</strong> This command should take less than five seconds to run.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>--ll
+<span class="go">Updating line load data book &#39;ll_arrow&#39; ...</span>
+<span class="go">poweroff/m1.25a0.0b0.0</span>
+<span class="go">  Adding new databook entry at iteration 200.</span>
+<span class="go">    triloadCmd &lt; triload.ll_arrow.i &gt; triload.ll_arrow.o</span>
+<span class="go">poweroff/m1.25a2.0b0.0</span>
+<span class="go">  Adding new databook entry at iteration 200.</span>
+<span class="go">    triloadCmd &lt; triload.ll_arrow.i &gt; triload.ll_arrow.o</span>
+<span class="go">poweroff/m1.25a0.0b2.0</span>
+<span class="go">  Adding new databook entry at iteration 200.</span>
+<span class="go">    triloadCmd &lt; triload.ll_arrow.i &gt; triload.ll_arrow.o</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This command creates a collection of files.  First, we will note the creation
+of a <code class="docutils literal notranslate"><span class="pre">lineload</span></code> folder in each case directory.  In the
+<code class="docutils literal notranslate"><span class="pre">poweroff/m1.25a0.0b0.0/lineload</span></code> folder, there are several files used in the
+raw computation of line loads created by the Chimera Grid Tools utility
+<code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code>.</p>
+<p>The file <code class="docutils literal notranslate"><span class="pre">triload.ll_arrow.i</span></code> is the input to <code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code> that is
+automatically created by pyCart.  The main output file is
+<code class="docutils literal notranslate"><span class="pre">LineLoad_ll_arrow.slds</span></code>, which contains the non-dimensionalized forces
+on each of the 100 slices.</p>
+<p>These raw files are then read by pyCart and processed into a databook in the
+<code class="docutils literal notranslate"><span class="pre">data/</span></code> folder (locations specified by the <em>DataBook&gt;Folder</em> option in
+<code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>).  Below is a file tree of the <code class="docutils literal notranslate"><span class="pre">06_lineload_arrow/data</span></code>
+folder.</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>data/
+    ll_ll_arrow.csv
+    lineload/
+        LineLoad_ll_arrow.smy
+        LineLoad_ll_arrow.smz
+        poweroff/
+            m1.25a0.0b0.0/
+                LineLoad_ll_arrow.csv
+            m1.25a2.0b0.0/
+                LineLoad_ll_arrow.csv
+            m1.25a0.0b2.0/
+                LineLoad_ll_arrow.csv
+</pre></div>
+</div>
+</div></blockquote>
+<p>The top-level <code class="docutils literal notranslate"><span class="pre">ll_ll_arrow.csv</span></code> file is a status file that stores which cases
+have computed line loads and what iteration at which they have been computed.
+It looks a lot like a force and moment databook file (e.g.
+<code class="docutils literal notranslate"><span class="pre">aero_arrow_no_base.csv</span></code>) except that there are no data columns (since
+those are stored in the line load folders.</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">data/lineload/</span></code> directory, there are two files with unusual file
+extensions.  These are just text files that give the outline of the body
+intersected by the <span class="math notranslate nohighlight">\(y{=}0\)</span> plane (<code class="docutils literal notranslate"><span class="pre">.smy</span></code>) and <span class="math notranslate nohighlight">\(z{=}0\)</span> plane
+(<code class="docutils literal notranslate"><span class="pre">.smz</span></code>).  They are used to make the line load plots more convenient, and
+which will make more sense in the next subsection.</p>
+<p>Within the <code class="docutils literal notranslate"><span class="pre">data/lineload/</span></code> folder, there is a whole file tree that mirrors
+that of the run cases.  The actual sectional loads from
+<code class="docutils literal notranslate"><span class="pre">poweroff/m1.25a.0.b0.0</span></code> are stored in
+<code class="docutils literal notranslate"><span class="pre">data/lineload/poweroff/m1.25a0.0b0.0</span></code>, etc.  In this case, each line load
+case folder contains only one file, but if there were more line load
+components, there would be one for each line load. Each is a very simple file
+containing seven columns: <em>x/Lref</em>, and then one for each of the six
+coefficients (<em>CA</em>, <em>CY</em>, <em>CN</em>, <em>CLL</em>, <em>CLM</em>, <em>CLN</em>).  The coefficient data is
+stored in a seemingly strange format of
+<span class="math notranslate nohighlight">\(\mathrm{d}C_A/\mathrm{d}(x/L_\mathit{ref})\)</span>.  Using this form keeps
+results nondimensional but also removes dependence on the number of cuts.</p>
+</section>
+<section id="creating-plots-and-automated-reports">
+<h2><span class="section-number">4.1.6.3. </span>Creating Plots and Automated Reports<a class="headerlink" href="#creating-plots-and-automated-reports" title="Link to this heading">¶</a></h2>
+<p>Line load plots are fairly easy to set up.  First let’s just create the report
+and then describe the <code class="docutils literal notranslate"><span class="pre">&quot;Report&quot;</span></code> section of <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>--report
+<span class="go">poweroff/m1.25a0.0b0.0</span>
+<span class="go">  CaseConds: New subfig at iteration 200.0</span>
+<span class="go">  FMTable: New subfig at iteration 200.0</span>
+<span class="go">  x = um.multiply(x, x, out=x)</span>
+<span class="go">  arrow_CA: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CY: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CN: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CLL: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CLN: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CLM: New subfig at iteration 200.0</span>
+<span class="go">  L1: New subfig at iteration 200.0</span>
+<span class="go">  LL_CY: New subfig at iteration 200.0</span>
+<span class="go">  LL_CN: New subfig at iteration 200.0</span>
+<span class="go">poweroff/m1.25a2.0b0.0</span>
+<span class="go">  CaseConds: New subfig at iteration 200.0</span>
+<span class="go">  FMTable: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CA: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CY: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CN: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CLL: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CLN: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CLM: New subfig at iteration 200.0</span>
+<span class="go">  L1: New subfig at iteration 200.0</span>
+<span class="go">  LL_CY: New subfig at iteration 200.0</span>
+<span class="go">  LL_CN: New subfig at iteration 200.0</span>
+<span class="go">poweroff/m1.25a0.0b2.0</span>
+<span class="go">  CaseConds: New subfig at iteration 200.0</span>
+<span class="go">  FMTable: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CA: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CY: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CN: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CLL: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CLN: New subfig at iteration 200.0</span>
+<span class="go">  arrow_CLM: New subfig at iteration 200.0</span>
+<span class="go">  L1: New subfig at iteration 200.0</span>
+<span class="go">  LL_CY: New subfig at iteration 200.0</span>
+<span class="go">  LL_CN: New subfig at iteration 200.0</span>
+<span class="go">Compiling...</span>
+<span class="go">Compiling...</span>
+<span class="go">Cleaning up...</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This creates a multipage PDF (in this case one title page and three more pages
+with one page dedicated to each case) that contains selected analysis tables
+and plots.  In this case we have set up the report to show one table
+identifying the case in more detail, one table of basic force coefficient
+results, and nine plots.</p>
+<blockquote>
+<div><figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../../../_images/report-case-p3.png"><img alt="../../../_images/report-case-p3.png" src="../../../_images/report-case-p3.png" style="width: 5.5in;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4.7 </span><span class="caption-text">Automatically generated report for <code class="docutils literal notranslate"><span class="pre">poweroff/m1.25a2.0b0.0</span></code></span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>The first six plots are of each force or moment coefficient on the
+<code class="docutils literal notranslate"><span class="pre">arrow_no_base</span></code> component.  There is an obvious problem with the <em>CLL</em> and
+<em>CLN</em> plots, which has to do with some confusion due to the symmetry of the
+arrow shape.  (This bug may go away in future versions of Cart3D).  We will
+discuss how to make these two figures look a little better shortly, but let’s
+move on to the other three plots.  The first is a plot of the global
+<span class="math notranslate nohighlight">\(L_1\)</span> norm of density residuals (which is the main residual reported by
+Cart3D).</p>
+<p>The last two plots are line load plots.  Let’s discuss the JSON syntax to set
+up each of these plots and also how these subfigures are assembled into a
+report.  The basic skeleton of the <code class="docutils literal notranslate"><span class="pre">&quot;Report&quot;</span></code> section of <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code>
+is shown below.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Report&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// List of reports</span>
+<span class="w">    </span><span class="s2">&quot;Reports&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;case&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Define the report</span>
+<span class="w">    </span><span class="s2">&quot;case&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Title&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Automated Cart3D Report with Line Load Plots&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Subtitle&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Example \\texttt{06\\_lineload\\_arrow}&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Restriction&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;pyCart Example - Distribution Unlimited&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Figures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;CaseTables&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;CasePlots&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Define the figures</span>
+<span class="w">    </span><span class="s2">&quot;Figures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;CaseTables&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;Alignment&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;CaseConds&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;FMTable&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;CasePlots&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;Header&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Iterative analysis and sectional loads&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Alignment&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;arrow_CA&quot;</span><span class="p">,</span><span class="w">  </span><span class="s2">&quot;arrow_CY&quot;</span><span class="p">,</span><span class="w">  </span><span class="s2">&quot;arrow_CN&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;arrow_CLL&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;arrow_CLN&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;arrow_CLM&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;L1&quot;</span><span class="p">,</span><span class="w">        </span><span class="s2">&quot;LL_CY&quot;</span><span class="p">,</span><span class="w">     </span><span class="s2">&quot;LL_CN&quot;</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Definitions for subfigures</span>
+<span class="w">    </span><span class="s2">&quot;Subfigures&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The overall structure is relatively simple: there is a list of reports (the
+same JSON file can have many different reports defined), an overall definition
+for the report including a list of figures, a section defining each figure, and
+a section defining the subfigures.  A figure is a collection of subfigures plus
+an alignment option and optional header.</p>
+<p>Creating this report creates a file called <code class="docutils literal notranslate"><span class="pre">report-case.pdf`</span> <span class="pre">in</span> <span class="pre">the</span>
+<span class="pre">``report/</span></code> folder.  The individual plots created for the report are stored in
+folders such as <code class="docutils literal notranslate"><span class="pre">report/poweroff/m1.25a2.0/a0.0/</span></code>, with each subfigure having
+a file name corresponding to the title of the subfigure (e.g.
+<code class="docutils literal notranslate"><span class="pre">arrow_CA.pdf</span></code>).</p>
+<section id="line-load-subfigures">
+<h3><span class="section-number">4.1.6.3.1. </span>Line Load Subfigures<a class="headerlink" href="#line-load-subfigures" title="Link to this heading">¶</a></h3>
+<p>The focus of this section is on the subfigures, and in particular the plots.
+To learn more about the two tables, the actual example <code class="docutils literal notranslate"><span class="pre">pyCart.json</span></code> file
+is relatively easy to understand.  Defining syntax for the line load plots is
+shown below.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="s2">&quot;LL_arrow&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;PlotLineLoad&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Component&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;ll_arrow&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5.5</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;FigHeight&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Width&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.33</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;SeamCurves&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;smy&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;SeamLocation&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;bottom&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;LL_CY&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;LL_arrow&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Caption&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow\\_no\\_base/CY&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CY&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;LL_CN&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;LL_arrow&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Caption&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow\\_no\\_base/CN&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CN&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>We have two line load plots that share many common options defined in
+<code class="docutils literal notranslate"><span class="pre">&quot;LL_arrow&quot;</span></code>.  This demonstrates the concept of cascading options and can
+save time, effort, and number of lines in the JSON file.  The <em>LL_arrow&gt;Type</em>
+option is set to <code class="docutils literal notranslate"><span class="pre">&quot;PlotLineLoad&quot;</span></code>, which is the basic pyCart line load
+subfigure type.  The <em>Component</em> is set to the name of the line load component
+as listed in the <code class="docutils literal notranslate"><span class="pre">&quot;DataBook&quot;</span></code> section, and the <em>Width</em> setting determines
+what percentage of the available text width in the final PDF document is taken
+up by the figure.</p>
+<p>The <em>FigWidth</em> and <em>FigHeight</em> obviously set an aspect ratio for the figure,
+but the absolute scale of <em>FigWidth</em> also determines the size at which the
+figure is rendered.  A larger <em>FigWidth</em> will make the labels appear to be in a
+smaller font size since the size in the document is set by <em>Width</em>.</p>
+<p>Finally, the <em>SeamCurves</em> option list which slice of the geometry (if any) to
+plot to help the reader anchor what part of the line load corresponds to what
+geometrical features.  The <em>SeamLocation</em> plot sets where to put this slice;
+<code class="docutils literal notranslate"><span class="pre">&quot;bottom&quot;</span></code> is the usual choice.</p>
+<p><strong>Waring</strong>: The seam curve plots have automatically adjusted aspect ratio to
+avoid distorting the seam curve. As a result, geometry with inconvenient actual
+aspect ratios will lead to problematic seam curve plots.</p>
+<blockquote>
+<div><figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../../../_images/LL_CN.png"><img alt="../../../_images/LL_CN.png" src="../../../_images/LL_CN.png" style="width: 4in;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4.8 </span><span class="caption-text">Normal sectional loads at 2 degrees angle of attack</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+</section>
+</section>
+<section id="residual-history-subfigure">
+<h2><span class="section-number">4.1.6.4. </span>Residual History Subfigure<a class="headerlink" href="#residual-history-subfigure" title="Link to this heading">¶</a></h2>
+<p>Cart3D residual plots almost always have the same JSON inputs.  The version for
+this plot uses a different <em>FigHeight</em> in order to match the aspect ratio of
+the neighboring line load plots.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="s2">&quot;L1&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;PlotL1&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5.5</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;FigHeight&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">6</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Width&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.33</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Caption&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;$L_1$ Density Residual&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="force-moment-plots">
+<h2><span class="section-number">4.1.6.5. </span>Force &amp; Moment Plots<a class="headerlink" href="#force-moment-plots" title="Link to this heading">¶</a></h2>
+<p>The iterative history plots are relatively simple for this case since we are
+only plotting one component.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="s2">&quot;arrow&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;PlotCoeff&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Component&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow_no_base&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;FigWidth&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5.5</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;FigHeight&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">4.2</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Width&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.33</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CA&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CA&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CY&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CY&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CN&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CN&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CLL&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLL&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CLM&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLM&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CLN&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLN&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>As we saw above, this simulation results in very poor results for <em>CLL</em> and
+<em>CLN</em> due to the symmetry of the configuration (among other things).  We can at
+least make the figures look readable by using scientific notation for the mean
+value and removing the standard deviation.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CLL&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLL&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;MuFormat&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;%.2e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;ShowSigma&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;arrow_CLN&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;Coefficient&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CLN&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;MuFormat&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;%.2e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;ShowSigma&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The updated <em>CLN</em> plot is shown below.</p>
+<blockquote>
+<div><figure class="align-default" id="id4">
+<a class="reference internal image-reference" href="../../../_images/arrow_CLN.png"><img alt="../../../_images/arrow_CLN.png" src="../../../_images/arrow_CLN.png" style="width: 3.5in;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4.9 </span><span class="caption-text">Problematic yawing moment coefficient with slightly improved formatting</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>There are also many different options for each of these plots, and it is also
+possible to plot line loads from other databases on top of those of the most
+recent case for comparison.  See the <a class="reference internal" href="../../json/Report.html#pycart-json-report"><span class="std std-ref">JSON page</span></a> for
+a thorough description of options.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4.1.6. Demo 6: Line Loads on the Arrow Example</a><ul>
+<li><a class="reference internal" href="#running-cases">4.1.6.1. Running Cases</a></li>
+<li><a class="reference internal" href="#calculating-line-loads">4.1.6.2. Calculating Line Loads</a></li>
+<li><a class="reference internal" href="#creating-plots-and-automated-reports">4.1.6.3. Creating Plots and Automated Reports</a><ul>
+<li><a class="reference internal" href="#line-load-subfigures">4.1.6.3.1. Line Load Subfigures</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#residual-history-subfigure">4.1.6.4. Residual History Subfigure</a></li>
+<li><a class="reference internal" href="#force-moment-plots">4.1.6.5. Force &amp; Moment Plots</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../05-adapt_bJet/index.html"
+                          title="previous chapter"><span class="section-number">4.1.5. </span>Demo 5: Mesh Adaptation on a Business Jet</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../07-data_arrow/index.html"
+                          title="next chapter"><span class="section-number">4.1.7. </span>Demo 7: Data Book Plots and Reports</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/pycart/examples/06-lineload_arrow/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../07-data_arrow/index.html" title="4.1.7. Demo 7: Data Book Plots and Reports"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../05-adapt_bJet/index.html" title="4.1.5. Demo 5: Mesh Adaptation on a Business Jet"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">4. </span>pyCart Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">4.1. </span>Examples Using pyCart</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.1.6. </span>Demo 6: Line Loads on the Arrow Example</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

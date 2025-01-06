@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.pycart.cntl: Cart3D control module &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pycart.options: Cart3D and pyCart Settings" href="options/index.html" />
+    <link rel="prev" title="cape.pycart: Interfaces to Cart3D" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="options/index.html" title="cape.pycart.options: Cart3D and pyCart Settings"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.pycart: Interfaces to Cart3D"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code>: Interfaces to Cart3D</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cntl</span></code>: Cart3D control module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.pycart.cntl">
+<span id="cape-pycart-cntl-cart3d-control-module"></span><h1><a class="reference internal" href="#module-cape.pycart.cntl" title="cape.pycart.cntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cntl</span></code></a>: Cart3D control module<a class="headerlink" href="#module-cape.pycart.cntl" title="Link to this heading">¶</a></h1>
+<section id="id1">
+<h2><a class="reference internal" href="#module-cape.pycart.cntl" title="cape.pycart.cntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cntl</span></code></a>: Cart3D control module<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>This module provides tools to quickly setup basic Cart3D runs or a
+complex Cart3D setup from a small set of input files. Alternatively, the
+methods and classes can be used to help setup a problem that is too
+complex or customized to conform to standardized script libraries. A
+collection of cases combined into a run matrix can be loaded using the
+following commands.</p>
+<blockquote>
+<div><div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cape.pycart.cart3d</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">pycart</span><span class="o">.</span><span class="n">cntl</span><span class="o">.</span><span class="n">Cntl</span><span class="p">(</span><span class="s2">&quot;pyCart.json&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span>
+<span class="go">&lt;cape.pycart.Cntl(nCase=4, tri=&#39;bullet.tri&#39;)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">GetFullFolderNames</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">&#39;poweroff/m1.5a0.0b0.0&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>An instance of this <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a> class has many
+attributes, which include the run matrix (<code class="docutils literal notranslate"><span class="pre">cntl.x</span></code>), the options
+interface (<code class="docutils literal notranslate"><span class="pre">cntl.opts</span></code>), and optionally the data book
+(<code class="docutils literal notranslate"><span class="pre">cntl.DataBook</span></code>), the triangulation (<code class="docutils literal notranslate"><span class="pre">cntl.tri</span></code>), and the
+appropriate input files (such as <code class="docutils literal notranslate"><span class="pre">cntl.InputCntl</span></code>).</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><em>cntl.x</em></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>cntl.opts</em></p></td>
+<td><p><a class="reference internal" href="options/index.html#cape.pycart.options.Options" title="cape.pycart.options.Options"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.options.Options</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><em>cntl.tri</em></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.trifile.Tri</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>cntl.DataBook</em></p></td>
+<td><p><a class="reference internal" href="databook.html#cape.pycart.databook.DataBook" title="cape.pycart.databook.DataBook"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.databook.DataBook</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><em>cntl.InputCntl</em></p></td>
+<td><p><a class="reference internal" href="inputcntlfile.html#cape.pycart.inputcntlfile.InputCntl" title="cape.pycart.inputcntlfile.InputCntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.inputcntlfile.InputCntl</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>cntl.AeroCsh</em></p></td>
+<td><p><a class="reference internal" href="aerocshfile.html#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.aerocshfile.AeroCsh</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Finally, the <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a> class is subclassed from the
+<a class="reference internal" href="../cfdx/cntl.html#cape.cfdx.cntl.Cntl" title="cape.cfdx.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.cntl.Cntl</span></code></a> class, so any methods available to the CAPE
+class are also available here.</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pycart.cntl.</span></span><span class="sig-name descname"><span class="pre">Cntl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl" title="Link to this definition">¶</a></dt>
+<dd><p>Class for handling global options and setup for Cart3D</p>
+<p>This class is intended to handle all settings used to describe a group
+of Cart3D cases. The settings are read from a JSON file.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span> <span class="o">=</span> <span class="n">cape</span><span class="o">.</span><span class="n">pycart</span><span class="o">.</span><span class="n">Cntl</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s2">&quot;pyCart.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of pyCart input file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of the pyCart control class</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Data members<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl.opts</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of options for this case (directly from <em>fname</em>)</p>
+</dd>
+<dt><em>cntl.x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></dt><dd><p>Values and definitions for variables in the run matrix</p>
+</dd>
+<dt><em>cntl.RootDir</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Absolute path to the root directory</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-05-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>  : v1.0</p></li>
+<li><p>2014-06-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>  : Renamed class <cite>Cntl</cite> –&gt; <cite>Cart3d</cite></p></li>
+<li><p>2014-06-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>  : Reduced number of data members</p></li>
+<li><p>2014-07-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>  : <cite>cart3d.RunMatrix</cite> –&gt; <cite>cart3d.x</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.ApplyCase">
+<span class="sig-name descname"><span class="pre">ApplyCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nPhase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.ApplyCase" title="Link to this definition">¶</a></dt>
+<dd><p>Apply settings from <em>cntl.opts</em> to an individual case</p>
+<p>This rewrites each run namelist file and the <code class="docutils literal notranslate"><span class="pre">case.json</span></code> file
+in the specified directories.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ApplyCase</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">nPhase</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="../pyfun/cntl.html#cape.pyfun.cntl.Cntl" title="cape.pyfun.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.cntl.Cntl</span></code></a></dt><dd><p>Cart3D control interface</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case number</p>
+</dd>
+<dt><em>nPhase</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | positive <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Last phase number (default determined by <em>PhaseSequence</em>)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-03-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.ApplyFlowCartSettings">
+<span class="sig-name descname"><span class="pre">ApplyFlowCartSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.ApplyFlowCartSettings" title="Link to this definition">¶</a></dt>
+<dd><p>Apply settings from <em>cntl.opts</em> to a set of cases</p>
+<p>This rewrites <code class="docutils literal notranslate"><span class="pre">case.json</span></code> in the specified directories.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ApplyFlowCartSettings</span><span class="p">(</span><span class="n">cons</span><span class="o">=</span><span class="p">[])</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of global pyCart settings object</p>
+</dd>
+<dt><em>I</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>List of indices</p>
+</dd>
+<dt><em>cons</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of constraints</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-12-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.CheckMesh">
+<span class="sig-name descname"><span class="pre">CheckMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.CheckMesh" title="Link to this definition">¶</a></dt>
+<dd><p>Check if the mesh for case <em>i</em> is prepared.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">CheckMesh</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of the case to check (0-based)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>q</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not the mesh for case <em>i</em> is prepared</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-09-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.CheckNone">
+<span class="sig-name descname"><span class="pre">CheckNone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.CheckNone" title="Link to this definition">¶</a></dt>
+<dd><p>Check if the current folder has the necessary files to run</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">CheckNone</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>v</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Verbose flag; prints message if <em>q</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-09-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2017-02-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added verbose flag</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.ExplodeTri">
+<span class="sig-name descname"><span class="pre">ExplodeTri</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.ExplodeTri" title="Link to this definition">¶</a></dt>
+<dd><p>Create a 3-view of each named or numbered comp using TecPlot</p>
+<p>This will create a folder called <code class="docutils literal notranslate"><span class="pre">subtri/</span></code> in the master
+directory for this <em>cntl</em> object, and it will contain a
+triangulation for each named component inf <code class="docutils literal notranslate"><span class="pre">Config.xml</span></code> along
+with a three-view plot of each component created using TecPlot
+if possible.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ExplodeTri</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of global pyCart settings object</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-01-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.GetSurfBCState">
+<span class="sig-name descname"><span class="pre">GetSurfBCState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.GetSurfBCState" title="Link to this definition">¶</a></dt>
+<dd><p>Get surface boundary condition state</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rho</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">GetSurfBCState</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of global pyCart settings object</p>
+</dd>
+<dt><em>key</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of key to process</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Run index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>rho</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Non-dimensional static density, <em>rho/rhoinf</em></p>
+</dd>
+<dt><em>U</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Non-dimensional velocity, <em>U/ainf</em></p>
+</dd>
+<dt><em>p</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Non-dimensional static pressure, <em>p/pinf</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-03-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.GetSurfCTState">
+<span class="sig-name descname"><span class="pre">GetSurfCTState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.GetSurfCTState" title="Link to this definition">¶</a></dt>
+<dd><p>Get surface boundary state from thrust coefficient</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rho</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">GetSurfCTState</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of global pyCart settings object</p>
+</dd>
+<dt><em>key</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of key to process</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Run index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>rho</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Non-dimensional static density, <em>rho/rhoinf</em></p>
+</dd>
+<dt><em>U</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Non-dimensional velocity, <em>U/ainf</em></p>
+</dd>
+<dt><em>p</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Non-dimensional static pressure, <em>p/pinf</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-11-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.PrepareAeroCsh">
+<span class="sig-name descname"><span class="pre">PrepareAeroCsh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.PrepareAeroCsh" title="Link to this definition">¶</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> for run case <em>i</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">PrepareAeroCsh</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of global pyCart settings object</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Run index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2014-10-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.PrepareCase">
+<span class="sig-name descname"><span class="pre">PrepareCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.PrepareCase" title="Link to this definition">¶</a></dt>
+<dd><p>Prepare case for running if necessary</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">PrepareCase</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of case to analyze</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-09-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2022-04-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; exec_modfunction()</p></li>
+<li><p>2024-01-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; case func b4 writeJSON</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.PrepareInputCntl">
+<span class="sig-name descname"><span class="pre">PrepareInputCntl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.PrepareInputCntl" title="Link to this definition">¶</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">input.cntl</span></code> for run case <em>i</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">PrepareInputCntl</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of global pyCart settings object</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Run index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2014-06-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; low-level griddir support</p></li>
+<li><p>2014-09-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; change to single-case</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.PrepareMesh">
+<span class="sig-name descname"><span class="pre">PrepareMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.PrepareMesh" title="Link to this definition">¶</a></dt>
+<dd><p>Prepare the mesh for case <em>i</em> if necessary.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">PrepareMesh</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of the case to check (0-based)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-09-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.PreparePreSpecCntl">
+<span class="sig-name descname"><span class="pre">PreparePreSpecCntl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.PreparePreSpecCntl" title="Link to this definition">¶</a></dt>
+<dd><p>Prepare and write <code class="docutils literal notranslate"><span class="pre">preSpec.c3d.cntl</span></code> in current folder</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">PreparePreSpecCntl</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of global pyCart settings object</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">See Also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pycart.options.Mesh.Mesh.get_BBox()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pycart.options.Mesh.Mesh.get_XLev()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.trifile.TriBase.GetCompBBox()</span></code></p></li>
+<li><p><a class="reference internal" href="prespecfile.html#cape.pycart.prespecfile.PreSpecCntl.AddBBox" title="cape.pycart.prespecfile.PreSpecCntl.AddBBox"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pycart.prespecfile.PreSpecCntl.AddBBox()</span></code></a></p></li>
+<li><p><a class="reference internal" href="prespecfile.html#cape.pycart.prespecfile.PreSpecCntl.AddXLev" title="cape.pycart.prespecfile.PreSpecCntl.AddXLev"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pycart.prespecfile.PreSpecCntl.AddXLev()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.ReadAeroCsh">
+<span class="sig-name descname"><span class="pre">ReadAeroCsh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.ReadAeroCsh" title="Link to this definition">¶</a></dt>
+<dd><p>Read the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ReadAeroCsh</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of global pyCart settings object</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-10-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Revived from deletion</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.ReadInputCntl">
+<span class="sig-name descname"><span class="pre">ReadInputCntl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.ReadInputCntl" title="Link to this definition">¶</a></dt>
+<dd><p>Read the <code class="file docutils literal notranslate"><span class="pre">input.cntl</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">ReadInputCntl</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of global pyCart settings object</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-06-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.SetSurfBC">
+<span class="sig-name descname"><span class="pre">SetSurfBC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CT</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.SetSurfBC" title="Link to this definition">¶</a></dt>
+<dd><p>Set all SurfBCs for a particular thrust trajectory key</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">SetSurfBC</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">CT</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of global pyCart settings object</p>
+</dd>
+<dt><em>key</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of key to process</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Run index</p>
+</dd>
+<dt><em>CT</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Inputs of thrust (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or pressure (<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-03-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2016-11-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <em>CT</em> input key</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.UpdatePointSensor">
+<span class="sig-name descname"><span class="pre">UpdatePointSensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.UpdatePointSensor" title="Link to this definition">¶</a></dt>
+<dd><p>Update point sensor group(s) data book</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">UpdatePointSensor</span><span class="p">(</span><span class="n">pt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cons</span><span class="o">=</span><span class="p">[],</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>pt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional name of point sensor group to update</p>
+</dd>
+<dt><em>I</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>List of indices</p>
+</dd>
+<dt><em>cons</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of constraints like <code class="docutils literal notranslate"><span class="pre">'Mach&lt;=0.5'</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-01-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.cntl.Cntl.cli">
+<span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.cntl.Cntl.cli" title="Link to this definition">¶</a></dt>
+<dd><p>Command-line interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span><span class="o">.</span><span class="n">cli</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Instance of control class containing relevant parameters</p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> (<code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)</dt><dd><p>Unprocessed keyword arguments</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cmd</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of command that was processed, if any</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cntl</span></code>: Cart3D control module</a><ul>
+<li><a class="reference internal" href="#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cntl</span></code>: Cart3D control module</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code>: Interfaces to Cart3D</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="options/index.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.options</span></code>: Cart3D and pyCart Settings</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pycart/cntl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="options/index.html" title="cape.pycart.options: Cart3D and pyCart Settings"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.pycart: Interfaces to Cart3D"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code>: Interfaces to Cart3D</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cntl</span></code>: Cart3D control module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

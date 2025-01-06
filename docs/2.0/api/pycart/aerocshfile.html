@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.pycart.aerocshfile: Cart3D aero.csh interface &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pycart.case: Case Control Module" href="casecntl.html" />
+    <link rel="prev" title="cape.pycart.options.util: Utilities for pyCart Options Module" href="options/util.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="casecntl.html" title="cape.pycart.case: Case Control Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="options/util.html" title="cape.pycart.options.util: Utilities for pyCart Options Module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code>: Interfaces to Cart3D</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.aerocshfile</span></code>: Cart3D <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-pycart-aerocshfile-cart3d-aero-csh-interface">
+<span id="module-cape.pycart.aerocshfile"></span><h1><a class="reference internal" href="#module-cape.pycart.aerocshfile" title="cape.pycart.aerocshfile"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.aerocshfile</span></code></a>: Cart3D <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> interface<a class="headerlink" href="#cape-pycart-aerocshfile-cart3d-aero-csh-interface" title="Link to this heading">¶</a></h1>
+<p>This is a module built off of the <a class="reference internal" href="../cape/filecntl/index.html#module-cape.filecntl" title="cape.filecntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl</span></code></a> module customized for
+manipulating <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> files.  Such files are actually C shell scripts
+copied into each run directory that operate adaptive runs of Cart3D.  The
+primary action of the <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a> is to set the values of
+several variables within the script.</p>
+<p>Because this is a C shell script, the <code class="xref py py-func docutils literal notranslate"><span class="pre">pyCart.aerocshfile.AeroCsh.Write()</span></code>
+method creates an executable script.</p>
+<p>Parameters that are set in the header section of <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> include
+inputs to <code class="docutils literal notranslate"><span class="pre">cubes</span></code>, <code class="docutils literal notranslate"><span class="pre">mgPrep</span></code>, <code class="docutils literal notranslate"><span class="pre">flowCart</span></code>, and <code class="docutils literal notranslate"><span class="pre">adjointCart</span></code>.  This is in
+addition to the overall mesh adaptation parameters set in
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.options.runControl.Adaptation</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See Also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../cape/filecntl/index.html#module-cape.filecntl" title="cape.filecntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl</span></code></a></p></li>
+<li><p><a class="reference internal" href="cntl.html#module-cape.pycart.cntl" title="cape.pycart.cntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cntl</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pycart.aerocshfile.</span></span><span class="sig-name descname"><span class="pre">AeroCsh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'aero.csh'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh" title="Link to this definition">¶</a></dt>
+<dd><p>File control class for <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> files</p>
+<p>This class is derived from <a class="reference internal" href="../cape/filecntl/filecntl.html#cape.filecntl.filecntl.FileCntl" title="cape.filecntl.filecntl.FileCntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.filecntl.filecntl.FileCntl</span></code></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span> <span class="o">=</span> <span class="n">AeroCsh</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span> <span class="o">=</span> <span class="n">AeroCsh</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s2">&quot;aero.csh&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of CNTL file to read, defaults to <code class="docutils literal notranslate"><span class="pre">'aero.csh'</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.GetVar">
+<span class="sig-name descname"><span class="pre">GetVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.GetVar" title="Link to this definition">¶</a></dt>
+<dd><p>Get generic <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> variable value</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">AC</span><span class="o">.</span><span class="n">GetVar</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>name</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of variable as identified in ‘aero.csh’</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>val</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text of value from file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2023-06-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.Prepare">
+<span class="sig-name descname"><span class="pre">Prepare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.Prepare" title="Link to this definition">¶</a></dt>
+<dd><p>Prepare all the key parameters of an <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">Prepare</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Run sequence index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-11-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (prev in <code class="docutils literal notranslate"><span class="pre">pycart.cntl</span></code>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetABuffer">
+<span class="sig-name descname"><span class="pre">SetABuffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetABuffer" title="Link to this definition">¶</a></dt>
+<dd><p>Set the number of buffer layers when refining a cell</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetABuffer</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>buf</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of buffer layers</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-11-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetAPC">
+<span class="sig-name descname"><span class="pre">SetAPC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">apc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetAPC" title="Link to this definition">¶</a></dt>
+<dd><p>Set the list of mesh growth factors</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetAPC</span><span class="p">(</span><span class="n">apc</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>apc</em>: <em>array_like</em></dt><dd><p>Vector of <code class="docutils literal notranslate"><span class="pre">'p'</span></code> and <code class="docutils literal notranslate"><span class="pre">'a'</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-10-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetAdjFirstOrder">
+<span class="sig-name descname"><span class="pre">SetAdjFirstOrder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetAdjFirstOrder" title="Link to this definition">¶</a></dt>
+<dd><p>Set flag to run <cite>adjointCart</cite> first-order</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetAdjFirstOrder</span><span class="p">(</span><span class="n">adj</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>adj</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to run <cite>adjointCart</cite> first-order</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-11-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetAdjointCartMG">
+<span class="sig-name descname"><span class="pre">SetAdjointCartMG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg_ad</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetAdjointCartMG" title="Link to this definition">¶</a></dt>
+<dd><p>Set the number of multigrid levels for <cite>adjointCart</cite></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetAdjointCartMG</span><span class="p">(</span><span class="n">mg_ad</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>mg_ad</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of <cite>adjointCart</cite> multigrid levels</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-11-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetBinaryIO">
+<span class="sig-name descname"><span class="pre">SetBinaryIO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">binaryIO</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetBinaryIO" title="Link to this definition">¶</a></dt>
+<dd><p>Set whether or not to write binary Tecplot files</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetBinaryIO</span><span class="p">(</span><span class="n">binaryIO</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>binaryIO</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to write binary Tecplot files</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-11-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; two output formats</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetBuffLim">
+<span class="sig-name descname"><span class="pre">SetBuffLim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffLim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetBuffLim" title="Link to this definition">¶</a></dt>
+<dd><p>Turn on or off buffer limiting to smear shocks</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetBuffLim</span><span class="p">(</span><span class="n">buffLim</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>buffLim</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to use the <code class="docutils literal notranslate"><span class="pre">-buffLim</span></code> flag</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2024-06-26 <code class="docutils literal notranslate"><span class="pre">&#64;jmeeroff</span></code>: v2.0 dual flag types</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetCFL">
+<span class="sig-name descname"><span class="pre">SetCFL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetCFL" title="Link to this definition">¶</a></dt>
+<dd><p>Set the CFL number</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetCFL</span><span class="p">(</span><span class="n">cfl</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>cfl</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>CFL number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetCFLMin">
+<span class="sig-name descname"><span class="pre">SetCFLMin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cflmin</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetCFLMin" title="Link to this definition">¶</a></dt>
+<dd><p>Set the minimum CFL number, which <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> uses as backup</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetCFLMin</span><span class="p">(</span><span class="n">cflmin</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>cfl</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>CFL number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-10-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetCubesA">
+<span class="sig-name descname"><span class="pre">SetCubesA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetCubesA" title="Link to this definition">¶</a></dt>
+<dd><p>Set the angle criterion for <cite>cubes</cite></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetCubesA</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>a</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Angle criterion for <cite>cubes</cite></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-12-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetCubesB">
+<span class="sig-name descname"><span class="pre">SetCubesB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetCubesB" title="Link to this definition">¶</a></dt>
+<dd><p>Set number of buffer layers for <cite>cubes</cite></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetCubesB</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>b</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of buffer layers for <cite>cubes</cite></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-12-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetErrorTolerance">
+<span class="sig-name descname"><span class="pre">SetErrorTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">etol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetErrorTolerance" title="Link to this definition">¶</a></dt>
+<dd><p>Set error tolerance in <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetErrorTolerance</span><span class="p">(</span><span class="n">etol</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>etol</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Number to set the function error tolerance to</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetFMG">
+<span class="sig-name descname"><span class="pre">SetFMG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetFMG" title="Link to this definition">¶</a></dt>
+<dd><p>Turn on or off <code class="docutils literal notranslate"><span class="pre">-no_fmg</span></code> flag</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetFMG</span><span class="p">(</span><span class="n">fmg</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>fmg</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to use full multigrid</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-11-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2024-06-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; two output formats</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetFinalMeshXRef">
+<span class="sig-name descname"><span class="pre">SetFinalMeshXRef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xref</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetFinalMeshXRef" title="Link to this definition">¶</a></dt>
+<dd><p>Set the number of additional adaptations on final error map</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetFinalMeshXRef</span><span class="p">(</span><span class="n">xref</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>xref</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of additional adaptations</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-11-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetFlowCartMG">
+<span class="sig-name descname"><span class="pre">SetFlowCartMG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg_fc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetFlowCartMG" title="Link to this definition">¶</a></dt>
+<dd><p>Set the number of multigrid levels for <cite>flowCart</cite></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetFlowCartMG</span><span class="p">(</span><span class="n">mg_fc</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>mg_fc</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of <cite>flowCart</cite> multigrid levels</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-11-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetLimiter">
+<span class="sig-name descname"><span class="pre">SetLimiter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limiter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetLimiter" title="Link to this definition">¶</a></dt>
+<dd><p>Set the limiter for <cite>flowCart</cite></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetLimiter</span><span class="p">(</span><span class="n">limiter</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>limiter</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Limiter, 2 or 5</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-10-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetMaxR">
+<span class="sig-name descname"><span class="pre">SetMaxR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxR</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetMaxR" title="Link to this definition">¶</a></dt>
+<dd><p>Set the maximum number of refinements for <cite>cubes</cite></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetMaxR</span><span class="p">(</span><span class="n">maxR</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>maxR</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Maximum number of refinements for <cite>cubes</cite></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-12-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetMaxnCells">
+<span class="sig-name descname"><span class="pre">SetMaxnCells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_nCells</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetMaxnCells" title="Link to this definition">¶</a></dt>
+<dd><p>Set the maximum number of cells for the mesh</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetMaxnCells</span><span class="p">(</span><span class="n">max_nCells</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>max_nCells</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Maximum number of cells allowed in mesh</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetMeshGrowth">
+<span class="sig-name descname"><span class="pre">SetMeshGrowth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_growth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetMeshGrowth" title="Link to this definition">¶</a></dt>
+<dd><p>Set the list of mesh growth factors</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetMeshGrowth</span><span class="p">(</span><span class="n">mesh_growth</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>mesh_growth</em>: <em>array_like</em></dt><dd><p>Vector of mesh growth parameters</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetPMG">
+<span class="sig-name descname"><span class="pre">SetPMG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pmg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetPMG" title="Link to this definition">¶</a></dt>
+<dd><p>Turn on or off <code class="docutils literal notranslate"><span class="pre">-pmg</span></code> flag</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetPMG</span><span class="p">(</span><span class="n">pmg</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>pmg</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to use poly multigrid</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-11-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2024-06-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; two output formats</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetPreSpec">
+<span class="sig-name descname"><span class="pre">SetPreSpec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetPreSpec" title="Link to this definition">¶</a></dt>
+<dd><p>Turn on or off <code class="file docutils literal notranslate"><span class="pre">preSpec.c3d.cntl</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetPreSpec</span><span class="p">(</span><span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>pre</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to use prespecified regions</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-12-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetTM">
+<span class="sig-name descname"><span class="pre">SetTM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetTM" title="Link to this definition">¶</a></dt>
+<dd><p>Turn on or off option to use first-order cut cells</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetTM</span><span class="p">(</span><span class="n">tm</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>tm</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> or <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Use first-order cut cells (<em>tm=0</em>) or not (<em>tm=1</em>)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetVar">
+<span class="sig-name descname"><span class="pre">SetVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetVar" title="Link to this definition">¶</a></dt>
+<dd><p>Set generic <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> variable value</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetVar</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>name</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of variable as identified in ‘aero.csh’</p>
+</dd>
+<dt><em>val</em>: <em>any</em>, converted using <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a></dt><dd><p>Value to which variable is set in final script</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetYIsSpanwise">
+<span class="sig-name descname"><span class="pre">SetYIsSpanwise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_is_spanwise</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetYIsSpanwise" title="Link to this definition">¶</a></dt>
+<dd><p>Turn on or off <em>y_is_spanwise</em> flag</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetYIsSpanwise</span><span class="p">(</span><span class="n">y_is_spanwise</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>y_is_spanwise</em>: <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether or not to use <em>y</em>-axis as spanwise axis</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-11-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-06-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; two output formats</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetnAdapt">
+<span class="sig-name descname"><span class="pre">SetnAdapt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_adapt_cycles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetnAdapt" title="Link to this definition">¶</a></dt>
+<dd><p>Set the number of adaptation cycles</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetnAdapt</span><span class="p">(</span><span class="n">n_adapt_cycles</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>n_adapt_cycles</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of adaptation cycles</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetnIter">
+<span class="sig-name descname"><span class="pre">SetnIter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">it_fc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetnIter" title="Link to this definition">¶</a></dt>
+<dd><p>Set the <em>initial</em> number of flowCart iterations</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetnIter</span><span class="p">(</span><span class="n">it_fc</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>it_fc</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of flowCart iters on initial mesh</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetnIterAdjoint">
+<span class="sig-name descname"><span class="pre">SetnIterAdjoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">it_ad</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetnIterAdjoint" title="Link to this definition">¶</a></dt>
+<dd><p>Set the number of adjointCart iterations</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetnIter</span><span class="p">(</span><span class="n">it_ad</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>it_ad</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of <cite>adjointCart</cite> iters</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetnIterList">
+<span class="sig-name descname"><span class="pre">SetnIterList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws_it</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetnIterList" title="Link to this definition">¶</a></dt>
+<dd><p>Set the number of flowCart iterations on new mesh</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetnIterList</span><span class="p">(</span><span class="n">ws_it</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>ws_it</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of <cite>flowCart</cite> iters on subsequent meshes</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Effects<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Writes a line of the form <code class="docutils literal notranslate"><span class="pre">'set</span> <span class="pre">ws_it</span> <span class="pre">=</span> <span class="pre">(</span> <span class="pre">50</span> <span class="pre">50</span> <span class="pre">50</span> <span class="pre">)'</span></code></p>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetnMultiGrid">
+<span class="sig-name descname"><span class="pre">SetnMultiGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg_fc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetnMultiGrid" title="Link to this definition">¶</a></dt>
+<dd><p>Set the number of multigrid levels for both solvers</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetnMultiGrid</span><span class="p">(</span><span class="n">mg_fc</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>mg_fc</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of multigrid levels, applied to flowCart and adjointCart</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.SetnRefinements">
+<span class="sig-name descname"><span class="pre">SetnRefinements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxR</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.SetnRefinements" title="Link to this definition">¶</a></dt>
+<dd><p>Set number of refinements for ‘cubes’ in ‘aero.csh’ file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">SetnRefinements</span><span class="p">(</span><span class="n">maxR</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> manipulation class</p>
+</dd>
+<dt><em>maxR</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Maximum number of refinements for <cite>cubes</cite></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pycart.aerocshfile.AeroCsh.Write">
+<span class="sig-name descname"><span class="pre">Write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pycart.aerocshfile.AeroCsh.Write" title="Link to this definition">¶</a></dt>
+<dd><p>Write <em>FC.lines</em> to text file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">Write</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AC</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>AC</em>: <a class="reference internal" href="#cape.pycart.aerocshfile.AeroCsh" title="cape.pycart.aerocshfile.AeroCsh"><code class="xref py py-class docutils literal notranslate"><span class="pre">AeroCsh</span></code></a></dt><dd><p>File control instance, defaults to <em>FC.fname</em></p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to write to</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-06-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="options/util.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.options.util</span></code>: Utilities for pyCart Options Module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="casecntl.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.case</span></code>: Case Control Module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pycart/aerocshfile.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="casecntl.html" title="cape.pycart.case: Case Control Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="options/util.html" title="cape.pycart.options.util: Utilities for pyCart Options Module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code>: Interfaces to Cart3D</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.aerocshfile</span></code>: Cart3D <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> interface</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

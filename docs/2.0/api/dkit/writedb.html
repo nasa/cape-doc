@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.dkit.writedb: Write DataKit processed data to file &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.dkit.xlsfile: Excel spreadsheet data interface" href="xlsfile.html" />
+    <link rel="prev" title="cape.dkit.vendorutils: Package Vendorization Utilities" href="vendorutils.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xlsfile.html" title="cape.dkit.xlsfile: Excel spreadsheet data interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="vendorutils.html" title="cape.dkit.vendorutils: Package Vendorization Utilities"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dkit</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dkit.writedb</span></code>: Write DataKit processed data to file</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-dkit-writedb-write-datakit-processed-data-to-file">
+<span id="module-cape.dkit.writedb"></span><h1><a class="reference internal" href="#module-cape.dkit.writedb" title="cape.dkit.writedb"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dkit.writedb</span></code></a>: Write DataKit processed data to file<a class="headerlink" href="#cape-dkit-writedb-write-datakit-processed-data-to-file" title="Link to this heading">¶</a></h1>
+<p>This module provides a function to write processed data for a given
+DataKit. It works within the context of a “DataKit collection” (i.e. a
+repo containing one or more DataKit packages) and is knowledgeable about
+the dependencies between DataKits within the collection.</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.writedb.genr8_modsequence">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.writedb.</span></span><span class="sig-name descname"><span class="pre">genr8_modsequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modnames</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.writedb.genr8_modsequence" title="Link to this definition">¶</a></dt>
+<dd><p>Create a sequence of modules that satisfy all requirements</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dbnames</span><span class="p">,</span> <span class="n">modnames</span> <span class="o">=</span> <span class="n">genr8_modsequence</span><span class="p">(</span><span class="n">modnames</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>modnames</em>: <a class="reference internal" href="../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Names of module names to process</p>
+</dd>
+<dt><em>reqs</em>, <em>dependencies</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Also process any modules listed in <em>REQUIREMENTS</em> in each
+module in <em>a</em></p>
+</dd>
+<dt><em>prefix</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional user-specified prefix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>dbnames</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of <em>DB_NAME</em> for modules corresponding to <em>modnames</em></p>
+</dd>
+<dt><em>modnames</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Modules in order that satisfies all dependencies</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-07-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2021-08-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; <em>prefix</em> option</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.writedb.get_dbname">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.writedb.</span></span><span class="sig-name descname"><span class="pre">get_dbname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mod</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.writedb.get_dbname" title="Link to this definition">¶</a></dt>
+<dd><p>Get database name from a module</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dbname</span> <span class="o">=</span> <span class="n">get_dbname</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>mod</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">module</span></code></dt><dd><p>DataKit module</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>dbname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Database name, from <em>mod.DATAKIT_LOADER</em> or <em>mod.__name__</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.writedb.get_fullmodname">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.writedb.</span></span><span class="sig-name descname"><span class="pre">get_fullmodname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.writedb.get_fullmodname" title="Link to this definition">¶</a></dt>
+<dd><p>Append prefix to module name if necessary</p>
+<p>For example <code class="docutils literal notranslate"><span class="pre">&quot;v004&quot;</span></code> might become <code class="docutils literal notranslate"><span class="pre">&quot;sls10afa.v004&quot;</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">modname</span> <span class="o">=</span> <span class="n">get_fullmodname</span><span class="p">(</span><span class="n">modname</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>modname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Module name, possibly missing top-level prefix</p>
+</dd>
+<dt><em>prefix</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional user-specified prefix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>modname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Full module name for import, possibly prepended</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2021-09-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; better <em>prefix</em> check</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.writedb.get_prefix">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.writedb.</span></span><span class="sig-name descname"><span class="pre">get_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.writedb.get_prefix" title="Link to this definition">¶</a></dt>
+<dd><p>Determine module name prefix based on current folder</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prefix</span> <span class="o">=</span> <span class="n">get_prefix</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>prefix</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional user-specified prefix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>prefix</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>User-specified prefix or package from
+<code class="xref py py-func docutils literal notranslate"><span class="pre">setuptools.find_packages()</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-08-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.writedb.import_dbname">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.writedb.</span></span><span class="sig-name descname"><span class="pre">import_dbname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.writedb.import_dbname" title="Link to this definition">¶</a></dt>
+<dd><p>Import a module by <em>DB_NAME</em> instead of module spec</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod2</span> <span class="o">=</span> <span class="n">import_dbname</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">dbname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>mod</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">module</span></code></dt><dd><p>Parent module</p>
+</dd>
+<dt><em>dbname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>DB name like <code class="docutils literal notranslate"><span class="pre">&quot;SLS-10-D-AFA-004&quot;</span></code></p>
+</dd>
+<dt><em>prefix</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional user-specified prefix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>mod2</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">module</span></code></dt><dd><p>Second module, having DB name matching <em>dbname</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-07-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2021-08-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; <em>prefix</em> option</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.writedb.import_module">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.writedb.</span></span><span class="sig-name descname"><span class="pre">import_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.writedb.import_module" title="Link to this definition">¶</a></dt>
+<dd><p>Import module from (possibly abbrev.) name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="n">modname</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>modname</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Module name, possibly missing top-level prefix</p>
+</dd>
+<dt><em>prefix</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional user-specified prefix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>mod</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">module</span></code></dt><dd><p>Module with (possibly prefixed) name <em>rev</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-07-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0 (<code class="docutils literal notranslate"><span class="pre">ATT-VM-CLVTOPS-003</span></code>)</p></li>
+<li><dl class="simple">
+<dt>2021-08-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1</dt><dd><ul>
+<li><p>automated default <em>PREFIX</em></p></li>
+<li><p>support empty <em>modname</em></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.writedb.main">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.writedb.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.writedb.main" title="Link to this definition">¶</a></dt>
+<dd><p>Main command-line interface function</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-07-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-07-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0</dt><dd><ul>
+<li><p>Move to <a class="reference internal" href="#cape.dkit.writedb.write_dbs" title="cape.dkit.writedb.write_dbs"><code class="xref py py-func docutils literal notranslate"><span class="pre">write_dbs()</span></code></a></p></li>
+<li><p>Add dependency tracking</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">-F</span></code> option</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>2021-08-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 3.0</dt><dd><ul>
+<li><p>Generalize for <a class="reference internal" href="../cape/index.html#module-cape" title="cape"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code></a></p></li>
+<li><p>Add <em>write_func</em> option</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.writedb.write_db">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.writedb.</span></span><span class="sig-name descname"><span class="pre">write_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.writedb.write_db" title="Link to this definition">¶</a></dt>
+<dd><p>Convert source data to formatted datakit files</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">write_db</span><span class="p">(</span><span class="n">modname</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>modnames</em>: <a class="reference internal" href="../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Names of module names to process</p>
+</dd>
+<dt><em>prefix</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional user-specified prefix</p>
+</dd>
+<dt><em>f</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Overwrite existing data files</p>
+</dd>
+<dt><em>write_func</em>, <em>func</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;write_db&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of function to use to write formatted files</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-07-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2018-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.0; using <code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib</span></code></p></li>
+<li><p>2021-07-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 2.1; Generalize for TNA/S-53</p></li>
+<li><dl class="simple">
+<dt>2021-08-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 3.0</dt><dd><ul>
+<li><p>move to <a class="reference internal" href="../cape/index.html#module-cape" title="cape"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code></a> from <code class="docutils literal notranslate"><span class="pre">ATT-VM-CLVTOPS-003</span></code></p></li>
+<li><p>generalize prefix using <code class="xref py py-func docutils literal notranslate"><span class="pre">setuptools.find_packages()</span></code></p></li>
+<li><p>add <em>prefix</em>, <em>write_func</em> kwargs</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.writedb.write_dbs">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.writedb.</span></span><span class="sig-name descname"><span class="pre">write_dbs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.writedb.write_dbs" title="Link to this definition">¶</a></dt>
+<dd><p>Write one or more datakit modules, with dependencies</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">write_dbs</span><span class="p">(</span><span class="o">*</span><span class="n">modnames</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>modnames</em>: <a class="reference internal" href="../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Names of modules to write, like <code class="docutils literal notranslate"><span class="pre">&quot;db0001&quot;</span></code></p>
+</dd>
+<dt><em>prefix</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional user-specified prefix</p>
+</dd>
+<dt><em>f</em>, <em>force</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Overwrite any modules in <em>a</em></p>
+</dd>
+<dt><em>F</em>, <em>force_all</em>, <em>force-all</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Overwrite all modules, including dependencies</p>
+</dd>
+<dt><em>reqs</em>, <em>dependencies</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Also process any modules listed in <em>REQUIREMENTS</em> in each
+modul in <em>a</em></p>
+</dd>
+<dt><em>write</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Flag to write databases (otherwise just print dependencies)</p>
+</dd>
+<dt><em>write_func</em>, <em>func</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;write_db&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of function to use to write formatted files</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-07-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><p>2021-07-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1; add <em>write</em> option</p></li>
+<li><p>2021-08-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.2; generalize <em>prefix</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="vendorutils.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dkit.vendorutils</span></code>: Package Vendorization Utilities</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="xlsfile.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dkit.xlsfile</span></code>: Excel spreadsheet data interface</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/dkit/writedb.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xlsfile.html" title="cape.dkit.xlsfile: Excel spreadsheet data interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="vendorutils.html" title="cape.dkit.vendorutils: Package Vendorization Utilities"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dkit</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dkit.writedb</span></code>: Write DataKit processed data to file</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

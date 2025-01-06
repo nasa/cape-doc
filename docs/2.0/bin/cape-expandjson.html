@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>7.21. cape-expandjson: Expand a JSON file and remove comments &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=87629129" />
+    <script src="../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7.22. pyfun-plt2triq: Convert FUN3D Tecplot file to Cart3D tri file" href="pyfun-plt2triq.html" />
+    <link rel="prev" title="7.20. cape-tri2surf: Convert surf triangulation to AFLR3 format" href="cape-tri2surf.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyfun-plt2triq.html" title="7.22. pyfun-plt2triq: Convert FUN3D Tecplot file to Cart3D tri file"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cape-tri2surf.html" title="7.20. cape-tri2surf: Convert surf triangulation to AFLR3 format"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">7. </span>CAPE Executables</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7.21. </span><code class="docutils literal notranslate"><span class="pre">cape-expandjson</span></code>: Expand a JSON file and remove comments</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-expandjson-expand-a-json-file-and-remove-comments">
+<span id="module-cape.clidoc.cape_expandjson"></span><h1><span class="section-number">7.21. </span><code class="docutils literal notranslate"><span class="pre">cape-expandjson</span></code>: Expand a JSON file and remove comments<a class="headerlink" href="#cape-expandjson-expand-a-json-file-and-remove-comments" title="Link to this heading">¶</a></h1>
+<p>This function performs two tasks:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Removes comments starting with either <code class="docutils literal notranslate"><span class="pre">&quot;//&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;#&quot;</span></code></p></li>
+<li><p>Replaces <code class="docutils literal notranslate"><span class="pre">JSONFile(fname)</span></code> with the contents of <em>fname</em></p></li>
+</ul>
+</div></blockquote>
+<p>The comments are removed recursively, so comments within children files
+are allowed.  If the output file is the same as the input file, the
+suffix <code class="docutils literal notranslate"><span class="pre">.old</span></code> is added to the original file, and the expanded contents
+are written to a new file with the same name as the input file.</p>
+<p>The default output file <em>OFILE</em> puts the infix “expanded” before the
+<code class="docutils literal notranslate"><span class="pre">.json</span></code> of the input file. So for example</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">myfile.json</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">myfile.expanded.json</span></code></p>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape-expandjson<span class="w"> </span>IFILE<span class="w"> </span>OFILE<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<span class="gp">$ </span>cape-expandjson<span class="w"> </span>-i<span class="w"> </span>IFILE<span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OFILE<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><em>IFILE</em>: name of input file</p></li>
+<li><p><em>OFILE</em>: output file for <em>IFILE</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">OPTIONS<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="option-list">
+<dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
+<dd><p>Display this help message and exit</p>
+</dd>
+<dt><kbd><span class="option">-i <var>IFILE</var></span></kbd></dt>
+<dd><p>Use <em>IFILE</em> as input file</p>
+</dd>
+<dt><kbd><span class="option">-o <var>OFILE</var></span></kbd></dt>
+<dd><p>Use <em>OFILE</em> as output file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0: <code class="xref py py-func docutils literal notranslate"><span class="pre">ExpandJSON()</span></code></p></li>
+<li><p>2021-10-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0; move to <code class="xref py py-mod docutils literal notranslate"><span class="pre">cli</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="cape-tri2surf.html"
+                          title="previous chapter"><span class="section-number">7.20. </span><code class="docutils literal notranslate"><span class="pre">cape-tri2surf</span></code>: Convert surf triangulation to AFLR3 format</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="pyfun-plt2triq.html"
+                          title="next chapter"><span class="section-number">7.22. </span><code class="docutils literal notranslate"><span class="pre">pyfun-plt2triq</span></code>: Convert FUN3D Tecplot file to Cart3D tri file</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/bin/cape-expandjson.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyfun-plt2triq.html" title="7.22. pyfun-plt2triq: Convert FUN3D Tecplot file to Cart3D tri file"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cape-tri2surf.html" title="7.20. cape-tri2surf: Convert surf triangulation to AFLR3 format"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">7. </span>CAPE Executables</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7.21. </span><code class="docutils literal notranslate"><span class="pre">cape-expandjson</span></code>: Expand a JSON file and remove comments</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

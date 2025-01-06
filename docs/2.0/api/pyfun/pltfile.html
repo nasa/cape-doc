@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.pyfun.plt: Interface to FUN3D Tecplot PLT files &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pyfun.report: Automated report interface" href="report.html" />
+    <link rel="prev" title="cape.pyfun.pointsensor: FUN3D point sensors module" href="pointsensor.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="report.html" title="cape.pyfun.report: Automated report interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pointsensor.html" title="cape.pyfun.pointsensor: FUN3D point sensors module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code>: FUN3D interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.plt</span></code>: Interface to FUN3D Tecplot PLT files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-pyfun-plt-interface-to-fun3d-tecplot-plt-files">
+<span id="module-cape.pyfun.pltfile"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.plt</span></code>: Interface to FUN3D Tecplot PLT files<a class="headerlink" href="#cape-pyfun-plt-interface-to-fun3d-tecplot-plt-files" title="Link to this heading">¶</a></h1>
+<p>This module provides the class <a class="reference internal" href="#cape.pyfun.pltfile.Plt" title="cape.pyfun.pltfile.Plt"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.pltfile.Plt</span></code></a>, which 
+intends to read and write Tecplot binary or ASCII PLT files for surface
+grid solutions from FUN3D. It is based on the generic PLT interface,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">cape.bin.pltfile.Plt</span></code>, which does not use the TecIO library to avoid
+causing unnecessary dependencies for the software.</p>
+<p>This version of the module has several modifications that are
+particular to FUN3D solutions.  It has a special method for calculating 
+time-averaged <em>Cp</em> values from named FUN3D outputs, and it also 
+includes an interface to FUN3D <code class="docutils literal notranslate"><span class="pre">.mapbc</span></code> files to interpret names for 
+each boundary zone.</p>
+<p>This class cannot read any generic <code class="docutils literal notranslate"><span class="pre">.plt</span></code> file; it focuses on surface
+grids with a mix of triangles and quads.  In particular it is closely 
+paired with the <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tri</span></code> triangulation module.  The initial 
+driving cause for creating this module was to read FUN3D boundary 
+solution files and convert them to annotated Cart3D <code class="docutils literal notranslate"><span class="pre">triq</span></code> format for
+input to <code class="docutils literal notranslate"><span class="pre">triload</span></code> and other post-processing based on the 
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tri</span></code> module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.plt</span></code></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tri</span></code></p></li>
+<li><p><a class="reference internal" href="mapbc.html#module-cape.pyfun.mapbc" title="cape.pyfun.mapbc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.mapbc</span></code></a></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">pc_Tri2Plt</span></code></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">pc_Plt2Tri</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyfun.pltfile.Plt">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyfun.pltfile.</span></span><span class="sig-name descname"><span class="pre">Plt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">triq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.pltfile.Plt" title="Link to this definition">¶</a></dt>
+<dd><p>Interface for Tecplot PLT files</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span> <span class="o">=</span> <span class="n">Plt</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>plt</em>: <a class="reference internal" href="#cape.pyfun.pltfile.Plt" title="cape.pyfun.pltfile.Plt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Plt</span></code></a></dt><dd><p>Tecplot PLT interface</p>
+</dd>
+<dt><em>plt.nVar</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of variables</p>
+</dd>
+<dt><em>plt.Vars</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of of variable names</p>
+</dd>
+<dt><em>plt.nZone</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of zones</p>
+</dd>
+<dt><em>plt.Zone</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Name of each zone</p>
+</dd>
+<dt><em>plt.nPt</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <em>nZone</em>)</dt><dd><p>Number of points in each zone</p>
+</dd>
+<dt><em>plt.nElem</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <em>nZone</em>)</dt><dd><p>Number of elements in each zone</p>
+</dd>
+<dt><em>plt.Tris</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<em>N</em>,4))</dt><dd><p>List of triangle node indices for each zone</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-11-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2017-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Subclassed to <a class="reference internal" href="../cape/pltfile.html#cape.pltfile.Plt" title="cape.pltfile.Plt"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pltfile.Plt</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.pltfile.Plt.GetCpTAvg">
+<span class="sig-name descname"><span class="pre">GetCpTAvg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mach</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.pltfile.Plt.GetCpTAvg" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate <em>cp_tavg</em> if <em>p_tavg</em> exists</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pltfile</span><span class="o">.</span><span class="n">GetCpTAvg</span><span class="p">(</span><span class="n">mach</span><span class="p">,</span> <span class="n">gam</span><span class="o">=</span><span class="mf">1.4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>plt</em>: <a class="reference internal" href="#cape.pyfun.pltfile.Plt" title="cape.pyfun.pltfile.Plt"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.pltfile.Plt</span></code></a></dt><dd><p>Tecplot PLT interface</p>
+</dd>
+<dt><em>mach</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Freestream Mach number</p>
+</dd>
+<dt><em>gam</em>: {<code class="docutils literal notranslate"><span class="pre">1.4</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Ratio of specific heats</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-05-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyfun.pltfile.Plt2Triq">
+<span class="sig-prename descclassname"><span class="pre">cape.pyfun.pltfile.</span></span><span class="sig-name descname"><span class="pre">Plt2Triq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fplt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftriq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.pltfile.Plt2Triq" title="Link to this definition">¶</a></dt>
+<dd><p>Convert Tecplot PLT file to Cart3D annotated tri (TRIQ)</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Plt2Triq</span><span class="p">(</span><span class="n">fplt</span><span class="p">,</span> <span class="n">ftriq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fplt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of Tecplot PLT file</p>
+</dd>
+<dt><em>ftriq</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of output file (default: replace extension with 
+<code class="docutils literal notranslate"><span class="pre">.triq</span></code>)</p>
+</dd>
+<dt><em>mach</em>: {<code class="docutils literal notranslate"><span class="pre">1.0</span></code>} | positive <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Freestream Mach number for skin friction coeff conversion</p>
+</dd>
+<dt><em>triload</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to write a triq tailored for <code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code></p>
+</dd>
+<dt><em>avg</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Use time-averaged states if available</p>
+</dd>
+<dt><em>rms</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Use root-mean-square variation instead of nominal value</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="pointsensor.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.pointsensor</span></code>: FUN3D point sensors module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="report.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.report</span></code>: Automated report interface</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pyfun/pltfile.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="report.html" title="cape.pyfun.report: Automated report interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pointsensor.html" title="cape.pyfun.pointsensor: FUN3D point sensors module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code>: FUN3D interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.plt</span></code>: Interface to FUN3D Tecplot PLT files</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

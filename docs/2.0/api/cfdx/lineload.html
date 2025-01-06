@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.cfdx.lineload: Line load databooks &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.cfdx.logger: Logging utilities for CAPE" href="logger.html" />
+    <link rel="prev" title="cape.cfdx.databook: Post-processed data module" href="databook.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="logger.html" title="cape.cfdx.logger: Logging utilities for CAPE"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="databook.html" title="cape.cfdx.databook: Post-processed data module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx</span></code>: Templates for CFD control tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.lineload</span></code>: Line load databooks</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-cfdx-lineload-line-load-databooks">
+<span id="module-cape.cfdx.lineload"></span><h1><a class="reference internal" href="#module-cape.cfdx.lineload" title="cape.cfdx.lineload"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.lineload</span></code></a>: Line load databooks<a class="headerlink" href="#cape-cfdx-lineload-line-load-databooks" title="Link to this heading">¶</a></h1>
+<p>This module contains functions for reading and processing sectional
+loads. This module is developed from <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.dataBook</span></code>, which
+is the overall databook interface. It provides the primary class
+<a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a>, which is a subclass of
+<a class="reference internal" href="databook.html#cape.cfdx.databook.DBBase" title="cape.cfdx.databook.DBBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.databook.DBBase</span></code></a>. This class is an interface to all
+line load data for a specific surface component.</p>
+<p>Overall, this module provides three classes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a>: Line load database for one component</p></li>
+<li><p><a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseLL</span></code></a>: Line load data for one comp of one CFD solution</p></li>
+<li><p><a class="reference internal" href="#cape.cfdx.lineload.CaseSeam" title="cape.cfdx.lineload.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseSeam</span></code></a>: Interface to “seam curves” to plot geom outline</p></li>
+</ul>
+</div></blockquote>
+<p>In addition to a database interface, this module also creates line
+loads. Specific modifications to the generic template provided here are
+needed for each individual CFD solver:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../pycart/lineload.html#module-cape.pycart.lineload" title="cape.pycart.lineload"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.lineload</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pyfun/lineLoad.html#module-cape.pyfun.lineload" title="cape.pyfun.lineload"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.lineload</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pyover/lineload.html#module-cape.pyover.lineload" title="cape.pyover.lineload"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.lineload</span></code></a></p></li>
+</ul>
+</div></blockquote>
+<p>To calculate line loads, this module utilizes the Chimera Grid Tools
+executable called <code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code>. This works by taking a Cart3D
+annotated surface triangulation (<code class="docutils literal notranslate"><span class="pre">triq</span></code> file), slicing the surface
+component into slices, and computing the loads on each slice. In order
+to create this surface triangulation, some solvers require steps to
+process the native CFD output. Those steps are performed by the
+solver-specific <code class="xref py py-mod docutils literal notranslate"><span class="pre">lineload</span></code> modules.</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.cfdx.lineload.</span></span><span class="sig-name descname"><span class="pre">CaseLL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LineLoad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dlds'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL" title="Link to this definition">¶</a></dt>
+<dd><p>Interface to individual sectional load</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span> <span class="o">=</span> <span class="n">CaseLL</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;LineLoad&#39;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="s1">&#39;slds&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>comp</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of component</p>
+</dd>
+<dt><em>proj</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Prefix for sectional load output files</p>
+</dd>
+<dt><em>sec</em>: <code class="docutils literal notranslate"><span class="pre">&quot;clds&quot;</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;dlds&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;slds&quot;</span></code></dt><dd><p>Cut type, cumulative, derivative, or sectional</p>
+</dd>
+<dt><em>ext</em>: <code class="docutils literal notranslate"><span class="pre">&quot;clds&quot;</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;dlds&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;slds&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;csv&quot;</span></code></dt><dd><p>File extension</p>
+</dd>
+<dt><em>fdir</em> {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of sub folder to use</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Individual line load for one component from one case</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-09-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Second version, universal</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.Copy">
+<span class="sig-name descname"><span class="pre">Copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.Copy" title="Link to this definition">¶</a></dt>
+<dd><p>Create a copy of a case line load object</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL2</span> <span class="o">=</span> <span class="n">LL</span><span class="o">.</span><span class="n">Copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Single-case, single-component line load interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>LL2</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Copy of the line load interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.CorrectCA">
+<span class="sig-name descname"><span class="pre">CorrectCA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CA1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.CorrectCA" title="Link to this definition">¶</a></dt>
+<dd><p>Correct <em>CA</em> using an unnormalized function</p>
+<p>This function takes a function with the same dimensions as <em>LL.CA</em> and
+adds a multiple of it so that the integrated axial force coefficient
+(<em>CA</em>) matches a target integrated value given by the user.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">CorrectCA</span><span class="p">(</span><span class="n">CA</span><span class="p">,</span> <span class="n">CA1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Instance of single-case line load interface</p>
+</dd>
+<dt><em>CA</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CA</em></p>
+</dd>
+<dt><em>CA1</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<em>LL.x.size</em>)</dt><dd><p>Basis function to correct <em>CA</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.CorrectCLL">
+<span class="sig-name descname"><span class="pre">CorrectCLL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CLL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CLL1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.CorrectCLL" title="Link to this definition">¶</a></dt>
+<dd><p>Correct <em>CLL</em> using an unnormalized function</p>
+<p>This function takes a function with the same dimensions as <em>LL.CLL</em> and
+adds a multiple of it so that the integrated rolling moment coefficient
+(<em>CLL</em>) matches a target integrated value given by the user.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">CorrectCLL</span><span class="p">(</span><span class="n">CLL</span><span class="p">,</span> <span class="n">CLL1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Instance of single-case line load interface</p>
+</dd>
+<dt><em>CLL</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CLL</em></p>
+</dd>
+<dt><em>CLL1</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<em>LL.x.size</em>)</dt><dd><p>Basis function to correct <em>CLL</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.CorrectCN">
+<span class="sig-name descname"><span class="pre">CorrectCN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CLM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UCN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xMRP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.CorrectCN" title="Link to this definition">¶</a></dt>
+<dd><p>Correct <em>CN</em> and <em>CLM</em> given <em>n</em> unnormalized functions</p>
+<p>This function takes an <em>m</em> by <em>n</em> matrix where <em>m</em> is the size of
+<em>LL.CN</em>. It then calculates an increment to <em>LL.CN</em> that is a linear
+combination of the columns of that matrix <em>UCN</em> such that the
+integrated normal force coefficient (<em>CN</em>) and pitching moment
+coefficient (<em>CLM</em>) match target values provided by the user.  The
+increment is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\Delta C_N = \sum_{i=1}^n k_i\\phi_i\end{split}\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(\\phi_i`\)</span> is the <em>i*th column of *UCN</em> scaled so that it
+has an L2 norm of 1.</p>
+<p>The weights of the linear coefficient are chosen in order to minimize
+the sum of an objective function subject to the integration constraints
+mentioned above.  This objective function is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\\sum_{i=1}^n a_i k_i^2 / \\sigma_i\end{split}\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(a_i\)</span> is the maximum absolute value of column <em>i</em> of <em>UCN</em>
+and <span class="math notranslate nohighlight">\(\\sigma_i\)</span> is the associated singular value.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">CorrectCN</span><span class="p">(</span><span class="n">CN</span><span class="p">,</span> <span class="n">CLM</span><span class="p">,</span> <span class="n">UCN</span><span class="p">,</span> <span class="n">sig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xMRP</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Instance of single-case line load interface</p>
+</dd>
+<dt><em>CN</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CN</em></p>
+</dd>
+<dt><em>CLM</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CLM</em></p>
+</dd>
+<dt><em>UCN</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<em>LL.x.size</em>,*n*)</dt><dd><p>Matrix of <em>CN</em> adjustment basis functions</p>
+</dd>
+<dt><em>sig</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<em>n</em>,)</dt><dd><p>Array of singular values</p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p><em>x</em>-coordinate of MRP divided by reference length</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-02-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.CorrectCN2">
+<span class="sig-name descname"><span class="pre">CorrectCN2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CLM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CN1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CN2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xMRP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.CorrectCN2" title="Link to this definition">¶</a></dt>
+<dd><p>Correct <em>CN</em> and <em>CLM</em> given two unnormalized functions</p>
+<p>This function takes two functions with the same dimensions as <em>LL.CN</em>
+and adds a linear combination of them so that the integrated normal
+force coefficient (<em>CN</em>) and pitching moment coefficient (<em>CLM</em>) match
+target integrated values given by the user.</p>
+<p>The user must specify two basis functions for correcting the <em>CN</em>
+sectional loads, and they must be linearly independent.  The
+corrections to <em>CLM</em> will be selected automatically to ensure
+consistency between the <em>CN</em> and <em>CLM</em>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">CorrectCN2</span><span class="p">(</span><span class="n">CN</span><span class="p">,</span> <span class="n">CLM</span><span class="p">,</span> <span class="n">CN1</span><span class="p">,</span> <span class="n">CN2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Instance of single-case line load interface</p>
+</dd>
+<dt><em>CN</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CN</em></p>
+</dd>
+<dt><em>CLM</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CLM</em></p>
+</dd>
+<dt><em>CN1</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<em>LL.x.size</em>)</dt><dd><p>First <em>CN</em> sectional load correction basis function</p>
+</dd>
+<dt><em>CN2</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<em>LL.x.size</em>)</dt><dd><p>Second <em>CN</em> sectional load correction basis function</p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p><em>x</em>-coordinate of MRP divided by reference length</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.CorrectCY">
+<span class="sig-name descname"><span class="pre">CorrectCY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CLN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UCY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xMRP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.CorrectCY" title="Link to this definition">¶</a></dt>
+<dd><p>Correct <em>CY</em> and <em>CLN</em> given <em>n</em> unnormalized functions</p>
+<p>This function takes an <em>m</em> by <em>n</em> matrix where <em>m</em> is the size of
+<em>LL.CY</em>. It then calculates an increment to <em>LL.CY</em> that is a linear
+combination of the columns of that matrix <em>UCY</em> such that the
+integrated normal force coefficient (<em>CY</em>) and pitching moment
+coefficient (<em>CLN</em>) match target values provided by the user.  The
+increment is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\Delta C_Y = \sum_{i=1}^n k_i\\phi_i\end{split}\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(\\phi_i`\)</span> is the <em>i*th column of *UCY</em> scaled so that it
+has an L2 norm of 1.</p>
+<p>The weights of the linear coefficient are chosen in order to minimize
+the sum of an objective function subject to the integration constraints
+mentioned above.  This objective function is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\\sum_{i=1}^n a_i k_i^2 / \\sigma_i\end{split}\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(a_i\)</span> is the maximum absolute value of column <em>i</em> of <em>UCY</em>
+and <span class="math notranslate nohighlight">\(\\sigma_i\)</span> is the associated singular value.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">CorrectCY</span><span class="p">(</span><span class="n">CY</span><span class="p">,</span> <span class="n">CLN</span><span class="p">,</span> <span class="n">UCY</span><span class="p">,</span> <span class="n">sig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xMRP</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Instance of single-case line load interface</p>
+</dd>
+<dt><em>CY</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CY</em></p>
+</dd>
+<dt><em>CLN</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CLN</em></p>
+</dd>
+<dt><em>UCY</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<em>LL.x.size</em>,*n*)</dt><dd><p>Matrix of <em>CY</em> adjustment basis functions</p>
+</dd>
+<dt><em>sig</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<em>n</em>,)</dt><dd><p>Array of singular values</p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p><em>x</em>-coordinate of MRP divided by reference length</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-02-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.CorrectCY2">
+<span class="sig-name descname"><span class="pre">CorrectCY2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CLN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CY1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CY2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xMRP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.CorrectCY2" title="Link to this definition">¶</a></dt>
+<dd><p>Correct <em>CY</em> and <em>CLN</em> given two unnormalized functions</p>
+<p>This function takes two functions with the same dimensions as <em>LL.CY</em>
+and adds a linear combination of them so that the integrated side
+force coefficient (<em>CY</em>) and yawing moment coefficient (<em>CLN</em>) match
+target integrated values given by the user.</p>
+<p>The user must specify two basis functions for correcting the <em>CY</em>
+sectional loads, and they must be linearly independent.  The
+corrections to <em>CLN</em> will be selected automatically to ensure
+consistency between the <em>CY</em> and <em>CLN</em>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">CorrectCY2</span><span class="p">(</span><span class="n">CY</span><span class="p">,</span> <span class="n">CLN</span><span class="p">,</span> <span class="n">CY1</span><span class="p">,</span> <span class="n">CY2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Instance of single-case line load interface</p>
+</dd>
+<dt><em>CY</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CY</em></p>
+</dd>
+<dt><em>CLN</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CLN</em></p>
+</dd>
+<dt><em>CY1</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<em>LL.x.size</em>)</dt><dd><p>First <em>CY</em> sectional load correction basis function</p>
+</dd>
+<dt><em>CY2</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> (<em>LL.x.size</em>)</dt><dd><p>Second <em>CY</em> sectional load correction basis function</p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p><em>x</em>-coordinate of MRP divided by reference length</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.CorrectLinear">
+<span class="sig-name descname"><span class="pre">CorrectLinear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CLM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CLN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xMRP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.CorrectLinear" title="Link to this definition">¶</a></dt>
+<dd><p>Correct line loads to match target integrated values using lines</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL2</span> <span class="o">=</span> <span class="n">LL</span><span class="o">.</span><span class="n">CorrectLinear</span><span class="p">(</span><span class="n">CN</span><span class="p">,</span> <span class="n">CLM</span><span class="p">,</span> <span class="n">xMRP</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Instance of single-case line load interface</p>
+</dd>
+<dt><em>CN</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CN</em></p>
+</dd>
+<dt><em>CLM</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CLM</em></p>
+</dd>
+<dt><em>CY</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CY</em></p>
+</dd>
+<dt><em>CLN</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Target integrated value of <em>CLN</em></p>
+</dd>
+<dt><em>xMRP</em>: {<code class="docutils literal notranslate"><span class="pre">0.0</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p><em>x</em>-coordinate of MRP divided by reference length</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>LL2</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Line loads with integrated loads matching <em>CN</em> and <em>CLM</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.Plot">
+<span class="sig-name descname"><span class="pre">Plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeff</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.Plot" title="Link to this definition">¶</a></dt>
+<dd><p>Plot a single line load</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.lineload.CaseLL</span></code></dt><dd><p>Instance of data book line load interface</p>
+</dd>
+<dt><em>coeff</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of coefficient to plot</p>
+</dd>
+<dt><em>x</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt><dd><p>Axis to use for independent axis</p>
+</dd>
+<dt><em>Seams</em>: {<code class="docutils literal notranslate"><span class="pre">[]</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference internal" href="#cape.cfdx.lineload.CaseSeam" title="cape.cfdx.lineload.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseSeam</span></code></a>)</dt><dd><p>List of seams to plot</p>
+</dd>
+<dt><em>SeamLocation</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;bottom&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;left&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;right&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;top&quot;</span></code></dt><dd><p>Location on which to plot seams</p>
+</dd>
+<dt><em>Orientation</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;vertical&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;horizontal&quot;</span></code></dt><dd><p>If not ‘vertical’, flip <em>x</em> and <em>y</em> axes</p>
+</dd>
+<dt><em>LineOptions</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of plot options</p>
+</dd>
+<dt><em>SeamOptions</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of plot options</p>
+</dd>
+<dt><em>Label</em>: {<em>LL.comp</em>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Plot label, <code class="docutils literal notranslate"><span class="pre">LineOptions['label']</span></code> supersedes this variable</p>
+</dd>
+<dt><em>XLabel</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x/Lref&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Label for x-axis</p>
+</dd>
+<dt><em>YLabel</em>: {<em>coeff</em>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Label for y-axis</p>
+</dd>
+<dt><em>Legend</em>: [ {True} | False ]</dt><dd><p>Whether or not to use a legend</p>
+</dd>
+<dt><em>FigWidth</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Figure width</p>
+</dd>
+<dt><em>FigHeight</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Figure height</p>
+</dd>
+<dt><em>SubplotMargin</em>: {<code class="docutils literal notranslate"><span class="pre">0.015</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Margin between subplots</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.PlotSeam">
+<span class="sig-name descname"><span class="pre">PlotSeam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'z'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.PlotSeam" title="Link to this definition">¶</a></dt>
+<dd><p>Plot a set of seam curves</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">LL</span><span class="o">.</span><span class="n">PlotSeam</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Instance of data book line load interface</p>
+</dd>
+<dt><em>s</em>: <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code>}</dt><dd><p>Type of slice to plot</p>
+</dd>
+<dt><em>x</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt><dd><p>Axis to plot on x-axis</p>
+</dd>
+<dt><em>y</em>: <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt><dd><p>Axis to plot on y-axis</p>
+</dd>
+<dt><em>LineOptions</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of plot options</p>
+</dd>
+<dt><em>Label</em>: {<em>LL.comp</em>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Plot label, <code class="docutils literal notranslate"><span class="pre">LineOptions['label']</span></code> supersedes this variable</p>
+</dd>
+<dt><em>XLabel</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x/Lref&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Label for x-axis</p>
+</dd>
+<dt><em>XLabel</em>: {<em>coeff</em>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Label for y-axis</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>h</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of plot handles</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.ReadCSV">
+<span class="sig-name descname"><span class="pre">ReadCSV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.ReadCSV" title="Link to this definition">¶</a></dt>
+<dd><p>Read a sectional loads <code class="docutils literal notranslate"><span class="pre">csv</span></code> file from the data book</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">ReadCSV</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Single-case, single component, line load interface</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+<dt><em>delim</em>: {<code class="docutils literal notranslate"><span class="pre">','</span></code>} | <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">'</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text delimiter</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.ReadLDS">
+<span class="sig-name descname"><span class="pre">ReadLDS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.ReadLDS" title="Link to this definition">¶</a></dt>
+<dd><p>Read a sectional loads <code class="docutils literal notranslate"><span class="pre">*.?lds</span></code> file from <cite>triloadCmd</cite></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">ReadLDS</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Single-case, single component, line load interface</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-09-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.ReadSeamCurves">
+<span class="sig-name descname"><span class="pre">ReadSeamCurves</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.ReadSeamCurves" title="Link to this definition">¶</a></dt>
+<dd><p>Read seam curves from a data book directory</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">ReadSeamCurves</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.lineload.CaseLL</span></code></dt><dd><p>Instance of data book line load interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-09-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseLL.WriteCSV">
+<span class="sig-name descname"><span class="pre">WriteCSV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseLL.WriteCSV" title="Link to this definition">¶</a></dt>
+<dd><p>Write a sectional loads <code class="docutils literal notranslate"><span class="pre">csv</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span><span class="o">.</span><span class="n">WriteCSV</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>LL</em>: <a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseLL</span></code></a></dt><dd><p>Single-case, single component, line load interface</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to write</p>
+</dd>
+<dt><em>delim</em>: {<code class="docutils literal notranslate"><span class="pre">','</span></code>} | <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">'</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text delimiter</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseSeam">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.cfdx.lineload.</span></span><span class="sig-name descname"><span class="pre">CaseSeam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'entire'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LineLoad'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseSeam" title="Link to this definition">¶</a></dt>
+<dd><p>Seam curve interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">CaseSeam</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="s1">&#39;entire&#39;</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;LineLoad&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+<dt><em>comp</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of the component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>S</em> <a class="reference internal" href="#cape.cfdx.lineload.CaseSeam" title="cape.cfdx.lineload.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseSeam</span></code></a></dt><dd><p>Seam curve interface</p>
+</dd>
+<dt><em>S.ax</em>: <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt><dd><p>Name of coordinate being held constant</p>
+</dd>
+<dt><em>S.x</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | {<a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>)}</dt><dd><p>x-coordinate or list of seam x-coordinate vectors</p>
+</dd>
+<dt><em>S.y</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | {<a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>)}</dt><dd><p>y-coordinate or list of seam y-coordinate vectors</p>
+</dd>
+<dt><em>S.z</em>: {<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>)</dt><dd><p>z-coordinate or list of seam z-coordinate vectors</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseSeam.Plot">
+<span class="sig-name descname"><span class="pre">Plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseSeam.Plot" title="Link to this definition">¶</a></dt>
+<dd><p>Plot a set of seam curves</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>S</em> <a class="reference internal" href="#cape.cfdx.lineload.CaseSeam" title="cape.cfdx.lineload.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseSeam</span></code></a></dt><dd><p>Seam curve interface</p>
+</dd>
+<dt><em>x</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt><dd><p>Axis to plot on x-axis</p>
+</dd>
+<dt><em>y</em>: <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code> | {<code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code>} | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt><dd><p>Axis to plot on y-axis</p>
+</dd>
+<dt><em>LineOptions</em>: {<code class="docutils literal notranslate"><span class="pre">{}</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of plot options</p>
+</dd>
+<dt><em>Label</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Plot label, <code class="docutils literal notranslate"><span class="pre">LineOptions['label']</span></code> supersedes this variable</p>
+</dd>
+<dt><em>XLabel</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;x/Lref&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Label for x-axis</p>
+</dd>
+<dt><em>XLabel</em>: {<em>coeff</em>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Label for y-axis</p>
+</dd>
+<dt><em>xpad</em>: {<code class="docutils literal notranslate"><span class="pre">0.03</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Relative margin to pad x-axis limits</p>
+</dd>
+<dt><em>ypad</em>: {<code class="docutils literal notranslate"><span class="pre">0.03</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Relative margin to pad y-axis limits</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>h</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of plot handles</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseSeam.Read">
+<span class="sig-name descname"><span class="pre">Read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseSeam.Read" title="Link to this definition">¶</a></dt>
+<dd><p>Read a seam  <code class="docutils literal notranslate"><span class="pre">*.sm[yz]</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>S</em> <a class="reference internal" href="#cape.cfdx.lineload.CaseSeam" title="cape.cfdx.lineload.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseSeam</span></code></a></dt><dd><p>Seam curve interface</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>S.n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of points in vector entries</p>
+</dd>
+<dt><em>S.x</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>)</dt><dd><p>List of <em>x</em> coordinates of seam curves</p>
+</dd>
+<dt><em>S.y</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>)</dt><dd><p>Fixed <em>y</em> coordinate or list of seam curve <em>y</em> coordinates</p>
+</dd>
+<dt><em>S.z</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>)</dt><dd><p>Fixed <em>z</em> coordinate or list of seam curve <em>z</em> coordinates</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-09-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added possibility of x-cuts</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.CaseSeam.Write">
+<span class="sig-name descname"><span class="pre">Write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.CaseSeam.Write" title="Link to this definition">¶</a></dt>
+<dd><p>Write a seam curve file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>S</em> <a class="reference internal" href="#cape.cfdx.lineload.CaseSeam" title="cape.cfdx.lineload.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.CaseSeam</span></code></a></dt><dd><p>Seam curve interface</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-09-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added possibility of x-cuts</p></li>
+<li><p>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Moved to seam class</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.cfdx.lineload.</span></span><span class="sig-name descname"><span class="pre">DBLineLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cntl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RootDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad" title="Link to this definition">¶</a></dt>
+<dd><p>Line load (sectional load) data book for one group</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span> <span class="o">=</span> <span class="n">DBLineLoad</span><span class="p">(</span><span class="n">cntl</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">RootDir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targ</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="cntl.html#cape.cfdx.cntl.Cntl" title="cape.cfdx.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.cntl.Cntl</span></code></a></dt><dd><p>CAPE run matrix control instance</p>
+</dd>
+<dt><em>comp</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of line load component</p>
+</dd>
+<dt><em>conf</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.Config</span></code></dt><dd><p>Surface configuration interface</p>
+</dd>
+<dt><em>RootDir</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Root directory for the configuration</p>
+</dd>
+<dt><em>targ</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>If used, read target data book’s folder</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Instance of line load data book</p>
+</dd>
+<dt><em>DBL.nCut</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of <em>x</em>-cuts to make, from <em>opts</em></p>
+</dd>
+<dt><em>DBL.RefL</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Reference length</p>
+</dd>
+<dt><em>DBL.MRP</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(3,)</dt><dd><p>Moment reference center</p>
+</dd>
+<dt><em>DBL.x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(<em>nCut</em>,)</dt><dd><p>Locations of <em>x</em>-cuts</p>
+</dd>
+<dt><em>DBL.CA</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(<em>nCut</em>,)</dt><dd><p>Axial force sectional load, d(CA)/d(x/RefL))</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-09-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2016-05-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Moved to <a class="reference internal" href="../cape/index.html#module-cape" title="cape"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.CalculateTriloadTransformation">
+<span class="sig-name descname"><span class="pre">CalculateTriloadTransformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.CalculateTriloadTransformation" title="Link to this definition">¶</a></dt>
+<dd><p>Write transformations to a <code class="docutils literal notranslate"><span class="pre">triload.i</span></code> input file</p>
+<p>Usually this just writes an <code class="docutils literal notranslate"><span class="pre">n</span></code> for “no”, but it can also write a 3x3
+transformation matrix if <code class="docutils literal notranslate"><span class="pre">&quot;Transformations&quot;</span></code> are defined for
+<em>DBL.comp</em>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">DBL</span><span class="o">.</span><span class="n">CalculateTriloadTransformation</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">topts</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Line load data book</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case number</p>
+</dd>
+<dt><em>topts</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of transformation options</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>R</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a> shape=(3,3)</dt><dd><p>Rotation matrix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-04-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.GetCoeffPOD">
+<span class="sig-name descname"><span class="pre">GetCoeffPOD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.GetCoeffPOD" title="Link to this definition">¶</a></dt>
+<dd><p>Create a Proper Orthogonal Decomposition for one coeff</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">DBL</span><span class="o">.</span><span class="n">GetPOD</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Line load data book</p>
+</dd>
+<dt><em>n</em>: {<code class="docutils literal notranslate"><span class="pre">2</span></code>} | positive <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of modes to keep</p>
+</dd>
+<dt><em>f</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | 0 &lt; <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> &lt;= 1</dt><dd><p>Keep enough modes so that this fraction of energy is kept</p>
+</dd>
+<dt><em>cons</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)</dt><dd><p>Constraints for which cases to include in basis</p>
+</dd>
+<dt><em>I</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>List of cases to include in basis</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.GetCompID">
+<span class="sig-name descname"><span class="pre">GetCompID</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.GetCompID" title="Link to this definition">¶</a></dt>
+<dd><p>Create list of component IDs</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">GetCompID</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Instance of line load data book</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version, extracted from __init__</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.GetMRP">
+<span class="sig-name descname"><span class="pre">GetMRP</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.GetMRP" title="Link to this definition">¶</a></dt>
+<dd><p>Get moment reference point for given component</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MRP</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">GetMRP</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a></dt><dd><p>Line load databook</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>MRP</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Coordinates of moment reference point</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2023-02-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.GetRefArea">
+<span class="sig-name descname"><span class="pre">GetRefArea</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.GetRefArea" title="Link to this definition">¶</a></dt>
+<dd><p>Get reference area for given component</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Aref</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">GetRefArea</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a></dt><dd><p>Line load databook</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>Aref</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Reference area</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2023-02-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.GetRefLength">
+<span class="sig-name descname"><span class="pre">GetRefLength</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.GetRefLength" title="Link to this definition">¶</a></dt>
+<dd><p>Get reference length for given component</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lref</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">GetRefLength</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a></dt><dd><p>Line load databook</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>Lref</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Reference length</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2023-02-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.GetTriqFile">
+<span class="sig-name descname"><span class="pre">GetTriqFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.GetTriqFile" title="Link to this definition">¶</a></dt>
+<dd><p>Get most recent <code class="docutils literal notranslate"><span class="pre">triq</span></code> file and its associated iterations</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qtriq</span><span class="p">,</span> <span class="n">ftriq</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">i0</span><span class="p">,</span> <span class="n">i1</span> <span class="o">=</span> <span class="n">DBL</span><span class="o">.</span><span class="n">GetTriqFile</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.lineload.DBLineLoad</span></code></dt><dd><p>Instance of line load data book</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>qtriq</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to convert file from other format</p>
+</dd>
+<dt><em>ftriq</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">triq</span></code> file</p>
+</dd>
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of iterations included</p>
+</dd>
+<dt><em>i0</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>First iteration in the averaging</p>
+</dd>
+<dt><em>i1</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Last iteration in the averaging</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added to the module</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.PreprocessTriq">
+<span class="sig-name descname"><span class="pre">PreprocessTriq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftriq</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.PreprocessTriq" title="Link to this definition">¶</a></dt>
+<dd><p>Perform any necessary preprocessing to create <code class="docutils literal notranslate"><span class="pre">triq</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ftriq</span> <span class="o">=</span> <span class="n">DBL</span><span class="o">.</span><span class="n">PreprocessTriq</span><span class="p">(</span><span class="n">ftriq</span><span class="p">,</span> <span class="n">qpbs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Line load data book</p>
+</dd>
+<dt><em>ftriq</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of triq file</p>
+</dd>
+<dt><em>qpbs</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to create a script and submit it</p>
+</dd>
+<dt><em>f</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File handle if writing PBS script</p>
+</dd>
+<dt><em>i</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2016-12-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added PBS</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.Read">
+<span class="sig-name descname"><span class="pre">Read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.Read" title="Link to this definition">¶</a></dt>
+<dd><p>Read a data book summary file for a single line load group</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">Read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Instance of line load data book</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of summary file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-09-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.ReadCase">
+<span class="sig-name descname"><span class="pre">ReadCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.ReadCase" title="Link to this definition">¶</a></dt>
+<dd><p>Read data from a case from the data book archive</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">ReadCase</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Line load data book</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case number from run matrix</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case number from data book</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2017-04-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Alternate index inputs</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.ReadSeamCurves">
+<span class="sig-name descname"><span class="pre">ReadSeamCurves</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.ReadSeamCurves" title="Link to this definition">¶</a></dt>
+<dd><p>Read seam curves from a data book directory</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">ReadSeamCurves</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Line load data book</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-09-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version (<a class="reference internal" href="#cape.cfdx.lineload.CaseLL" title="cape.cfdx.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseLL</span></code></a>)</p></li>
+<li><p>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Adapted for <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.RunTriload">
+<span class="sig-name descname"><span class="pre">RunTriload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qtriq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftriq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qpbs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.RunTriload" title="Link to this definition">¶</a></dt>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">triload</span></code> for a case</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">RunTriload</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Line load data book</p>
+</dd>
+<dt><em>qtriq</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not preprocessing is needed to create TRIQ file</p>
+</dd>
+<dt><em>ftriq</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of TRIQ file (if needed)</p>
+</dd>
+<dt><em>qpbs</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to create a script and submit it</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2016-12-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: PBS added</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.UpdateCase">
+<span class="sig-name descname"><span class="pre">UpdateCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qpbs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.UpdateCase" title="Link to this definition">¶</a></dt>
+<dd><p>Update one line load entry if necessary</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">DBL</span><span class="o">.</span><span class="n">UpdateLineLoadCase</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">qpbs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">seam</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Line load data book</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case number</p>
+</dd>
+<dt><em>qpbs</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to submit as a script</p>
+</dd>
+<dt><em>seam</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to always read local seam curves</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>n</em>: <code class="docutils literal notranslate"><span class="pre">0</span></code> | <code class="docutils literal notranslate"><span class="pre">1</span></code></dt><dd><p>Number of cases updated or added</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2016-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Modified for generic module</p></li>
+<li><p>2016-12-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added PBS</p></li>
+<li><p>2017-04-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Removed PBS and added output</p></li>
+<li><p>2021-12-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added <em>deam</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.UpdateRunMatrix">
+<span class="sig-name descname"><span class="pre">UpdateRunMatrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.UpdateRunMatrix" title="Link to this definition">¶</a></dt>
+<dd><p>Match the trajectory to the cases in the data book</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">UpdateRunMatrix</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Line load data book</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-05-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2016-08-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Copied from data book</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.Write">
+<span class="sig-name descname"><span class="pre">Write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unlock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.Write" title="Link to this definition">¶</a></dt>
+<dd><p>Write a single line load data book summary file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">Write</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unlock</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pycart.lineload.DBLineLoad</span></code></dt><dd><p>Instance of line load data book</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of summary file</p>
+</dd>
+<dt><em>merge</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to attempt a merger before writing</p>
+</dd>
+<dt><em>unlock</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not to delete any lock files</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2015-09-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2023-05-03 <code class="docutils literal notranslate"><span class="pre">&#64;aburkhea</span></code>: Added <em>unlock</em> and <em>merge</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.WriteSeamCurves">
+<span class="sig-name descname"><span class="pre">WriteSeamCurves</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.WriteSeamCurves" title="Link to this definition">¶</a></dt>
+<dd><p>Write seam curves to a common data book directory</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">WriteSeamCurves</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Line load data book</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.WriteTriloadInput">
+<span class="sig-name descname"><span class="pre">WriteTriloadInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftriq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.WriteTriloadInput" title="Link to this definition">¶</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">triload.i</span></code> input file to <code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">WriteTriloadInput</span><span class="p">(</span><span class="n">ftriq</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Line load data book</p>
+</dd>
+<dt><em>ftriq</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of the <code class="docutils literal notranslate"><span class="pre">triq</span></code> file to analyze</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Keyword arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>mach</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Override Mach number</p>
+</dd>
+<dt><em>Re</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Override Reynolds number input</p>
+</dd>
+<dt><em>gamma</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Override ratio of specific heats</p>
+</dd>
+<dt><em>MRP</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Override the moment reference point from the JSON input file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2017-01-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Moved code to WriteTriloadInputBase</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.WriteTriloadInputBase">
+<span class="sig-name descname"><span class="pre">WriteTriloadInputBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftriq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.WriteTriloadInputBase" title="Link to this definition">¶</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">triload.i</span></code> input file to <code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">WriteTriloadInput</span><span class="p">(</span><span class="n">ftriq</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Line load data book</p>
+</dd>
+<dt><em>ftriq</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of the <code class="docutils literal notranslate"><span class="pre">triq</span></code> file to analyze</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Keyword arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>mach</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Override Mach number</p>
+</dd>
+<dt><em>Re</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Override Reynolds number input</p>
+</dd>
+<dt><em>gamma</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Override ratio of specific heats</p>
+</dd>
+<dt><em>MRP</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Override the moment reference point from the JSON input file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.DBLineLoad.WriteTriloadTransformations">
+<span class="sig-name descname"><span class="pre">WriteTriloadTransformations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.DBLineLoad.WriteTriloadTransformations" title="Link to this definition">¶</a></dt>
+<dd><p>Write transformations to a <code class="docutils literal notranslate"><span class="pre">triload.i</span></code> input file</p>
+<p>Usually this just writes an <code class="docutils literal notranslate"><span class="pre">n</span></code> for “no”, but it can also
+write a 3x3 transformation matrix if <code class="docutils literal notranslate"><span class="pre">&quot;Transformations&quot;</span></code> are
+defined for <em>DBL.comp</em>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">WriteTriloadTransformations</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad" title="cape.cfdx.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.lineload.DBLineLoad</span></code></a></dt><dd><p>Line load data book</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case number</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Open file handle from <a class="reference internal" href="#cape.cfdx.lineload.DBLineLoad.WriteTriloadInputBase" title="cape.cfdx.lineload.DBLineLoad.WriteTriloadInputBase"><code class="xref py py-func docutils literal notranslate"><span class="pre">WriteTriloadInputBase()</span></code></a></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-04-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.lineload.ImportPyPlot">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.lineload.</span></span><span class="sig-name descname"><span class="pre">ImportPyPlot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.lineload.ImportPyPlot" title="Link to this definition">¶</a></dt>
+<dd><p>Import <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> if not already loaded</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pyCart</span><span class="o">.</span><span class="n">databook</span><span class="o">.</span><span class="n">ImportPyPlot</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-12-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="databook.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.databook</span></code>: Post-processed data module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="logger.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.logger</span></code>: Logging utilities for CAPE</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cfdx/lineload.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="logger.html" title="cape.cfdx.logger: Logging utilities for CAPE"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="databook.html" title="cape.cfdx.databook: Post-processed data module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx</span></code>: Templates for CFD control tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.lineload</span></code>: Line load databooks</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

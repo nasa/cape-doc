@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.argread: Command-Line Argument Processor &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.atm: Atmosphere Models" href="atm.html" />
+    <link rel="prev" title="cape.filecntl.texfile: Interface to LaTeX source files" href="filecntl/texfile.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atm.html" title="cape.atm: Atmosphere Models"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="filecntl/texfile.html" title="cape.filecntl.texfile: Interface to LaTeX source files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.argread</span></code>: Command-Line Argument Processor</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.argread">
+<span id="cape-argread-command-line-argument-processor"></span><h1><a class="reference internal" href="#module-cape.argread" title="cape.argread"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.argread</span></code></a>: Command-Line Argument Processor<a class="headerlink" href="#module-cape.argread" title="Link to this heading">¶</a></h1>
+<section id="argread-parse-command-line-arguments-and-options">
+<h2><code class="docutils literal notranslate"><span class="pre">argread</span></code>: Parse command-line arguments and options<a class="headerlink" href="#argread-parse-command-line-arguments-and-options" title="Link to this heading">¶</a></h2>
+<p>This class provides the <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a> class, instances of
+which can be used to customize available command-line options for a
+given interface.</p>
+<p>The <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a> class has the function <a class="reference internal" href="#cape.argread.ArgReader.parse" title="cape.argread.ArgReader.parse"><code class="xref py py-func docutils literal notranslate"><span class="pre">ArgReader.parse()</span></code></a>,
+which interprets <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code> and splits it into a list of args and
+kwargs. The base <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a> class will parse command-line
+arguments in useful ways, but one of the main intents is to subclass
+<a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a> and customize how various CLI arguments are parsed.</p>
+<p>Here are some examples of the base interpreter, which can also be used
+with the convenience function <a class="reference internal" href="#cape.argread.readkeys" title="cape.argread.readkeys"><code class="xref py py-func docutils literal notranslate"><span class="pre">readkeys()</span></code></a>.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">readkeys</span><span class="p">([</span><span class="s2">&quot;prog&quot;</span><span class="p">,</span> <span class="s2">&quot;arg1&quot;</span><span class="p">,</span> <span class="s2">&quot;arg2&quot;</span><span class="p">,</span> <span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--name&quot;</span><span class="p">,</span> <span class="s2">&quot;argread&quot;</span><span class="p">])</span>
+<span class="go">(&quot;arg1&quot;, &quot;arg2&quot;), {&quot;v&quot;: True, &quot;name&quot;: &quot;argread&quot;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">readkeys</span><span class="p">([</span><span class="s2">&quot;prog&quot;</span><span class="p">,</span> <span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;-name&quot;</span><span class="p">,</span> <span class="s2">&quot;argread&quot;</span><span class="p">,</span> <span class="s2">&quot;d=3&quot;</span><span class="p">])</span>
+<span class="go">(&quot;2&quot;,), {&quot;v&quot;: &quot;1&quot;, &quot;name&quot;: &quot;argread&quot;, &quot;d&quot;: &quot;3&quot;}</span>
+</pre></div>
+</div>
+<p>Notice that the <code class="docutils literal notranslate"><span class="pre">1</span></code> goes as the value of the option <code class="docutils literal notranslate"><span class="pre">v</span></code>. The <code class="docutils literal notranslate"><span class="pre">2</span></code>
+is not preceded by a <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> starting with a dash, so it gets
+interpreted as an arg.</p>
+<p>There is an alternate function <a class="reference internal" href="#cape.argread.readflags" title="cape.argread.readflags"><code class="xref py py-func docutils literal notranslate"><span class="pre">readflags()</span></code></a> that interprets
+multi-letter args starting with a single dash differently:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">readflags</span><span class="p">([</span><span class="s2">&quot;prog&quot;</span><span class="p">,</span> <span class="s2">&quot;-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;fname&quot;</span><span class="p">])</span>
+<span class="go">(&quot;fname&quot;,), {&quot;l&quot;: True, &quot;h&quot;: True}</span>
+</pre></div>
+</div>
+<p>There is a third function <a class="reference internal" href="#cape.argread.readflagstar" title="cape.argread.readflagstar"><code class="xref py py-func docutils literal notranslate"><span class="pre">readflagstar()</span></code></a> that interprets arguments
+like <code class="docutils literal notranslate"><span class="pre">tar</span></code></p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">readflagstar</span><span class="p">([</span><span class="s2">&quot;prog&quot;</span><span class="p">,</span> <span class="s2">&quot;-cvf&quot;</span><span class="p">,</span> <span class="s2">&quot;fname&quot;</span><span class="p">])</span>
+<span class="go">(), {&quot;c&quot;: True, &quot;v&quot;: True, &quot;f&quot;: &quot;fname&quot;}</span>
+</pre></div>
+</div>
+<p>These convenience functions make it easy to parse many command-line
+inputs with minimal effort, but it is also possible to declare richer
+and more specific interfaces by subclassing <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a>.</p>
+<p>For example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyParser</span><span class="p">(</span><span class="n">ArgReader</span><span class="p">):</span>
+    <span class="n">_optlist_noval</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;verbose&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_optmap</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;d&quot;</span><span class="p">:</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;v&quot;</span><span class="p">:</span> <span class="n">verbose</span><span class="s2">&quot;,</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>has two properties. First <code class="docutils literal notranslate"><span class="pre">-d</span></code> and <code class="docutils literal notranslate"><span class="pre">-v</span></code> are abbreviations for
+<code class="docutils literal notranslate"><span class="pre">--default</span></code> and <code class="docutils literal notranslate"><span class="pre">--verbose</span></code>, respectively, because of the entries in
+<code class="xref py py-data docutils literal notranslate"><span class="pre">MyParser._optmap</span></code>. Second, neither option can take a “value”, so</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>prog<span class="w"> </span>-d<span class="w"> </span>hub<span class="w"> </span>url
+</pre></div>
+</div>
+<p>would be parsed as</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="s2">&quot;hub&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span><span class="p">),</span> <span class="p">{</span><span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>In other words, the word <code class="docutils literal notranslate"><span class="pre">hub</span></code> didn’t get interpreted as the value for
+the option <code class="docutils literal notranslate"><span class="pre">d</span></code> as it would with the default <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a>.</p>
+<p>Another common use case is to convert CLI strings to another type. For
+example suppose you have an option <code class="docutils literal notranslate"><span class="pre">i</span></code> that takes in the index of
+something you want to work with, like</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>prog<span class="w"> </span>-i<span class="w"> </span><span class="m">3</span>
+</pre></div>
+</div>
+<p>The default <a class="reference internal" href="#cape.argread.readkeys" title="cape.argread.readkeys"><code class="xref py py-func docutils literal notranslate"><span class="pre">readkeys()</span></code></a> in this case would return</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(),</span> <span class="p">{</span><span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>you can convert this <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> <code class="docutils literal notranslate"><span class="pre">&quot;3&quot;</span></code> to an <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> with the
+following subclass</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyConverter</span><span class="p">(</span><span class="n">ArgReader</span><span class="p">):</span>
+    <span class="n">_optconverters</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<dl class="py exception">
+<dt class="sig sig-object py" id="cape.argread.ArgReadError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">ArgReadError</span></span><a class="headerlink" href="#cape.argread.ArgReadError" title="Link to this definition">¶</a></dt>
+<dd><p>Base error class for this package</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="cape.argread.ArgReadValueError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">ArgReadValueError</span></span><a class="headerlink" href="#cape.argread.ArgReadValueError" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.argread.ArgReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">ArgReader</span></span><a class="headerlink" href="#cape.argread.ArgReader" title="Link to this definition">¶</a></dt>
+<dd><p>Class to parse command-line interface arguments</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">ArgReader</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Instance of command-line argument parser</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#cape.argread.ArgReader.argv" title="cape.argread.ArgReader.argv"><code class="xref py py-attr docutils literal notranslate"><span class="pre">argv</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.argread.ArgReader.argvals" title="cape.argread.ArgReader.argvals"><code class="xref py py-attr docutils literal notranslate"><span class="pre">argvals</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.argread.ArgReader.cmdname" title="cape.argread.ArgReader.cmdname"><code class="xref py py-attr docutils literal notranslate"><span class="pre">cmdname</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.argread.ArgReader.prog" title="cape.argread.ArgReader.prog"><code class="xref py py-attr docutils literal notranslate"><span class="pre">prog</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.argread.ArgReader.kwargs_sequence" title="cape.argread.ArgReader.kwargs_sequence"><code class="xref py py-attr docutils literal notranslate"><span class="pre">kwargs_sequence</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.argread.ArgReader.kwargs_replaced" title="cape.argread.ArgReader.kwargs_replaced"><code class="xref py py-attr docutils literal notranslate"><span class="pre">kwargs_replaced</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.argread.ArgReader.kwargs_single_dash" title="cape.argread.ArgReader.kwargs_single_dash"><code class="xref py py-attr docutils literal notranslate"><span class="pre">kwargs_single_dash</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.argread.ArgReader.kwargs_double_dash" title="cape.argread.ArgReader.kwargs_double_dash"><code class="xref py py-attr docutils literal notranslate"><span class="pre">kwargs_double_dash</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.argread.ArgReader.kwargs_equal_sign" title="cape.argread.ArgReader.kwargs_equal_sign"><code class="xref py py-attr docutils literal notranslate"><span class="pre">kwargs_equal_sign</span></code></a></p></li>
+<li><p><a class="reference internal" href="#cape.argread.ArgReader.param_sequence" title="cape.argread.ArgReader.param_sequence"><code class="xref py py-attr docutils literal notranslate"><span class="pre">param_sequence</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">See also<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">_vendor.kwparse.KwargParser</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.apply_cmdmap">
+<span class="sig-name descname"><span class="pre">apply_cmdmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmdname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.argread.ArgReader.apply_cmdmap" title="Link to this definition">¶</a></dt>
+<dd><p>Apply aliases for sub-command name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fullcmdname</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">apply_cmdmap</span><span class="p">(</span><span class="n">cmdname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+<dt><em>cmdname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of sub-command as supplied by user</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fullcmdname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Standardized name of <em>cmdname</em>, usually just <em>cmdname</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2024-11-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.argv">
+<span class="sig-name descname"><span class="pre">argv</span></span><a class="headerlink" href="#cape.argread.ArgReader.argv" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] –
+List of raw CLI commands parsed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.argvals">
+<span class="sig-name descname"><span class="pre">argvals</span></span><a class="headerlink" href="#cape.argread.ArgReader.argvals" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> – Current values of non-keyword arguments</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.cmdname">
+<span class="sig-name descname"><span class="pre">cmdname</span></span><a class="headerlink" href="#cape.argread.ArgReader.cmdname" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> – Name of subcommand to use, if any</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.decide_cmdname">
+<span class="sig-name descname"><span class="pre">decide_cmdname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#list" title="list"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cape.argread.SubCmdTuple" title="cape.argread.SubCmdTuple"><span class="pre">SubCmdTuple</span></a></span></span><a class="headerlink" href="#cape.argread.ArgReader.decide_cmdname" title="Link to this definition">¶</a></dt>
+<dd><p>Identify sub-command if appropriate</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cmdname</span><span class="p">,</span> <span class="n">subargv</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">decide_cmdname</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+<dt><em>argv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Raw command-line args to parse {<code class="docutils literal notranslate"><span class="pre">sys.argv</span></code>}</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cmdname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>(Standardized) name of sub-command as supplied by user</p>
+</dd>
+<dt><em>subargv</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Command-line arguments for sub-command to parse</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2024-11-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.equal_sign_key">
+<span class="sig-name descname"><span class="pre">equal_sign_key</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#cape.argread.ArgReader.equal_sign_key" title="Link to this definition">¶</a></dt>
+<dd><p>Option to allow equal-sign options, e.g.
+<code class="docutils literal notranslate"><span class="pre">key=val</span></code> becomes <code class="docutils literal notranslate"><span class="pre">{&quot;key&quot;:</span> <span class="pre">&quot;val&quot;}</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.exc_cls">
+<span class="sig-name descname"><span class="pre">exc_cls</span></span><a class="headerlink" href="#cape.argread.ArgReader.exc_cls" title="Link to this definition">¶</a></dt>
+<dd><p>Base exception class: <a class="reference internal" href="../python.html#Exception" title="Exception"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>alias of <a class="reference internal" href="#cape.argread.ArgReadError" title="cape.argread.ArgReadError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReadError</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.fullparse">
+<span class="sig-name descname"><span class="pre">fullparse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#list" title="list"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cape.argread.SubParserTuple" title="cape.argread.SubParserTuple"><span class="pre">SubParserTuple</span></a></span></span><a class="headerlink" href="#cape.argread.ArgReader.fullparse" title="Link to this definition">¶</a></dt>
+<dd><p>Identify sub-command and use appropriate parser</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cmdname</span><span class="p">,</span> <span class="n">subparser</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">fullparse</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+<dt><em>argv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Optional arguments to parse, else <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cmdname</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of command, if identified or inferred</p>
+</dd>
+<dt><em>subparser</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReadder</span></code></dt><dd><p>Parser for <em>cmdname</em> applied to remaining CLI args</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2024-11-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.genr8_help">
+<span class="sig-name descname"><span class="pre">genr8_help</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.argread.ArgReader.genr8_help" title="Link to this definition">¶</a></dt>
+<dd><p>Generate automatic help message to use w/ <code class="docutils literal notranslate"><span class="pre">-h</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">msg</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">genr8_optshelp</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>msg</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Help message</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.genr8_opthelp">
+<span class="sig-name descname"><span class="pre">genr8_opthelp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.argread.ArgReader.genr8_opthelp" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a help message for a particular option</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">msg</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">genr8_opthelp</span><span class="p">(</span><span class="n">opt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+<dt><em>opt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of option</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>msg</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Help message for option <em>opt</em></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.genr8_optshelp">
+<span class="sig-name descname"><span class="pre">genr8_optshelp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.argread.ArgReader.genr8_optshelp" title="Link to this definition">¶</a></dt>
+<dd><p>Generate help message for all the options in _optlist</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">msg</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">genr8_optshelp</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>msg</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Help message for all options</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.get_aliases">
+<span class="sig-name descname"><span class="pre">get_aliases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#list" title="list"><span class="pre">list</span></a></span></span><a class="headerlink" href="#cape.argread.ArgReader.get_aliases" title="Link to this definition">¶</a></dt>
+<dd><p>Get list of aliases for a particular option</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">names</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">get_aliases</span><span class="p">(</span><span class="n">opt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+<dt><em>opt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of option</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>names</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of aliases, including <em>opt</em>; primary name first</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.get_args">
+<span class="sig-name descname"><span class="pre">get_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cape.argread.ArgTuple" title="cape.argread.ArgTuple"><span class="pre">ArgTuple</span></a></span></span><a class="headerlink" href="#cape.argread.ArgReader.get_args" title="Link to this definition">¶</a></dt>
+<dd><p>Get full list of args and options from parsed inputs</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">get_args</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>args</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of positional parameter argument values</p>
+</dd>
+<dt><em>kwargs</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of named options and their values</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2023-11-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.get_kwargs">
+<span class="sig-name descname"><span class="pre">get_kwargs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.argread.ArgReader.get_kwargs" title="Link to this definition">¶</a></dt>
+<dd><p>Get full list of kwargs, including repeated values</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">get_args</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>kwargs</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of named options and their values</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2024-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.infer_cmdname">
+<span class="sig-name descname"><span class="pre">infer_cmdname</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#cape.argread.ArgReader.infer_cmdname" title="Link to this definition">¶</a></dt>
+<dd><p>Infer sub-command if not determined by first argument</p>
+<p>This command is usually overwritten in subclasses for special
+command-line interfaces where the primary task is inferred from
+options. This version always returns <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cmdname</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">infer_cmdname</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cmdname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of sub-command</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2024-11-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.kwargs_double_dash">
+<span class="sig-name descname"><span class="pre">kwargs_double_dash</span></span><a class="headerlink" href="#cape.argread.ArgReader.kwargs_double_dash" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] –
+List of options that were entered with a double dash</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.kwargs_equal_sign">
+<span class="sig-name descname"><span class="pre">kwargs_equal_sign</span></span><a class="headerlink" href="#cape.argread.ArgReader.kwargs_equal_sign" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] –
+List of options that were entered using <code class="docutils literal notranslate"><span class="pre">key=val</span></code> syntax</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.kwargs_replaced">
+<span class="sig-name descname"><span class="pre">kwargs_replaced</span></span><a class="headerlink" href="#cape.argread.ArgReader.kwargs_replaced" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] –
+List of options that have duplicates</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.kwargs_sequence">
+<span class="sig-name descname"><span class="pre">kwargs_sequence</span></span><a class="headerlink" href="#cape.argread.ArgReader.kwargs_sequence" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] –
+List of options in original order</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.kwargs_single_dash">
+<span class="sig-name descname"><span class="pre">kwargs_single_dash</span></span><a class="headerlink" href="#cape.argread.ArgReader.kwargs_single_dash" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] –
+List of options that were entered with a single dash</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.param_sequence">
+<span class="sig-name descname"><span class="pre">param_sequence</span></span><a class="headerlink" href="#cape.argread.ArgReader.param_sequence" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code>] –
+List of option name and value as parsed (includes duplicates
+in their original order)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.parse">
+<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#list" title="list"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cape.argread.ArgTuple" title="cape.argread.ArgTuple"><span class="pre">ArgTuple</span></a></span></span><a class="headerlink" href="#cape.argread.ArgReader.parse" title="Link to this definition">¶</a></dt>
+<dd><p>Parse CLI args</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+<dt><em>argv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Optional arguments to parse, else <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>a</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></dt><dd><p>List of positional arguments</p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of options and their values</p>
+</dd>
+<dt><em>kw[“__replaced__”]</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[(<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <em>any</em>)]</dt><dd><p>List of any options replaced by later values</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-11-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.prog">
+<span class="sig-name descname"><span class="pre">prog</span></span><a class="headerlink" href="#cape.argread.ArgReader.prog" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> – Name of program read from <code class="docutils literal notranslate"><span class="pre">argv[0]</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.reconstruct">
+<span class="sig-name descname"><span class="pre">reconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#list" title="list"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#list" title="list"><span class="pre">list</span></a></span></span><a class="headerlink" href="#cape.argread.ArgReader.reconstruct" title="Link to this definition">¶</a></dt>
+<dd><p>Recreate a command from parsed information</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cmdlist</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">reconstruct</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+<dt><em>params</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>]</dt><dd><p>Optional list of parameters (default from <em>parser</em>)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cmdlist</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Reconstruction of originally parsed command</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2024-11-11 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.save_arg">
+<span class="sig-name descname"><span class="pre">save_arg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.ArgReader.save_arg" title="Link to this definition">¶</a></dt>
+<dd><p>Save a positional argument</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">save_arg</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">narg</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+<dt><em>arg</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name/value of next parameter</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-11-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.save_double_dash">
+<span class="sig-name descname"><span class="pre">save_double_dash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.ArgReader.save_double_dash" title="Link to this definition">¶</a></dt>
+<dd><p>Save a double-dash keyword and value</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">save_double_dash</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+<dt><em>k</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of key to save</p>
+</dd>
+<dt><em>v</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Value to save</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-11-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.save_equal_key">
+<span class="sig-name descname"><span class="pre">save_equal_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.ArgReader.save_equal_key" title="Link to this definition">¶</a></dt>
+<dd><p>Save an equal-sign key/value pair, like <code class="docutils literal notranslate"><span class="pre">&quot;mach=0.9&quot;</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">save_equal_key</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+<dt><em>k</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of key to save</p>
+</dd>
+<dt><em>v</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Value to save</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-11-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.save_single_dash">
+<span class="sig-name descname"><span class="pre">save_single_dash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.ArgReader.save_single_dash" title="Link to this definition">¶</a></dt>
+<dd><p>Save a single-dash keyword and value</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">save_single_dash</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>parser</em>: <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></dt><dd><p>Command-line argument parser</p>
+</dd>
+<dt><em>k</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of key to save</p>
+</dd>
+<dt><em>v</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Value to save</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-11-23 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.single_dash_lastkey">
+<span class="sig-name descname"><span class="pre">single_dash_lastkey</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#cape.argread.ArgReader.single_dash_lastkey" title="Link to this definition">¶</a></dt>
+<dd><p>Option to interpret multi-char words with a single dash
+the way POSIX command <code class="docutils literal notranslate"><span class="pre">tar</span></code> does, e.g.
+<code class="docutils literal notranslate"><span class="pre">-cvf</span> <span class="pre">val</span></code> becomes <code class="docutils literal notranslate"><span class="pre">{&quot;c&quot;:</span> <span class="pre">True,</span> <span class="pre">&quot;v&quot;:</span> <span class="pre">True,</span> <span class="pre">&quot;f&quot;:</span> <span class="pre">&quot;val&quot;}</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgReader.single_dash_split">
+<span class="sig-name descname"><span class="pre">single_dash_split</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#cape.argread.ArgReader.single_dash_split" title="Link to this definition">¶</a></dt>
+<dd><p>Option to interpret multi-char words with a single dash
+as single-letter boolean options, e.g.
+<code class="docutils literal notranslate"><span class="pre">-lh</span></code> becomes <code class="docutils literal notranslate"><span class="pre">{&quot;l&quot;:</span> <span class="pre">True,</span> <span class="pre">&quot;h&quot;:</span> <span class="pre">True}</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.argread.ArgTuple">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">ArgTuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.ArgTuple" title="Link to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgTuple.a">
+<span class="sig-name descname"><span class="pre">a</span></span><a class="headerlink" href="#cape.argread.ArgTuple.a" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.ArgTuple.kw">
+<span class="sig-name descname"><span class="pre">kw</span></span><a class="headerlink" href="#cape.argread.ArgTuple.kw" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.argread.FlagsArgReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">FlagsArgReader</span></span><a class="headerlink" href="#cape.argread.FlagsArgReader" title="Link to this definition">¶</a></dt>
+<dd><p>Subclass of <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a> for <a class="reference internal" href="#cape.argread.readflags" title="cape.argread.readflags"><code class="xref py py-func docutils literal notranslate"><span class="pre">readflags()</span></code></a></p>
+<p>The class attribute <code class="docutils literal notranslate"><span class="pre">FlagsArgRead.single_dash_split</span></code> is set to
+<code class="docutils literal notranslate"><span class="pre">True</span></code> so that <code class="docutils literal notranslate"><span class="pre">-opt</span> <span class="pre">val</span></code> is interpreted as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;o&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>and <code class="docutils literal notranslate"><span class="pre">&quot;val&quot;</span></code> becomes an argument.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.FlagsArgReader.single_dash_split">
+<span class="sig-name descname"><span class="pre">single_dash_split</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#cape.argread.FlagsArgReader.single_dash_split" title="Link to this definition">¶</a></dt>
+<dd><p>Option to interpret multi-char words with a single dash
+as single-letter boolean options, e.g.
+<code class="docutils literal notranslate"><span class="pre">-lh</span></code> becomes <code class="docutils literal notranslate"><span class="pre">{&quot;l&quot;:</span> <span class="pre">True,</span> <span class="pre">&quot;h&quot;:</span> <span class="pre">True}</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.argread.KeysArgReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">KeysArgReader</span></span><a class="headerlink" href="#cape.argread.KeysArgReader" title="Link to this definition">¶</a></dt>
+<dd><p>Subclass of <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a> for <a class="reference internal" href="#cape.argread.readkeys" title="cape.argread.readkeys"><code class="xref py py-func docutils literal notranslate"><span class="pre">readkeys()</span></code></a></p>
+<p>The class attribute <code class="docutils literal notranslate"><span class="pre">KeysArgRead.single_dash_split</span></code> is set to
+<code class="docutils literal notranslate"><span class="pre">False</span></code> so that <code class="docutils literal notranslate"><span class="pre">-opt</span> <span class="pre">val</span></code> is interpreted as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;opt&quot;</span><span class="p">:</span> <span class="s2">&quot;val&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.KeysArgReader.single_dash_split">
+<span class="sig-name descname"><span class="pre">single_dash_split</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#cape.argread.KeysArgReader.single_dash_split" title="Link to this definition">¶</a></dt>
+<dd><p>Option to interpret multi-char words with a single dash
+as single-letter boolean options, e.g.
+<code class="docutils literal notranslate"><span class="pre">-lh</span></code> becomes <code class="docutils literal notranslate"><span class="pre">{&quot;l&quot;:</span> <span class="pre">True,</span> <span class="pre">&quot;h&quot;:</span> <span class="pre">True}</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.argread.MetaArgReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">MetaArgReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#tuple" title="tuple"><span class="pre">tuple</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.MetaArgReader" title="Link to this definition">¶</a></dt>
+<dd><p>Metaclass for <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a></p>
+<p>This metaclass combines attributes w/ bases. For example if creating
+a new class <code class="xref py py-class docutils literal notranslate"><span class="pre">Class2</span></code> that inherits from <code class="xref py py-class docutils literal notranslate"><span class="pre">Class1</span></code>, this
+will automatically combine <code class="docutils literal notranslate"><span class="pre">Class1._optlist`</span> <span class="pre">and</span>
+<span class="pre">``Class2._optlist</span></code> and save the result as <code class="docutils literal notranslate"><span class="pre">Class2._optlist</span></code>. This
+happens behind the scenes so that users do not need to worry about
+repeating <code class="docutils literal notranslate"><span class="pre">_optlist</span></code> entries.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.argread.SubCmdTuple">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">SubCmdTuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmdname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.SubCmdTuple" title="Link to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.SubCmdTuple.argv">
+<span class="sig-name descname"><span class="pre">argv</span></span><a class="headerlink" href="#cape.argread.SubCmdTuple.argv" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.SubCmdTuple.cmdname">
+<span class="sig-name descname"><span class="pre">cmdname</span></span><a class="headerlink" href="#cape.argread.SubCmdTuple.cmdname" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.argread.SubParserTuple">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">SubParserTuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmdname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subparser</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.SubParserTuple" title="Link to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.SubParserTuple.cmdname">
+<span class="sig-name descname"><span class="pre">cmdname</span></span><a class="headerlink" href="#cape.argread.SubParserTuple.cmdname" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.SubParserTuple.subparser">
+<span class="sig-name descname"><span class="pre">subparser</span></span><a class="headerlink" href="#cape.argread.SubParserTuple.subparser" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.argread.TarFlagsArgReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">TarFlagsArgReader</span></span><a class="headerlink" href="#cape.argread.TarFlagsArgReader" title="Link to this definition">¶</a></dt>
+<dd><p>Subclass of <a class="reference internal" href="#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgReader</span></code></a> for <a class="reference internal" href="#cape.argread.readflags" title="cape.argread.readflags"><code class="xref py py-func docutils literal notranslate"><span class="pre">readflags()</span></code></a></p>
+<p>The class attributes are</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TarArgRead</span><span class="o">.</span><span class="n">single_dash_split</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">TarArgRead</span><span class="o">.</span><span class="n">single_dash_lastkey</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>so that <code class="docutils literal notranslate"><span class="pre">-opt</span> <span class="pre">val</span></code> is interpreted as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;o&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="s2">&quot;val&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.TarFlagsArgReader.single_dash_lastkey">
+<span class="sig-name descname"><span class="pre">single_dash_lastkey</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#cape.argread.TarFlagsArgReader.single_dash_lastkey" title="Link to this definition">¶</a></dt>
+<dd><p>Option to interpret multi-char words with a single dash
+the way POSIX command <code class="docutils literal notranslate"><span class="pre">tar</span></code> does, e.g.
+<code class="docutils literal notranslate"><span class="pre">-cvf</span> <span class="pre">val</span></code> becomes <code class="docutils literal notranslate"><span class="pre">{&quot;c&quot;:</span> <span class="pre">True,</span> <span class="pre">&quot;v&quot;:</span> <span class="pre">True,</span> <span class="pre">&quot;f&quot;:</span> <span class="pre">&quot;val&quot;}</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.argread.TarFlagsArgReader.single_dash_split">
+<span class="sig-name descname"><span class="pre">single_dash_split</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#cape.argread.TarFlagsArgReader.single_dash_split" title="Link to this definition">¶</a></dt>
+<dd><p>Option to interpret multi-char words with a single dash
+as single-letter boolean options, e.g.
+<code class="docutils literal notranslate"><span class="pre">-lh</span></code> becomes <code class="docutils literal notranslate"><span class="pre">{&quot;l&quot;:</span> <span class="pre">True,</span> <span class="pre">&quot;h&quot;:</span> <span class="pre">True}</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.argread.readflags">
+<span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">readflags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.readflags" title="Link to this definition">¶</a></dt>
+<dd><p>Parse args where <code class="docutils literal notranslate"><span class="pre">-cj</span></code> becomes <code class="docutils literal notranslate"><span class="pre">c=True,</span> <span class="pre">j=True</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">readflags</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>argv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of args other than <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>a</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of positional args</p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</dt><dd><p>Keyword arguments</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-12-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.argread.readflagstar">
+<span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">readflagstar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.readflagstar" title="Link to this definition">¶</a></dt>
+<dd><p>Parse args where <code class="docutils literal notranslate"><span class="pre">-cf</span> <span class="pre">a</span></code> becomes <code class="docutils literal notranslate"><span class="pre">c=True,</span> <span class="pre">f=&quot;a&quot;</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">readflags</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>argv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of args other than <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>a</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of positional args</p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</dt><dd><p>Keyword arguments</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-12-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.argread.readkeys">
+<span class="sig-prename descclassname"><span class="pre">cape.argread.</span></span><span class="sig-name descname"><span class="pre">readkeys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.argread.readkeys" title="Link to this definition">¶</a></dt>
+<dd><p>Parse args where <code class="docutils literal notranslate"><span class="pre">-cj</span></code> becomes <code class="docutils literal notranslate"><span class="pre">cj=True</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">kw</span> <span class="o">=</span> <span class="n">readkeys</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>argv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of args other than <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>a</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of positional args</p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</dt><dd><p>Keyword arguments</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-12-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.argread</span></code>: Command-Line Argument Processor</a><ul>
+<li><a class="reference internal" href="#argread-parse-command-line-arguments-and-options"><code class="docutils literal notranslate"><span class="pre">argread</span></code>: Parse command-line arguments and options</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="filecntl/texfile.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.texfile</span></code>: Interface to LaTeX source files</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="atm.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.atm</span></code>: Atmosphere Models</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cape/argread.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atm.html" title="cape.atm: Atmosphere Models"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="filecntl/texfile.html" title="cape.filecntl.texfile: Interface to LaTeX source files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.argread</span></code>: Command-Line Argument Processor</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

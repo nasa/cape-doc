@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.3. Command-Line Interface &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=87629129" />
+    <script src="../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.4. Syntax for CAPE JSON Files" href="file/json.html" />
+    <link rel="prev" title="3.2. General Case Setup" href="setup.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="file/json.html" title="3.4. Syntax for CAPE JSON Files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="setup.html" title="3.2. General Case Setup"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.3. </span>Command-Line Interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="command-line-interface">
+<span id="cli"></span><h1><span class="section-number">3.3. </span>Command-Line Interface<a class="headerlink" href="#command-line-interface" title="Link to this heading">¶</a></h1>
+<p>The command-line interface is accessed through three scripts (one for each
+CFD solver), <code class="docutils literal notranslate"><span class="pre">pycart</span></code>, <code class="docutils literal notranslate"><span class="pre">pyfun</span></code>, and <code class="docutils literal notranslate"><span class="pre">pyover</span></code>.  These three scripts are
+simple Python scripts located in <code class="docutils literal notranslate"><span class="pre">$PYCART/bin</span></code>.</p>
+<p>Command-line options are interpreted by <a class="reference internal" href="../api/cape/argread.html#cape.argread.readkeys" title="cape.argread.readkeys"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.argread.readkeys()</span></code></a>. Multiple
+letters following a single hyphen, such as <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-cf</span></code>, is interpreted as
+two options, equivalent to <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-c</span> <span class="pre">-f</span></code>. Multiple characters following two
+hyphens, such as <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--help</span></code> are interpreted as a single option with a
+longer name.</p>
+<p>The master input file for one of these scripts is a JSON file that is usually
+identified with the <code class="docutils literal notranslate"><span class="pre">-f</span></code> flag.  For example</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-f<span class="w"> </span>run/poweroff.json
+</pre></div>
+</div>
+</div></blockquote>
+<p>will use the file <code class="file docutils literal notranslate"><span class="pre">run/poweroff.json</span></code> for its settings.  Each call to one
+of these scripts interprets the current directory, i.e. <code class="docutils literal notranslate"><span class="pre">$PWD</span></code>, as the home
+directory for the analysis.  In the example above, the home directory is
+<code class="docutils literal notranslate"><span class="pre">$PWD</span></code>, not <code class="docutils literal notranslate"><span class="pre">$PWD/run</span></code>.</p>
+<section id="basic-commands">
+<span id="cli-commands"></span><h2><span class="section-number">3.3.1. </span>Basic Commands<a class="headerlink" href="#basic-commands" title="Link to this heading">¶</a></h2>
+<p>Options to <code class="docutils literal notranslate"><span class="pre">pycart</span></code> and the other scripts can be grouped into commands,
+modifiers, and subsetting options.  The subsetting options are used to identify
+a subset of the full run matrix, and the command options identify an action for
+<code class="docutils literal notranslate"><span class="pre">pycart</span></code> to take.  Modifiers provide a small set of options for the the major
+commands.  The following section describes commands using a <a class="reference internal" href="../pycart/examples/01-bullet/index.html#pycart-ex-bullet"><span class="std std-ref">simple
+example</span></a> from pyCart.</p>
+<p>Furthermore, these commands are listed in order of precedence.  If a user
+specifies more than one of these options, only one action will actually be
+taken, and that order of precedence is demonstrated in the table below.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-h</span></code></p></td>
+<td><p>Display help message and quit</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--help</span></code></p></td>
+<td><p>Display help message and quit</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-c</span></code></p></td>
+<td><p>Check and display status</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span>&#160; <span class="pre">--batch</span></code></p></td>
+<td><p>Run command as a PBS job; this submits a
+PBS job that runs the same command with
+the <code class="docutils literal notranslate"><span class="pre">--batch</span></code> flag removed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--fm</span></code></p></td>
+<td><p>Create/update force &amp; moment databook</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--pt</span> <span class="pre">$PT</span></code></p></td>
+<td><p>Update point sensor data book for point
+sensor group <em>PT</em>; if <em>PT</em> is not
+given, update all point sensor groups</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--ll</span> <span class="pre">$COMP</span></code></p></td>
+<td><p>Update line load data book for component
+<em>COMP</em>; if <em>COMP</em> is not given, update
+all line load data books</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--triqfm</span> <span class="pre">$COMP</span></code></p></td>
+<td><p>Update patch load database for component
+<em>COMP</em>; if <em>COMP</em> is not given, update
+all TriqFM data books</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--archive</span></code></p></td>
+<td><p>Create archive of solution in an outside
+folder and clean up the working folder</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--clean</span></code></p></td>
+<td><p>Delete files according to the settings
+from <em>ProgressDeleteFiles</em> even if case
+is not completed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--unarchive</span></code></p></td>
+<td><p>Copy files from archive to working
+directory</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--skeleton</span></code></p></td>
+<td><p>Clean even more files after archiving</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--report</span> <span class="pre">$REP</span></code></p></td>
+<td><p>Create/update a report called <em>REP</em>; if
+<em>REP</em> is omitted, create the first
+report available</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--qdel</span></code></p></td>
+<td><p>Kill PBS jobs</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--rm</span></code></p></td>
+<td><p>Delete run folders</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-e</span> <span class="pre">$CMD</span></code></p></td>
+<td><p>Run command <em>CMD</em> in each case folder</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--exec</span> <span class="pre">$CMD</span></code></p></td>
+<td><p>Run command <em>CMD</em> in each case folder</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-n</span> <span class="pre">$N</span></code></p></td>
+<td><p>Submit or run up to <em>N</em> jobs</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--extend</span></code></p></td>
+<td><p>Extend the last phase by the number of
+steps that phase would run for</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--apply</span></code></p></td>
+<td><p>Rewrite input files and PBS files using
+appropriate JSON settings; can also be
+used to add one or more phases</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pycart</span></code></p></td>
+<td><p>Running with no command is equivalent to
+<code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-n</span> <span class="pre">10</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<section id="help-message">
+<span id="cli-h"></span><h3><span class="section-number">3.3.1.1. </span>Help Message<a class="headerlink" href="#help-message" title="Link to this heading">¶</a></h3>
+<p>To see of the options from the command line, just run <code class="docutils literal notranslate"><span class="pre">pycart</span>
+<span class="pre">-h</span></code> or <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--help</span></code>.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-h
+
+<span class="go">Python interface for Cart3D: pycart</span>
+
+<span class="go">This function provides a master interface for pyCart. The functionality from</span>
+<span class="go">this script is also accessible from the &#39;pyCart&#39; module using relatively</span>
+<span class="go">simple commands.</span>
+
+<span class="go">USAGE</span>
+
+<span class="gp">    $ </span>pycart<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+
+<span class="go">EXAMPLES</span>
+
+<span class="go">    The basic call submits all jobs prescribed in the file &#39;pyCart.json&#39;</span>
+
+<span class="gp">        $ </span>pycart
+
+<span class="go">    This command uses the inputs from &#39;poweron.json&#39; and only displays</span>
+<span class="go">    statuses.  No jobs are submitted.</span>
+
+<span class="gp">        $ </span>pycart<span class="w"> </span>-f<span class="w"> </span>poweron.json<span class="w"> </span>-c
+
+<span class="go"> ...</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The help messages are printed as raw text on the command line in such a format
+that is interpreted as
+<a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>  at
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart.cli</span></code> (for <code class="docutils literal notranslate"><span class="pre">pycart</span></code>), <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.cli</span></code> (for
+<code class="docutils literal notranslate"><span class="pre">pyfun</span></code>), and <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.cli</span></code> (for <code class="docutils literal notranslate"><span class="pre">pyover</span></code>).</p>
+</section>
+<section id="status-check">
+<span id="cli-c"></span><h3><span class="section-number">3.3.1.2. </span>Status Check<a class="headerlink" href="#status-check" title="Link to this heading">¶</a></h3>
+<p>The first command is the help command, which was discussed previously.  The
+second command is to check the status, which may show something like the
+following.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m1.5a0.0b0.0 DONE    200/200     .   5.0</span>
+<span class="go">1    poweroff/m2.0a0.0b0.0 INCOMP  100/200     .   2.2</span>
+<span class="go">2    poweroff/m2.0a2.0b0.0 RUN     157/200     Q   3.1</span>
+<span class="go">3    poweroff/m2.0a2.0b2.0 ---     /           .</span>
+
+<span class="go">---=1, INCOMP=1, RUN=1, DONE=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The status check will show one of eight statuses for each case in the run
+matrix or <a class="reference internal" href="#cli-subset"><span class="std std-ref">subset</span></a>, and these are explained in the table
+below.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Status</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">---</span></code></p></td>
+<td><p>Folder does not yet exist or does not have all files</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INCOMP</span></code></p></td>
+<td><p>Case is not running, not submitted in the queue, and
+has not reached the requested number of iterations</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">QUEUE</span></code></p></td>
+<td><p>Case is not running but is present in the PBS queue</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RUN</span></code></p></td>
+<td><p>Case is currently running, locally or as PBS job</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ZOMBIE</span></code></p></td>
+<td><p>Case appears to be running, but no files have
+changed in the last 30 minutes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERROR</span></code></p></td>
+<td><p>Case has been marked as erroneous for some reason</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>Case is not running and has reached requested number
+of iterations</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PASS</span></code></p></td>
+<td><p>Case meets criteria for <code class="docutils literal notranslate"><span class="pre">DONE</span></code> and has been marked
+as acceptable with a <code class="docutils literal notranslate"><span class="pre">p</span></code> in the run matrix file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PASS*</span></code></p></td>
+<td><p>Case was marked <code class="docutils literal notranslate"><span class="pre">PASS</span></code> by user but does not meet
+criteria for <code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>This command also has a modifier <code class="docutils literal notranslate"><span class="pre">-j</span></code> that will also show the PBS job number
+as another column in the status message.  This can be written shorthand as
+<code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-cj</span></code>.  Also, the <code class="docutils literal notranslate"><span class="pre">-j</span></code> modifier extends to any other command that
+shows the status message above as part of its process (e.g. submitting jobs).</p>
+</section>
+<section id="batch-commands">
+<span id="cli-batch"></span><h3><span class="section-number">3.3.1.3. </span>Batch Commands<a class="headerlink" href="#batch-commands" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">--batch</span></code> option is a special command that creates a PBS job that runs
+what is otherwise the same command.  This creates a simple PBS job in the
+folder <code class="docutils literal notranslate"><span class="pre">batch-pbs</span></code>.  As an exception, the <code class="docutils literal notranslate"><span class="pre">-h</span></code> and <code class="docutils literal notranslate"><span class="pre">-c</span></code> options do not
+require much work, and so they can not be submitted as batch jobs.</p>
+</section>
+<section id="data-book-updates">
+<span id="cli-aero"></span><h3><span class="section-number">3.3.1.4. </span>Data Book Updates<a class="headerlink" href="#data-book-updates" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">--fm</span></code> flag creates or updates the force and moment database.  The list
+of components included in the database, along with other defining options, are
+specified in the <code class="docutils literal notranslate"><span class="pre">&quot;DataBook&quot;</span></code> section of the input JSON file.  When a user
+runs this command, each case (<a class="reference internal" href="#cli-subset"><span class="std std-ref">subsetting commands</span></a> still
+apply) is shown along with a brief message of the status of the database and
+action of this update.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>--aero
+<span class="go">poweroff/m0.84a0.0b0.0</span>
+<span class="go">  Adding new databook entry at iteration 300.</span>
+<span class="go">poweroff/m0.84a2.0b0.0</span>
+<span class="go">  Not enough iterations (100) for analysis.</span>
+<span class="go">poweroff/m0.88a0.0b0.0</span>
+<span class="go">poweroff/m0.88a2.0b0.0</span>
+<span class="go">  Updating from iteration 200 to 300.</span>
+<span class="go">poweroff/m0.88a4.0b0.0</span>
+<span class="go">  Databook up to date.</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The point sensor data book (<code class="docutils literal notranslate"><span class="pre">--pt</span></code>) and line load data book (<code class="docutils literal notranslate"><span class="pre">--ll</span></code>) work
+in the same way.  The exception is that these two extended data book examples
+can be commanded to update only one component of the data book.  Suppose there
+is a setup with a center, left, and right component.  Then</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>--ll<span class="w"> </span>LL_C
+</pre></div>
+</div>
+</div></blockquote>
+<p>only updates the data book for line loads on the center component (assuming
+there is a line load component called <code class="docutils literal notranslate"><span class="pre">LL_C</span></code> for the center body defined in
+the <code class="docutils literal notranslate"><span class="pre">&quot;DataBook&quot;</span></code> section of the JSON file).  Meanwhile, the command <code class="docutils literal notranslate"><span class="pre">pycart</span>
+<span class="pre">--ll</span></code> will update the data book for all three components.</p>
+<p>Also, these commands will both run the necessary post-processing and collect
+the results into the data book.  For instance, it will run <code class="docutils literal notranslate"><span class="pre">triloadCmd</span></code> to
+compute line loads unless they already exist.</p>
+</section>
+<section id="archiving-solutions">
+<span id="cli-archive"></span><h3><span class="section-number">3.3.1.5. </span>Archiving Solutions<a class="headerlink" href="#archiving-solutions" title="Link to this heading">¶</a></h3>
+<p>Once a case has been completed and marked as <code class="docutils literal notranslate"><span class="pre">PASS</span></code>, the <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--archive</span></code>
+command can be issued to perform several tasks.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Delete any files that are not deemed necessary to be saved</p></li>
+<li><p>Archive folders or other groups into tar balls to reduce file count</p></li>
+<li><p>Copy reduced set of files to external location for backup</p></li>
+<li><p>Clean up the working folder</p></li>
+</ol>
+</div></blockquote>
+<p>All of these steps can be heavily customized using the options in the
+<code class="docutils literal notranslate"><span class="pre">&quot;Archive&quot;</span></code> subsection of the <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> section of the JSON file.
+There are two main modes of archive generation.  The first mode is to archive
+the entire case as an entire folder, which leads to a file such as
+<code class="docutils literal notranslate"><span class="pre">m2.50a2.0.tar</span></code> in the archive.  The second mode is to copy several files
+within the folder.  Using the second option, files can either be saved
+individually or in groups as tar balls.  Which mode is selected is based on the
+<em>ArchiveType</em> option; the second mode is selected unless <em>ArchiveType</em> is
+<code class="docutils literal notranslate"><span class="pre">&quot;full&quot;</span></code>.</p>
+<p>In both modes, there are three different opportunities to delete files:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Delete files as the cases is running, using <em>ProgressDeleteFiles</em></p></li>
+<li><p>Delete files after completion but before archiving, <em>PreDeleteFiles</em></p></li>
+<li><p>Delete files after creating archive, <em>PostDeleteFiles</em></p></li>
+</ol>
+</div></blockquote>
+<p>These options can be set to keep around the <em>n</em> most recent files meeting a
+particular file glob; for example</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;ProgressDeleteFiles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;q.[0-9]*&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="s2">&quot;x.[0-9]*&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This tells pyOver to keep the 2 most recent <code class="docutils literal notranslate"><span class="pre">q.$N</span></code> and the two most recent
+<code class="docutils literal notranslate"><span class="pre">x.$N</span></code> files; this can be very useful in keeping down hard drive usage for
+large runs.</p>
+</section>
+<section id="trimming-excess-files-while-running">
+<span id="cli-clean"></span><h3><span class="section-number">3.3.1.6. </span>Trimming Excess Files While Running<a class="headerlink" href="#trimming-excess-files-while-running" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">--clean</span></code> command can be applied even if the case is not marked <code class="docutils literal notranslate"><span class="pre">PASS</span></code>
+or even it is currently running.  It applies the <em>ProgressDeleteFiles</em> and
+<em>ProgressDeleteFolders</em> options from the <em>RunControl&gt;Archive</em> section of the
+JSON file.</p>
+<p>Note that inappropriate settings for these two options may cause pyCart to
+delete files needed for running!</p>
+</section>
+<section id="creating-reports">
+<span id="cli-report"></span><h3><span class="section-number">3.3.1.7. </span>Creating Reports<a class="headerlink" href="#creating-reports" title="Link to this heading">¶</a></h3>
+<p>Creating <a class="reference internal" href="report/index.html#report"><span class="std std-ref">automated reports</span></a> is done using the command <code class="docutils literal notranslate"><span class="pre">pycart</span>
+<span class="pre">--report</span></code>.  In the <code class="docutils literal notranslate"><span class="pre">&quot;Report&quot;</span></code> section of the JSON file, a number of reports
+can be defined.  A sample section of the JSON file looks like the following:</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Report&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// List of reports</span>
+<span class="w">    </span><span class="s2">&quot;Reports&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;case&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;sweep&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;flow&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Definitions for each report</span>
+<span class="w">    </span><span class="s2">&quot;cases&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;sweep&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;flow&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Definitions for each figure</span>
+<span class="w">    </span><span class="s2">&quot;Figures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Definitions for each subfigure</span>
+<span class="w">    </span><span class="s2">&quot;Subfigures&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In this case, the following commands are possible.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>--report
+<span class="gp">$ </span>pycart<span class="w"> </span>--report<span class="w"> </span><span class="k">case</span>
+<span class="gp">$ </span>pycart<span class="w"> </span>--report<span class="w"> </span>sweep
+<span class="gp">$ </span>pycart<span class="w"> </span>--report<span class="w"> </span>flow
+</pre></div>
+</div>
+</div></blockquote>
+<p>The first two of these commands are equivalent since not naming the report
+explicitly in the command defaults to the first report in the <code class="docutils literal notranslate"><span class="pre">&quot;Reports&quot;</span></code>
+list.</p>
+<p>Each command creates a file <code class="docutils literal notranslate"><span class="pre">report/report-$REP.pdf</span></code>.  Further, subsequent
+calls to <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--report</span></code> only updates each figure of each case if needed.
+This means that figures are only updated when more iterations have been run
+since the last time the figure was created or the settings for that figure have
+changed.</p>
+</section>
+<section id="killing-jobs">
+<span id="cli-qdel"></span><h3><span class="section-number">3.3.1.8. </span>Killing Jobs<a class="headerlink" href="#killing-jobs" title="Link to this heading">¶</a></h3>
+<p>Occasionally it is necessary to stop a number of PBS jobs that have either been
+submitted to the queue or are currently running.  Rather than manually killing
+each job (using the <code class="docutils literal notranslate"><span class="pre">qdel</span></code> command, for instance), pyCart provides a command
+to delete PBS jobs for an arbitrarily-sized subset of the run matrix.  The
+following two commands are equivalent.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>--qdel
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="removing-cases">
+<span id="cli-rm"></span><h3><span class="section-number">3.3.1.9. </span>Removing Cases<a class="headerlink" href="#removing-cases" title="Link to this heading">¶</a></h3>
+<p>The CAPE CLI also provides a convenient method to delete the entire folder of
+one or more case using</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>--rm
+</pre></div>
+</div>
+</div></blockquote>
+<p>By default this will interactively ask for confirmation for each individual
+case folder, which can be eliminated using</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>--rm<span class="w"> </span>--no-prompt
+</pre></div>
+</div>
+</div></blockquote>
+<p>However, even with the <code class="docutils literal notranslate"><span class="pre">--no-prompt</span></code> option, it will ask for confirmation
+when the case has more than 0 iterations run.</p>
+</section>
+<section id="execute-a-script-in-each-case-folder">
+<span id="cli-e"></span><h3><span class="section-number">3.3.1.10. </span>Execute a Script in Each Case Folder<a class="headerlink" href="#execute-a-script-in-each-case-folder" title="Link to this heading">¶</a></h3>
+<p>The command <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-e</span> <span class="pre">$CMD</span></code> can be used to execute a command in each folder
+in a run matrix.  This can be something simple, such as <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-e</span> <span class="pre">ls</span></code> to
+list the files in each folder.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-e<span class="w"> </span>ls
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m1.5a0.0b0.0 RUN     130/200     .        0.0</span>
+<span class="go">  Executing system command:</span>
+<span class="go">    ls</span>
+<span class="go">body.dat            Components.i.tri  forces.dat      input.cntl     preSpec.c3d.cntl</span>
+<span class="go">bullet_no_base.dat  conditions.json   functional.dat  Mesh.c3d.Info  run_cart3d.pbs</span>
+<span class="go">bullet_total.dat    Config.xml        history.dat     Mesh.mg.c3d    RUNNING</span>
+<span class="go">cap.dat             entire.dat        input.00.cntl   Mesh.R.c3d</span>
+<span class="go">case.json           flowCart.out      input.c3d       moments.dat</span>
+<span class="go">    exit(0)</span>
+<span class="go">1    poweroff/m2.0a0.0b0.0 DONE    200/200     .</span>
+<span class="go">  Executing system command:</span>
+<span class="go">    ls</span>
+<span class="go">body.dat            clic.dat            cutPlanes.dat   input.cntl        run.00.200</span>
+<span class="go">bullet_no_base.dat  clic.i.dat          entire.dat      loadsCC.dat       run_cart3d.pbs</span>
+<span class="go">bullet_total.dat    clic.w.dat          export.png      macro.xml         test.pdf</span>
+<span class="go">cap.dat             Components.i.tri    export.py       marco.py          test.png</span>
+<span class="go">case.json           Components.i.triq   forces.dat      Mesh.c3d.Info     test.pvcc</span>
+<span class="go">check.00200         Components.w2.triq  functional.dat  Mesh.mg.c3d       test.pvd</span>
+<span class="go">checkDT.00200       Components.w.triq   history.dat     Mesh.R.c3d        test.pvsm</span>
+<span class="go">clic                conditions.json     input.00.cntl   moments.dat</span>
+<span class="go">clic.cntl           Config.xml          input.c3d       preSpec.c3d.cntl</span>
+<span class="go">    exit(0)</span>
+<span class="go">2    poweroff/m2.0a2.0b0.0 ---     /           .</span>
+<span class="go">3    poweroff/m2.0a2.0b2.0 ---     /           .</span>
+
+<span class="go">---=2, RUN=1, DONE=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>It can also be used to execute a specific script, for example</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-e<span class="w"> </span>tools/fixProblem.py
+</pre></div>
+</div>
+</div></blockquote>
+<p>This command copies the script <code class="docutils literal notranslate"><span class="pre">tools/fixProblem.py</span></code> to each case folder and
+then executes <code class="docutils literal notranslate"><span class="pre">./fixProblem.py</span></code> in each folder.  The commands <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-e</span></code>
+and <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--exec</span></code> are equivalent.</p>
+</section>
+<section id="extending-a-case-to-repeat-the-last-phase">
+<span id="cli-extend"></span><h3><span class="section-number">3.3.1.11. </span>Extending a Case to Repeat the Last Phase<a class="headerlink" href="#extending-a-case-to-repeat-the-last-phase" title="Link to this heading">¶</a></h3>
+<p>Often a case does not look like it has fully converged after inspecting the
+report.  The command</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>--extend<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>goes into each folder, determines the last phase number and how many iterations
+it normally runs for, and extends the case by that many iterations.  The
+primary effect of this command is to edit the last entry of <em>PhaseIters</em> in the
+<code class="file docutils literal notranslate"><span class="pre">case.json</span></code> file.</p>
+<p>pyCart is fairly diligent at determining the appropriate number of iterations
+for which to extend the case.  For example, for OVERFLOW runs it will determine
+the last namelist and determine the extension amount from the <em>GLOBAL&gt;NSTEPS</em>
+option in that namelist.</p>
+<p>This command comes with two additional options: <code class="docutils literal notranslate"><span class="pre">--restart</span></code> and <code class="docutils literal notranslate"><span class="pre">--imax</span>
+<span class="pre">$N</span></code>.  The <code class="docutils literal notranslate"><span class="pre">--imax</span> <span class="pre">$N</span></code> option prevents pyCart from extending the maximum
+iteration count beyond <em>N</em>.</p>
+<p>Furthermore, the default behavior of the <code class="docutils literal notranslate"><span class="pre">--extend</span></code> command is modify the
+iteration count and then leave the case in an <code class="docutils literal notranslate"><span class="pre">INCOMP</span></code> status, which can feel
+a little disappointing.  (The reason is that the user may want to change the
+status of many cases, and this prevents restarting a surprising load of cases.)
+Adding either <code class="docutils literal notranslate"><span class="pre">--qsub</span></code> or <code class="docutils literal notranslate"><span class="pre">--restart</span></code> tells pyCart to submit or restart the
+case after extending it.</p>
+</section>
+<section id="apply-new-settings-and-or-add-phases">
+<span id="cli-apply"></span><h3><span class="section-number">3.3.1.12. </span>Apply New Settings and/or Add Phases<a class="headerlink" href="#apply-new-settings-and-or-add-phases" title="Link to this heading">¶</a></h3>
+<p>The command <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--apply</span></code> will try to apply all the settings from the
+current JSON file to each case that meets the subsetting criteria associated
+with the command.  There are usually three steps to this process:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Rewrite all input files, such as <code class="file docutils literal notranslate"><span class="pre">input.cntl</span></code> for Cart3D or
+namelist files for OVERFLOW and FUN3D.</p></li>
+<li><p>Rewrite the PBS scripts</p></li>
+<li><p>Rewrite <code class="docutils literal notranslate"><span class="pre">case.json</span></code> with new <em>RunControl</em> settings</p></li>
+</ul>
+</div></blockquote>
+<p>Each of these steps may be affected by the presence of additional phases in the
+JSON file.  For example, if the case in its present setup has three phases, but
+<code class="file docutils literal notranslate"><span class="pre">pyOver.json</span></code> has five phases, the <code class="docutils literal notranslate"><span class="pre">pyover</span> <span class="pre">--extend</span></code> command will write
+two additional input namelists called <code class="file docutils literal notranslate"><span class="pre">run.03.inp</span></code> and
+<code class="file docutils literal notranslate"><span class="pre">run.04.inp</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">--qsub</span></code> option also works with this command.</p>
+</section>
+<section id="submitting-or-running-jobs">
+<span id="cli-n"></span><h3><span class="section-number">3.3.1.13. </span>Submitting or Running Jobs<a class="headerlink" href="#submitting-or-running-jobs" title="Link to this heading">¶</a></h3>
+<p>Submitting jobs is usually done with the <code class="docutils literal notranslate"><span class="pre">-n</span></code> flag.  If <em>no</em> other commands
+are issued, it is the same as using <code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">10</span></code>.  Only jobs with a status of
+<code class="docutils literal notranslate"><span class="pre">---</span></code> or <code class="docutils literal notranslate"><span class="pre">INCOMP</span></code> will be run or submitted.</p>
+<p>If a JSON file has the setting <code class="docutils literal notranslate"><span class="pre">&quot;qsub&quot;:</span> <span class="pre">true</span></code> in the <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> section
+of the JSON file, it is submitted as a PBS job. Otherwise, it is run within the
+same shell that issued the <code class="docutils literal notranslate"><span class="pre">pycart</span></code> command.  An exception to this is when
+the <code class="docutils literal notranslate"><span class="pre">-n</span></code> command is issued in combination with <code class="docutils literal notranslate"><span class="pre">--batch</span></code>.  Running as a
+<code class="docutils literal notranslate"><span class="pre">--batch</span></code> PBS job overrides <code class="docutils literal notranslate"><span class="pre">&quot;qsub&quot;</span></code> and runs one or more jobs within the
+batch job.</p>
+<p>This command accepts several modifiers:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Modifier</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--no-restart</span></code></p></td>
+<td><p>Only setup and/or run and submit new cases;
+do not submit <code class="docutils literal notranslate"><span class="pre">INCOMP</span></code> jobs that have
+iterations remaining</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--no-start</span></code></p></td>
+<td><p>Set up new cases but do not actually start
+simulation or submit job</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--no-qsub</span></code></p></td>
+<td><p>Keep all tasks local and do not submit PBS
+job(s)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+</section>
+<section id="command-modifiers">
+<span id="cli-modification"></span><h2><span class="section-number">3.3.2. </span>Command Modifiers<a class="headerlink" href="#command-modifiers" title="Link to this heading">¶</a></h2>
+<p>Several options are used to specify additional settings to some or all
+commands.  The most important of these is the <code class="docutils literal notranslate"><span class="pre">-f</span></code> flag, which tells
+<code class="docutils literal notranslate"><span class="pre">pycart</span></code>, <code class="docutils literal notranslate"><span class="pre">pyfun</span></code>, or <code class="docutils literal notranslate"><span class="pre">pyover</span></code> to use a specific JSON input file.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-f<span class="w"> </span>run/poweroff.json<span class="w"> </span>-c
+</pre></div>
+</div>
+</div></blockquote>
+<p>If the <code class="docutils literal notranslate"><span class="pre">-f</span></code> flag is not used, a default file name of either
+<code class="file docutils literal notranslate"><span class="pre">pyCart.json</span></code>, <code class="file docutils literal notranslate"><span class="pre">pyFun.json</span></code>, or <code class="file docutils literal notranslate"><span class="pre">pyOver.json</span></code> is assumed.
+Pointing to specific JSON files using the <code class="docutils literal notranslate"><span class="pre">-f</span></code> flag is useful for run
+folders that have two or more related CFD configurations.</p>
+<p>Another modifier option is <code class="docutils literal notranslate"><span class="pre">-j</span></code>, which adds a column showing the job number
+to the stats message printout.  Another modifier option that affects the status
+message is the <code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">$USER</span></code> flag, which instructs pyCart to check the queue for
+jobs submitted by a different user.  The default is to use the username of the
+user issuing the command, but the <code class="docutils literal notranslate"><span class="pre">-u</span></code> flag can be used to check the status
+of another user’s jobs.  Somewhat related is the <code class="docutils literal notranslate"><span class="pre">-q</span> <span class="pre">$QUE</span></code> flag, which allows
+the user to override the queue setting in the JSON file and submit new jobs to
+a specific queue.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">--qsub</span></code> option modifies some post-processing commands to be submitted as
+PBS jobs in each folder (instead of being run in the current terminal).
+Arguably a command in its own right, the <code class="docutils literal notranslate"><span class="pre">--batch</span></code> modifier creates a PBS job
+that runs the same command (except with the <code class="docutils literal notranslate"><span class="pre">--batch</span></code> flag removed).</p>
+<p>The following table lists all modifiers and the commands that are affected by
+them.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Modifier</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Affected commands</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">$FNAME</span></code></p></td>
+<td><p>Use JSON file called <em>FNAME</em></p></td>
+<td><p>All except <code class="docutils literal notranslate"><span class="pre">-h</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-j</span></code></p></td>
+<td><p>Print PBS job numbers if run
+job is present in the queue</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code>, <code class="docutils literal notranslate"><span class="pre">-e</span></code>,
+<code class="docutils literal notranslate"><span class="pre">-n</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-q</span> <span class="pre">$QUE</span></code></p></td>
+<td><p>Submit new jobs to PBS queue
+called <em>QUE</em> and ignore <code class="docutils literal notranslate"><span class="pre">&quot;q&quot;</span></code>
+option in <code class="docutils literal notranslate"><span class="pre">&quot;PBS&quot;</span></code> section</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-n</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">$USER</span></code></p></td>
+<td><p>Check PBS queue for jobs
+submitted by user <em>USER</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code>, <code class="docutils literal notranslate"><span class="pre">-e</span></code>,
+<code class="docutils literal notranslate"><span class="pre">-n</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--delete</span></code></p></td>
+<td><p>Remove subset of cases from
+a data book</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--aero</span></code>,
+<code class="docutils literal notranslate"><span class="pre">--ll</span></code>,
+<code class="docutils literal notranslate"><span class="pre">--triqfm</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--imax</span> <span class="pre">$N</span></code></p></td>
+<td><p>Do not exceed iteration <em>N</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--extend</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--restart</span></code></p></td>
+<td><p>Restart/resubmit case after
+modifying settings</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--extend</span></code>,
+<code class="docutils literal notranslate"><span class="pre">--apply</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--batch</span></code></p></td>
+<td><p>Rerun command as a PBS job</p></td>
+<td><p>All except <code class="docutils literal notranslate"><span class="pre">-h</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="run-matrix-subsetting">
+<span id="cli-subset"></span><h2><span class="section-number">3.3.3. </span>Run Matrix Subsetting<a class="headerlink" href="#run-matrix-subsetting" title="Link to this heading">¶</a></h2>
+<p>Identifying a subset of the run matrix using the command line is an important
+tool.  This system of scripts and modules has been used for run matrix of more
+than 5000 cases, which could result in, for example, a very unwieldy status
+message.  Although it is possible to comment out lines of the run matrix file,
+pyCart provides much more powerful tools to identify specific subsets of the
+run matrix.</p>
+<p>There are five separate subsetting options, and it is possible to use more than
+one of them in the same command.  When doing so, they are treated as logical
+<strong>AND</strong>, so that only cases meeting all criteria are shown, run, or processed.
+Finally, these subset commands can be applied to all commands that interact
+with individual cases.  In other words, it applies to all commands except
+<code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-h</span></code>.  The following dedicates a subsection to each of the five
+subsetting options.  The subsections will use a <a class="reference internal" href="../pycart/examples/01-bullet/index.html#pycart-ex-bullet"><span class="std std-ref">simple example</span></a> from <code class="docutils literal notranslate"><span class="pre">$PYCART/examples/pycart/bullet</span></code>.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m1.5a0.0b0.0 DONE    200/200     .   5.0</span>
+<span class="go">1    poweroff/m2.0a0.0b0.0 INCOMP  100/200     .   2.2</span>
+<span class="go">2    poweroff/m2.0a2.0b0.0 RUN     157/200     Q   3.1</span>
+<span class="go">3    poweroff/m2.0a2.0b2.0 ---     /           .</span>
+
+<span class="go">---=1, INCOMP=1, RUN=1, DONE=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<section id="specific-indices">
+<span id="cli-subset-i"></span><h3><span class="section-number">3.3.3.1. </span>Specific Indices<a class="headerlink" href="#specific-indices" title="Link to this heading">¶</a></h3>
+<p>Limiting to a specific index or list of indices is simple.  Consider the
+following examples using the <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">-I</span></code> option.  The first version is to
+identify an individual case.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c<span class="w"> </span>-I<span class="w"> </span><span class="m">1</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">1    poweroff/m2.0a0.0b0.0 INCOMP  100/200     .   2.2</span>
+
+<span class="go">INCOMP=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>It is also possible to get a specific list of cases.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c<span class="w"> </span>-I<span class="w"> </span><span class="m">0</span>,2,3
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m1.5a0.0b0.0 DONE    200/200     .   5.0</span>
+<span class="go">2    poweroff/m2.0a2.0b0.0 RUN     157/200     Q   3.1</span>
+<span class="go">3    poweroff/m2.0a2.0b2.0 ---     /           .</span>
+
+<span class="go">---=1, RUN=1, DONE=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Finally, a range of cases can be identified using a <code class="docutils literal notranslate"><span class="pre">:</span></code> character.  Note that
+this relies on Python’s zero-based indexing, which is something of an acquired
+taste.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-cI<span class="w"> </span><span class="m">1</span>:3
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">1    poweroff/m2.0a0.0b0.0 INCOMP  100/200     .   2.2</span>
+<span class="go">2    poweroff/m2.0a2.0b0.0 RUN     157/200     Q   3.1</span>
+
+<span class="go">INCOMP=1, RUN=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="using-constraints">
+<span id="cli-subset-cons"></span><h3><span class="section-number">3.3.3.2. </span>Using Constraints<a class="headerlink" href="#using-constraints" title="Link to this heading">¶</a></h3>
+<p>Perhaps the most useful subsetting command is to give explicit constraints.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c<span class="w"> </span>--cons<span class="w"> </span><span class="s2">&quot;alpha==2&quot;</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">2    poweroff/m2.0a2.0b0.0 RUN     157/200     Q   3.1</span>
+<span class="go">3    poweroff/m2.0a2.0b2.0 ---     /           .</span>
+
+<span class="go">---=1, RUN=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Multiple constraints can be separated with commas.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c<span class="w"> </span>--cons<span class="w"> </span><span class="s2">&quot;alpha==2,beta==2&quot;</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">3    poweroff/m2.0a2.0b2.0 ---     /           .</span>
+
+<span class="go">RUN=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The variables included in the constraint list must be run matrix variables
+listed in the <code class="docutils literal notranslate"><span class="pre">&quot;Keys&quot;</span></code> option of the <code class="docutils literal notranslate"><span class="pre">&quot;RunMatrix&quot;</span></code> section of the JSON
+file.  The <em>key</em> must be the first thing in each constraint, so for example
+<code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--cons</span> <span class="pre">&quot;2==alpha&quot;</span></code> will not work.</p>
+<p>Finally, the Python relational operators <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">&gt;=</span></code> can be combined with other operations.  For example, the following
+command isolates cases with Mach number ending in 0.5.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c<span class="w"> </span>--cons<span class="w"> </span><span class="s2">&quot;Mach%1==0.5&quot;</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">0    poweroff/m1.5a0.0b0.0 DONE    200/200     .   5.0</span>
+
+<span class="go">DONE=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="filtering-by-folder-name">
+<span id="cli-subset-filter"></span><h3><span class="section-number">3.3.3.3. </span>Filtering by Folder Name<a class="headerlink" href="#filtering-by-folder-name" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">--filter</span></code> option allows a user to restrict the command to cases that
+include raw text in their full folder name.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c<span class="w"> </span>--filter<span class="w"> </span><span class="s2">&quot;a2&quot;</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">2    poweroff/m2.0a2.0b0.0 RUN     157/200     Q   3.1</span>
+<span class="go">3    poweroff/m2.0a2.0b2.0 ---     /           .</span>
+
+<span class="go">---=1, RUN=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="filtering-by-file-glob">
+<span id="cli-subset-glob"></span><h3><span class="section-number">3.3.3.4. </span>Filtering by File Glob<a class="headerlink" href="#filtering-by-file-glob" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">--glob</span></code> option is similar to <code class="docutils literal notranslate"><span class="pre">--filter</span></code> except that it uses standard
+file globs.  This is useful for identifying cases with a range of text instead
+of a very specific case.  However, the entire name of the case must match the
+glob, so the user may need to add <code class="docutils literal notranslate"><span class="pre">'*'</span></code> to the beginning and end of the
+command.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c<span class="w"> </span>--glob<span class="w"> </span><span class="s2">&quot;*a[1-3]*&quot;</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">2    poweroff/m2.0a2.0b0.0 RUN     157/200     Q   3.1</span>
+<span class="go">3    poweroff/m2.0a2.0b2.0 ---     /           .</span>
+
+<span class="go">---=1, RUN=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="using-regular-expressions">
+<span id="cli-subset-regex"></span><h3><span class="section-number">3.3.3.5. </span>Using Regular Expressions<a class="headerlink" href="#using-regular-expressions" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">--re</span></code> option is basically a better version of <code class="docutils literal notranslate"><span class="pre">--glob</span></code>.  It uses
+Python’s standard <code class="xref py py-mod docutils literal notranslate"><span class="pre">re</span></code> module and only reports cases that contain at least
+one match for the regular expression.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pycart<span class="w"> </span>-c<span class="w"> </span>--re<span class="w"> </span><span class="s2">&quot;a[1-3]&quot;</span>
+<span class="go">Case Config/Run Directory  Status  Iterations  Que CPU Time</span>
+<span class="go">---- --------------------- ------- ----------- --- --------</span>
+<span class="go">2    poweroff/m2.0a2.0b0.0 RUN     157/200     Q   3.1</span>
+<span class="go">3    poweroff/m2.0a2.0b2.0 ---     /           .</span>
+
+<span class="go">---=1, RUN=1,</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.3. Command-Line Interface</a><ul>
+<li><a class="reference internal" href="#basic-commands">3.3.1. Basic Commands</a><ul>
+<li><a class="reference internal" href="#help-message">3.3.1.1. Help Message</a></li>
+<li><a class="reference internal" href="#status-check">3.3.1.2. Status Check</a></li>
+<li><a class="reference internal" href="#batch-commands">3.3.1.3. Batch Commands</a></li>
+<li><a class="reference internal" href="#data-book-updates">3.3.1.4. Data Book Updates</a></li>
+<li><a class="reference internal" href="#archiving-solutions">3.3.1.5. Archiving Solutions</a></li>
+<li><a class="reference internal" href="#trimming-excess-files-while-running">3.3.1.6. Trimming Excess Files While Running</a></li>
+<li><a class="reference internal" href="#creating-reports">3.3.1.7. Creating Reports</a></li>
+<li><a class="reference internal" href="#killing-jobs">3.3.1.8. Killing Jobs</a></li>
+<li><a class="reference internal" href="#removing-cases">3.3.1.9. Removing Cases</a></li>
+<li><a class="reference internal" href="#execute-a-script-in-each-case-folder">3.3.1.10. Execute a Script in Each Case Folder</a></li>
+<li><a class="reference internal" href="#extending-a-case-to-repeat-the-last-phase">3.3.1.11. Extending a Case to Repeat the Last Phase</a></li>
+<li><a class="reference internal" href="#apply-new-settings-and-or-add-phases">3.3.1.12. Apply New Settings and/or Add Phases</a></li>
+<li><a class="reference internal" href="#submitting-or-running-jobs">3.3.1.13. Submitting or Running Jobs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#command-modifiers">3.3.2. Command Modifiers</a></li>
+<li><a class="reference internal" href="#run-matrix-subsetting">3.3.3. Run Matrix Subsetting</a><ul>
+<li><a class="reference internal" href="#specific-indices">3.3.3.1. Specific Indices</a></li>
+<li><a class="reference internal" href="#using-constraints">3.3.3.2. Using Constraints</a></li>
+<li><a class="reference internal" href="#filtering-by-folder-name">3.3.3.3. Filtering by Folder Name</a></li>
+<li><a class="reference internal" href="#filtering-by-file-glob">3.3.3.4. Filtering by File Glob</a></li>
+<li><a class="reference internal" href="#using-regular-expressions">3.3.3.5. Using Regular Expressions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="setup.html"
+                          title="previous chapter"><span class="section-number">3.2. </span>General Case Setup</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="file/json.html"
+                          title="next chapter"><span class="section-number">3.4. </span>Syntax for CAPE JSON Files</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/common/command-line.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="file/json.html" title="3.4. Syntax for CAPE JSON Files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="setup.html" title="3.2. General Case Setup"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">3. </span>Usage and Common Settings</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.3. </span>Command-Line Interface</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

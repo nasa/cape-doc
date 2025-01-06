@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>7.13. cape-writell: Combine CAPE line load data into MAT file &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=87629129" />
+    <script src="../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7.14. cape-step2crv: Convert STEP file to Plot3D multiple curve file" href="cape-step2crv.html" />
+    <link rel="prev" title="7.12. cape: Python interface for CFDX" href="cape.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cape-step2crv.html" title="7.14. cape-step2crv: Convert STEP file to Plot3D multiple curve file"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cape.html" title="7.12. cape: Python interface for CFDX"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">7. </span>CAPE Executables</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7.13. </span><code class="docutils literal notranslate"><span class="pre">cape-writell</span></code>: Combine CAPE line load data into MAT file</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-writell-combine-cape-line-load-data-into-mat-file">
+<span id="module-cape.clidoc.cape_writell"></span><h1><span class="section-number">7.13. </span><code class="docutils literal notranslate"><span class="pre">cape-writell</span></code>: Combine CAPE line load data into MAT file<a class="headerlink" href="#cape-writell-combine-cape-line-load-data-into-mat-file" title="Link to this heading">¶</a></h1>
+<p>This tool combines the individual-case line load data files from a CAPE
+“databook” (which are extracted using a command like <code class="docutils literal notranslate"><span class="pre">pyfun</span> <span class="pre">--ll</span></code>)
+into a single <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file.</p>
+<p>That <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file (or files, if multiple line load components are
+written) is placed in the databook folder.</p>
+<dl class="field-list">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape-writell<span class="w"> </span><span class="o">[</span>PAT1<span class="w"> </span>PAT2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><p>Write all the DataBook components in <code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code> with the type
+<code class="docutils literal notranslate"><span class="pre">&quot;LineLoad&quot;</span></code>.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape-writell<span class="w"> </span>-f<span class="w"> </span>pyFun.json
+</pre></div>
+</div>
+</div></blockquote>
+<p>Only write the line load component <code class="docutils literal notranslate"><span class="pre">&quot;CORE_LL&quot;</span></code>.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape-writell<span class="w"> </span>CORE_LL
+</pre></div>
+</div>
+</div></blockquote>
+<p>Write any LineLoad component starting with “CORE” or “BODY”.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape-writell<span class="w"> </span><span class="s2">&quot;CORE*&quot;</span><span class="w"> </span><span class="s2">&quot;BODY*&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd>
+<dt class="field-odd">Inputs<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>PAT1</em>: Optional pattern to subset available line load components
+<em>PAT2</em>: Second pattern, use comps matching <em>PAT1</em> or <em>PAT2</em></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If no subsets are given, all available line load components will
+be processed.</p>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="option-list">
+<dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
+<dd><p>Display this help message and quit</p>
+</dd>
+<dt><kbd><span class="option">-f <var>FNAME</var></span></kbd></dt>
+<dd><p>Use CAPE input file <em>FNAME</em> (by default checks for
+<code class="docutils literal notranslate"><span class="pre">'cape.json'</span></code>, <code class="docutils literal notranslate"><span class="pre">'pyFun.json'</span></code>, etc.)</p>
+</dd>
+<dt><kbd><span class="option">--ll <var>COMP</var></span></kbd></dt>
+<dd><p>Only consider components matching <em>COMP</em> from “DataBook” section
+of <em>FNAME</em> (by default apply no filters) (combines with <em>PAT1</em>,
+<em>PAT2</em>, etc.)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-02-10 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="cape.html"
+                          title="previous chapter"><span class="section-number">7.12. </span><strong>cape</strong>: Python interface for CFDX</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="cape-step2crv.html"
+                          title="next chapter"><span class="section-number">7.14. </span><code class="docutils literal notranslate"><span class="pre">cape-step2crv</span></code>: Convert STEP file to Plot3D multiple curve file</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/bin/cape-writell.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cape-step2crv.html" title="7.14. cape-step2crv: Convert STEP file to Plot3D multiple curve file"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cape.html" title="7.12. cape: Python interface for CFDX"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">7. </span>CAPE Executables</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7.13. </span><code class="docutils literal notranslate"><span class="pre">cape-writell</span></code>: Combine CAPE line load data into MAT file</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

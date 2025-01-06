@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.xmlfile: Extended interface to XML files &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="_cape3: Compiled CAPE extension" href="_cape.html" />
+    <link rel="prev" title="cape.writell: Collect CAPE line load databooks" href="writell.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="_cape.html" title="_cape3: Compiled CAPE extension"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="writell.html" title="cape.writell: Collect CAPE line load databooks"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.xmlfile</span></code>: Extended interface to XML files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.xmlfile">
+<span id="cape-xmlfile-extended-interface-to-xml-files"></span><h1><a class="reference internal" href="#module-cape.xmlfile" title="cape.xmlfile"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.xmlfile</span></code></a>: Extended interface to XML files<a class="headerlink" href="#module-cape.xmlfile" title="Link to this heading">¶</a></h1>
+<p>This module provides the class <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a>, which extends slightly
+the built-in class <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElmentTree</span></code>. Compared to the
+standard library class, <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a> has a more top-level interface.</p>
+<p>Specifically, it is possible to find and/or edit properties of
+subelements that are arbitrarily deep within the file using methods for
+the top-level class. This is convenient (for example) for CFD solvers
+using XML files as their input because it eases the process of changing
+minor settings (for example the angle of attack) without searching
+through multiple levels of elements and subelements.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.xmlfile.XMLFile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.xmlfile.</span></span><span class="sig-name descname"><span class="pre">XMLFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.XMLFile" title="Link to this definition">¶</a></dt>
+<dd><p>Interface to XML files</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">XMLFile</span><span class="p">(</span><span class="n">fxml</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">XMLFile</span><span class="p">(</span><span class="n">xml1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">XMLFile</span><span class="p">(</span><span class="n">et</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">XMLFile</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">XMLFile</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">XMLFile</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fxml</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of an XML file</p>
+</dd>
+<dt><em>et</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.ElementTree</span></code></dt><dd><p>An XML element tree</p>
+</dd>
+<dt><em>e</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></dt><dd><p>An XML root element</p>
+</dd>
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>XML text to parse directly</p>
+</dd>
+<dt><em>xml1</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>Another instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>xml</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>Instance of XML file interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>xml.tree</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.ElementTree</span></code></dt><dd><p>An XML element tree interface to contents</p>
+</dd>
+<dt><em>xml.root</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></dt><dd><p>The root element of the XML element tree</p>
+</dd>
+<dt><em>xml.fname</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file read or default file name to write</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-10-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v0.0: Started</p></li>
+<li><p>2021-10-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2021-10-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; <a class="reference internal" href="#cape.xmlfile.XMLFile.text2val" title="cape.xmlfile.XMLFile.text2val"><code class="xref py py-func docutils literal notranslate"><span class="pre">text2val()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.xmlfile.XMLFile.find">
+<span class="sig-name descname"><span class="pre">find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.XMLFile.find" title="Link to this definition">¶</a></dt>
+<dd><p>Find an element using full path and expanded search criteria</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">elem</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">elem</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Examples<span class="colon">:</span></dt>
+<dd class="field-even"><p>Find the first element called <em>InputList</em> that’s a direct
+child of the root element:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">elem</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;InputList&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using the following example XML text:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;JobXML&gt;</span>
+<span class="w">  </span><span class="nt">&lt;InputList&gt;</span>
+<span class="w">    </span><span class="nt">&lt;Input</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Alpha&quot;</span><span class="nt">&gt;</span>4.0<span class="nt">&lt;/Input&gt;</span>
+<span class="w">    </span><span class="nt">&lt;Input</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Beta&quot;</span><span class="nt">&gt;</span>1.0<span class="nt">&lt;/Input&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/InputList&gt;</span>
+<span class="nt">&lt;/JobXML&gt;</span>
+</pre></div>
+</div>
+<p>find the <em>Input</em> element with attribute <code class="docutils literal notranslate"><span class="pre">name=&quot;Alpha&quot;</span></code>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;InputList.Input&quot;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Alpha&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>or, alternatively:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">([</span><span class="s2">&quot;InputList&quot;</span><span class="p">,</span><span class="s2">&quot;Input&quot;</span><span class="p">],</span> <span class="n">attrib</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Alpha&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">Inputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>xml</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>XML file interface</p>
+</dd>
+<dt><em>tag</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Subelement tag, using <code class="docutils literal notranslate"><span class="pre">'.'</span></code> to separate levels</p>
+</dd>
+<dt><em>tags</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Path of tags to sought <em>elem</em></p>
+</dd>
+<dt><em>attrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Requirements to match for <em>elem.attrib</em></p>
+</dd>
+<dt><em>attribs</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<em>attrib</em>]</dt><dd><p>Target <em>attrib</em> for each level of <em>tags</em></p>
+</dd>
+<dt><em>text</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.text</em>, ignoring head/tail white space</p>
+</dd>
+<dt><em>tail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.tail</em>, ignoring head/tail white space</p>
+</dd>
+<dt><em>exacttext</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.text</em>, exact match</p>
+</dd>
+<dt><em>exacttail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.tail</em>, exact match</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>elem</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></dt><dd><p>Element matching all criteria</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-10-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.xmlfile.XMLFile.find_iter">
+<span class="sig-name descname"><span class="pre">find_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.XMLFile.find_iter" title="Link to this definition">¶</a></dt>
+<dd><p>Find an element at any level using various search criteria</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">elem</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find_iter</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>xml</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>XML file interface</p>
+</dd>
+<dt><em>tag</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of child element to match</p>
+</dd>
+<dt><em>attrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of attributes to match</p>
+</dd>
+<dt><em>text</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Element text to match, ignoring head/tail</p>
+</dd>
+<dt><em>tail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Post-element text to match, ignoring head/tail</p>
+</dd>
+<dt><em>exacttext</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Element text to match exactly</p>
+</dd>
+<dt><em>exacttail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Post-element text to match exactly</p>
+</dd>
+<dt><em>finditer</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to search all levels, not just immediate children</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>elem</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></dt><dd><p>An XML element matching all criteria above</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.xmlfile.XMLFile.find_trail">
+<span class="sig-name descname"><span class="pre">find_trail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.XMLFile.find_trail" title="Link to this definition">¶</a></dt>
+<dd><p>Find an element using full path and expanded search criteria</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">elems</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find_trail</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">elems</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find_trail</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>xml</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>XML file interface</p>
+</dd>
+<dt><em>tag</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Subelement tag, using <code class="docutils literal notranslate"><span class="pre">'.'</span></code> to separate levels</p>
+</dd>
+<dt><em>tags</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Path of tags to sought <em>elem</em></p>
+</dd>
+<dt><em>attrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Requirements to match for <em>elem.attrib</em></p>
+</dd>
+<dt><em>attribs</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<em>attrib</em>]</dt><dd><p>Target <em>attrib</em> for each level of <em>tags</em></p>
+</dd>
+<dt><em>text</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.text</em>, ignoring head/tail white space</p>
+</dd>
+<dt><em>tail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.tail</em>, ignoring head/tail white space</p>
+</dd>
+<dt><em>exacttext</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.text</em>, exact match</p>
+</dd>
+<dt><em>exacttail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.tail</em>, exact match</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>elems</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code>]</dt><dd><p>Path of elements leading up to requested tag</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.xmlfile.XMLFile.findall_iter">
+<span class="sig-name descname"><span class="pre">findall_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.XMLFile.findall_iter" title="Link to this definition">¶</a></dt>
+<dd><p>Find all elements at any level using various search criteria</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">elems</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">findall_iter</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>xml</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>XML file interface</p>
+</dd>
+<dt><em>tag</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of child element to match</p>
+</dd>
+<dt><em>attrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of attributes to match</p>
+</dd>
+<dt><em>text</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Element text to match, ignoring head/tail</p>
+</dd>
+<dt><em>tail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Post-element text to match, ignoring head/tail</p>
+</dd>
+<dt><em>exacttext</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Element text to match exactly</p>
+</dd>
+<dt><em>exacttail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Post-element text to match exactly</p>
+</dd>
+<dt><em>finditer</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to search all levels, not just immediate children</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>elems</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code>]</dt><dd><p>All XML elements matching all criteria above</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.xmlfile.XMLFile.get_value">
+<span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.XMLFile.get_value" title="Link to this definition">¶</a></dt>
+<dd><p>Find an element using full path and expanded search criteria</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Examples<span class="colon">:</span></dt>
+<dd class="field-even"><p>Find the first element called <em>InputList</em> that’s a direct
+child of the root element:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">elem</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;InputList&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using the following example XML text:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;JobXML&gt;</span>
+<span class="w">  </span><span class="nt">&lt;InputList&gt;</span>
+<span class="w">    </span><span class="nt">&lt;Input</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Alpha&quot;</span><span class="nt">&gt;</span>4.0<span class="nt">&lt;/Input&gt;</span>
+<span class="w">    </span><span class="nt">&lt;Input</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Beta&quot;</span><span class="nt">&gt;</span>1.0<span class="nt">&lt;/Input&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/InputList&gt;</span>
+<span class="nt">&lt;/JobXML&gt;</span>
+</pre></div>
+</div>
+<p>find the <em>Input</em> element with attribute <code class="docutils literal notranslate"><span class="pre">name=&quot;Alpha&quot;</span></code>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="s2">&quot;InputList.Input&quot;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Alpha&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>or, alternatively:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span><span class="o">.</span><span class="n">get_value</span><span class="p">([</span><span class="s2">&quot;InputList&quot;</span><span class="p">,</span><span class="s2">&quot;Input&quot;</span><span class="p">],</span> <span class="n">attrib</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Alpha&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">Inputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>xml</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>XML file interface</p>
+</dd>
+<dt><em>tag</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Subelement tag, using <code class="docutils literal notranslate"><span class="pre">'.'</span></code> to separate levels</p>
+</dd>
+<dt><em>tags</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Path of tags to sought <em>elem</em></p>
+</dd>
+<dt><em>attrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Requirements to match for <em>elem.attrib</em></p>
+</dd>
+<dt><em>attribs</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<em>attrib</em>]</dt><dd><p>Target <em>attrib</em> for each level of <em>tags</em></p>
+</dd>
+<dt><em>text</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.text</em>, ignoring head/tail white space</p>
+</dd>
+<dt><em>tail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.tail</em>, ignoring head/tail white space</p>
+</dd>
+<dt><em>exacttext</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.text</em>, exact match</p>
+</dd>
+<dt><em>exacttail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.tail</em>, exact match</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>v</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></dt><dd><p>Value of <em>elem.text</em> if possible</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2024-04-17 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.xmlfile.XMLFile.pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.XMLFile.pop" title="Link to this definition">¶</a></dt>
+<dd><p>Remove an element if found</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">elem</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">elem</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>xml</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>XML file interface</p>
+</dd>
+<dt><em>tag</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Subelement tag, using <code class="docutils literal notranslate"><span class="pre">'.'</span></code> to separate levels</p>
+</dd>
+<dt><em>tags</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Path of tags to sought <em>elem</em></p>
+</dd>
+<dt><em>attrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Requirements to match for <em>elem.attrib</em></p>
+</dd>
+<dt><em>attribs</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<em>attrib</em>]</dt><dd><p>Target <em>attrib</em> for each level of <em>tags</em></p>
+</dd>
+<dt><em>text</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.text</em> for searching</p>
+</dd>
+<dt><em>tail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.tail</em> for searching</p>
+</dd>
+<dt><em>exacttext</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.text</em>, exact match</p>
+</dd>
+<dt><em>exacttail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.tail</em>, exact match</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>elem</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></dt><dd><p>Element matching all criteria, if present</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.xmlfile.XMLFile.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.XMLFile.remove" title="Link to this definition">¶</a></dt>
+<dd><p>Remove an element; raise exception if not found</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>xml</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>XML file interface</p>
+</dd>
+<dt><em>tag</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Subelement tag, using <code class="docutils literal notranslate"><span class="pre">'.'</span></code> to separate levels</p>
+</dd>
+<dt><em>tags</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Path of tags to sought <em>elem</em></p>
+</dd>
+<dt><em>attrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Requirements to match for <em>elem.attrib</em></p>
+</dd>
+<dt><em>attribs</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<em>attrib</em>]</dt><dd><p>Target <em>attrib</em> for each level of <em>tags</em></p>
+</dd>
+<dt><em>text</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.text</em> for searching</p>
+</dd>
+<dt><em>tail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.tail</em> for searching</p>
+</dd>
+<dt><em>exacttext</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.text</em>, exact match</p>
+</dd>
+<dt><em>exacttail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.tail</em>, exact match</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-10-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.xmlfile.XMLFile.set_elem">
+<span class="sig-name descname"><span class="pre">set_elem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newtext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.XMLFile.set_elem" title="Link to this definition">¶</a></dt>
+<dd><p>Edit or insert an element</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span><span class="o">.</span><span class="n">set_elem</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">newtext</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span><span class="o">.</span><span class="n">set_elem</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="n">newtext</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Examples<span class="colon">:</span></dt>
+<dd class="field-even"><p>Using the following example XML text:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;JobXML&gt;</span>
+<span class="w">  </span><span class="nt">&lt;InputList&gt;</span>
+<span class="w">    </span><span class="nt">&lt;Input</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Alpha&quot;</span><span class="nt">&gt;</span>4.0<span class="nt">&lt;/Input&gt;</span>
+<span class="w">    </span><span class="nt">&lt;Input</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Beta&quot;</span><span class="nt">&gt;</span>1.0<span class="nt">&lt;/Input&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/InputList&gt;</span>
+<span class="nt">&lt;/JobXML&gt;</span>
+</pre></div>
+</div>
+<p>Suppose we want to find the <em>Input</em> element with attribute
+<code class="docutils literal notranslate"><span class="pre">name=&quot;Alpha&quot;</span></code> and change the value (<em>text</em> to 3.0):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xml</span><span class="o">.</span><span class="n">set_elem</span><span class="p">(</span>
+    <span class="s2">&quot;InputList.Input&quot;</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Alpha&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Suppose we want to add a condition for <code class="docutils literal notranslate"><span class="pre">&quot;Mach&quot;</span></code> at 1.5:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xml</span><span class="o">.</span><span class="n">set_elem</span><span class="p">(</span>
+    <span class="s2">&quot;InputList.Input&quot;</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Mach&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Suppose we want to change <code class="docutils literal notranslate"><span class="pre">&quot;Alpha&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;alpha&quot;</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xml</span><span class="o">.</span><span class="n">set_elem</span><span class="p">(</span>
+    <span class="s2">&quot;InputList.Input&quot;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Alpha&quot;</span><span class="p">},</span>
+    <span class="n">newattrib</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;alpha&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">Inputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>xml</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>XML file interface</p>
+</dd>
+<dt><em>tag</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Subelement tag, using <code class="docutils literal notranslate"><span class="pre">'.'</span></code> to separate levels</p>
+</dd>
+<dt><em>tags</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Path of tags to sought <em>elem</em></p>
+</dd>
+<dt><em>newtext</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>The final text to set in new/edited element</p>
+</dd>
+<dt><em>attrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Requirements to match for <em>elem.attrib</em></p>
+</dd>
+<dt><em>attribs</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<em>attrib</em>]</dt><dd><p>Target <em>attrib</em> for each level of <em>tags</em></p>
+</dd>
+<dt><em>insert</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Option to insert new element(s) if not found</p>
+</dd>
+<dt><em>indent</em>: {<code class="docutils literal notranslate"><span class="pre">2</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> &gt;= 0</dt><dd><p>Number of spaces in an indent</p>
+</dd>
+<dt><em>tab</em>: {<code class="docutils literal notranslate"><span class="pre">indent</span> <span class="pre">*</span> <span class="pre">&quot;</span> <span class="pre">&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Override <em>indent</em> with a specific string</p>
+</dd>
+<dt><em>text</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.text</em> for searching</p>
+</dd>
+<dt><em>tail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.tail</em> for searching</p>
+</dd>
+<dt><em>exacttext</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.text</em>, exact match</p>
+</dd>
+<dt><em>exacttail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Target <em>elem.tail</em>, exact match</p>
+</dd>
+<dt><em>newattrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>New attributes to set in found element</p>
+</dd>
+<dt><em>newtail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Specific final <em>tail</em> text for found dlement</p>
+</dd>
+<dt><em>updateattrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Attributes to update without resetting <em>elem.attrib</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-08 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.xmlfile.XMLFile.text2val">
+<span class="sig-name descname"><span class="pre">text2val</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.XMLFile.text2val" title="Link to this definition">¶</a></dt>
+<dd><p>Convert XML text to Python value</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">text2val</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>xml</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>XML file interface</p>
+</dd>
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text to convert</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Converted value</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.xmlfile.XMLFile.val2text">
+<span class="sig-name descname"><span class="pre">val2text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.XMLFile.val2text" title="Link to this definition">¶</a></dt>
+<dd><p>Convert Python value to XML text</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">val2text</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>xml</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>XML file interface</p>
+</dd>
+<dt><em>v</em>: <strong>any</strong></dt><dd><p>Python value to convert</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>txt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Converted text</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.xmlfile.XMLFile.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.XMLFile.write" title="Link to this definition">¶</a></dt>
+<dd><p>Write a file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>xml</em>: <a class="reference internal" href="#cape.xmlfile.XMLFile" title="cape.xmlfile.XMLFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLFile</span></code></a></dt><dd><p>XML file interface</p>
+</dd>
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to write</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2021-10-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.xmlfile.find_elem">
+<span class="sig-prename descclassname"><span class="pre">cape.xmlfile.</span></span><span class="sig-name descname"><span class="pre">find_elem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.find_elem" title="Link to this definition">¶</a></dt>
+<dd><p>Find a [direct] child of <em>e</em> using full search criteria</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">elem</span> <span class="o">=</span> <span class="n">find_elem</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>e</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></dt><dd><p>An XML element using standard library interface</p>
+</dd>
+<dt><em>tag</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of child element to match</p>
+</dd>
+<dt><em>attrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of attributes to match</p>
+</dd>
+<dt><em>text</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Element text to match, ignoring head/tail</p>
+</dd>
+<dt><em>tail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Post-element text to match, ignoring head/tail</p>
+</dd>
+<dt><em>exacttext</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Element text to match exactly</p>
+</dd>
+<dt><em>exacttail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Post-element text to match exactly</p>
+</dd>
+<dt><em>finditer</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to search all levels, not just immediate children</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>elem</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></dt><dd><p>An XML element matching all criteria above</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.xmlfile.findall_elem">
+<span class="sig-prename descclassname"><span class="pre">cape.xmlfile.</span></span><span class="sig-name descname"><span class="pre">findall_elem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.findall_elem" title="Link to this definition">¶</a></dt>
+<dd><p>Find all [direct] children of <em>e</em> using full search criteria</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">elems</span> <span class="o">=</span> <span class="n">findall_elem</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>e</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></dt><dd><p>An XML element using standard library interface</p>
+</dd>
+<dt><em>tag</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of child element to match</p>
+</dd>
+<dt><em>attrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of attributes to match</p>
+</dd>
+<dt><em>text</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Element text to match, ignoring head/tail</p>
+</dd>
+<dt><em>tail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Post-element text to match, ignoring head/tail</p>
+</dd>
+<dt><em>exacttext</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Element text to match exactly</p>
+</dd>
+<dt><em>exacttail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Post-element text to match exactly</p>
+</dd>
+<dt><em>finditer</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to search all levels, not just immediate children</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>elems</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code>]</dt><dd><p>All XML elements matching all criteria above</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.xmlfile.toelement">
+<span class="sig-prename descclassname"><span class="pre">cape.xmlfile.</span></span><span class="sig-name descname"><span class="pre">toelement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.xmlfile.toelement" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new element from basic properties</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">toelement</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tail</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>tag</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of the XML element</p>
+</dd>
+<dt><em>attrib</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Attributes for the XML element</p>
+</dd>
+<dt><em>text</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text for the interior of the element</p>
+</dd>
+<dt><em>tail</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text after the element</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>e</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></dt><dd><p>New XML element</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-10-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="writell.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.writell</span></code>: Collect CAPE line load databooks</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="_cape.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">_cape3</span></code>: Compiled CAPE extension</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cape/xmlfile.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="_cape.html" title="_cape3: Compiled CAPE extension"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="writell.html" title="cape.writell: Collect CAPE line load databooks"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.xmlfile</span></code>: Extended interface to XML files</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

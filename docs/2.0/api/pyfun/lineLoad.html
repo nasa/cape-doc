@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.pyfun.lineload: Sectional loads module &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pyfun.mapbc: FUN3D boundary condition module" href="mapbc.html" />
+    <link rel="prev" title="cape.pyfun.faux: FAUXGeom interface module" href="faux.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mapbc.html" title="cape.pyfun.mapbc: FUN3D boundary condition module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="faux.html" title="cape.pyfun.faux: FAUXGeom interface module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code>: FUN3D interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.lineload</span></code>: Sectional loads module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-pyfun-lineload-sectional-loads-module">
+<span id="module-cape.pyfun.lineload"></span><h1><a class="reference internal" href="#module-cape.pyfun.lineload" title="cape.pyfun.lineload"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.lineload</span></code></a>: Sectional loads module<a class="headerlink" href="#cape-pyfun-lineload-sectional-loads-module" title="Link to this heading">¶</a></h1>
+<p>This module contains functions for reading and processing sectional
+loads. It is a version of <a class="reference internal" href="../cfdx/lineload.html#module-cape.cfdx.lineload" title="cape.cfdx.lineload"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.lineload</span></code></a> that is closely
+tied to <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.dataBook</span></code>.</p>
+<p>It provides the primary class <a class="reference internal" href="#cape.pyfun.lineload.DBLineLoad" title="cape.pyfun.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a>, which
+is a subclass of <a class="reference internal" href="../cfdx/databook.html#cape.cfdx.databook.DBBase" title="cape.cfdx.databook.DBBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.databook.DBBase</span></code></a>.  This class is an
+interface to all line load data for a specific surface component.</p>
+<p>For reading the sectional load for a single solution on one component
+(which includes multiple coefficients), there is another class
+<a class="reference internal" href="#cape.pyfun.lineload.CaseLL" title="cape.pyfun.lineload.CaseLL"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseLL</span></code></a>.</p>
+<p>Finally, reading seam curves from individual cases utilizes the class
+<a class="reference internal" href="#cape.pyfun.lineload.CaseSeam" title="cape.pyfun.lineload.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseSeam</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../cfdx/lineload.html#module-cape.cfdx.lineload" title="cape.cfdx.lineload"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.lineload</span></code></a></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.dataBook</span></code></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.dataBook</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyfun.lineload.CaseLL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyfun.lineload.</span></span><span class="sig-name descname"><span class="pre">CaseLL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LineLoad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dlds'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.lineload.CaseLL" title="Link to this definition">¶</a></dt>
+<dd><p>Individual class line load class</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LL</span> <span class="o">=</span> <span class="n">CaseLL</span><span class="p">(</span><span class="n">cart3d</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cart3d</em>: <a class="reference internal" href="../pycart/cntl.html#cape.pycart.cntl.Cntl" title="cape.pycart.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pycart.cntl.Cntl</span></code></a></dt><dd><p>Master pyCart interface</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Case index</p>
+</dd>
+<dt><em>comp</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of line load group</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>LL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.lineload.CaseLL</span></code></dt><dd><p>Instance of individual case line load interface</p>
+</dd>
+<dt><em>LL.nCut</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of <em>x</em>-cuts to make, based on options in <em>cart3d</em></p>
+</dd>
+<dt><em>LL.nIter</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Last iteration in line load file</p>
+</dd>
+<dt><em>LL.nStats</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of iterations in line load file</p>
+</dd>
+<dt><em>LL.RefL</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Reference length</p>
+</dd>
+<dt><em>LL.MRP</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(3,)</dt><dd><p>Moment reference center</p>
+</dd>
+<dt><em>LL.x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(<em>nCut</em>,)</dt><dd><p>Locations of <em>x</em>-cuts</p>
+</dd>
+<dt><em>LL.CA</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(<em>nCut</em>,)</dt><dd><p>Axial force sectional load, d(CA)/d(x/RefL))</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-09-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2016-06-07 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Subclassed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyfun.lineload.CaseSeam">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyfun.lineload.</span></span><span class="sig-name descname"><span class="pre">CaseSeam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'entire'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LineLoad'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.lineload.CaseSeam" title="Link to this definition">¶</a></dt>
+<dd><p>Seam curve interface</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">CaseSeam</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="s1">&#39;entire&#39;</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;LineLoad&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+<dt><em>comp</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of the component</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>S</em> <a class="reference internal" href="#cape.pyfun.lineload.CaseSeam" title="cape.pyfun.lineload.CaseSeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseSeam</span></code></a></dt><dd><p>Seam curve interface</p>
+</dd>
+<dt><em>S.ax</em>: <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;y&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code></dt><dd><p>Name of coordinate being held constant</p>
+</dd>
+<dt><em>S.x</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | {<a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>)}</dt><dd><p>x-coordinate or list of seam x-coordinate vectors</p>
+</dd>
+<dt><em>S.y</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | {<a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>)}</dt><dd><p>y-coordinate or list of seam y-coordinate vectors</p>
+</dd>
+<dt><em>S.z</em>: {<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>} | <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> (<a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>)</dt><dd><p>z-coordinate or list of seam z-coordinate vectors</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-06-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyfun.lineload.DBLineLoad">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyfun.lineload.</span></span><span class="sig-name descname"><span class="pre">DBLineLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cntl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RootDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.lineload.DBLineLoad" title="Link to this definition">¶</a></dt>
+<dd><p>Line load (sectional load) data book for one group</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span> <span class="o">=</span> <span class="n">DBLineLoad</span><span class="p">(</span><span class="n">cntl</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">RootDir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></dt><dd><p>RunMatrix/run matrix interface</p>
+</dd>
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>comp</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of line load component</p>
+</dd>
+<dt><em>conf</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.config.Config</span></code></dt><dd><p>Surface configuration interface</p>
+</dd>
+<dt><em>RootDir</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Root directory for the configuration</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>DBL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.lineload.DBLineLoad</span></code></dt><dd><p>Instance of line load data book</p>
+</dd>
+<dt><em>DBL.nCut</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of <em>x</em>-cuts to make, based on options in <em>cart3d</em></p>
+</dd>
+<dt><em>DBL.RefL</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Reference length</p>
+</dd>
+<dt><em>DBL.MRP</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(3,)</dt><dd><p>Moment reference center</p>
+</dd>
+<dt><em>DBL.x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(<em>nCut</em>,)</dt><dd><p>Locations of <em>x</em>-cuts</p>
+</dd>
+<dt><em>DBL.CA</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> shape=(<em>nCut</em>,)</dt><dd><p>Axial force sectional load, d(CA)/d(x/RefL))</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-09-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.lineload.DBLineLoad.GetCompID">
+<span class="sig-name descname"><span class="pre">GetCompID</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.lineload.DBLineLoad.GetCompID" title="Link to this definition">¶</a></dt>
+<dd><p>Create list of component IDs</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DBL</span><span class="o">.</span><span class="n">GetCompID</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">lineload.DBLineLoad</span></code></dt><dd><p>Instance of line load data book</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0, extracted from __init__()</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.lineload.DBLineLoad.GetMRP">
+<span class="sig-name descname"><span class="pre">GetMRP</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.lineload.DBLineLoad.GetMRP" title="Link to this definition">¶</a></dt>
+<dd><p>Get moment reference point, reading from namelist if needed</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MRP</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">GetMRP</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.pyfun.lineload.DBLineLoad" title="cape.pyfun.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a></dt><dd><p>Line load component databook instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>MRP</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>] | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Reference length</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2023-02-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.lineload.DBLineLoad.GetNamelist">
+<span class="sig-name descname"><span class="pre">GetNamelist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.lineload.DBLineLoad.GetNamelist" title="Link to this definition">¶</a></dt>
+<dd><p>Read FUN3D namelist from parent folder, if possible</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nml</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">GetNamelist</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.pyfun.lineload.DBLineLoad" title="cape.pyfun.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a></dt><dd><p>Line load component databook instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>nml</em>: <a class="reference internal" href="namelist.html#cape.pyfun.namelist.Namelist" title="cape.pyfun.namelist.Namelist"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.namelist.Namelist</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Active FUN3D namelist interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2023-02-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.lineload.DBLineLoad.GetRefArea">
+<span class="sig-name descname"><span class="pre">GetRefArea</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.lineload.DBLineLoad.GetRefArea" title="Link to this definition">¶</a></dt>
+<dd><p>Get reference area, reading from namelist if needed</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Aref</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">GetRefArea</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.pyfun.lineload.DBLineLoad" title="cape.pyfun.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a></dt><dd><p>Line load component databook instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>Aref</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Reference area</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2023-02-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.lineload.DBLineLoad.GetRefLength">
+<span class="sig-name descname"><span class="pre">GetRefLength</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.lineload.DBLineLoad.GetRefLength" title="Link to this definition">¶</a></dt>
+<dd><p>Get reference length, reading from namelist if needed</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lref</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">GetRefLength</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.pyfun.lineload.DBLineLoad" title="cape.pyfun.lineload.DBLineLoad"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLineLoad</span></code></a></dt><dd><p>Line load component databook instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>Lref</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Reference length</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2023-02-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.lineload.DBLineLoad.GetTriqFile">
+<span class="sig-name descname"><span class="pre">GetTriqFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.lineload.DBLineLoad.GetTriqFile" title="Link to this definition">¶</a></dt>
+<dd><p>Get most recent <code class="docutils literal notranslate"><span class="pre">triq</span></code> file and its associated iterations</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qtriq</span><span class="p">,</span> <span class="n">ftriq</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">i0</span><span class="p">,</span> <span class="n">i1</span> <span class="o">=</span> <span class="n">DBL</span><span class="o">.</span><span class="n">GetTriqFile</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyfun.lineload.DBLineLoad</span></code></dt><dd><p>Instance of line load data book</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>qtriq</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to convert file from other format</p>
+</dd>
+<dt><em>ftriq</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">triq</span></code> file</p>
+</dd>
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of iterations included</p>
+</dd>
+<dt><em>i0</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>First iteration in the averaging</p>
+</dd>
+<dt><em>i1</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Last iteration in the averaging</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-12-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added to the module</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyfun.lineload.DBLineLoad.PreprocessTriq">
+<span class="sig-name descname"><span class="pre">PreprocessTriq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftriq</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.lineload.DBLineLoad.PreprocessTriq" title="Link to this definition">¶</a></dt>
+<dd><p>Perform any necessary preprocessing to create <code class="docutils literal notranslate"><span class="pre">triq</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ftriq</span> <span class="o">=</span> <span class="n">DBL</span><span class="o">.</span><span class="n">PreprocessTriq</span><span class="p">(</span><span class="n">ftriq</span><span class="p">,</span> <span class="n">qpbs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>DBL</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyfun.lineload.DBLineLoad</span></code></dt><dd><p>Line load data book</p>
+</dd>
+<dt><em>ftriq</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of triq file</p>
+</dd>
+<dt><em>qpbs</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Whether or not to create a script and submit it</p>
+</dd>
+<dt><em>f</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>File handle if writing PBS script</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2016-12-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Added PBS</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyfun.lineload.GetPltFile">
+<span class="sig-prename descclassname"><span class="pre">cape.pyfun.lineload.</span></span><span class="sig-name descname"><span class="pre">GetPltFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyfun.lineload.GetPltFile" title="Link to this definition">¶</a></dt>
+<dd><p>Get most recent boundary <code class="docutils literal notranslate"><span class="pre">plt</span></code> file and associated iterations</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fplt</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">i0</span><span class="p">,</span> <span class="n">i1</span> <span class="o">=</span> <span class="n">GetPltFile</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fplt</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">plt</span></code> file</p>
+</dd>
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of iterations included</p>
+</dd>
+<dt><em>i0</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>First iteration in the averaging</p>
+</dd>
+<dt><em>i1</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Last iteration in the averaging</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-12-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="faux.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.faux</span></code>: FAUXGeom interface module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="mapbc.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.mapbc</span></code>: FUN3D boundary condition module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pyfun/lineLoad.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mapbc.html" title="cape.pyfun.mapbc: FUN3D boundary condition module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="faux.html" title="cape.pyfun.faux: FAUXGeom interface module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code>: FUN3D interfaces</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun.lineload</span></code>: Sectional loads module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

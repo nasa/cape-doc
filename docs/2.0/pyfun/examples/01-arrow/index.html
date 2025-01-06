@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.1.1. Demo 1: Basic Viscous FUN3D Usage on Arrow with Fins &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="5.1.2. Demo 2: Inviscid Bullet with Reports" href="../02-bullet/index.html" />
+    <link rel="prev" title="5.1. Examples Using pyFun" href="../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../02-bullet/index.html" title="5.1.2. Demo 2: Inviscid Bullet with Reports"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="5.1. Examples Using pyFun"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">5. </span>pyFun Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">5.1. </span>Examples Using pyFun</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.1.1. </span>Demo 1: Basic Viscous FUN3D Usage on Arrow with Fins</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="demo-1-basic-viscous-fun3d-usage-on-arrow-with-fins">
+<span id="pyfun-ex01-arrow"></span><h1><span class="section-number">5.1.1. </span>Demo 1: Basic Viscous FUN3D Usage on Arrow with Fins<a class="headerlink" href="#demo-1-basic-viscous-fun3d-usage-on-arrow-with-fins" title="Link to this heading">¶</a></h1>
+<p>This is a simple pyfun example that runs FUN3D on a fixed grid on an arrow
+shape with four fins.</p>
+<p>To get started, clone the repo and run a couple of commands.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/nasa-ddalle/pyfun01-arrow.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>pyfun01-bullet
+<span class="gp">$ </span>./copy-files.py
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>work/
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will copy all of the files into a newly created <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder. Follow
+the instructions below by entering that <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder; the purpose is that
+you can easily delete the <code class="docutils literal notranslate"><span class="pre">work/</span></code> folder and restart the tutorial at any
+time.</p>
+<p>The geometry used for this shape is a capped cylinder with four fins and 9216
+faces and seven components.  The surface triangulation, <code class="docutils literal notranslate"><span class="pre">arrow.tri`</span></code>, is
+shown below.</p>
+<blockquote>
+<div><figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../../../_images/arrow012.png"><img alt="../../../_images/arrow012.png" src="../../../_images/arrow012.png" style="width: 4in;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 5.1 </span><span class="caption-text">Simple bullet shape triangulation with four fins</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>The files in this folder are listed below with a short description.  In this
+case, the run matrix is defined within the <code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code> file.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code>: Master input control file for pyFun</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code>: Template namelist file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arrow-far.ugrid</span></code>: Volume grid, ASCII AFLR3 format</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arrow-far.mapbc</span></code>: Boundary conditions file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arrow-far.tri</span></code>: (Not used) Cart3D surface triangulation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arrow-far.xml</span></code>: (Not used) XML files used to define larger components</p></li>
+</ul>
+</div></blockquote>
+<p>To get started, make sure that the <code class="docutils literal notranslate"><span class="pre">$PYCART/bin</span></code> folder is part of your
+path and <code class="docutils literal notranslate"><span class="pre">$PYCART</span></code> is listed in the environment variable <em>PYTHONPATH</em>.  It is
+a good idea to put these in your startup file or create a module.  For a BASH
+environment, the following commands set up the environment for using pyCart
+assuming that <code class="docutils literal notranslate"><span class="pre">$HOME/pycart</span></code> is where pyCart was installed.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$PATH</span><span class="s2">:</span><span class="nv">$HOME</span><span class="s2">/pycart/bin&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$PYTHONPATH</span><span class="s2">:</span><span class="nv">$HOME</span><span class="s2">/pycart&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>For a C-shell environment, use the following.</p>
+<blockquote>
+<div><div class="highlight-csh notranslate"><div class="highlight"><pre><span></span><span class="nb">setenv </span>PATH <span class="s2">&quot;$PATH:$HOME/pycart/bin&quot;</span>
+<span class="nb">setenv </span>PYTHONPATH <span class="s2">&quot;$PYTHONPATH:$HOME/pycart&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Assuming the present working directory is in this demo folder, i.e.
+<code class="docutils literal notranslate"><span class="pre">$PYCART/examples/pycart/01_bullet</span></code>, a good first test command is the
+following, which checks the status of each case in the matrix.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pyfun<span class="w"> </span>-c
+Case<span class="w"> </span>Config/Run<span class="w"> </span>Directory<span class="w">  </span>Status<span class="w">  </span>Iterations<span class="w">  </span>Que<span class="w"> </span>CPU<span class="w"> </span>Time
+----<span class="w"> </span>---------------------<span class="w"> </span>-------<span class="w"> </span>-----------<span class="w"> </span>---<span class="w"> </span>--------
+<span class="m">0</span><span class="w">    </span>arrow/m0.80a0.0b0.0<span class="w">   </span>---<span class="w">     </span>/<span class="w">           </span>.
+<span class="m">1</span><span class="w">    </span>arrow/m0.80a2.0b0.0<span class="w">   </span>---<span class="w">     </span>/<span class="w">           </span>.
+<span class="m">2</span><span class="w">    </span>arrow/m0.84a0.0b0.0<span class="w">   </span>---<span class="w">     </span>/<span class="w">           </span>.
+<span class="m">3</span><span class="w">    </span>arrow/m1.20a0.0b0.0<span class="w">   </span>---<span class="w">     </span>/<span class="w">           </span>.
+</pre></div>
+</div>
+</div></blockquote>
+<p>Here pyFun has read the default master file name, <code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code> and determined
+that this is a setup with four cases.  The run matrix has at least three input
+variables, which are Mach number, angle of attack, and sideslip, although the
+user can’t tell yet whether or not there are more input variables that don’t
+affect the parametric folder names.</p>
+<p>As it turns out, this is a viscous example, so we should expect Reynolds number
+per inch and freestream static temperature to be inputs.   It is permitted in
+pyFun not to specify these inputs and just keep a constant value inherited from
+the <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code> namelist, but it would be unusual to have varying Mach
+numbers and a constant freestream state.  If we look at the final section in
+<code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code>, we see that Reynolds number and temperature are indeed
+variables.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Run matrix description</span>
+<span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// File and variable list</span>
+<span class="w">    </span><span class="s2">&quot;File&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Keys&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;mach&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;beta&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Re&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;T&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;config&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Label&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Modify one definition</span>
+<span class="w">    </span><span class="s2">&quot;Definitions&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;mach&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;Format&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;%.2f&quot;</span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Group settings</span>
+<span class="w">    </span><span class="s2">&quot;GroupMesh&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Label universal</span>
+<span class="w">    </span><span class="s2">&quot;Label&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;config&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Local values</span>
+<span class="w">    </span><span class="s2">&quot;mach&quot;</span><span class="o">:</span><span class="w">  </span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">0.84</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;alpha&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">  </span><span class="mf">0.0</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;beta&quot;</span><span class="o">:</span><span class="w">  </span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">  </span><span class="mf">0.0</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;Re&quot;</span><span class="o">:</span><span class="w">    </span><span class="p">[</span><span class="mf">1e3</span><span class="p">,</span><span class="w"> </span><span class="mf">1e3</span><span class="p">,</span><span class="w"> </span><span class="mf">1e4</span><span class="p">,</span><span class="w">  </span><span class="mf">1e4</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;T&quot;</span><span class="o">:</span><span class="w">     </span><span class="p">[</span><span class="mf">478</span><span class="p">,</span><span class="w"> </span><span class="mf">478</span><span class="p">,</span><span class="w"> </span><span class="mf">478</span><span class="p">,</span><span class="w">  </span><span class="mf">478</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The second line, <em>Keys</em>, lists the five input variables we have discussed above
+and two additional input variables used for bookkeeping.  Each of these
+variables has a standard name, so pyFun provides a default definition and
+interpretation.  However, it is possible to modify any aspect of a variable’s
+behavior in the <em>Definitions</em> section.</p>
+<p>Here we have modified the <em>mach</em> definition so that pyFun explicitly includes
+exactly two digits after the decimal place in the folder name (otherwise we may
+have difficulty with the Mach 0.84 case).  There are many more capabilities of
+this <em>Definitions</em> section.  Some of them are discussed in other examples, and
+the complete guide can be found in the “RunMatrix” section of the JSON file.</p>
+<p>In this case, we have decided to specify the values of the variables within the
+JSON file.  We can specify a list with one value for each case, as in <code class="docutils literal notranslate"><span class="pre">&quot;mach&quot;:</span>
+<span class="pre">[0.8,</span> <span class="pre">0.8,</span> <span class="pre">0.84,</span> <span class="pre">1.2]</span></code> or a constant value that applies to all cases as in
+<code class="docutils literal notranslate"><span class="pre">&quot;config&quot;:</span> <span class="pre">&quot;arrow&quot;</span></code>.</p>
+<p>To actually run a case, specifically the first case, run the following command.
+It will show some status updates as it runs, but this may take a respectable
+amount of time (about 7.5 CPU hours) to demonstrate a semi-realistic case.  It
+can be aborted with a <code class="docutils literal notranslate"><span class="pre">Ctrl-C</span></code> command if desired.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pyfun<span class="w"> </span>-I<span class="w"> </span><span class="m">0</span>
+Case<span class="w"> </span>Config/Run<span class="w"> </span>Directory<span class="w">  </span>Status<span class="w">  </span>Iterations<span class="w">  </span>Que<span class="w"> </span>CPU<span class="w"> </span>Time
+----<span class="w"> </span>---------------------<span class="w"> </span>-------<span class="w"> </span>-----------<span class="w"> </span>---<span class="w"> </span>--------
+<span class="m">0</span><span class="w">    </span>arrow/m0.80a0.0b0.0<span class="w">   </span>---<span class="w">     </span>/<span class="w">           </span>.
+<span class="w">  </span>Case<span class="w"> </span>name:<span class="w"> </span><span class="s1">&#39;arrow/m0.80a0.0b0.0&#39;</span><span class="w"> </span><span class="o">(</span>index<span class="w"> </span><span class="m">0</span><span class="o">)</span>
+<span class="w">     </span>Starting<span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;arrow/m0.80a0.0b0.0&#39;</span>.
+<span class="w"> </span>&gt;<span class="w"> </span>nodet<span class="w"> </span>--animation_freq<span class="w"> </span><span class="m">500</span>
+<span class="w">     </span><span class="o">(</span><span class="nv">PWD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/home/dalle/usr/pycart/examples/pyfun/arrow/arrow/m0.80a0.0b0.0&#39;</span><span class="o">)</span>
+<span class="w">     </span><span class="o">(</span><span class="nv">STDOUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;fun3d.out&#39;</span><span class="o">)</span>
+<span class="w"> </span>&gt;<span class="w"> </span>nodet<span class="w"> </span>--animation_freq<span class="w"> </span><span class="m">500</span>
+<span class="w">     </span><span class="o">(</span><span class="nv">PWD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/home/dalle/usr/pycart/examples/pyfun/arrow/arrow/m0.80a0.0b0.0&#39;</span><span class="o">)</span>
+<span class="w">     </span><span class="o">(</span><span class="nv">STDOUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;fun3d.out&#39;</span><span class="o">)</span>
+
+Submitted<span class="w"> </span>or<span class="w"> </span>ran<span class="w"> </span><span class="m">1</span><span class="w"> </span>job<span class="o">(</span>s<span class="o">)</span>.
+
+---<span class="o">=</span><span class="m">1</span>,
+</pre></div>
+</div>
+</div></blockquote>
+<p>While this is running, we can open another window and navigate to the same
+folder.  Then we can check the status using another <code class="docutils literal notranslate"><span class="pre">pyfun</span> <span class="pre">-c</span></code> call.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pyfun<span class="w"> </span>-c
+Case<span class="w"> </span>Config/Run<span class="w"> </span>Directory<span class="w">  </span>Status<span class="w">  </span>Iterations<span class="w">  </span>Que<span class="w"> </span>CPU<span class="w"> </span>Time
+----<span class="w"> </span>---------------------<span class="w"> </span>-------<span class="w"> </span>-----------<span class="w"> </span>---<span class="w"> </span>--------
+<span class="m">0</span><span class="w">    </span>arrow/m0.80a0.0b0.0<span class="w">   </span>RUN<span class="w">     </span><span class="m">57</span>/1000<span class="w">     </span>.<span class="w">        </span><span class="m">0</span>.7
+<span class="m">1</span><span class="w">    </span>arrow/m0.80a2.0b0.0<span class="w">   </span>---<span class="w">     </span>/<span class="w">           </span>.
+<span class="m">2</span><span class="w">    </span>arrow/m0.84a0.0b0.0<span class="w">   </span>---<span class="w">     </span>/<span class="w">           </span>.
+<span class="m">3</span><span class="w">    </span>arrow/m1.20a0.0b0.0<span class="w">   </span>---<span class="w">     </span>/<span class="w">           </span>.
+
+---<span class="o">=</span><span class="m">3</span>,<span class="w"> </span><span class="nv">RUN</span><span class="o">=</span><span class="m">1</span>,
+</pre></div>
+</div>
+</div></blockquote>
+<p>Once the case is complete (not fully necessary for this demo), the status will
+change to the following.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pyfun<span class="w"> </span>-c
+Case<span class="w"> </span>Config/Run<span class="w"> </span>Directory<span class="w">  </span>Status<span class="w">  </span>Iterations<span class="w">  </span>Que<span class="w"> </span>CPU<span class="w"> </span>Time
+----<span class="w"> </span>---------------------<span class="w"> </span>-------<span class="w"> </span>-----------<span class="w"> </span>---<span class="w"> </span>--------
+<span class="m">0</span><span class="w">    </span>arrow/m0.80a0.0b0.0<span class="w">   </span>DONE<span class="w">    </span><span class="m">1000</span>/1000<span class="w">   </span>.<span class="w">        </span><span class="m">7</span>.5
+<span class="m">1</span><span class="w">    </span>arrow/m0.80a2.0b0.0<span class="w">   </span>---<span class="w">     </span>/<span class="w">           </span>.
+<span class="m">2</span><span class="w">    </span>arrow/m0.84a0.0b0.0<span class="w">   </span>---<span class="w">     </span>/<span class="w">           </span>.
+<span class="m">3</span><span class="w">    </span>arrow/m1.20a0.0b0.0<span class="w">   </span>---<span class="w">     </span>/<span class="w">           </span>.
+
+---<span class="o">=</span><span class="m">3</span>,<span class="w"> </span><span class="nv">DONE</span><span class="o">=</span><span class="m">1</span>,
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">arrow/m0.80a0.0b0.0</span></code> folder itself contains the hallmark files of a
+FUN3D run with a project prefix of <code class="docutils literal notranslate"><span class="pre">arrow</span></code> (which is set within
+<code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code> or <code class="docutils literal notranslate"><span class="pre">fun3d.nml</span></code>) with a few additional files used by pyFun to
+keep track of status.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../index.html"
+                          title="previous chapter"><span class="section-number">5.1. </span>Examples Using pyFun</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../02-bullet/index.html"
+                          title="next chapter"><span class="section-number">5.1.2. </span>Demo 2: Inviscid Bullet with Reports</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/pyfun/examples/01-arrow/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../02-bullet/index.html" title="5.1.2. Demo 2: Inviscid Bullet with Reports"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="5.1. Examples Using pyFun"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">5. </span>pyFun Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">5.1. </span>Examples Using pyFun</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.1.1. </span>Demo 1: Basic Viscous FUN3D Usage on Arrow with Fins</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

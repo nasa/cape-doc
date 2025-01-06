@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.units: Unit Conversion Module &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.util: Cape utilities" href="util.html" />
+    <link rel="prev" title="cape.tricli: Interfaces to .tri and related files" href="tricli.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="util.html" title="cape.util: Cape utilities"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tricli.html" title="cape.tricli: Interfaces to .tri and related files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.units</span></code>: Unit Conversion Module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.units">
+<span id="cape-units-unit-conversion-module"></span><h1><a class="reference internal" href="#module-cape.units" title="cape.units"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.units</span></code></a>: Unit Conversion Module<a class="headerlink" href="#module-cape.units" title="Link to this heading">¶</a></h1>
+<p>CAPE includes this unit-conversion module to interpret various units for
+inputs and post-processing.  Many CFD solvers, and some trajectory tools
+that are used to provide flight conditions, expect imperial units, which
+can be challenging to interpret and difficult to use in complications.</p>
+<p>The main function of this module is called <a class="reference internal" href="#cape.units.mks" title="cape.units.mks"><code class="xref py py-func docutils literal notranslate"><span class="pre">mks()</span></code></a>, which takes a
+string as input and tries to convert it to a numerical output as
+multiple of meters, kilograms, and seconds (and Kelvins and amperes or
+several other fundamental units as needed). For example it will return
+0.0254 if the input is <code class="docutils literal notranslate"><span class="pre">&quot;inch&quot;</span></code>, which is the length of an inch in
+meters.</p>
+<blockquote>
+<div><div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mks</span><span class="p">(</span><span class="s2">&quot;inch&quot;</span><span class="p">)</span>
+<span class="go">0.0254</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This function also takes more complexly defined units using exponents,
+multiples and ratios, and SI prefixes.  For example, this converts
+thousand pounds per square foot to the appropriate mks unit, which is
+Pascals.</p>
+<blockquote>
+<div><div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mks</span><span class="p">(</span><span class="s2">&quot;klbf/ft^2&quot;</span><span class="p">)</span>
+<span class="go">4.7880e+04</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The module also contains several simple <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> values, such as
+<em>psf</em> for the value of pounds per square feet in Pascals.  There is a
+<a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> called <em>units_dict</em> that contains a full dictionary of
+recognized unit names.</p>
+<blockquote>
+<div><div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">units_dict</span><span class="p">[</span><span class="s1">&#39;psf&#39;</span><span class="p">]</span>
+<span class="go">47.88025903135141</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.units.mks">
+<span class="sig-prename descclassname"><span class="pre">cape.units.</span></span><span class="sig-name descname"><span class="pre">mks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_lbl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.units.mks" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a string for arbitrary nits to numerical MKS value</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">mks</span><span class="p">(</span><span class="n">unit_lbl</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Examples<span class="colon">:</span></dt>
+<dd class="field-even"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mks</span><span class="p">(</span><span class="s2">&quot;kg&quot;</span><span class="p">)</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mks</span><span class="p">(</span><span class="s2">&quot;lbf/ft^2&quot;</span><span class="p">)</span>
+<span class="go">47.880</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">Inputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>unit_lbl</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">unicode</span></code></dt><dd><p>String describing units</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>val</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Units converted to numerical value assuming MKS system</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2018-04-12 <code class="docutils literal notranslate"><span class="pre">&#64;dalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="tricli.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tricli</span></code>: Interfaces to <code class="docutils literal notranslate"><span class="pre">.tri</span></code> and related files</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="util.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.util</span></code>: Cape utilities</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cape/units.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="util.html" title="cape.util: Cape utilities"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tricli.html" title="cape.tricli: Interfaces to .tri and related files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.units</span></code>: Unit Conversion Module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

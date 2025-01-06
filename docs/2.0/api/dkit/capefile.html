@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>capefile: Reader for CAPE-specific binary files &#8212; CAPE 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.dkit.csvfile: Comma-separated value read/write" href="csvfile.html" />
+    <link rel="prev" title="cape.dkit.basefile: Common ATTDB file type attributes" href="basefile.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="csvfile.html" title="cape.dkit.csvfile: Comma-separated value read/write"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="basefile.html" title="cape.dkit.basefile: Common ATTDB file type attributes"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dkit</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">capefile</span></code>: Reader for CAPE-specific binary files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="capefile-reader-for-cape-specific-binary-files">
+<span id="module-cape.dkit.capefile"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">capefile</span></code>: Reader for CAPE-specific binary files<a class="headerlink" href="#capefile-reader-for-cape-specific-binary-files" title="Link to this heading">¶</a></h1>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.dkit.capefile.CapeFile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.dkit.capefile.</span></span><span class="sig-name descname"><span class="pre">CapeFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../python.html#dict" title="dict"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">IOBase</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#bool" title="bool"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.capefile.CapeFile" title="Link to this definition">¶</a></dt>
+<dd><p>Interface to simple binary format specific to CAPE</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cdb</span> <span class="o">=</span> <span class="n">CapeFile</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cdb</span> <span class="o">=</span> <span class="n">CapeFile</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cdb</span> <span class="o">=</span> <span class="n">CapeFile</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+<dt><em>fp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">io.IOBase</span></code></dt><dd><p>File handle open in <code class="docutils literal notranslate"><span class="pre">rb</span></code> mode</p>
+</dd>
+<dt><em>meta</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to only read variable names and sizes</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cdb</em>: <a class="reference internal" href="#cape.dkit.capefile.CapeFile" title="cape.dkit.capefile.CapeFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeFile</span></code></a></dt><dd><p>Data from CAPE binary file</p>
+</dd>
+<dt><em>cdb.filename</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file data was read from</p>
+</dd>
+<dt><em>cdb.filedir</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Absolute path to folder with file data was read from</p>
+</dd>
+<dt><em>cdb.cols</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Ordered list of columns</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.dkit.capefile.CapeFile.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">IOBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#bool" title="bool"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.capefile.CapeFile.read" title="Link to this definition">¶</a></dt>
+<dd><p>Read data from a <code class="docutils literal notranslate"><span class="pre">.cdb</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.dkit.capefile.CapeFile" title="cape.dkit.capefile.CapeFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeFile</span></code></a></dt><dd><p>Instance of <code class="docutils literal notranslate"><span class="pre">.cdb</span></code> file interface</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+<dt><em>fp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">io.IOBase</span></code></dt><dd><p>File handle open in <code class="docutils literal notranslate"><span class="pre">'rb'</span></code> mode</p>
+</dd>
+<dt><em>meta</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Option to only read column names and sizes</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.dkit.capefile.CapeFile.save_col">
+<span class="sig-name descname"><span class="pre">save_col</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.capefile.CapeFile.save_col" title="Link to this definition">¶</a></dt>
+<dd><p>Save value for one column</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">save_col</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.dkit.capefile.CapeFile" title="cape.dkit.capefile.CapeFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeFile</span></code></a></dt><dd><p>Instance of <code class="docutils literal notranslate"><span class="pre">.cdb</span></code> file interface</p>
+</dd>
+<dt><em>col</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of column/field to save</p>
+</dd>
+<dt><em>v</em>: <a class="reference internal" href="../python.html#Any" title="Any"><code class="xref py py-class docutils literal notranslate"><span class="pre">Any</span></code></a></dt><dd><p>Value to save</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of which instance of <em>col</em> to save</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.dkit.capefile.CapeFile.save_dict">
+<span class="sig-name descname"><span class="pre">save_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.capefile.CapeFile.save_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Save all parameters of a <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">save_dict</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.dkit.capefile.CapeFile" title="cape.dkit.capefile.CapeFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeFile</span></code></a></dt><dd><p>Instance of <code class="docutils literal notranslate"><span class="pre">.cdb</span></code> file interface</p>
+</dd>
+<dt><em>a</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Any dictionary of serializable keys</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.dkit.capefile.CapeFile.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">IOBase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.capefile.CapeFile.write" title="Link to this definition">¶</a></dt>
+<dd><p>Write data to a <code class="docutils literal notranslate"><span class="pre">.cdb</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.dkit.capefile.CapeFile" title="cape.dkit.capefile.CapeFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeFile</span></code></a></dt><dd><p>Instance of <code class="docutils literal notranslate"><span class="pre">.cdb</span></code> file interface</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to write</p>
+</dd>
+<dt><em>fp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">io.IOBase</span></code></dt><dd><p>File handle open in <code class="docutils literal notranslate"><span class="pre">'wb'</span></code> mode</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="cape.dkit.capefile.CapeFileError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.dkit.capefile.</span></span><span class="sig-name descname"><span class="pre">CapeFileError</span></span><a class="headerlink" href="#cape.dkit.capefile.CapeFileError" title="Link to this definition">¶</a></dt>
+<dd><p>Base for all exceptions raised by <code class="xref py py-mod docutils literal notranslate"><span class="pre">capefile</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="cape.dkit.capefile.CapeFileTypeError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.dkit.capefile.</span></span><span class="sig-name descname"><span class="pre">CapeFileTypeError</span></span><a class="headerlink" href="#cape.dkit.capefile.CapeFileTypeError" title="Link to this definition">¶</a></dt>
+<dd><p>Exception class for incorrect type in <code class="xref py py-mod docutils literal notranslate"><span class="pre">capefile</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="cape.dkit.capefile.CapeFileValueError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.dkit.capefile.</span></span><span class="sig-name descname"><span class="pre">CapeFileValueError</span></span><a class="headerlink" href="#cape.dkit.capefile.CapeFileValueError" title="Link to this definition">¶</a></dt>
+<dd><p>Exception class for incorrect value in <code class="xref py py-mod docutils literal notranslate"><span class="pre">capefile</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.capefile.assert_isinstance">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.capefile.</span></span><span class="sig-name descname"><span class="pre">assert_isinstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_or_tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.capefile.assert_isinstance" title="Link to this definition">¶</a></dt>
+<dd><p>Conveniently check types</p>
+<p>Applies <code class="docutils literal notranslate"><span class="pre">isinstance(obj,</span> <span class="pre">cls_or_tuple)</span></code> but also constructs
+a <a class="reference internal" href="../python.html#TypeError" title="TypeError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></a> and appropriate message if test fails.</p>
+<p>If <em>cls</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, no checks are performed.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">assert_isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">assert_isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">cls_tuple</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>obj</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></dt><dd><p>Object whose type is checked</p>
+</dd>
+<dt><em>cls</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../python.html#type" title="type"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></dt><dd><p>Single permitted class</p>
+</dd>
+<dt><em>cls_tuple</em>: <a class="reference internal" href="../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference internal" href="../python.html#type" title="type"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>]</dt><dd><p>Tuple of allowed classes</p>
+</dd>
+<dt><em>desc</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional text describing <em>obj</em> for including in error msg</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#cape.dkit.capefile.CapeFileTypeError" title="cape.dkit.capefile.CapeFileTypeError"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeFileTypeError</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.capefile.assert_size">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.capefile.</span></span><span class="sig-name descname"><span class="pre">assert_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IOBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.capefile.assert_size" title="Link to this definition">¶</a></dt>
+<dd><p>Check if array has expected size</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">assert_size</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>v</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a></dt><dd><p>An array</p>
+</dd>
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Expected size</p>
+</dd>
+<dt><em>fp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">io.IOBase</span></code></dt><dd><p>File handle to report position</p>
+</dd>
+<dt><em>desc</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional text describing <em>v</em> for including in error msg</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#cape.dkit.capefile.CapeFileValueError" title="cape.dkit.capefile.CapeFileValueError"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeFileValueError</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.capefile.assert_value">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.capefile.</span></span><span class="sig-name descname"><span class="pre">assert_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_or_tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.capefile.assert_value" title="Link to this definition">¶</a></dt>
+<dd><p>Conveniently check values</p>
+<p>If <em>val</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, no checks are performed.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">assert_value</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">assert_value</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">val_tuple</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>obj</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></dt><dd><p>Object whose type is checked</p>
+</dd>
+<dt><em>val</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></dt><dd><p>Single permitted value</p>
+</dd>
+<dt><em>val_tuple</em>: <a class="reference internal" href="../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></dt><dd><p>Tuple of allowed values</p>
+</dd>
+<dt><em>desc</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional text describing <em>obj</em> for including in error msg</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#cape.dkit.capefile.CapeFileValueError" title="cape.dkit.capefile.CapeFileValueError"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeFileValueError</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.capefile.check_header">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.capefile.</span></span><span class="sig-name descname"><span class="pre">check_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IOBase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.dkit.capefile.check_header" title="Link to this definition">¶</a></dt>
+<dd><p>Check that file has the correct header for file type</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">check_header</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">io.IOBase</span></code></dt><dd><p>File open for reading bytes (<code class="docutils literal notranslate"><span class="pre">'rb'</span></code> or similar)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#cape.dkit.capefile.CapeFileValueError" title="cape.dkit.capefile.CapeFileValueError"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeFileValueError</span></code></a> if file does not have correct
+header</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.capefile.genr8_recordtype">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.capefile.</span></span><span class="sig-name descname"><span class="pre">genr8_recordtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../thirdparty.html#numpy.uint32" title="numpy.uint32"><span class="pre">uint32</span></a></span></span><a class="headerlink" href="#cape.dkit.capefile.genr8_recordtype" title="Link to this definition">¶</a></dt>
+<dd><p>Get capefile record type code based on Python type</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rt</span> <span class="o">=</span> <span class="n">genr8_recordtype</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>v</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></dt><dd><p>Any value to analyze type</p>
+</dd>
+<dt><em>name</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Title for <em>v</em>, used to determine “title” bit in <em>rt</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>rt</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.uint32</span></code></dt><dd><p>Record type code</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.capefile.read_nrecord">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.capefile.</span></span><span class="sig-name descname"><span class="pre">read_nrecord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IOBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../thirdparty.html#numpy.uint64" title="numpy.uint64"><span class="pre">uint64</span></a></span></span><a class="headerlink" href="#cape.dkit.capefile.read_nrecord" title="Link to this definition">¶</a></dt>
+<dd><p>Read number of records in file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nr</span> <span class="o">=</span> <span class="n">read_nrecord</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">io.IOBase</span></code></dt><dd><p>File handle</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>nr</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.uint64</span></code></dt><dd><p>Number of records</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.dkit.capefile.write_record">
+<span class="sig-prename descclassname"><span class="pre">cape.dkit.capefile.</span></span><span class="sig-name descname"><span class="pre">write_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IOBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../thirdparty.html#numpy.uint64" title="numpy.uint64"><span class="pre">uint64</span></a></span></span><a class="headerlink" href="#cape.dkit.capefile.write_record" title="Link to this definition">¶</a></dt>
+<dd><p>Write a record to file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">size</span> <span class="o">=</span> <span class="n">write_record</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">io.IOBase</span></code></dt><dd><p>A file open for writing bytes</p>
+</dd>
+<dt><em>v</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></dt><dd><p>Object to be written to file</p>
+</dd>
+<dt><em>name</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional title to save <em>v</em> as</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>size</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">np.uint64</span></code></dt><dd><p>Number of bytes written</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="basefile.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dkit.basefile</span></code>: Common ATTDB file type attributes</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="csvfile.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dkit.csvfile</span></code>: Comma-separated value read/write</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/dkit/capefile.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="csvfile.html" title="cape.dkit.csvfile: Comma-separated value read/write"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="basefile.html" title="cape.dkit.basefile: Common ATTDB file type attributes"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.dkit</span></code>: Package for “datakits”: database + toolkit</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">capefile</span></code>: Reader for CAPE-specific binary files</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>
