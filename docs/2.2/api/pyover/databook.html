@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.pyover.databook: DataBook module for OVERFLOW &#8212; CAPE 2.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pyover.overnmlfile: OVERFLOW namelist module" href="overnmlfile.html" />
+    <link rel="prev" title="cape.pyover.cmdgen: Create commands for OVERFLOW executables" href="cmdgen.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="overnmlfile.html" title="cape.pyover.overnmlfile: OVERFLOW namelist module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cmdgen.html" title="cape.pyover.cmdgen: Create commands for OVERFLOW executables"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code>: Interfaces to OVERFLOW</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">cape.pyover.databook</span></code>: DataBook module for OVERFLOW</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-pyover-databook-databook-module-for-overflow">
+<span id="module-cape.pyover.databook"></span><h1><code class="docutils literal notranslate"><span class="pre">cape.pyover.databook</span></code>: DataBook module for OVERFLOW<a class="headerlink" href="#cape-pyover-databook-databook-module-for-overflow" title="Link to this heading">¶</a></h1>
+<p>This module contains functions for reading and processing forces,
+moments, and other statistics from cases in a trajectory. Data books are
+usually created by using the <code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pyover.cntl.Cntl.ReadDataBook()</span></code>
+function.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read OVERFLOW control instance</span>
+<span class="n">cntl</span> <span class="o">=</span> <span class="n">pyOver</span><span class="o">.</span><span class="n">Cntl</span><span class="p">(</span><span class="s2">&quot;pyOver.json&quot;</span><span class="p">)</span>
+<span class="c1"># Read the data book</span>
+<span class="n">cntl</span><span class="o">.</span><span class="n">ReadDataBook</span><span class="p">()</span>
+<span class="c1"># Get a handle</span>
+<span class="n">DB</span> <span class="o">=</span> <span class="n">cntl</span><span class="o">.</span><span class="n">DataBook</span>
+
+<span class="c1"># Read a line load component</span>
+<span class="n">DB</span><span class="o">.</span><span class="n">ReadLineLoad</span><span class="p">(</span><span class="s2">&quot;CORE_LL&quot;</span><span class="p">)</span>
+<span class="n">DBL</span> <span class="o">=</span> <span class="n">DB</span><span class="o">.</span><span class="n">LineLoads</span><span class="p">[</span><span class="s2">&quot;CORE_LL&quot;</span><span class="p">]</span>
+<span class="c1"># Read a target</span>
+<span class="n">DB</span><span class="o">.</span><span class="n">ReadTarget</span><span class="p">(</span><span class="s2">&quot;t97&quot;</span><span class="p">)</span>
+<span class="n">DBT</span> <span class="o">=</span> <span class="n">DB</span><span class="o">.</span><span class="n">Targets</span><span class="p">[</span><span class="s2">&quot;t97&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Data books can be created without an overall control structure, but it
+requires creating a run matrix object using
+<code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyover.runmatrix.RunMatrix</span></code>, so it is a more involved
+process.</p>
+<p>Data book modules are also invoked during update and reporting
+command-line calls.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfun<span class="w"> </span>--aero
+<span class="gp">$ </span>pyfun<span class="w"> </span>--ll
+<span class="gp">$ </span>pyfun<span class="w"> </span>--triqfm
+<span class="gp">$ </span>pyfun<span class="w"> </span>--report
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">See Also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../cfdx/databook.html#module-cape.cfdx.databook" title="cape.cfdx.databook"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.databook</span></code></a></p></li>
+<li><p><a class="reference internal" href="../cfdx/pointsensor.html#module-cape.cfdx.pointsensor" title="cape.cfdx.pointsensor"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.pointsensor</span></code></a></p></li>
+<li><p><a class="reference internal" href="../cfdx/options/databookopts.html#module-cape.cfdx.options.databookopts" title="cape.cfdx.options.databookopts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.options.databookopts</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyover.databook.CaseFM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyover.databook.</span></span><span class="sig-name descname"><span class="pre">CaseFM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.databook.CaseFM" title="Link to this definition">¶</a></dt>
+<dd><p>Force and moment iterative histories</p>
+<p>This class contains methods for reading data about an the history of
+an individual component for a single casecntl. It reads the Tecplot
+file <code class="docutils literal notranslate"><span class="pre">$proj_fm_$comp.dat</span></code> where <em>proj</em> is the lower-case root
+project name and <em>comp</em> is the name of the component. From this file
+it determines which coefficients are recorded automatically.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fm</span> <span class="o">=</span> <span class="n">CaseFM</span><span class="p">(</span><span class="n">proj</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>proj</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Root name of the project</p>
+</dd>
+<dt><em>comp</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of component to process</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fm</em>: <a class="reference internal" href="#cape.pyover.databook.CaseFM" title="cape.pyover.databook.CaseFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseFM</span></code></a></dt><dd><p>Force and moment iterative history instance</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.databook.CaseFM.get_filelist">
+<span class="sig-name descname"><span class="pre">get_filelist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#list" title="list"><span class="pre">list</span></a></span></span><a class="headerlink" href="#cape.pyover.databook.CaseFM.get_filelist" title="Link to this definition">¶</a></dt>
+<dd><p>Get ordered list of files to read to build iterative history</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">filelist</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">get_filelist</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>h</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">CaseData</span></code></dt><dd><p>Single-case iterative history instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>filelist</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of files to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2024-01-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.databook.CaseFM.read_fomoco_meta">
+<span class="sig-name descname"><span class="pre">read_fomoco_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.databook.CaseFM.read_fomoco_meta" title="Link to this definition">¶</a></dt>
+<dd><p>Get basic stats about an OVERFLOW fomoco file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ic</span><span class="p">,</span> <span class="n">nc</span><span class="p">,</span> <span class="n">ni</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">GetFomocoInfo</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fm</em>: <a class="reference internal" href="#cape.pyover.databook.CaseFM" title="cape.pyover.databook.CaseFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseFM</span></code></a></dt><dd><p>Force and moment iterative history</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to query</p>
+</dd>
+<dt><em>comp</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of component to find</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>ic</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Index of component in the list of components</p>
+</dd>
+<dt><em>nc</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Number of components</p>
+</dd>
+<dt><em>ni</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of iterations</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (GetFomocoInfo)</p></li>
+<li><p>2024-01-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.databook.CaseFM.readfile">
+<span class="sig-name descname"><span class="pre">readfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.pyover.databook.CaseFM.readfile" title="Link to this definition">¶</a></dt>
+<dd><p>Read a FOMOCO output file for one component</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fm</em>: <a class="reference internal" href="#cape.pyover.databook.CaseFM" title="cape.pyover.databook.CaseFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseFM</span></code></a></dt><dd><p>Single-case force &amp; moment iterative history instance</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">basedata.BaseData</span></code></dt><dd><p>Data read from <em>fname</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2024-01-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyover.databook.CaseResid">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyover.databook.</span></span><span class="sig-name descname"><span class="pre">CaseResid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.databook.CaseResid" title="Link to this definition">¶</a></dt>
+<dd><p>OVERFLOW iterative residual history class</p>
+<p>This class provides an interface to residuals for a given case by reading
+the files <code class="docutils literal notranslate"><span class="pre">resid.out</span></code>, <code class="docutils literal notranslate"><span class="pre">resid.tmp</span></code>, <code class="docutils literal notranslate"><span class="pre">run.resid</span></code>, <code class="docutils literal notranslate"><span class="pre">turb.out</span></code>,
+<code class="docutils literal notranslate"><span class="pre">species.out</span></code>, etc.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">CaseResid</span><span class="p">(</span><span class="n">proj</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>proj</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Project root name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>hist</em>: <a class="reference internal" href="#cape.pyover.databook.CaseResid" title="cape.pyover.databook.CaseResid"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseResid</span></code></a></dt><dd><p>Instance of the residual histroy class</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.databook.CaseResid.PlotL2">
+<span class="sig-name descname"><span class="pre">PlotL2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nFirst</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nLast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.databook.CaseResid.PlotL2" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the L2 residual</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">PlotL2</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nFirst</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nLast</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>hist</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.databook.CaseResid</span></code></dt><dd><p>Instance of the DataBook residual history</p>
+</dd>
+<dt><em>n</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Only show the last <em>n</em> iterations</p>
+</dd>
+<dt><em>nFirst</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Plot starting at iteration <em>nStart</em></p>
+</dd>
+<dt><em>nLast</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Plot up to iteration <em>nLast</em></p>
+</dd>
+<dt><em>FigWidth</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Figure width</p>
+</dd>
+<dt><em>FigHeight</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Figure height</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>h</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of figure/plot handles</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-11-12 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2014-12-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; move to <code class="docutils literal notranslate"><span class="pre">AeroPlot</span></code></p></li>
+<li><p>2015-02-15 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; move to <code class="docutils literal notranslate"><span class="pre">databook.Aero</span></code></p></li>
+<li><p>2015-03-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.3; add <em>nStart</em> and <em>nLast</em></p></li>
+<li><p>2015-10-21 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.4; use <code class="xref py py-func docutils literal notranslate"><span class="pre">PlotResid()</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.databook.CaseResid.get_filelist">
+<span class="sig-name descname"><span class="pre">get_filelist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#list" title="list"><span class="pre">list</span></a></span></span><a class="headerlink" href="#cape.pyover.databook.CaseResid.get_filelist" title="Link to this definition">¶</a></dt>
+<dd><p>Get ordered list of files to read to build iterative history</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">filelist</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">get_filelist</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>h</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">CaseData</span></code></dt><dd><p>Single-case iterative history instance</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>filelist</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of files to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2024-01-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyover.databook.CaseResid.readfile">
+<span class="sig-name descname"><span class="pre">readfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.pyover.databook.CaseResid.readfile" title="Link to this definition">¶</a></dt>
+<dd><p>Read an OVERFLOW residual history file; create global resid</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fm</em>: <a class="reference internal" href="#cape.pyover.databook.CaseFM" title="cape.pyover.databook.CaseFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseFM</span></code></a></dt><dd><p>Single-case force &amp; moment iterative history instance</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>db</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">basedata.BaseData</span></code></dt><dd><p>Data read from <em>fname</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2024-01-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyover.databook.ReadResidFirstIter">
+<span class="sig-prename descclassname"><span class="pre">cape.pyover.databook.</span></span><span class="sig-name descname"><span class="pre">ReadResidFirstIter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.databook.ReadResidFirstIter" title="Link to this definition">¶</a></dt>
+<dd><p>Read the first iteration number in an OVERFLOW residual file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">iIter</span> <span class="o">=</span> <span class="n">ReadResidFirstIter</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iIter</span> <span class="o">=</span> <span class="n">ReadResidFirstIter</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to query</p>
+</dd>
+<dt><em>f</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">file</span></code></dt><dd><p>Already opened file handle to query</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>iIter</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Iteration number from first line</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2023-01-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; fix file type check for py3</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyover.databook.ReadResidGrids">
+<span class="sig-prename descclassname"><span class="pre">cape.pyover.databook.</span></span><span class="sig-name descname"><span class="pre">ReadResidGrids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.databook.ReadResidGrids" title="Link to this definition">¶</a></dt>
+<dd><p>Get list of grids in an OVERFLOW residual file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grids</span> <span class="o">=</span> <span class="n">ReadResidGrids</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>grids</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of grids</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyover.databook.ReadResidNGrids">
+<span class="sig-prename descclassname"><span class="pre">cape.pyover.databook.</span></span><span class="sig-name descname"><span class="pre">ReadResidNGrids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.databook.ReadResidNGrids" title="Link to this definition">¶</a></dt>
+<dd><p>Get number of grids from an OVERFLOW residual file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nGrid</span> <span class="o">=</span> <span class="n">ReadResidNGrids</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>nGrid</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of grids</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2024-01-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; context manager</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyover.databook.ReadResidNIter">
+<span class="sig-prename descclassname"><span class="pre">cape.pyover.databook.</span></span><span class="sig-name descname"><span class="pre">ReadResidNIter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.databook.ReadResidNIter" title="Link to this definition">¶</a></dt>
+<dd><p>Get number of iterations in an OVERFLOW residual file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nIter</span> <span class="o">=</span> <span class="n">ReadResidNIter</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to query</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>nIter</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of iterations</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2022-01-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; Python 3 int division</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyover.databook.read_fomoco_comps">
+<span class="sig-prename descclassname"><span class="pre">cape.pyover.databook.</span></span><span class="sig-name descname"><span class="pre">read_fomoco_comps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.databook.read_fomoco_comps" title="Link to this definition">¶</a></dt>
+<dd><p>Get list of components in an OVERFLOW fomoco file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">comps</span> <span class="o">=</span> <span class="n">read_fomoco_comps</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of the file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>comps</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of components</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (ReadFomocoCOmps)</p></li>
+<li><p>2024-01-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; handle instead of file name</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyover.databook.read_fomoco_niter">
+<span class="sig-prename descclassname"><span class="pre">cape.pyover.databook.</span></span><span class="sig-name descname"><span class="pre">read_fomoco_niter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncomp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyover.databook.read_fomoco_niter" title="Link to this definition">¶</a></dt>
+<dd><p>Get number of iterations in an OVERFLOW fomoco file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nIter</span> <span class="o">=</span> <span class="n">read_fomoco_niter</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nIter</span> <span class="o">=</span> <span class="n">read_fomoco_niter</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">nComp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read</p>
+</dd>
+<dt><em>nComp</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Number of components in each record</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>nIter</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Number of iterations in the file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2016-02-03 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2024-01-24 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; require <em>ncomp</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="cmdgen.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.cmdgen</span></code>: Create commands for OVERFLOW executables</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="overnmlfile.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover.overnmlfile</span></code>: OVERFLOW namelist module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pyover/databook.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="overnmlfile.html" title="cape.pyover.overnmlfile: OVERFLOW namelist module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cmdgen.html" title="cape.pyover.cmdgen: Create commands for OVERFLOW executables"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code>: Interfaces to OVERFLOW</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">cape.pyover.databook</span></code>: DataBook module for OVERFLOW</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

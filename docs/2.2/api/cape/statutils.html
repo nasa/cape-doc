@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.statutils: Statistics tools &#8212; CAPE 2.2.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.step: Python interface to STEP Files" href="step.html" />
+    <link rel="prev" title="cape.plt: Interface to Tecplot data files" href="pltfile.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="step.html" title="cape.step: Python interface to STEP Files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pltfile.html" title="cape.plt: Interface to Tecplot data files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.statutils</span></code>: Statistics tools</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-statutils-statistics-tools">
+<span id="module-cape.statutils"></span><h1><a class="reference internal" href="#module-cape.statutils" title="cape.statutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.statutils</span></code></a>: Statistics tools<a class="headerlink" href="#cape-statutils-statistics-tools" title="Link to this heading">¶</a></h1>
+<p>This module includes several shorthand calls to statistical functions
+from <code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.stats</span></code>.  The primary tool provided by this module is to
+calculate 99% (or any other fraction) coverage ranges for two data sets.</p>
+<p>This module depends on <code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.stats</span></code> from the SciPy package.  To
+ensure that this package is installed, even without root privileges on
+your system, run</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install --user --upgrade scipy</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This module does not provide a general-purpose statistical toolkit that
+wraps a complete package like <code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.stats</span></code>.  Instead, it provides
+a small set of tools that are common in handling data relevant to
+aerosciences databases but not commonly found in common statistics
+libraries.</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.statutils.check_outliers">
+<span class="sig-prename descclassname"><span class="pre">cape.statutils.</span></span><span class="sig-name descname"><span class="pre">check_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.statutils.check_outliers" title="Link to this definition">¶</a></dt>
+<dd><p>Find outliers in a data set</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">I</span> <span class="o">=</span> <span class="n">check_outliers</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>dx</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Array of signed deltas</p>
+</dd>
+<dt><em>cov</em>, <em>Coverage</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | 0 &lt; <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> &lt; 1</dt><dd><p>Strict coverage fraction</p>
+</dd>
+<dt><em>ksig</em>, <em>CoverageSigma</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Number of standard deviations to cover (default based on
+<em>cov</em>; user must supply either <em>cov</em> or <em>ksig</em> or both)</p>
+</dd>
+<dt><em>cdf</em>, <em>CoverageCDF</em>: {<em>cov</em>} | 0 &lt; <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> &lt; 1</dt><dd><p>Fraction to use to define <em>ksig</em></p>
+</dd>
+<dt><em>osig</em>, <em>OutlierSigma</em>: {<code class="docutils literal notranslate"><span class="pre">1.5*ksig</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Multiple of standard deviation to identify outliers</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>I</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</dt><dd><p>Flags for non-outlier cases,  <code class="docutils literal notranslate"><span class="pre">False</span></code> if case is an outlier</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-02-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-09-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1</dt><dd><ul>
+<li><p>use <code class="xref py py-func docutils literal notranslate"><span class="pre">_parse_options()</span></code></p></li>
+<li><p>allow 100% coverage</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.statutils.check_outliers_range">
+<span class="sig-prename descclassname"><span class="pre">cape.statutils.</span></span><span class="sig-name descname"><span class="pre">check_outliers_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.statutils.check_outliers_range" title="Link to this definition">¶</a></dt>
+<dd><p>Find outliers in an array of ranges</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">I</span> <span class="o">=</span> <span class="n">check_outliers_range</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>R</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Array of ranges (unsigned deltas)</p>
+</dd>
+<dt><em>cov</em>, <em>Coverage</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | 0 &lt; <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> &lt; 1</dt><dd><p>Strict coverage fraction</p>
+</dd>
+<dt><em>ksig</em>, <em>CoverageSigma</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Number of standard deviations to cover (default based on
+<em>cov</em>; user must supply either <em>cov</em> or <em>ksig</em> or both)</p>
+</dd>
+<dt><em>cdf</em>, <em>CoverageCDF</em>: {<em>cov</em>} | 0 &lt; <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> &lt; 1</dt><dd><p>Fraction to use to define <em>ksig</em></p>
+</dd>
+<dt><em>osig</em>, <em>OutlierSigma</em>: {<code class="docutils literal notranslate"><span class="pre">1.5*ksig</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Multiple of standard deviation to identify outliers</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>I</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</dt><dd><p>Flags for non-outlier cases,  <code class="docutils literal notranslate"><span class="pre">False</span></code> if case is an outlier</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-02-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.statutils.get_cov_interval">
+<span class="sig-prename descclassname"><span class="pre">cape.statutils.</span></span><span class="sig-name descname"><span class="pre">get_cov_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.statutils.get_cov_interval" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate Student’s <em>t</em>-distribution confidence range</p>
+<p>If the nominal application of the Student’s t-distribution fails to
+cover a high enough fraction of the data, the bounds are extended
+until <em>cov</em> (user-defined fraction) of the data is covered.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">get_cov_interval</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>dx</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Array of signed deltas</p>
+</dd>
+<dt><em>cov</em>, <em>Coverage</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | 0 &lt; <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> &lt; 1</dt><dd><p>Strict coverage fraction</p>
+</dd>
+<dt><em>ksig</em>, <em>CoverageSigma</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Number of standard deviations to cover (default based on
+<em>cov</em>; user must supply either <em>cov</em> or <em>ksig</em> or both)</p>
+</dd>
+<dt><em>cdf</em>, <em>CoverageCDF</em>: {<em>cov</em>} | 0 &lt; <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> &lt; 1</dt><dd><p>Fraction to use to define <em>ksig</em></p>
+</dd>
+<dt><em>osig</em>, <em>OutlierSigma</em>: {<code class="docutils literal notranslate"><span class="pre">1.5*ksig</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Multiple of standard deviation to identify outliers</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>a</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Lower bound of coverage interval</p>
+</dd>
+<dt><em>b</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Upper bound of coverage interval</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-02-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-09-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1</dt><dd><ul>
+<li><p>use <code class="xref py py-func docutils literal notranslate"><span class="pre">_parse_options()</span></code></p></li>
+<li><p>allow 100% coverage</p></li>
+<li><p>remove confusing <em>kcov</em> vs <em>ksig</em> scaling</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.statutils.get_coverage">
+<span class="sig-prename descclassname"><span class="pre">cape.statutils.</span></span><span class="sig-name descname"><span class="pre">get_coverage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.statutils.get_coverage" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate Student’s <em>t</em>-distribution confidence range</p>
+<p>If the nominal application of the Student’s t-distribution fails to
+cover a high enough fraction of the data, the bounds are extended
+until <em>cov</em> (user-defined fraction) of the data is covered.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">width</span> <span class="o">=</span> <span class="n">get_coverage</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>dx</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Array of signed deltas</p>
+</dd>
+<dt><em>cov</em>, <em>Coverage</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | 0 &lt; <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> &lt; 1</dt><dd><p>Strict coverage fraction</p>
+</dd>
+<dt><em>ksig</em>, <em>CoverageSigma</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Number of standard deviations to cover (default based on
+<em>cov</em>; user must supply either <em>cov</em> or <em>ksig</em> or both)</p>
+</dd>
+<dt><em>cdf</em>, <em>CoverageCDF</em>: {<em>cov</em>} | 0 &lt; <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> &lt; 1</dt><dd><p>Fraction to use to define <em>ksig</em></p>
+</dd>
+<dt><em>osig</em>, <em>OutlierSigma</em>: {<code class="docutils literal notranslate"><span class="pre">1.5*ksig</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Multiple of standard deviation to identify outliers</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>width</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Half-width of confidence region</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-02-04 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-09-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1</dt><dd><ul>
+<li><p>use <code class="xref py py-func docutils literal notranslate"><span class="pre">_parse_options()</span></code></p></li>
+<li><p>allow 100% coverage</p></li>
+<li><p>remove confusing <em>kcov</em> vs <em>ksig</em> scaling</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.statutils.get_ordered_lower">
+<span class="sig-prename descclassname"><span class="pre">cape.statutils.</span></span><span class="sig-name descname"><span class="pre">get_ordered_lower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.statutils.get_ordered_lower" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate value less than fraction <em>cov</em> of <em>V</em>’s values</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">get_ordered_lower</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">cov</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>V</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Array of scalar values</p>
+</dd>
+<dt><em>cov</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Coverage fraction, 0 &lt; <em>cov</em> &lt;= 1</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Value such that <code class="docutils literal notranslate"><span class="pre">cov*V.size</span></code> entries in <em>V</em> are greater
+than or equal to <em>v</em>; may be interpolated between sorted
+values of <em>V</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-09-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.statutils.get_ordered_stats">
+<span class="sig-prename descclassname"><span class="pre">cape.statutils.</span></span><span class="sig-name descname"><span class="pre">get_ordered_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onesided</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.statutils.get_ordered_stats" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate coverage using ordered statistics</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">get_ordered_stats</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">cov</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">get_ordered_stats</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vlim</span> <span class="o">=</span> <span class="n">get_ordered_stats</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">onesided</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vlim</span> <span class="o">=</span> <span class="n">get_ordered_stats</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">onsided</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>V</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Array of scalar values</p>
+</dd>
+<dt><em>cov</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Coverage fraction, 0 &lt; <em>cov</em> &lt;= 1</p>
+</dd>
+<dt><em>onsided</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>}</dt><dd><p>Option to find coverage of one-sided distribution</p>
+</dd>
+<dt><em>ksig</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Option to calculate <em>cov</em> based on Gaussian distribution</p>
+</dd>
+<dt><em>tsig</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Option to calculate <em>cov</em> based on Student’s t-distribution</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>vmin</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Lower limit of two-sided coverage interval</p>
+</dd>
+<dt><em>vmax</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Upper limit of two-sided coverage interval</p>
+</dd>
+<dt><em>vlim</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Upper limit of one-sided coverage interval</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-09-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.statutils.get_ordered_upper">
+<span class="sig-prename descclassname"><span class="pre">cape.statutils.</span></span><span class="sig-name descname"><span class="pre">get_ordered_upper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.statutils.get_ordered_upper" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate value greater than fraction <em>cov</em> of <em>V</em>’s values</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">get_ordered_upper</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">cov</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>V</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Array of scalar values</p>
+</dd>
+<dt><em>cov</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Coverage fraction, 0 &lt; <em>cov</em> &lt;= 1</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Value such that <code class="docutils literal notranslate"><span class="pre">cov*V.size</span></code> entries in <em>V</em> are less than
+or equal to <em>v</em>; may be interpolated between sorted values
+of <em>V</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2021-09-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.statutils.get_range">
+<span class="sig-prename descclassname"><span class="pre">cape.statutils.</span></span><span class="sig-name descname"><span class="pre">get_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.statutils.get_range" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate Student’s t-distribution confidence range</p>
+<p>If the nominal application of the Student’s t-distribution fails to
+cover a high enough fraction of the data, the bounds are extended
+until the data is covered.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">width</span> <span class="o">=</span> <span class="n">get_range</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>R</em>: <a class="reference internal" href="../thirdparty.html#np.ndarray" title="np.ndarray"><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Array of ranges (absolute values of deltas)</p>
+</dd>
+<dt><em>cov</em>, <em>Coverage</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | 0 &lt; <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> &lt; 1</dt><dd><p>Strict coverage fraction</p>
+</dd>
+<dt><em>ksig</em>, <em>CoverageSigma</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Number of standard deviations to cover (default based on
+<em>cov</em>; user must supply either <em>cov</em> or <em>ksig</em> or both)</p>
+</dd>
+<dt><em>cdf</em>, <em>CoverageCDF</em>: {<em>cov</em>} | 0 &lt; <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> &lt; 1</dt><dd><p>Fraction to use to define <em>ksig</em></p>
+</dd>
+<dt><em>osig</em>, <em>OutlierSigma</em>: {<code class="docutils literal notranslate"><span class="pre">1.5*ksig</span></code>} | <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Multiple of standard deviation to identify outliers</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>width</em>: <a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Half-width of confidence region</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2018-09-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.0</p></li>
+<li><dl class="simple">
+<dt>2021-09-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Version 1.1</dt><dd><ul>
+<li><p>use <code class="xref py py-func docutils literal notranslate"><span class="pre">_parse_options()</span></code></p></li>
+<li><p>allow 100% coverage</p></li>
+<li><p>remove confusing <em>kcov</em> vs <em>ksig</em> scaling</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="pltfile.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.plt</span></code>: Interface to Tecplot data files</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="step.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.step</span></code>: Python interface to STEP Files</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cape/statutils.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="step.html" title="cape.step: Python interface to STEP Files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pltfile.html" title="cape.plt: Interface to Tecplot data files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.2.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.statutils</span></code>: Statistics tools</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>
