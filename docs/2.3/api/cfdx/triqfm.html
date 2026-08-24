@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.cfdx.triqfm: Module for reading patch loads from one case &#8212; CAPE 2.3.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=c3c8ae58"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.cfdx.volcomp: Cell volume computation tools" href="volcomp.html" />
+    <link rel="prev" title="cape.cfdx.tarcmd: Common tar/untar utilities" href="tarcmd.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="volcomp.html" title="cape.cfdx.volcomp: Cell volume computation tools"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tarcmd.html" title="cape.cfdx.tarcmd: Common tar/untar utilities"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.3.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx</span></code>: Templates for CFD control tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.triqfm</span></code>: Module for reading patch loads from one case</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-cfdx-triqfm-module-for-reading-patch-loads-from-one-case">
+<span id="module-cape.cfdx.triqfm"></span><h1><a class="reference internal" href="#module-cape.cfdx.triqfm" title="cape.cfdx.triqfm"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.triqfm</span></code></a>: Module for reading patch loads from one case<a class="headerlink" href="#cape-cfdx-triqfm-module-for-reading-patch-loads-from-one-case" title="Link to this heading">¶</a></h1>
+<p>This module provides classes for reading surface data from an existing
+<code class="docutils literal notranslate"><span class="pre">.triq</span></code> file in a CFD case’s main folder. It provides classes to read
+this data and then compute data products:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a>: patch load forces &amp; moments</p></li>
+<li><p><a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqPoint" title="cape.cfdx.triqfm.CaseTriqPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqPoint</span></code></a>: interpolate pressure at several points</p></li>
+</ul>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.cfdx.triqfm.</span></span><span class="sig-name descname"><span class="pre">CaseTriqBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftriq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cntl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cntlbase.html#cape.cfdx.cntlbase.CntlBase" title="cape.cfdx.cntlbase.CntlBase"><span class="pre">CntlBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../dkit/rdb.html#cape.dkit.rdb.DataKit" title="cape.dkit.rdb.DataKit"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataKit</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqBase.cntl">
+<span class="sig-name descname"><span class="pre">cntl</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqBase.cntl" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqBase.get_configfile">
+<span class="sig-name descname"><span class="pre">get_configfile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqBase.get_configfile" title="Link to this definition">¶</a></dt>
+<dd><p>Find configuration file for <code class="docutils literal notranslate"><span class="pre">.triq</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fcfg</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_configfile</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fcfg</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of XML/JSON/MIXSUR config file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2025-08-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqBase.read_triq">
+<span class="sig-name descname"><span class="pre">read_triq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../cape/trifile.html#cape.trifile.Triq" title="cape.trifile.Triq"><span class="pre">Triq</span></a></span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqBase.read_triq" title="Link to this definition">¶</a></dt>
+<dd><p>Read the surface solution data from a <code class="docutils literal notranslate"><span class="pre">.triq</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">triq</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">read_triq</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>triq</em>: <a class="reference internal" href="../cape/trifile.html#cape.trifile.Triq" title="cape.trifile.Triq"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.trifile.Triq</span></code></a></dt><dd><p>Triangulated surface data (also stored in <em>db.triq</em>)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2025-08-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2025-10-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; support ConfigJSON</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqBase.triq">
+<span class="sig-name descname"><span class="pre">triq</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqBase.triq" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.cfdx.triqfm.</span></span><span class="sig-name descname"><span class="pre">CaseTriqFM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftriq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cntl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cntlbase.html#cape.cfdx.cntlbase.CntlBase" title="cape.cfdx.cntlbase.CntlBase"><span class="pre">CntlBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqBase" title="cape.cfdx.triqfm.CaseTriqBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqBase</span></code></a></p>
+<p>Interface to post-processed patch loads from one case</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">CaseTriqFM</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">ftriq</span><span class="p">,</span> <span class="n">cntl</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>comp</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of component</p>
+</dd>
+<dt><em>ftriq</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">.triq</span></code> annotated surface file to read</p>
+</dd>
+<dt><em>cntl</em>: <a class="reference internal" href="cntl.html#cape.cfdx.cntl.Cntl" title="cape.cfdx.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.cntl.Cntl</span></code></a></dt><dd><p>Run matrix controller instance</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of this case</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.apply_transformations">
+<span class="sig-name descname"><span class="pre">apply_transformations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.apply_transformations" title="Link to this definition">¶</a></dt>
+<dd><p>Get the forces and moments on a patch</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">apply_transformations</span><span class="p">(</span><span class="n">fm</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+<dt><em>fm</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Force &amp; moment coefficients, transformed in-place</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-03-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2025-08-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0 (dex)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.cntl">
+<span class="sig-name descname"><span class="pre">cntl</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.cntl" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.cols">
+<span class="sig-name descname"><span class="pre">cols</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.cols" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.comp">
+<span class="sig-name descname"><span class="pre">comp</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.comp" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.compmap">
+<span class="sig-name descname"><span class="pre">compmap</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.compmap" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.ftriq">
+<span class="sig-name descname"><span class="pre">ftriq</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.ftriq" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.get_conditions">
+<span class="sig-name descname"><span class="pre">get_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.get_conditions" title="Link to this definition">¶</a></dt>
+<dd><p>Get the freestream conditions needed for forces</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xi</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_conditions</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>xi</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Conditions, incl. Mach (<em>mach</em>), Reynolds number (<em>Re</em>)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-03-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2025-08-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1 (dex)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.get_patch_compid">
+<span class="sig-name descname"><span class="pre">get_patch_compid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.get_patch_compid" title="Link to this definition">¶</a></dt>
+<dd><p>Get the comp name/number in the tri-map for one patch</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compid</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_patch_compid</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+<dt><em>patch</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of patch</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>compid</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Name or number of component defining <em>patch</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2025-08-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.get_patch_compids">
+<span class="sig-name descname"><span class="pre">get_patch_compids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#list" title="list"><span class="pre">list</span></a></span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.get_patch_compids" title="Link to this definition">¶</a></dt>
+<dd><p>Get the list of component IDs mapped from the template <em>tri</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compids</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_patch_compids</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>compids</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</dt><dd><p>List of component IDs that came from the mapping file</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.get_triq_forces">
+<span class="sig-name descname"><span class="pre">get_triq_forces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.get_triq_forces" title="Link to this definition">¶</a></dt>
+<dd><p>Get the forces, moments, and other states on each patch</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">get_triq_forces</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-03-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">TriqFMDataBook</span></code>)</p></li>
+<li><p>2025-08-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0 (dex)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.get_triq_forces_patch">
+<span class="sig-name descname"><span class="pre">get_triq_forces_patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.get_triq_forces_patch" title="Link to this definition">¶</a></dt>
+<dd><p>Get the forces and moments on a patch</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fm</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_triq_forces_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+<dt><em>patch</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of patch</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fm</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Dictionary of force &amp; moment coefficients</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-03-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2025-08-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0 (dex)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.i">
+<span class="sig-name descname"><span class="pre">i</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.i" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.map_tri_compid">
+<span class="sig-name descname"><span class="pre">map_tri_compid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.map_tri_compid" title="Link to this definition">¶</a></dt>
+<dd><p>Perform any component ID mapping if necessary</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">triq</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">map_tri_compid</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>DBF.compmap</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Map of component numbers altered during the mapping</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-03-28 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.patches">
+<span class="sig-name descname"><span class="pre">patches</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.patches" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.read_tri_map">
+<span class="sig-name descname"><span class="pre">read_tri_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../cape/trifile.html#cape.trifile.Tri" title="cape.trifile.Tri"><span class="pre">Tri</span></a></span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.read_tri_map" title="Link to this definition">¶</a></dt>
+<dd><p>Read the surface triangulation mapping file</p>
+<p>This file defines the patches for the TriqFM output.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">triq</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">read_triq</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>triq</em>: <a class="reference internal" href="../cape/trifile.html#cape.trifile.Triq" title="cape.trifile.Triq"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.trifile.Triq</span></code></a></dt><dd><p>Triangulated surface data (also stored in <em>db.triq</em>)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2025-08-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.select_triq">
+<span class="sig-name descname"><span class="pre">select_triq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../cape/trifile.html#cape.trifile.Triq" title="cape.trifile.Triq"><span class="pre">Triq</span></a></span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.select_triq" title="Link to this definition">¶</a></dt>
+<dd><p>Select the components of <em>triq</em> that are mapped patches</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">triq</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select_triq</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>triq</em>: <a class="reference internal" href="../cape/trifile.html#cape.trifile.Triq" title="cape.trifile.Triq"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.trifile.Triq</span></code></a></dt><dd><p>Interface to annotated surface triangulation</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.transform_fm">
+<span class="sig-name descname"><span class="pre">transform_fm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">topts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.transform_fm" title="Link to this definition">¶</a></dt>
+<dd><p>Apply transformations to one patch load</p>
+<p>Available transformations and their parameters are listed below.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“Euler321”: “psi”, “theta”, “phi”</p></li>
+<li><p>“ScaleCoeffs”: “CA”, “CY”, “CN”</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">transform_fm</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span> <span class="n">topts</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+<dt><em>fm</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</dt><dd><p>Force &amp; moment coefficients, transformed in-place</p>
+</dd>
+<dt><em>topts</em>: <a class="reference internal" href="../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of options for the transformation</p>
+</dd>
+<dt><em>x</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.runmatrix.RunMatrix</span></code></dt><dd><p>The run matrix used for this analysis</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-12-22 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">TriqFMDataBook</span></code>)</p></li>
+<li><p>2025-08-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0 (dex)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.tri">
+<span class="sig-name descname"><span class="pre">tri</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.tri" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.triq">
+<span class="sig-name descname"><span class="pre">triq</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.triq" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.triq2plt">
+<span class="sig-name descname"><span class="pre">triq2plt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">triq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../cape/trifile.html#cape.trifile.Triq" title="cape.trifile.Triq"><span class="pre">Triq</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../cape/pltfile.html#cape.pltfile.Plt" title="cape.pltfile.Plt"><span class="pre">Plt</span></a></span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.triq2plt" title="Link to this definition">¶</a></dt>
+<dd><p>Convert an annotated tri (TRIQ) interface to Tecplot (PLT)</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span> <span class="o">=</span> <span class="n">DBF</span><span class="o">.</span><span class="n">Triq2Plt</span><span class="p">(</span><span class="n">triq</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+<dt><em>triq</em>: <a class="reference internal" href="../cape/trifile.html#cape.trifile.Triq" title="cape.trifile.Triq"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.trifile.Triq</span></code></a></dt><dd><p>Interface to annotated surface triangulation</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>plt</em>: <a class="reference internal" href="../cape/pltfile.html#cape.pltfile.Plt" title="cape.pltfile.Plt"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pltfile.Plt</span></code></a></dt><dd><p>Binary Tecplot interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2017-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqFM.write_triq">
+<span class="sig-name descname"><span class="pre">write_triq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqFM.write_triq" title="Link to this definition">¶</a></dt>
+<dd><p>Write mapped solution as TRIQ or Tecplot file with zones</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">write_triq</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqFM" title="cape.cfdx.triqfm.CaseTriqFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqFM</span></code></a></dt><dd><p>Interface to TriqFM data for one component of one case</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-03-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0 (<code class="docutils literal notranslate"><span class="pre">TriqFMDataBook</span></code>)</p></li>
+<li><p>2025-08-13 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0 (dex)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqPoint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.cfdx.triqfm.</span></span><span class="sig-name descname"><span class="pre">CaseTriqPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftriq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cntl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cntlbase.html#cape.cfdx.cntlbase.CntlBase" title="cape.cfdx.cntlbase.CntlBase"><span class="pre">CntlBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqPoint" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqBase" title="cape.cfdx.triqfm.CaseTriqBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqBase</span></code></a></p>
+<p>Interface to post-processed interpolated surface pressure points</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">CaseTriqPoint</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">ftriq</span><span class="p">,</span> <span class="n">cntl</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>comp</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of component</p>
+</dd>
+<dt><em>ftriq</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">.triq</span></code> annotated surface file to read</p>
+</dd>
+<dt><em>cntl</em>: <a class="reference internal" href="cntl.html#cape.cfdx.cntl.Cntl" title="cape.cfdx.cntl.Cntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.cntl.Cntl</span></code></a></dt><dd><p>Run matrix controller instance</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index of this case</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqPoint.cntl">
+<span class="sig-name descname"><span class="pre">cntl</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqPoint.cntl" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqPoint.cols">
+<span class="sig-name descname"><span class="pre">cols</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqPoint.cols" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqPoint.comp">
+<span class="sig-name descname"><span class="pre">comp</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqPoint.comp" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqPoint.ftriq">
+<span class="sig-name descname"><span class="pre">ftriq</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqPoint.ftriq" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqPoint.i">
+<span class="sig-name descname"><span class="pre">i</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqPoint.i" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqPoint.interp_pt">
+<span class="sig-name descname"><span class="pre">interp_pt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqPoint.interp_pt" title="Link to this definition">¶</a></dt>
+<dd><p>Interpolate a single surface point</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">interp_pt</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>db</em>: <a class="reference internal" href="#cape.cfdx.triqfm.CaseTriqPoint" title="cape.cfdx.triqfm.CaseTriqPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">CaseTriqPoint</span></code></a></dt><dd><p>Single-case surface point interp class</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2025-08-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqPoint.interp_pts">
+<span class="sig-name descname"><span class="pre">interp_pts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqPoint.interp_pts" title="Link to this definition">¶</a></dt>
+<dd><p>Interpolate surface points</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">interp_pts</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2025-08-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqPoint.pts">
+<span class="sig-name descname"><span class="pre">pts</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqPoint.pts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.cfdx.triqfm.CaseTriqPoint.triq">
+<span class="sig-name descname"><span class="pre">triq</span></span><a class="headerlink" href="#cape.cfdx.triqfm.CaseTriqPoint.triq" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="tarcmd.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.tarcmd</span></code>: Common tar/untar utilities</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="volcomp.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.volcomp</span></code>: Cell volume computation tools</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cfdx/triqfm.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="volcomp.html" title="cape.cfdx.volcomp: Cell volume computation tools"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tarcmd.html" title="cape.cfdx.tarcmd: Common tar/untar utilities"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.3.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx</span></code>: Templates for CFD control tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.triqfm</span></code>: Module for reading patch loads from one case</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

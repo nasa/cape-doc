@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.cfdx.manage: Manage file counts and quotas &#8212; CAPE 2.3.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=c3c8ae58"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.cfdx.pointsensor: Point sensor databooks" href="pointsensor.html" />
+    <link rel="prev" title="cape.cfdx.ll: Line load interfaces" href="ll.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pointsensor.html" title="cape.cfdx.pointsensor: Point sensor databooks"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ll.html" title="cape.cfdx.ll: Line load interfaces"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.3.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx</span></code>: Templates for CFD control tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.manage</span></code>: Manage file counts and quotas</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-cfdx-manage-manage-file-counts-and-quotas">
+<span id="module-cape.cfdx.manage"></span><h1><a class="reference internal" href="#module-cape.cfdx.manage" title="cape.cfdx.manage"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.manage</span></code></a>: Manage file counts and quotas<a class="headerlink" href="#cape-cfdx-manage-manage-file-counts-and-quotas" title="Link to this heading">¶</a></h1>
+<p>This module provides a variety of CAPE-related file management tools,
+including</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#cape.cfdx.manage.find_json" title="cape.cfdx.manage.find_json"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_json()</span></code></a> to find apparent main CAPE JSON files</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">find_large_cases()</span></code> to find large case folders</p></li>
+</ul>
+</div></blockquote>
+<p>and more.</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.manage.find_json">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.manage.</span></span><span class="sig-name descname"><span class="pre">find_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#list" title="list"><span class="pre">list</span></a></span></span><a class="headerlink" href="#cape.cfdx.manage.find_json" title="Link to this definition">¶</a></dt>
+<dd><p>Find all tracked CAPE JSON files in a repository</p>
+<p>The test is not perfect and consists of the following three fairly
+reliable criteria:</p>
+<ol class="arabic simple">
+<li><p>The JSON file is tracked by <code class="docutils literal notranslate"><span class="pre">git</span></code></p></li>
+<li><p>The file name ends with <code class="docutils literal notranslate"><span class="pre">.json</span></code></p></li>
+<li><p>The file contains <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code></p></li>
+</ol>
+<p>Obviously from criterion #1, this function only works in git
+repositories.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cape_json_files</span> <span class="o">=</span> <span class="n">find_json</span><span class="p">(</span><span class="n">pat</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>pat</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Pattern to search for, defaults to <code class="docutils literal notranslate"><span class="pre">&quot;*.json&quot;</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cape_json_files</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of apparent CAPE JSON files</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2025-09-25 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2026-07-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; search <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.manage.find_json_solver">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.manage.</span></span><span class="sig-name descname"><span class="pre">find_json_solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#list" title="list"><span class="pre">list</span></a></span></span><a class="headerlink" href="#cape.cfdx.manage.find_json_solver" title="Link to this definition">¶</a></dt>
+<dd><p>Find tracked CAPE JSON files in repo and report which solver</p>
+<p>The results will be returned in order from most recently modified to
+least recently modified.</p>
+<p>The test is not perfect and consists of the following three fairly
+reliable criteria:</p>
+<ol class="arabic simple">
+<li><p>The JSON file is tracked by <code class="docutils literal notranslate"><span class="pre">git</span></code></p></li>
+<li><p>The file name ends with <code class="docutils literal notranslate"><span class="pre">.json</span></code></p></li>
+<li><p>The file contains <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code></p></li>
+</ol>
+<p>Obviously from criterion #1, this function only works in git
+repositories.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">json_files</span> <span class="o">=</span> <span class="n">find_json_solver</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>pat</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Pattern to search for, defaults to <code class="docutils literal notranslate"><span class="pre">&quot;*.json&quot;</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>json_files</em>: <a class="reference internal" href="../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of apparent CAPE JSON files</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2026-07-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2026-07-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; special rules for <cite>py{X}.json`</cite></p></li>
+<li><p>2026-07-29 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.2; work outside of git repo</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.manage.identify_case_solver">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.manage.</span></span><span class="sig-name descname"><span class="pre">identify_case_solver</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#cape.cfdx.manage.identify_case_solver" title="Link to this definition">¶</a></dt>
+<dd><p>Determine the intended solver of the current case folder</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="n">identify_case_solver</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>solver</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Intended solver <code class="docutils literal notranslate"><span class="pre">&quot;pycart&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;pyfun&quot;</span></code>, etc., if one
+could be determined. If no <code class="docutils literal notranslate"><span class="pre">case.json</span></code> file is found,
+returns <code class="docutils literal notranslate"><span class="pre">None</span></code>. If  <code class="docutils literal notranslate"><span class="pre">case.json</span></code> is present but
+no other identifying features were found for a specific
+solver, returns <code class="docutils literal notranslate"><span class="pre">&quot;cfdx&quot;</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2026-07-20 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.manage.identify_solver">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.manage.</span></span><span class="sig-name descname"><span class="pre">identify_solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fjson</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#cape.cfdx.manage.identify_solver" title="Link to this definition">¶</a></dt>
+<dd><p>Determine the intended solver for a CAPE JSON file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">solver</span> <span class="o">=</span> <span class="n">identify_solver</span><span class="p">(</span><span class="n">fjson</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fjson</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of JSON file to investigate</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>solver</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Intended solver <code class="docutils literal notranslate"><span class="pre">&quot;pycart&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;pyfun&quot;</span></code>, etc., if one
+could be determined. If no <cite>“RunControl”</cite> section is found,
+returns <code class="docutils literal notranslate"><span class="pre">None</span></code>. If  <cite>“RunControl”</cite> section is present but
+no other identifying features were found for a specific
+solver, returns <code class="docutils literal notranslate"><span class="pre">&quot;cfdx&quot;</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2026-07-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.cfdx.manage.search_repo_large">
+<span class="sig-prename descclassname"><span class="pre">cape.cfdx.manage.</span></span><span class="sig-name descname"><span class="pre">search_repo_large</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../python.html#float" title="float"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../python.html#int" title="int"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'100MB'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.cfdx.manage.search_repo_large" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="ll.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.ll</span></code>: Line load interfaces</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="pointsensor.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.pointsensor</span></code>: Point sensor databooks</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/cfdx/manage.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pointsensor.html" title="cape.cfdx.pointsensor: Point sensor databooks"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ll.html" title="cape.cfdx.ll: Line load interfaces"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.3.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx</span></code>: Templates for CFD control tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.manage</span></code>: Manage file counts and quotas</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

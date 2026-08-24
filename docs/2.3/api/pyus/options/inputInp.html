@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.pyus.options.inputInp: US3D input.inp options &#8212; CAPE 2.3.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../../_static/documentation_options.js?v=c3c8ae58"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.pyus.options.runctlopts: US3D run control options" href="runctlopts.html" />
+    <link rel="prev" title="cape.pyus.options.configopts: US3D configuration options" href="configopts.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="runctlopts.html" title="cape.pyus.options.runctlopts: US3D run control options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="configopts.html" title="cape.pyus.options.configopts: US3D configuration options"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 2.3.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >&lt;no title&gt;</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">&lt;no title&gt;</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyus.options.inputInp</span></code>: US3D <code class="docutils literal notranslate"><span class="pre">input.inp</span></code> options</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-pyus-options-inputinp-us3d-input-inp-options">
+<span id="module-cape.pyus.options.inputInp"></span><h1><a class="reference internal" href="#module-cape.pyus.options.inputInp" title="cape.pyus.options.inputInp"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyus.options.inputInp</span></code></a>: US3D <code class="docutils literal notranslate"><span class="pre">input.inp</span></code> options<a class="headerlink" href="#cape-pyus-options-inputinp-us3d-input-inp-options" title="Link to this heading">¶</a></h1>
+<p>This module provides a class to interpret JSON options that are converted to
+<code class="docutils literal notranslate"><span class="pre">input.inp</span></code> settings for FUN3D.  The
+module provides a class, <code class="xref py py-class docutils literal notranslate"><span class="pre">pyUS.options.inputinpfile.InputInpOpts</span></code>, which
+interprets the settings of the <code class="docutils literal notranslate"><span class="pre">&quot;US3D&quot;</span></code> section of the master JSON file.
+These settings are then applied to the main OVERFLOW input file, the
+<code class="docutils literal notranslate"><span class="pre">input.inp</span></code> input file, which is in a format specific to US3D.</p>
+<p>An example JSON setting is shown below.</p>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;US3D&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;CFD_SOLVER&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;nstop&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">30000</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;ivisc&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">11</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cfl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">1.1</span><span class="p">,</span><span class="w"> </span><span class="mf">5.1</span><span class="p">,</span><span class="w"> </span><span class="mf">10.1</span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;CFD_SOLVER_OPTS&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;chem_vibr_diso&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1.0</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;MANAGE&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;flag&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">4</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will cause or partially cause changes to the sections <code class="docutils literal notranslate"><span class="pre">[CFD_SOVER]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">[CFD_SOLVER_OPTS]</span></code>, and <code class="docutils literal notranslate"><span class="pre">[MANAGE]</span></code> in the <code class="docutils literal notranslate"><span class="pre">input.00.inp</span></code> file.</p>
+<p>The edits to <code class="docutils literal notranslate"><span class="pre">input.02.inp</span></code> are from the third entries of each list, so the
+<em>cfl</em> parameter would be <code class="docutils literal notranslate"><span class="pre">10.1</span></code> instead of <code class="docutils literal notranslate"><span class="pre">1.1</span></code>.</p>
+<p>Each setting and section in the <code class="docutils literal notranslate"><span class="pre">&quot;US&quot;</span></code> section may be either present in
+the template <code class="docutils literal notranslate"><span class="pre">input.inp</span></code> file or missing.  It will be either edited or added
+as appropriate, even if the specified section does not exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">See also<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyus.inputInp</span></code></p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyus.us3d</span></code></p></li>
+<li><p><a class="reference internal" href="../../cape/filecntl/namelist.html#module-cape.filecntl.namelist" title="cape.filecntl.namelist"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.namelist</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.pyus.options.inputInp.InputInpOpts">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cape.pyus.options.inputInp.</span></span><span class="sig-name descname"><span class="pre">InputInpOpts</span></span><a class="headerlink" href="#cape.pyus.options.inputInp.InputInpOpts" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../cfdx/options/util.html#cape.cfdx.options.util.odict" title="cape.cfdx.options.util.odict"><code class="xref py py-class docutils literal notranslate"><span class="pre">odict</span></code></a></p>
+<p>Dictionary-based interface for US3D input file <code class="docutils literal notranslate"><span class="pre">input.inp</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyus.options.inputInp.InputInpOpts.get_CFDSOLVER">
+<span class="sig-name descname"><span class="pre">get_CFDSOLVER</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.options.inputInp.InputInpOpts.get_CFDSOLVER" title="Link to this definition">¶</a></dt>
+<dd><p>Return a <code class="docutils literal notranslate"><span class="pre">&quot;CFD_SOLVER&quot;</span></code> settings <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_CFDSOLVER</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: :pyUS.options.Options`</dt><dd><p>Options interface</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>d</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.odict</span></code></dt><dd><p>Settings for that section</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-06-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyus.options.inputInp.InputInpOpts.get_CFDSOLVER_key">
+<span class="sig-name descname"><span class="pre">get_CFDSOLVER_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.options.inputInp.InputInpOpts.get_CFDSOLVER_key" title="Link to this definition">¶</a></dt>
+<dd><p>Return a named parameter from the <em>CFD_SOLVER</em> section</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_CFDSOLVER_key</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: :pyUS.options.Options`</dt><dd><p>Options interface</p>
+</dd>
+<dt><em>k</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of appropriate key from <code class="docutils literal notranslate"><span class="pre">input.inp</span></code> section</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>v</em>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></dt><dd><p>Value for (numeric) parameter</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-06-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyus.options.inputInp.InputInpOpts.get_InputInp_key">
+<span class="sig-name descname"><span class="pre">get_InputInp_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.options.inputInp.InputInpOpts.get_InputInp_key" title="Link to this definition">¶</a></dt>
+<dd><p>Select an <code class="docutils literal notranslate"><span class="pre">input.inp</span></code> setting from a specified section</p>
+<p>Roughly, this returns <code class="docutils literal notranslate"><span class="pre">opts[sec][key]</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">val</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_namelist_key</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyUS.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>sec</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Section name</p>
+</dd>
+<dt><em>key</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Variable name</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>val</em>: JSON-type</dt><dd><p>Value from JSON options</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2019-06-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: From <code class="xref py py-func docutils literal notranslate"><span class="pre">get_namelist_var()</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyus.options.inputInp.InputInpOpts.get_section">
+<span class="sig-name descname"><span class="pre">get_section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.options.inputInp.InputInpOpts.get_section" title="Link to this definition">¶</a></dt>
+<dd><p>Return a settings <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> for an <code class="docutils literal notranslate"><span class="pre">input.inp</span></code> section</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_section</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: :pyUS.options.Options`</dt><dd><p>Options interface</p>
+</dd>
+<dt><em>sec</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of appropriate <code class="docutils literal notranslate"><span class="pre">input.inp</span></code> section</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>d</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.odict</span></code></dt><dd><p>Settings for that section</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-06-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyus.options.inputInp.InputInpOpts.select_InputInp">
+<span class="sig-name descname"><span class="pre">select_InputInp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.options.inputInp.InputInpOpts.select_InputInp" title="Link to this definition">¶</a></dt>
+<dd><p>Reduce <code class="docutils literal notranslate"><span class="pre">input.inp</span></code> options to options for a single phase</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">select_InputInp</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyUS.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">0</span></code>} | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>d</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.odict</span></code></dt><dd><p>Project settings for phase <em>j</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-06-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.pyus.options.inputInp.InputInpOpts.set_InputInp_key">
+<span class="sig-name descname"><span class="pre">set_InputInp_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.options.inputInp.InputInpOpts.set_InputInp_key" title="Link to this definition">¶</a></dt>
+<dd><p>Set a namelist key for a specified phase or phases</p>
+<p>Roughly, this sets <code class="docutils literal notranslate"><span class="pre">opts[&quot;US3D&quot;][sec][key]</span></code> or
+<code class="docutils literal notranslate"><span class="pre">opts[&quot;US3D&quot;][sec][key][i]</span></code> equal to <em>val</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opts</span><span class="o">.</span><span class="n">set_InputInp_key</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyUS.options.Options</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>sec</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Section name</p>
+</dd>
+<dt><em>key</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Variable name</p>
+</dd>
+<dt><em>val</em>: JSON-type</dt><dd><p>Value for JSON options</p>
+</dd>
+<dt><em>j</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2017-04-05 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2019-06-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: From <code class="xref py py-func docutils literal notranslate"><span class="pre">set_namelist_var()</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="configopts.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyus.options.configopts</span></code>: US3D configuration options</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="runctlopts.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyus.options.runctlopts</span></code>: US3D run control options</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/pyus/options/inputInp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="runctlopts.html" title="cape.pyus.options.runctlopts: US3D run control options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="configopts.html" title="cape.pyus.options.configopts: US3D configuration options"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 2.3.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >&lt;no title&gt;</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" >&lt;no title&gt;</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyus.options.inputInp</span></code>: US3D <code class="docutils literal notranslate"><span class="pre">input.inp</span></code> options</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

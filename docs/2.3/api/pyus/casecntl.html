@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.pyus.casecntl: US3D Case control module &#8212; CAPE 2.3.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=87629129" />
+    <script src="../../_static/documentation_options.js?v=c3c8ae58"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cape.pyus.cli: Command-line interface to pyus" href="cli.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cli.html" title="cape.pyus.cli: Command-line interface to pyus"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="&lt;no title&gt;"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.3.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">&lt;no title&gt;</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyus.casecntl</span></code>: US3D Case control module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-pyus-casecntl-us3d-case-control-module">
+<span id="module-cape.pyus.casecntl"></span><h1><a class="reference internal" href="#module-cape.pyus.casecntl" title="cape.pyus.casecntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyus.casecntl</span></code></a>: US3D Case control module<a class="headerlink" href="#cape-pyus-casecntl-us3d-case-control-module" title="Link to this heading">¶</a></h1>
+<p>This module contains the important function <code class="xref py py-func docutils literal notranslate"><span class="pre">casecntl.run_us3d()</span></code>, which
+actually runs <code class="docutils literal notranslate"><span class="pre">us3d</span></code> or <code class="docutils literal notranslate"><span class="pre">us3d_mpi</span></code>, along with the utilities that
+support it.</p>
+<p>It also contains US3D-specific versions of some of the generic methods from
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.case</span></code>.  For instance the function <code class="xref py py-func docutils literal notranslate"><span class="pre">GetCurrentIter()</span></code> determines
+how many US3D iterations have been run in the current folder, which is
+obviously a solver-specific task.</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyus.casecntl.GetInputInp">
+<span class="sig-prename descclassname"><span class="pre">cape.pyus.casecntl.</span></span><span class="sig-name descname"><span class="pre">GetInputInp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.casecntl.GetInputInp" title="Link to this definition">¶</a></dt>
+<dd><p>Read case namelist <code class="docutils literal notranslate"><span class="pre">input.inp</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">inp</span> <span class="o">=</span> <span class="n">pyUS</span><span class="o">.</span><span class="n">casecntl</span><span class="o">.</span><span class="n">GetInputInp</span><span class="p">(</span><span class="n">rc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyus.options.runControl.RunControl</span></code></dt><dd><p>Run control options</p>
+</dd>
+<dt><em>j</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>inp</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyUS.inputinpfile.InputInp</span></code></dt><dd><p>Interface to <code class="docutils literal notranslate"><span class="pre">input.inp</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-06-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyus.casecntl.GetPBSScript">
+<span class="sig-prename descclassname"><span class="pre">cape.pyus.casecntl.</span></span><span class="sig-name descname"><span class="pre">GetPBSScript</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.casecntl.GetPBSScript" title="Link to this definition">¶</a></dt>
+<dd><p>Determine the file name of the PBS script to call</p>
+<p>This is a compatibility function for cases that do or do not have
+multiple PBS scripts in a single run directory</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fpbs</span> <span class="o">=</span> <span class="n">casecntl</span><span class="o">.</span><span class="n">GetPBSScript</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Run index</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>fpbs</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of PBS script to call</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-12-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2020-04-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: US3D version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyus.casecntl.GetPhaseNumber">
+<span class="sig-prename descclassname"><span class="pre">cape.pyus.casecntl.</span></span><span class="sig-name descname"><span class="pre">GetPhaseNumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.casecntl.GetPhaseNumber" title="Link to this definition">¶</a></dt>
+<dd><p>Determine the phase number based on files in folder</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">casecntl</span><span class="o">.</span><span class="n">GetPhaseNumber</span><span class="p">(</span><span class="n">rc</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyfun.options.runControl.RunControl</span></code></dt><dd><p>Options interface for run control</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Most appropriate phase number for a restart</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2020-10-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Placeholder version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyus.casecntl.PrepareFiles">
+<span class="sig-prename descclassname"><span class="pre">cape.pyus.casecntl.</span></span><span class="sig-name descname"><span class="pre">PrepareFiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.casecntl.PrepareFiles" title="Link to this definition">¶</a></dt>
+<dd><p>Prepare file names appropriate to run phase <em>i</em> of FUN3D</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PrepareFiles</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyus.options.runControl.RunControl</span></code></dt><dd><p>Options interface from <code class="docutils literal notranslate"><span class="pre">case.json</span></code></p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-04-14 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyus.casecntl.ReadCaseJSON">
+<span class="sig-prename descclassname"><span class="pre">cape.pyus.casecntl.</span></span><span class="sig-name descname"><span class="pre">ReadCaseJSON</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.casecntl.ReadCaseJSON" title="Link to this definition">¶</a></dt>
+<dd><p>Read <cite>RunControl</cite> settings for local case</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rc</span> <span class="o">=</span> <span class="n">pyUS</span><span class="o">.</span><span class="n">casecntl</span><span class="o">.</span><span class="n">ReadCaseJSON</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyus.options.runControl.RunControl</span></code></dt><dd><p>Options interface for run control settings</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2014-10-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2015-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: FUN3D version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyus.casecntl.RunPhase">
+<span class="sig-prename descclassname"><span class="pre">cape.pyus.casecntl.</span></span><span class="sig-name descname"><span class="pre">RunPhase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.casecntl.RunPhase" title="Link to this definition">¶</a></dt>
+<dd><p>Run one phase using appropriate commands</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">RunPhase</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyus.options.runControl.RunControl</span></code></dt><dd><p>Options interface from <code class="docutils literal notranslate"><span class="pre">case.json</span></code></p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-04-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Starter version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyus.casecntl.RunUS3DGenBC">
+<span class="sig-prename descclassname"><span class="pre">cape.pyus.casecntl.</span></span><span class="sig-name descname"><span class="pre">RunUS3DGenBC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.casecntl.RunUS3DGenBC" title="Link to this definition">¶</a></dt>
+<dd><p>Execute <code class="docutils literal notranslate"><span class="pre">us3d-genbc</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">RunUS3DPrepar</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyus.options.runControl.RunControl</span></code></dt><dd><p>Options interface from <code class="docutils literal notranslate"><span class="pre">case.json</span></code></p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number, does nothing if <em>i</em> is not <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-04-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyus.casecntl.RunUS3DPrepar">
+<span class="sig-prename descclassname"><span class="pre">cape.pyus.casecntl.</span></span><span class="sig-name descname"><span class="pre">RunUS3DPrepar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.casecntl.RunUS3DPrepar" title="Link to this definition">¶</a></dt>
+<dd><p>Execute <code class="docutils literal notranslate"><span class="pre">us3d-prepar</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">RunUS3DPrepar</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.pyus.options.runControl.RunControl</span></code></dt><dd><p>Options interface from <code class="docutils literal notranslate"><span class="pre">case.json</span></code></p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number, does nothing if <em>i</em> is not <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2020-04-16 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyus.casecntl.StartCase">
+<span class="sig-prename descclassname"><span class="pre">cape.pyus.casecntl.</span></span><span class="sig-name descname"><span class="pre">StartCase</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.casecntl.StartCase" title="Link to this definition">¶</a></dt>
+<dd><p>Start a case by either submitting it or calling locally</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">casecntl</span><span class="o">.</span><span class="n">StartCase</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2014-10-06 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2015-10-19 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Copied from <a class="reference internal" href="../pycart/index.html#module-cape.pycart" title="cape.pycart"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code></a></p></li>
+<li><p>2020-04-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Copied from <a class="reference internal" href="index.html#module-cape.pyus" title="cape.pyus"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyus</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyus.casecntl.WriteStartTime">
+<span class="sig-prename descclassname"><span class="pre">cape.pyus.casecntl.</span></span><span class="sig-name descname"><span class="pre">WriteStartTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pyus_start.dat'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.casecntl.WriteStartTime" title="Link to this definition">¶</a></dt>
+<dd><p>Write the start time in <em>tic</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">WriteStartTime</span><span class="p">(</span><span class="n">tic</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s2">&quot;pyus_start.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>tic</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></dt><dd><p>Time to write into data file</p>
+</dd>
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyOver.options.runControl.RunControl</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">&quot;pyus_start.dat&quot;</span></code>} | <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file containing run start times</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2016-08-31 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2019-06-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: US3D version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyus.casecntl.WriteUserTime">
+<span class="sig-prename descclassname"><span class="pre">cape.pyus.casecntl.</span></span><span class="sig-name descname"><span class="pre">WriteUserTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pyus_time.dat'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.casecntl.WriteUserTime" title="Link to this definition">¶</a></dt>
+<dd><p>Write time usage since time <em>tic</em> to file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">toc</span> <span class="o">=</span> <span class="n">WriteUserTime</span><span class="p">(</span><span class="n">tic</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s2">&quot;pyus_time.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>tic</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></dt><dd><p>Time from which timer will be measured</p>
+</dd>
+<dt><em>rc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyCart.options.runControl.RunControl</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>i</em>: <a class="reference internal" href="../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Phase number</p>
+</dd>
+<dt><em>fname</em>: <a class="reference internal" href="../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file containing CPU usage history</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>toc</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></dt><dd><p>Time at which time delta was measured</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2015-12-09 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: First version</p></li>
+<li><p>2019-06-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: US3D version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.pyus.casecntl.run_us3d">
+<span class="sig-prename descclassname"><span class="pre">cape.pyus.casecntl.</span></span><span class="sig-name descname"><span class="pre">run_us3d</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.pyus.casecntl.run_us3d" title="Link to this definition">¶</a></dt>
+<dd><p>Setup and run the appropriate US3D command</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pyUS</span><span class="o">.</span><span class="n">casecntl</span><span class="o">.</span><span class="n">run_us3d</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2019-06-27 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: Started</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">&lt;no title&gt;</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="cli.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyus.cli</span></code>: Command-line interface to <code class="docutils literal notranslate"><span class="pre">pyus</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/pyus/casecntl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cli.html" title="cape.pyus.cli: Command-line interface to pyus"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="&lt;no title&gt;"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CAPE 2.3.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >&lt;no title&gt;</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyus.casecntl</span></code>: US3D Case control module</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

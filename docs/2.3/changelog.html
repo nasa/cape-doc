@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Changelog &#8212; CAPE 2.3.0</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=87629129" />
+    <script src="_static/documentation_options.js?v=c3c8ae58"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction to CAPE Application Program Interface" href="api/index.html" />
+    <link rel="prev" title="7.23. triqfm: Calculate forces and moments on a .triq file" href="bin/triqfm.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api/index.html" title="Introduction to CAPE Application Program Interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bin/triqfm.html" title="7.23. triqfm: Calculate forces and moments on a .triq file"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CAPE 2.3.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Changelog</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="changelog">
+<span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h1>
+<section id="release-2-3-0">
+<h2>Release 2.3.0<a class="headerlink" href="#release-2-3-0" title="Link to this heading">¶</a></h2>
+<section id="new-features">
+<h3>New Features<a class="headerlink" href="#new-features" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p><em>More flexible command-line interface</em></p>
+<p>CAPE calls, while still preserving backward compatibility, can now be
+simplified. Instead of calling <code class="docutils literal notranslate"><span class="pre">pyfun</span></code>, <code class="docutils literal notranslate"><span class="pre">pycart</span></code>, <code class="docutils literal notranslate"><span class="pre">pyover</span></code>, etc. most
+calls can now be done by just using <code class="docutils literal notranslate"><span class="pre">cape</span></code>. CAPE will automatically
+determine which solver module to use by quickly looking at the contents of
+the JSON file. In combination with the implicit or explicit sub-command,
+this means that most CAPE calls have four different ways to be invoked:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>c
+<span class="gp">$ </span>cape<span class="w"> </span>-c
+<span class="gp">$ </span>pyfun<span class="w"> </span>check
+<span class="gp">$ </span>pyfun<span class="w"> </span>-c
+</pre></div>
+</div>
+<p>If the <cite>cape</cite> executable determines the wrong solver (e.g. it thinks your
+JSON file is a Cart3D JSON file when it’s actually for LAVA), you can use
+the explicit call (<code class="docutils literal notranslate"><span class="pre">pylava</span></code> in the previous example).</p>
+</li>
+<li><p><strong>pylava</strong>: CAPE has added support for a fifth solver, NASA’s new LAVA
+package. For this release only the LAVA Cartesian solver is fully
+supported.</p></li>
+<li><p><em>Additional CAPE sub-commands and options</em></p>
+<ul>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">open-pdf</span> <span class="pre">report/report-$REPORT.pdf</span> <span class="pre">--pull</span></code> to automatically
+transfer a report file from an HPC node and open it locally</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">find</span></code> to just return the indices of cases that match a set of
+constraints.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">edit-json</span></code> command is an option to edit the contents of the
+main JSON file through a command-line interface</p></li>
+<li><p>Case subsets can now be constrained by status, e.g</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>c<span class="w"> </span>--status<span class="w"> </span>DONE
+</pre></div>
+</div>
+</div></blockquote>
+<p>However, using this constraint interferes with the speed-up from
+parallelization (see below).</p>
+</li>
+<li><p>For shared run matrices, you can use the new option <code class="docutils literal notranslate"><span class="pre">--me</span></code> instead of
+the much longer <code class="docutils literal notranslate"><span class="pre">--cons</span> <span class="pre">&quot;user=='$USER'&quot;</span></code>. The <code class="docutils literal notranslate"><span class="pre">--me</span></code> option will do
+nothing unless you have a run matrix key named <code class="docutils literal notranslate"><span class="pre">&quot;user&quot;</span></code> or another
+<em>user</em>-type key defined.</p></li>
+</ul>
+</li>
+<li><p><em>Much faster run matrix checking</em></p>
+<p>Checking on a large run matrix, especially with <code class="docutils literal notranslate"><span class="pre">pyfun</span></code>, can be
+time-consuming. This is mostly because determining how many iterations have
+been run can be surprisingly complicated for some of the CFD solvers.
+<code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">-c</span></code> is now automatically parallelized, so that it can analyze
+several cases in parallel, controlled by the new <code class="docutils literal notranslate"><span class="pre">--nproc</span></code> option.</p>
+</li>
+<li><p><em>Smarter error handling</em></p>
+<p>Many errors caused by incorrect input (and also <code class="docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code> or
+<code class="docutils literal notranslate"><span class="pre">Ctrl-C</span></code>) will now produce a small error message rather than a full
+Python traceback. Progress will continue to be made on this front in future
+versions of CAPE.</p>
+</li>
+<li><p><em>Logging</em>: most command-line CAPE calls are now recorded in a log file.</p>
+<p>Whenever you run a CAPE command that involves a <a class="reference internal" href="api/cfdx/cntl.html#cape.cfdx.cntl.Cntl" title="cape.cfdx.cntl.Cntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.cntl.Cntl</span></code></a>
+instance, it will now log that command the folder</p>
+<p><code class="docutils literal notranslate"><span class="pre">log/{BASENAME_OF_JSON_FILE}/</span></code></p>
+<p>where <code class="docutils literal notranslate"><span class="pre">$BASENAME_OF_JSON_FILE</span></code> is the name of the JSON/YAML control file
+with the <code class="docutils literal notranslate"><span class="pre">.json</span></code> stripped. This can include sub-folders. In this folder
+for logging a single CAPE file, you will see</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cmd.log</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hash.log</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">last.json</span></code></p></li>
+</ul>
+<p>For example if you run <code class="docutils literal notranslate"><span class="pre">pyfun</span> <span class="pre">-c</span></code> and <code class="docutils literal notranslate"><span class="pre">pyFun.json</span></code> is linked to
+<code class="docutils literal notranslate"><span class="pre">run/dac3-asc01.json</span></code>, you’ll get a folder (or append to it if it already
+exists) called <code class="docutils literal notranslate"><span class="pre">log/cmd/run/dac3-asc01/</span></code> with those three files in it.
+The <code class="docutils literal notranslate"><span class="pre">cmd.log</span></code> file will contain a line such as</p>
+<p><code class="docutils literal notranslate"><span class="pre">CMD,2026-01-07</span> <span class="pre">14:55:33,pyfun</span> <span class="pre">check</span> <span class="pre">-f</span> <span class="pre">run/dac3-asc01.json</span></code></p>
+<p>The commands are “canonical-ized” so that the actual name of the JSON file
+is always included, and it will use the new two-word format for the logged
+commands. The line preceding this <code class="docutils literal notranslate"><span class="pre">CMD</span></code> line will be a SHA-256 hash of
+the current expanded (and comment-stripped) JSON file for tracing.</p>
+<p>You can turn this off by setting</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;LogLevel&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span>
+</pre></div>
+</div>
+<p>in the JSON file or by the environment variable <code class="docutils literal notranslate"><span class="pre">$CAPE_LOG_LEVEL</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export CAPE_LOG_LEVEL=0</span>
+</pre></div>
+</div>
+</li>
+<li><p><em>Advanced case naming</em></p>
+<p>New settings in the <code class="docutils literal notranslate"><span class="pre">&quot;RunMatrix&quot;</span></code> section named <code class="docutils literal notranslate"><span class="pre">&quot;Replace&quot;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&quot;RegexSubs&quot;</span></code>. These allow you to replace one string with another
+(<em>Replace</em>) or apply general regular expression replacements using
+<code class="docutils literal notranslate"><span class="pre">re.sub()</span></code>. For example, if you don’t want decimal points in your case
+names, you could use:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Replace&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;.&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;p&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>to get conversions like <code class="docutils literal notranslate"><span class="pre">m2.50a2.0</span></code> → <code class="docutils literal notranslate"><span class="pre">m2p50a2p0</span></code> or use</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Replace&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;.&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>to get conversions like <code class="docutils literal notranslate"><span class="pre">m2.50a2.0</span></code> → <code class="docutils literal notranslate"><span class="pre">m250a20</span></code>. One more example:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Replace&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;.0&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;.&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>to get <code class="docutils literal notranslate"><span class="pre">m2.50a2.0</span></code> → <code class="docutils literal notranslate"><span class="pre">m250a2</span></code>.</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="release-2-2-1">
+<h2>Release 2.2.1<a class="headerlink" href="#release-2-2-1" title="Link to this heading">¶</a></h2>
+<p>This is a bug-fix release for CAPE 2.2.0, especially for running Cart3D.</p>
+<section id="bugs-fixed">
+<h3>Bugs Fixed<a class="headerlink" href="#bugs-fixed" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Writing of <code class="docutils literal notranslate"><span class="pre">.tri</span></code> (Cart3D triangulation) files were writing an extra
+<code class="docutils literal notranslate"><span class="pre">1</span></code> in the header as if it were writing a <code class="docutils literal notranslate"><span class="pre">.triq</span></code> (annotated
+triangulation) file. This has been fixed.</p></li>
+<li><p>Starting new line load databooks (e.g. using <code class="docutils literal notranslate"><span class="pre">pyfun</span> <span class="pre">--ll</span></code>) from various
+initial conditions has been fixed.</p></li>
+</ul>
+</section>
+</section>
+<section id="release-2-2-0">
+<h2>Release 2.2.0<a class="headerlink" href="#release-2-2-0" title="Link to this heading">¶</a></h2>
+<p>CAPE 2.2 is an important release that substantially reduces the amount of
+unlikeable code under the hood. In many cases, the improvements will not be
+highly visible to users, which is the intent. The intended benefit of this
+restructuring is really to make it easier to implement new features, which is
+already paying off on several additions in the works.</p>
+<section id="id2">
+<h3>New Features<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>Status check commands, e.g. <code class="docutils literal notranslate"><span class="pre">pyfun</span> <span class="pre">-c</span></code> now have an option to add
+additional columns as columns in the status table. For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfun<span class="w"> </span>-c<span class="w"> </span>--add-cols<span class="w"> </span><span class="s2">&quot;user,arch&quot;</span>
+<span class="go">Case Config/Run Directory  Status  Iterations Que CPU Time user   arch</span>
+<span class="go">---- --------------------- ------- ---------- --- -------- ------ ----</span>
+<span class="go">0    poweroff/m0.5a0.0b0.0 ---     /          .            ddalle rom</span>
+<span class="go">1    poweroff/m0.5a2.0b0.0 ---     /          .            jmeero mil</span>
+<span class="go">2    poweroff/m0.5a0.0b2.0 ---     /          .            ddalle ivy</span>
+</pre></div>
+</div>
+<p>Users may also use the <code class="docutils literal notranslate"><span class="pre">--cols</span></code> option to only select certain columns</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>-c<span class="w"> </span>--cols<span class="w"> </span><span class="s2">&quot;i,case,progress&quot;</span>
+<span class="go">Case Case Folder  Iterations</span>
+<span class="go">---- ------------ ----------</span>
+<span class="go">0    m0.5a0.0b0.0 500/1000</span>
+<span class="go">1    m0.5a2.0b0.0 /</span>
+<span class="go">2    m0.5a0.0b2.0 /</span>
+</pre></div>
+</div>
+</li>
+<li><p>The various solvers now have an ability to detect “early exits.” Some
+solvers run fewer than the requested number of iterations if, for example,
+a specified convergence criteria is met early. Previous versions of CAPE
+in some cases got stuck in a loop trying to rerun such cases, but the new
+capability will reduce <em>PhaseIters</em> to match whatever point the solver
+exited at if it detects a purposeful early exit.</p></li>
+<li><p>Tecplot subfigures can now work directly from VTK files. If the user
+defines the option <em>VTKFiles</em> for a <code class="docutils literal notranslate"><span class="pre">&quot;Tecplot&quot;</span></code> type subfigure, CAPE can
+convert them using <code class="docutils literal notranslate"><span class="pre">cape.gruvoc</span></code> (see the CAPE 2.1.0 release notes)
+combined with PyVista to convert them to <code class="docutils literal notranslate"><span class="pre">.plt</span></code> files before proceeding
+with the flow viz image generation.</p></li>
+<li><p>On a related note, there is now a <code class="docutils literal notranslate"><span class="pre">cape-vtk2plt</span></code> executable that can
+convert many VTK files to Tecplot <code class="docutils literal notranslate"><span class="pre">.plt</span></code> format directly from the command
+line.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;Mesh&quot;</span></code> section of each JSON file now supports new options
+<code class="docutils literal notranslate"><span class="pre">&quot;CopyAsFiles&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;LinkAsFiles&quot;</span></code>. These are in addition to
+<code class="docutils literal notranslate"><span class="pre">&quot;CopyFiles&quot;</span></code>, which enables users to copy files into each case’s run
+folder as they are. The <code class="docutils literal notranslate"><span class="pre">&quot;CopyAsFiles&quot;</span></code> option is a <a class="reference internal" href="api/python.html#dict" title="dict"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dict</span></code></a> that
+enables users to rename files as they are copied. For example</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Mesh&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;CopyAsFiles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;inputs/mesh/config02.lb8.ugrid&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;pyfun.lb8.ugrid&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>will copy the file <code class="docutils literal notranslate"><span class="pre">inputs/mesh/config02.lb8.ugrid</span></code> into each case folder
+but rename it <code class="docutils literal notranslate"><span class="pre">pyfun.lb8.ugrid</span></code> in the process.</p>
+</li>
+<li><p>A new run matrix variable type, <code class="docutils literal notranslate"><span class="pre">&quot;altitude&quot;</span></code>, has been added and has been
+integrated into the <code class="docutils literal notranslate"><span class="pre">cape.pykes</span></code> module.</p></li>
+</ul>
+</section>
+<section id="behavior-changes">
+<h3>Behavior Changes<a class="headerlink" href="#behavior-changes" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>The infrastructure for “DataBook” has been rewritten. Commands like</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfun<span class="w"> </span>--fm
+<span class="gp">$ </span>pyfun<span class="w"> </span>--ll
+<span class="gp">$ </span>pyfun<span class="w"> </span>--triqfm
+</pre></div>
+</div>
+<p>will continue to work as before (though with some more informative output
+to the command line), and the force &amp; moment data will look almost
+identical. However, the line load data files take a much different form.</p>
+<p>A line load databook for a component called <code class="docutils literal notranslate"><span class="pre">&quot;STACK&quot;</span></code> for a run matrix
+with cases like <code class="docutils literal notranslate"><span class="pre">poweron/m0.50a0.0</span></code> would have created a whole herd of
+files in the old-style line load databooks:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ll_STACK.csv</span></code>: status and conds of which cases have been completed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lineload/poweron/m0.50a0.0/LineLoad_STACK.csv</span></code>: loads for one case</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lineload/poweron/m0.50a2.0/LineLoad_STACK.csv</span></code>: loads for one case</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lineload/poweron/m0.50a4.0/LineLoad_STACK.csv</span></code>: loads for one case</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lineload/poweron/m0.70a0.0/LineLoad_STACK.csv</span></code>: loads for one case</p></li>
+<li><p>…</p></li>
+</ul>
+<p>You will now see a single file, <code class="docutils literal notranslate"><span class="pre">ll_STACK.csv</span></code>, which has all of the data
+in a format that’s quite compatible with revision control using <cite>git</cite>. It
+will have a <strong>lot</strong> of columns! If you have 10 run matrix variables and you
+select 100 slices for the <code class="docutils literal notranslate"><span class="pre">STACK</span></code> component, the column count will be
+710. But it works quite well and is much simpler to interact with than the
+previous multiple-file mess.</p>
+<p>For a DataBook component of type <code class="docutils literal notranslate"><span class="pre">&quot;TriqFM&quot;</span></code>, you will see a similar theme,
+though the effect is much less dramatic. Suppose you have a component <code class="docutils literal notranslate"><span class="pre">fin</span></code>
+that has patches <code class="docutils literal notranslate"><span class="pre">front</span></code>, <code class="docutils literal notranslate"><span class="pre">top</span></code>, <code class="docutils literal notranslate"><span class="pre">left</span></code>, <code class="docutils literal notranslate"><span class="pre">right</span></code>, and <code class="docutils literal notranslate"><span class="pre">back</span></code>. In the
+old databooks you would have seen these files:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">triqfm/triqfm_fin.csv</span></code> (combined loads on all patches)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">triqfm/triqfm_fin_front.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">triqfm/triqfm_fin_top.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">triqfm/triqfm_fin_left.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">triqfm/triqfm_fin_right.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">triqfm/triqfm_fin_back.csv</span></code></p></li>
+</ul>
+<p>whereas now you will only see a single file</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">triqfm/triqfm_fin.csv</span></code></p></li>
+</ul>
+</li>
+<li><p>Raw files for automated reports (e.g. from <code class="docutils literal notranslate"><span class="pre">pyfun</span> <span class="pre">--report</span></code>) can now be
+either saved in the <code class="docutils literal notranslate"><span class="pre">report/</span></code> folder (the previous standard) or directly
+in the case folder (the new default). Users can control this with the new
+<em>Location</em> option on the <em>Reports</em> section. It’s defined for each report
+and can be either <code class="docutils literal notranslate"><span class="pre">&quot;case&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;report&quot;</span></code>.</p>
+<p>The upgrades to CAPE reports will result in smaller file sizes and also
+enable caching of text-based subfigures (such as force &amp; moment summary
+tables), which previously had to be regenerated each time a report was
+compiled.</p>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h3>Bugs Fixed<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>Several recent versions of CAPE did not support having mixed CSV/JSON
+definitions for run matrix conditions. For example, you might have a run
+matrix definition like this:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;RunMatrix&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;Keys&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;mach&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;beta&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;config&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;File&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;matrix.csv&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;Config&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;poweroff&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>with the following in <code class="docutils literal notranslate"><span class="pre">matrix.csv</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># mach, alpha, beta
+  0.50, 2.0,  0.0
+  0.80, 4.0, -1.0
+  0.95, 1.5,  2.0
+</pre></div>
+</div>
+<p>This is supposed to work, using <code class="docutils literal notranslate"><span class="pre">&quot;poweroff&quot;</span></code> as the value for <em>config</em>
+for all three cases, but it was broken in CAPE 2.1.</p>
+</li>
+<li><p>The <em>limiter</em> option for Cart3D in non-adaptive cases now affects the
+<code class="docutils literal notranslate"><span class="pre">input.cntl</span></code> files that CAPE creates.</p></li>
+</ul>
+</section>
+<section id="features-paused">
+<h3>Features Paused<a class="headerlink" href="#features-paused" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>As a result of the major rewrite of how reports are generated, sweep
+reports are temporarily not functional. They can be reimplemented without
+too much difficulty, but didn’t make the priority cut for this release.</p></li>
+</ul>
+</section>
+</section>
+<section id="release-2-1-1">
+<h2>Release 2.1.1<a class="headerlink" href="#release-2-1-1" title="Link to this heading">¶</a></h2>
+<section id="id4">
+<h3>New Features<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>The interface for <code class="docutils literal notranslate"><span class="pre">py{x}</span> <span class="pre">-c</span></code> now has more options. For example you can
+show the values of additional columns from the run matrix explicitly.</p>
+<p>This example will show the value of run matrix keys called <em>user</em> and
+<em>arch</em> for each row of the status table, provided they exist.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfun<span class="w"> </span>-I<span class="w"> </span><span class="m">3</span>:7<span class="w"> </span>--add-cols<span class="w"> </span><span class="s2">&quot;user,arch&quot;</span><span class="w"> </span>-c
+</pre></div>
+</div>
+<p>This feature is not fully documented yet and will be discussed more in the
+release of CAPE 2.2.0.</p>
+</li>
+</ul>
+</section>
+<section id="id5">
+<h3>Bugs Fixed<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>When running Cart3D, CAPE will now avoid trying to restart <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> in
+an infinite loop for certain cases. This seemed to be caused by Cart3D
+terminating early when a target residual is reached (see the <em>nOrders</em>
+option for <code class="docutils literal notranslate"><span class="pre">input.cntl</span></code>). <code class="docutils literal notranslate"><span class="pre">pycart</span></code> has now been set to lower the
+<em>PhaseIters</em> option if an adaptive phase looks to have run successfully but
+with fewer iterations than expected.</p></li>
+</ul>
+</section>
+</section>
+<section id="release-2-1-0">
+<h2>Release 2.1.0<a class="headerlink" href="#release-2-1-0" title="Link to this heading">¶</a></h2>
+<section id="id6">
+<h3>New Features<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>CAPE now includes an unstructured mesh module called <code class="docutils literal notranslate"><span class="pre">cape.gruvoc</span></code>. It
+contains a mesh conversion capability, for example to convert a UGRID
+volume mesh to a Tecplot volume PLT file, you could run</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>cape.gruvoc<span class="w"> </span>pyfun.lb8.ugrid<span class="w"> </span>pyfun.plt<span class="w"> </span>--mapbc<span class="w"> </span>pyfun.mapbc
+</pre></div>
+</div>
+<p>It also creates a <code class="docutils literal notranslate"><span class="pre">gruvoc</span></code> executable so that you could just run</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gruvoc<span class="w"> </span>pyfun.lb8.ugrid<span class="w"> </span>pyfun.plt<span class="w"> </span>--mapbc<span class="w"> </span>pyfun.mapbc
+</pre></div>
+</div>
+<p>Another useful tool is <code class="docutils literal notranslate"><span class="pre">gruvoc</span> <span class="pre">report</span></code>, which summarizes the number of
+nodes, surface tris, tets, etc. in a grid.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gruvoc<span class="w"> </span>report<span class="w"> </span>pyfun.lb8.ugrid<span class="w"> </span>-h
+</pre></div>
+</div>
+<p>You can call <code class="docutils literal notranslate"><span class="pre">gruvoc</span> <span class="pre">report</span></code> without the <code class="docutils literal notranslate"><span class="pre">-h</span></code> to see the raw numbers.
+The <code class="docutils literal notranslate"><span class="pre">-h</span></code> flag means “human-readable”, so for example it will abbreviate
+1234567 to “1.2M”.</p>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">pyfun</span></code> module now contains the ability to directly read FUN3D
+solutions directly, both instantaneous restart files (<code class="docutils literal notranslate"><span class="pre">.flow</span></code>) and
+time-averaged solutions (<code class="docutils literal notranslate"><span class="pre">_TAVG.1</span></code>). An example usage is to convert a
+time-averaged solution to a volume Tecplot PLT file:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gruvoc<span class="w"> </span>convert<span class="w"> </span>pyfun.lb8.ugrid<span class="w"> </span>pyfun_volume_tavg_timestep1000.plt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tavg<span class="w"> </span>pyfun_TAVG.1<span class="w"> </span>--add-mach<span class="w"> </span>--add-cp<span class="w"> </span>--mapbc<span class="w"> </span>pyfun.mapbc
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">cape.pyfun.casecntl</span></code> module conveniently provides some built-in
+“workers” (See the notes on the CAPE 2.0.3 release) to make these
+conversions while FUN3D is running. A common use case is to add the
+following to the <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> section for a <code class="docutils literal notranslate"><span class="pre">pyfun</span></code> JSON file:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;WorkerPythonFuncs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;flow2plt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;runner&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;tavg2plt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;runner&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;clean&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;runner&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">],</span>
+<span class="s2">&quot;PostPythonFuncs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;flow2plt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;runner&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;tavg2plt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;runner&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>This code will automatically convert each new <code class="docutils literal notranslate"><span class="pre">pyfun.flow</span></code> file to
+<code class="docutils literal notranslate"><span class="pre">pyfun_volume_timestep{n}.plt</span></code> and each new <code class="docutils literal notranslate"><span class="pre">pyfun_TAVG.1</span></code> file to
+<code class="docutils literal notranslate"><span class="pre">pyfun_volume_tavg_timestep{n}.plt</span></code> without requiring FUN3D to do any of
+the output except for writing its usual restart files.</p>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">cape.gruvoc</span></code> module also contains tools for creating cut planes and
+performing other data sampling routines by using PyVista
+(<a class="reference external" href="https://pyvista.org/">https://pyvista.org/</a>). The <code class="docutils literal notranslate"><span class="pre">tavg2x</span></code> runner for <code class="docutils literal notranslate"><span class="pre">pyfun</span></code> can be used for
+more data sampling routines; see the documentation of that function for
+more information.</p></li>
+<li><p>Checking PBS status is now more efficient and effective. CAPE can now
+automatically detect which user’s queue to check based on the owner of a
+job (useful if you care calling <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">-c</span></code> from another user’s folder) and
+call to multiple PBS servers if appropriate. (This last example has become
+quite usefule on NASA HPC systems, for example, where the CPU and GPU jobs
+are controlled by distinct and separate PBS servers.)</p></li>
+<li><p>Several upgrades have been made to the MPI interface in
+<code class="docutils literal notranslate"><span class="pre">cape.cfdx.cmdgen</span></code>. These changes allow support for mixed GPU/CPU
+workflows (for example when running <code class="docutils literal notranslate"><span class="pre">refine/three</span></code> on a GPU job with
+FUN3D) and support additional environments that require more command-line
+arguments (for example the new Grace Hopper systems on the NASA Advanced
+Supercomputing facility).</p></li>
+<li><p>Fun3D namelist control in the <code class="docutils literal notranslate"><span class="pre">pyfun</span></code> JSON file now supports setting
+multiple indices of the same option in an efficient manner. Here’s an
+example setting the boundary conditions for a variety of surfaces:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Fun3D&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;boundary_conditions&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;wall_temp_flag&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;1-38&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;wall_temperature&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;1-38&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;static_pressure_ratio&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;8&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;15&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.75</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;18&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.52</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It will lead to a namelist such as this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&amp;boundary_conditions
+    wall_temp_flag(1:38) = .true.
+    wall_temperature(1:38) = -1
+    static_pressure_ratio(8) = 0.5
+    static_pressure_ratio(15) = 0.75
+    static_pressure_ratio(18) = 0.52
+/
+</pre></div>
+</div>
+<p>This is generally much more practical than making a list of 38 <code class="docutils literal notranslate"><span class="pre">true</span></code>
+values for <em>wall_temp_flag</em> and is especially convenient for the
+<em>static_pressure_ratio</em> in this example.</p>
+</li>
+</ul>
+</section>
+<section id="id7">
+<h3>Behavior Changes<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Many of the “DataBook” classes in <code class="docutils literal notranslate"><span class="pre">cape.cfdx.databook</span></code> have been renamed.
+These may cause issues for advanced users who have custom “hooks” or other
+Python modules.</p></li>
+<li><p>The default data type in <code class="docutils literal notranslate"><span class="pre">cape.dkit.textdata</span></code> has been changed to
+<code class="docutils literal notranslate"><span class="pre">int32</span></code>. This minor change makes it much easier to read CAPE run matrix
+files as DataKits without the need for extra keyword arguments.</p></li>
+<li><p>Job status (e.g. when running <code class="docutils literal notranslate"><span class="pre">pyover</span> <span class="pre">-c</span></code>) is now computed by
+<code class="docutils literal notranslate"><span class="pre">CaseRunner</span></code> instead of <code class="docutils literal notranslate"><span class="pre">Cntl</span></code>. This is generally more efficient (users
+may notice the difference) and allows stand-alone cases to be aware of
+their status without being part of a run matrix.</p></li>
+</ul>
+</section>
+<section id="bug-fixes">
+<h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The CAPE 2.0.3 <code class="docutils literal notranslate"><span class="pre">pycart</span></code> modules contained several bugs that prevented
+adaptive runs (even the published CAPE examples) from running properly. All
+CAPE test cases run properly now.</p></li>
+</ul>
+</section>
+</section>
+<section id="release-2-0-3">
+<h2>Release 2.0.3<a class="headerlink" href="#release-2-0-3" title="Link to this heading">¶</a></h2>
+<section id="id8">
+<h3>New Features<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>CAPE now includes <em>PreShellCmds</em> to go alongise <em>PostShellCmds</em>. This is an
+option in the <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> section that allows the user to run one or
+more BASH (or whatever your shell of choice is) commands prior to running
+the primary CFD solver executables.</p></li>
+<li><p>There is an exciting new feature called <em>WorkerShellCmds</em> in the
+<code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> section. It allows you to specify 0 or more BASH commands
+that you run every <em>WorkerSleepTime</em> seconds (default=``10.0``) while your
+case is running. It has working clean-up after the main executable is
+finished, allowing up to <code class="docutils literal notranslate"><span class="pre">&quot;WorkerTimeout&quot;</span></code> (default=``600.0``) seconds
+for the last instance of the worker to complete.</p></li>
+<li><p>These run hooks also have Python function versions, in the form of options
+<em>PrePythonFuncs</em>, <em>PostPythonFuncs</em>, and <em>WorkerPythonFuncs</em>. If these are
+defined as a simple string, CAPE will import any modules implied by the
+function name and then call that function with no arguments. However, users
+may also specify more details for Python functions by defining the function
+in a <code class="docutils literal notranslate"><span class="pre">dict</span></code>.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;RunControl&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;WorkerPythonFuncs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;mymod.mufunc&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;clean&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;runner&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;mymod.otherfunc&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;args&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;$runner&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;$mach&quot;</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Users of FUN3D and Kestrel can now link the mesh file into folders instead
+of copying it. Set <code class="docutils literal notranslate"><span class="pre">&quot;LinkMesh&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> in the <code class="docutils literal notranslate"><span class="pre">&quot;Mesh&quot;</span></code> section.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cape.pyfun</span></code> in particular changes how it uses XML or JSON configuration
+files (which is specified in the <code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">&quot;File&quot;</span></code> setting). In
+previous versions of CAPE, the face labels or component ID numbers in that
+file had to match your actual grid, which had to match your <code class="docutils literal notranslate"><span class="pre">.mapbc</span></code>
+file. Now CAPE only uses the text names in the <em>ConfigFile</em>, and it’s ok to
+include components that aren’t actually present in your grid. If your case
+worked as expected before, it will still work now, but for new cases it
+might be much easier to set up. The (new) recommended process is to use a
+ConfigJSON file and only specify a <code class="docutils literal notranslate"><span class="pre">&quot;Tree&quot;</span></code> section. See
+<a class="reference internal" href="common/file/configjson.html#configjson-syntax"><span class="std std-ref">Syntax for ConfigJSON Files</span></a>.</p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Behavior Changes<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Binary files storing iterative histories are no longer saved automatically</p></li>
+<li><p>Calculation of job status, especially for FUN3D, is much faster. This
+change should not cause any functional changes for users.</p></li>
+<li><p>Python modules used to define hooks are no longer universally imported
+during <code class="docutils literal notranslate"><span class="pre">Cntl</span></code> instantiation. Modules are imported dynamically if needed
+to execute a hook. The <code class="docutils literal notranslate"><span class="pre">&quot;Modules&quot;</span></code> setting is still present in the JSON
+file but has no effect.</p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>Bugs Fixed<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Fix bug in area-weighted node normal calculation,
+<a class="reference internal" href="api/cape/trifile.html#cape.trifile.TriBase.GetNodeNormals" title="cape.trifile.TriBase.GetNodeNormals"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.trifile.TriBase.GetNodeNormals()</span></code></a>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">refine/three</span></code> capability with FUN3D now works more reliably.</p></li>
+</ul>
+</section>
+</section>
+<section id="release-2-0-2">
+<h2>Release 2.0.2<a class="headerlink" href="#release-2-0-2" title="Link to this heading">¶</a></h2>
+<section id="id11">
+<h3>New Features<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>New capabilities in <em>nProc</em>, the number of MPI processes to use. Instead of
+requiring a positive integer, there are now four ways to interpret this
+setting:</p>
+<ul>
+<li><p><strong>positive integer</strong>: <cite>“nProc”: 128</cite> will continue to work in the
+obvious way that it always has</p></li>
+<li><p><strong>negative integer</strong>: <cite>“nProc”: -2</cite> on a node with 128 cores will mean
+using 126 cores</p></li>
+<li><p><strong>fraction</strong>: <cite>“nProc”: 0.5</cite> will mean using 50% (rounded down), so
+<cite>mpiexec -np 64</cite> on a 128-core node</p></li>
+<li><p><strong>blank</strong>: <cite>“nProc”: null</cite> (or leaving out entirely) means use all the
+MPI procs available</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id12">
+<h3>Behavior Changes<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Don’t write <em>Archive</em> settings to each case folder</p></li>
+</ul>
+</section>
+<section id="id13">
+<h3>Bugs Fixed<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<p>All of the tutorials at</p>
+<p><a class="reference external" href="https://github.com/nasa-ddalle/">https://github.com/nasa-ddalle/</a></p>
+<p>now work properly with this version. Most of the updates were to the tutorials
+themselves, but some CAPE bugs were fixed, too.</p>
+</section>
+</section>
+<section id="release-2-0-1">
+<h2>Release 2.0.1<a class="headerlink" href="#release-2-0-1" title="Link to this heading">¶</a></h2>
+<section id="id14">
+<h3>New Features<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>GPU options in <em>RunControl</em> section of options</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CaseRunner</span></code> system calls now allow piping lines of a file to STDIN</p></li>
+</ul>
+</section>
+<section id="id15">
+<h3>Behavior Changes<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Archiving uses <code class="docutils literal notranslate"><span class="pre">tar</span> <span class="pre">-u</span></code> if using the standard <code class="docutils literal notranslate"><span class="pre">.tar</span></code> archive format</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">-e</span></code> option to execute commands in case folders, and allow it to run
+regular system commands (not just local scripts)</p></li>
+</ul>
+</section>
+<section id="id16">
+<h3>Bugs Fixed<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Add several missing options to <em>RunMatrix</em> definitions</p></li>
+<li><p>Fix zone type when reading Tecplot file from Cart3D <code class="docutils literal notranslate"><span class="pre">.tri[q]</span></code> format</p></li>
+<li><p>Improve handling of different-sized iterative histories in <code class="docutils literal notranslate"><span class="pre">CaseFM</span></code></p></li>
+<li><p>Add PyYAML and colorama to install requirements</p></li>
+</ul>
+</section>
+</section>
+<section id="release-2-0-0">
+<h2>Release 2.0.0<a class="headerlink" href="#release-2-0-0" title="Link to this heading">¶</a></h2>
+<section id="id17">
+<h3>New Features<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>Added a command <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">--1to2</span></code> to help update Python files written against
+the CAPE 1.2 API to the newer module names mentioned below.</p></li>
+<li><p>The main input file can now be a YAML file in addition to the standard
+JSON. However, there is no “include” statement like the <code class="docutils literal notranslate"><span class="pre">JSONFile()</span></code>
+directive supported in CAPE JSON files.</p></li>
+<li><p>New command-line interface. The CLI supports the commands that would have
+worked for CAPE 1 but also support a new method that allows the user to be
+more explicit about the primary purpose of the command. For example</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfun<span class="w"> </span>--re<span class="w"> </span><span class="s2">&quot;m1.2&quot;</span><span class="w"> </span>--report
+</pre></div>
+</div>
+<p>is the same as</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfun<span class="w"> </span>report<span class="w"> </span>--re<span class="w"> </span><span class="s2">&quot;m1.2&quot;</span>
+</pre></div>
+</div>
+<p>The new CLI also implements checks so that misspelled or unrecognized
+options will result in an error instead of just ignoring those options.</p>
+</li>
+<li><p>Created a new executable <code class="docutils literal notranslate"><span class="pre">cape-tec</span></code> that takes a Tecplot(R) layout file
+as input and exports a PNG from that layout.</p></li>
+<li><p>Rewritten interface to <em>RunControl</em> &gt; <em>Archive</em>. Users may now prescribe
+“only keep the most recent file of this set” of multiple patterns in a
+single line. For example …</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Archive&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;SearchMethod&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;regex&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;clean&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;PreDeleteFiles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;pyfun[0-9]+_([a-z][a-z0-9_-]+)_timestep[0-9]+\\.plt&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This will delete most Tecplot <code class="docutils literal notranslate"><span class="pre">.plt</span></code> files but keep the most recent <code class="docutils literal notranslate"><span class="pre">1</span></code>
+matches. The new feature is that it will collect all the files that match
+this regular expression but divide them into separate lists for all the
+unique values of the regular expression group (the part inside
+parentheses). So if you have the following files:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pyfun00_plane-y0_timestep1000.plt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyfun00_tec_boundary_timestep1000.plt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyfun01_plane-y0_timestep2000.plt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyfun01_tec_boundary_timestep2000.plt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyfun02_plane-y0_timestep3000.plt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyfun02_plane-y0_timestep4000.plt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyfun02_tec_boundary_timestep3000.plt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyfun02_tec_boundary_timestep4000.plt</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>Then it would delete most of these files but only keep</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pyfun02_plane-y0_timestep4000.plt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyfun02_tec_boundary_timestep4000.plt</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>This would not have been possible in CAPE 1; users would need to provide
+two separate instructions.</p>
+</li>
+<li><p>A <em>RunMatrix</em> key with the type <code class="docutils literal notranslate"><span class="pre">&quot;translation&quot;</span></code> can now use two named
+points as the <code class="docutils literal notranslate"><span class="pre">&quot;Vector&quot;</span></code>. This means that the direction that a component
+is translated can be affected by prior <em>RunMatrix</em> keys</p></li>
+</ul>
+</section>
+<section id="id18">
+<h3>Behavior Changes<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Many modules have been renamed, including renaming the <code class="docutils literal notranslate"><span class="pre">case</span></code> modules to
+the less-confusing name <code class="docutils literal notranslate"><span class="pre">casecntl</span></code>. In addition, the main <code class="docutils literal notranslate"><span class="pre">cntl</span></code> module
+has been moved into the <code class="docutils literal notranslate"><span class="pre">cape.cfdx</span></code> folder.</p></li>
+</ul>
+</section>
+<section id="id19">
+<h3>Bugs Fixed<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Determination of number of available MPI ranks on Slurm jobs</p></li>
+</ul>
+</section>
+</section>
+<section id="release-1-2-1">
+<h2>Release 1.2.1<a class="headerlink" href="#release-1-2-1" title="Link to this heading">¶</a></h2>
+<section id="id20">
+<h3>New Features<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Each case now generates logs, which are helpful for debugging or just
+understanding the sequence of actions CAPE takes. The two log files within
+each case are <code class="docutils literal notranslate"><span class="pre">cape/cape-main.log</span></code> and <code class="docutils literal notranslate"><span class="pre">cape/cape-verbose.log</span></code>).</p></li>
+<li><p>PBS/Slurm job names are now longer (32 chars instead of 15), and the length
+is configurable (<em>RunMatrix</em> &gt; <em>MaxJobNameLength</em>).</p></li>
+</ul>
+</section>
+<section id="id21">
+<h3>Behavior Changes<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>PBS/Slurm job IDs are now saved as the full string instead of just the
+job number (often something like <code class="docutils literal notranslate"><span class="pre">123456.pbspl1</span></code>)</p></li>
+<li><p>The extensions are now build against NumPy version 2.0+ for Python 3.10
+and later. The Python 3.9 extension is still build against NumPy 1.x.</p></li>
+</ul>
+</section>
+<section id="id22">
+<h3>Bugs Fixed<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Better support of newer <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> script for Cart3D</p></li>
+<li><p>Various compatibility issues with NumPy 2.0 release</p></li>
+</ul>
+</section>
+</section>
+<section id="release-1-2-0">
+<h2>Release 1.2.0<a class="headerlink" href="#release-1-2-0" title="Link to this heading">¶</a></h2>
+<p>CAPE 1.2 is a smaller change than CAPE 1.1 and focuses on improving the quality
+of CAPE’s underlying code. Many modules have been de-linted, and some of the
+older modules have been rewritten. Test coverage is also significantly
+improved.</p>
+<section id="id23">
+<h3>New Features<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The iterative histories (both <code class="docutils literal notranslate"><span class="pre">CaseFM</span></code> and <code class="docutils literal notranslate"><span class="pre">CaseResid</span></code>) now create a
+cache file so that CAPE can read them in much faster after the first read.
+It also creates a uniform file format for users who might be interested in
+saving iterative histories.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">TSVTecDatFile</span></code> class to read Tecplot-style column-data into
+<code class="docutils literal notranslate"><span class="pre">DataKit</span></code>. See
+<a class="reference external" href="https://nasa.github.io/cape-doc/1.2/api/attdb/ftypes/tecdatfile.html">https://nasa.github.io/cape-doc/1.2/api/attdb/ftypes/tecdatfile.html</a></p></li>
+<li><p>Add a <code class="docutils literal notranslate"><span class="pre">--incremental</span></code> option (or set <em>RunControl</em> <span class="menuselection">‣</span> <em>StartNextPhase</em> to
+<code class="docutils literal notranslate"><span class="pre">False</span></code>) option to run one phase at a time. See
+<a class="reference external" href="https://nasa.github.io/cape-doc/1.2/common/json/RunControl.html">https://nasa.github.io/cape-doc/1.2/common/json/RunControl.html</a> for the
+<em>StartNextPhase</em> option and/or
+<a class="reference external" href="https://nasa.github.io/cape-doc/1.2/bin/pyfun.html">https://nasa.github.io/cape-doc/1.2/bin/pyfun.html</a> for <code class="docutils literal notranslate"><span class="pre">--incremental</span></code>.</p></li>
+</ul>
+</section>
+<section id="id24">
+<h3>Behavior Changes<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>The iterative history modules, <code class="docutils literal notranslate"><span class="pre">CaseFM</span></code> and <code class="docutils literal notranslate"><span class="pre">CaseResid</span></code>, are now
+subclasses of <code class="docutils literal notranslate"><span class="pre">DataKit</span></code>. Among other things, this means that what used to
+be <code class="docutils literal notranslate"><span class="pre">fm.CN</span></code> is now <code class="docutils literal notranslate"><span class="pre">fm[&quot;CN&quot;]</span></code>. This is a major improvement to making
+those classes extensible for histories of things other than forces &amp;
+moments.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">cape.filecntl.filecntl</span></code> module, which is critical to how CAPE
+reads and modifies CFD input files, was rewritten and tested to 100%
+coverage.</p></li>
+<li><p>Rename some <em>RunControl</em> options to more understandable</p>
+<ul class="simple">
+<li><p><em>Resubmit</em> → <em>ResubmitNextPhase</em></p></li>
+<li><p><em>Continue</em> → opposite of <em>ResubmitSamePhase</em></p></li>
+</ul>
+<p>(See <a class="reference external" href="https://nasa.github.io/cape-doc/1.2/common/json/RunControl.html">https://nasa.github.io/cape-doc/1.2/common/json/RunControl.html</a>)</p>
+</li>
+</ul>
+</section>
+<section id="id25">
+<h3>Bugs Fixed<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The documentation now builds without warnings.</p></li>
+</ul>
+</section>
+</section>
+<section id="release-1-1-1-post2">
+<h2>Release 1.1.1.post2<a class="headerlink" href="#release-1-1-1-post2" title="Link to this heading">¶</a></h2>
+<section id="id26">
+<h3>Bugs Fixed<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Add (back) default <code class="docutils literal notranslate"><span class="pre">&quot;MuFormat&quot;</span></code> for coefficient table subfigures, which
+was causing tables full of the text “<em>None</em>” in some cases</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code> when saving a long string in an existing array</p></li>
+<li><p>Fix default formatting of <code class="docutils literal notranslate"><span class="pre">user</span></code> and <code class="docutils literal notranslate"><span class="pre">tag</span></code> run matrix keys in
+conditions table subfigures</p></li>
+</ul>
+</section>
+</section>
+<section id="release-1-1-1-post1">
+<h2>Release 1.1.1.post1<a class="headerlink" href="#release-1-1-1-post1" title="Link to this heading">¶</a></h2>
+<p>That’s a weird-looking version number…</p>
+<p>This post-release fixes some issues that the testing suite did not catch
+regarding the previous CAPE 1.1 releases.</p>
+<section id="id27">
+<h3>Bugs Fixed<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">TriRotate</span></code> and <code class="docutils literal notranslate"><span class="pre">TriTranslate</span></code> run matrix keys now work properly
+again; they were not getting noticed as the correct key type in previous
+1.1 releases.</p></li>
+<li><p>Using a <code class="docutils literal notranslate"><span class="pre">list</span></code> inside a <code class="docutils literal notranslate"><span class="pre">&#64;map</span></code> <code class="docutils literal notranslate"><span class="pre">dict</span></code> now works with phase numbers in
+<code class="docutils literal notranslate"><span class="pre">cape.optdict</span></code></p></li>
+<li><p>Fixes to flow initializations for FUN3D for new <code class="docutils literal notranslate"><span class="pre">nmlfile</span></code> Fortran
+namelist manipulation module</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">cape.nmlfile</span></code> namelist module now supports <em>N</em>-dimensional arrays,
+whereas the <code class="docutils literal notranslate"><span class="pre">set_opt()</span></code> method didn’t support this before.</p></li>
+</ul>
+</section>
+</section>
+<section id="release-1-1-1">
+<h2>Release 1.1.1<a class="headerlink" href="#release-1-1-1" title="Link to this heading">¶</a></h2>
+<p>CAPE 1.1.1 introduces the optional <code class="docutils literal notranslate"><span class="pre">&quot;NJob&quot;</span></code> option, which can be placed in
+the <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> section. If you set this parameter to a positive integer,
+CAPE will automatically keep that many jobs running. When one case finishes, it
+will submit the appropriate number of new jobs until the total number of jobs
+(not counting the one that is finishing) equals <code class="docutils literal notranslate"><span class="pre">NJob</span></code>. Using this option,
+users can start a run matrix and keep a roughly fixed number of cases running
+for long periods of time without having to manually check and/or submit new
+jobs.</p>
+<section id="features-added">
+<h3>Features added<a class="headerlink" href="#features-added" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">&quot;NJob&quot;</span></code> option</p></li>
+</ul>
+</section>
+<section id="id28">
+<h3>Bugs Fixed<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h3>
+<p>(Same as Release 1.0.4)</p>
+<ul class="simple">
+<li><p>Allow spaces in strings when reading tab-delimited files using <code class="docutils literal notranslate"><span class="pre">DataKit</span></code>
+or <code class="docutils literal notranslate"><span class="pre">TextDataFile</span></code>.</p></li>
+<li><p>Fix some <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> imports to work with more <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> versions.</p></li>
+<li><p>Switch order of <code class="docutils literal notranslate"><span class="pre">CaseFunction()</span></code> hook and <code class="docutils literal notranslate"><span class="pre">WriteCaseJSON()</span></code> in
+<code class="docutils literal notranslate"><span class="pre">cape.pycart</span></code> so that <code class="docutils literal notranslate"><span class="pre">case.json</span></code> reflects options changes from all
+hooks.</p></li>
+</ul>
+</section>
+</section>
+<section id="release-1-1-0">
+<h2>Release 1.1.0<a class="headerlink" href="#release-1-1-0" title="Link to this heading">¶</a></h2>
+<p>CAPE 1.1 incorporates an entirely new interface to how it reads the JSON files
+that define most of the CAPE inputs. See <a class="reference internal" href="api/cape/optdict/index.html#module-cape.optdict" title="cape.optdict"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.optdict</span></code></a> for details about
+the new options package and <a class="reference internal" href="api/cfdx/options/index.html#module-cape.cfdx.options" title="cape.cfdx.options"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.options</span></code></a> for an gateway to the
+CAPE-specific options for each section.</p>
+<p>CAPE 1.1 removes support for Python 2.7. It supports Python 3.6+ (because
+that’s the version available on standard Red Hat Enterprise Linux versions 7
+and 8), but testing is performed in Python 3.9.</p>
+<p>This change is meant to be backwards-compatible with CAPE 1.0 with respect to
+the JSON files, so the same JSON file that worked with CAPE 1.0 <em>should</em> work
+with CAPE 1.1. However, the API is not fully backward-compatible, so some user
+scripts and any hooks may need to be modified for CAPE 1.1. Also, although CAPE
+1.0 JSON files should be compatible with CAPE 1.1, there may be many warnings
+when using CAPE 1.1.</p>
+<p>CAPE 1.1 adds support for a fourth CFD solver, namely
+Kestrel from the Department of Defense’s
+<a class="reference external" href="https://centers.hpc.mil/CREATE/CREATE-AV.html">CREATE-AV</a> program.</p>
+<p>There are three key features for CAPE 1.1 that all come from the incorporation
+of <a class="reference internal" href="api/cape/optdict/index.html#module-cape.optdict" title="cape.optdict"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.optdict</span></code></a>:</p>
+<ul class="simple">
+<li><p>Option names, types, and values are checked and validated throughout the
+JSON file. This contrasts with the CAPE 1.0 behavior where unrecognized
+options (e.g. a spelling error) were silently ignored, and invalid values
+(e.g. a <a class="reference internal" href="api/python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> instead of an <a class="reference internal" href="api/python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) may or may not result in
+an Exception later.</p></li>
+<li><p>JSON syntax errors generate much more helpful messages, especially if the
+error is in a nested file using the <code class="docutils literal notranslate"><span class="pre">JSONFile()</span></code> directive.</p></li>
+<li><p>All or nearly all settings in the JSON file (except in the <code class="docutils literal notranslate"><span class="pre">&quot;RunMatrix&quot;</span></code>
+section) can vary with run matrix conditions using one of three methods.</p></li>
+</ul>
+<p>Related to the third bullet, you can use <code class="docutils literal notranslate"><span class="pre">&#64;cons</span></code> (constraints), <code class="docutils literal notranslate"><span class="pre">&#64;map</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">&#64;expr</span></code>. For example to set a CFL number equal to 2 times the Mach
+number, assuming the <code class="docutils literal notranslate"><span class="pre">&quot;RunMatrix&quot;</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">&quot;Keys&quot;</span></code> includes a key called
+<code class="docutils literal notranslate"><span class="pre">&quot;mach&quot;</span></code>, set</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;CFL&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;@epxr&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2*$mach&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The next example demonstrates how to use a separate grid for supersonic and
+subsonic conditions.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Mesh&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;File&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;@cons&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;$mach &lt; 1&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;subsonic.ugrid&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;$mach &gt;= 1&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;supersonic.ugrid&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The third method is <code class="docutils literal notranslate"><span class="pre">&#64;map</span></code>, which might be used to use specific values based
+on the value of some run matrix key. This example creates a map of how many PBS
+nodes to use based on a run matrix key called <code class="docutils literal notranslate"><span class="pre">&quot;arch&quot;</span></code>.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;PBS&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;select&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;@map&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;model1&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;model2&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">20</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arch&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You can also nest these features, with the most common example having an
+<code class="docutils literal notranslate"><span class="pre">&#64;expr</span></code> inside a <code class="docutils literal notranslate"><span class="pre">cons</span></code> set.</p>
+<section id="id29">
+<h3>Features added<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Better error messages for JSON syntax errors</p></li>
+<li><p>Explicit checks for option names and option values in most of JSON file</p></li>
+<li><p>Ability to easily vary almost any JSON parameter as a function of run
+matrix conditions</p></li>
+<li><p>Add support for Kestrel as fourth CFD solver (<a class="reference internal" href="api/pykes/index.html#module-cape.pykes" title="cape.pykes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes</span></code></a>)</p></li>
+</ul>
+</section>
+<section id="id30">
+<h3>Bugs fixed<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Raise an exception if component list not found during <code class="docutils literal notranslate"><span class="pre">py{x}</span> <span class="pre">--ll</span></code>
+(previously wrote invalid triload input files and encountered an error
+later)</p></li>
+</ul>
+</section>
+<section id="id31">
+<h3>Behavior changes<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Drop support for Python 2.7.</p></li>
+<li><p>FUN3D namelists no longer preserve text of template file; instead
+<a class="reference internal" href="api/cape/nmlfile/index.html#cape.nmlfile.NmlFile" title="cape.nmlfile.NmlFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.nmlfile.NmlFile</span></code></a> reads a namelist into a <a class="reference internal" href="api/python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p></li>
+<li><p>Options modules and classes renamed to more reasonable convention, e.g.
+<a class="reference internal" href="api/cfdx/options/runctlopts.html#cape.cfdx.options.runctlopts.RunControlOpts" title="cape.cfdx.options.runctlopts.RunControlOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.options.runctlopts.RunControlOpts</span></code></a>.</p></li>
+<li><p>More readable <code class="xref py py-func docutils literal notranslate"><span class="pre">cape.pyfun.case.run_fun3d()</span></code> and other main loop runner
+functions.</p></li>
+</ul>
+</section>
+</section>
+<section id="release-1-0-4">
+<h2>Release 1.0.4<a class="headerlink" href="#release-1-0-4" title="Link to this heading">¶</a></h2>
+<p>The test suite now runs with three Python versions: Python 2.7, 3.6, and 3.11.
+We also found a way to create wheels with the <code class="docutils literal notranslate"><span class="pre">_cape2</span></code> or <code class="docutils literal notranslate"><span class="pre">_cape3</span></code>
+extension module in more Python versions.</p>
+<section id="id32">
+<h3>Bugs Fixed<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Allow spaces in strings when reading tab-delimited files using <code class="docutils literal notranslate"><span class="pre">DataKit</span></code>
+or <code class="docutils literal notranslate"><span class="pre">TextDataFile</span></code>.</p></li>
+<li><p>Fix some <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> imports to work with more <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> versions.</p></li>
+<li><p>Switch order of <code class="docutils literal notranslate"><span class="pre">CaseFunction()</span></code> hook and <code class="docutils literal notranslate"><span class="pre">WriteCaseJSON()</span></code> in
+<code class="docutils literal notranslate"><span class="pre">cape.pycart</span></code> so that <code class="docutils literal notranslate"><span class="pre">case.json</span></code> reflects options changes from all
+hooks.</p></li>
+</ul>
+</section>
+</section>
+<section id="release-1-0-3">
+<h2>Release 1.0.3<a class="headerlink" href="#release-1-0-3" title="Link to this heading">¶</a></h2>
+<section id="id33">
+<h3>Features added<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">&quot;KeepTemplateComponents&quot;</span></code> for pyfun, which tells
+pyfun to add components to the <code class="docutils literal notranslate"><span class="pre">'component_parameters'</span></code> section rather
+than replacing it.</p></li>
+<li><p>Support FUN3D 14.0 (a change to the STDOUT used to measure progress
+in <code class="docutils literal notranslate"><span class="pre">pyfun</span></code>)</p></li>
+</ul>
+</section>
+<section id="id34">
+<h3>Bugs fixed<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Properly tests if <code class="docutils literal notranslate"><span class="pre">grid.i.tri</span></code> is already present using <code class="docutils literal notranslate"><span class="pre">usurp</span></code> for
+<code class="docutils literal notranslate"><span class="pre">pyover</span> <span class="pre">--ll</span></code></p></li>
+<li><p>Raise an exception if component list not found during <code class="docutils literal notranslate"><span class="pre">py{x}</span> <span class="pre">--ll</span></code>
+(previously wrote invalid triload input files and ecnountered an error
+later)</p></li>
+</ul>
+</section>
+</section>
+<section id="release-1-0-2-post1">
+<h2>Release 1.0.2.post1<a class="headerlink" href="#release-1-0-2-post1" title="Link to this heading">¶</a></h2>
+<section id="id35">
+<h3>Bugs fixed<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>Restore previous support for dictionaries like</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;sampling_parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;plane_center(1:3, 2)&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+        <span class="s2">&quot;label(2)&quot;</span><span class="p">:</span> <span class="s2">&quot;plane-y1&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>as inputs to <a class="reference internal" href="api/cape/filecntl/namelist.html#cape.filecntl.namelist.Namelist.ApplyDict" title="cape.filecntl.namelist.Namelist.ApplyDict"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.filecntl.namelist.Namelist.ApplyDict</span></code></a>. This is
+related to GitHub issues #4 and #19.</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="release-1-0-2">
+<h2>Release 1.0.2<a class="headerlink" href="#release-1-0-2" title="Link to this heading">¶</a></h2>
+<section id="id36">
+<h3>Features added<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">&quot;PostShellCmds&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> for <a class="reference internal" href="api/pyover/index.html#module-cape.pyover" title="cape.pyover"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code></a>;
+allows users to add a list of commands that run after every call to
+OVERFLOW</p></li>
+<li><p>Support more recent versions of <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> in <a class="reference internal" href="api/pycart/index.html#module-cape.pycart" title="cape.pycart"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code></a></p></li>
+<li><p>Add command-line options to <code class="docutils literal notranslate"><span class="pre">py{x}</span> <span class="pre">--report</span></code>:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">--report <var>RP</var></span></kbd></dt>
+<dd><p>Update report named <em>RP</em> (default: first report in JSON file)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>–report RP –force</dt><dd><p>Update report and ignore cache for all subfigures</p>
+</dd>
+<dt>–report RP –no-compile</dt><dd><p>Create images for a report but don’t compile into PDF</p>
+</dd>
+<dt>–report RP –rm</dt><dd><p>Delete existing caches of report subfigure images instead of
+creating them</p>
+</dd>
+</dl>
+</li>
+<li><p>Add support for commas within strings in DataBooks and run matrices</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code> option in <code class="docutils literal notranslate"><span class="pre">&quot;PBS&quot;</span></code> section</p></li>
+<li><p>Allow <code class="docutils literal notranslate"><span class="pre">nodet_mpi</span></code> to set <code class="docutils literal notranslate"><span class="pre">&quot;nProc&quot;</span></code> automatically with Slurm</p></li>
+<li><p>Add options <code class="docutils literal notranslate"><span class="pre">&quot;YLim&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;YMin&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;YMax&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;YLimMin&quot;</span></code> and likewise
+for <code class="docutils literal notranslate"><span class="pre">&quot;PlotCoeff&quot;</span></code> subfigures.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;YLim&quot;</span></code>: list of explicit min and explicit max to use for <em>y</em>-axis</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;YMin&quot;</span></code>: explicit min to use for <em>y</em>-axis</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;YMax&quot;</span></code>: explicit max to use for <em>y</em>-axis</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;YLimMax&quot;</span></code>: outer bounds for <em>ymin</em> and <em>ymax</em>; CAPE will not plot a
+<em>y</em>-value below <code class="docutils literal notranslate"><span class="pre">YLimMax[0]</span></code> but may have a min <em>y</em>-axis value greater
+than that, and CAPE will not plot a <em>y</em>-value above <code class="docutils literal notranslate"><span class="pre">YLimMax[1]</span></code>. Also
+supports using None (in Python) or null (in JSON) to use one of the
+bounds. E.g. <code class="docutils literal notranslate"><span class="pre">&quot;YLimMax&quot;:</span> <span class="pre">[0.0,</span> <span class="pre">null]</span></code> will guarantee only positive
+<em>y</em>-values are shown but not set an upper bound.</p></li>
+<li><p>The same options, replacing <code class="docutils literal notranslate"><span class="pre">Y</span></code> with <code class="docutils literal notranslate"><span class="pre">X</span></code></p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="release-1-0-1">
+<h2>Release 1.0.1<a class="headerlink" href="#release-1-0-1" title="Link to this heading">¶</a></h2>
+<section id="id37">
+<h3>Features added<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Warm-start capability for <a class="reference internal" href="api/pyfun/index.html#module-cape.pyfun" title="cape.pyfun"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code></a>, adds options <em>WarmStart</em> and
+<em>WarmStartDir</em> to <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code>  section</p></li>
+</ul>
+</section>
+<section id="id38">
+<h3>Behavior changes<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Use <code class="xref py py-func docutils literal notranslate"><span class="pre">os.mkdir()</span></code> instead of <a class="reference internal" href="api/cfdx/options/index.html#cape.cfdx.options.Options.mkdir" title="cape.cfdx.options.Options.mkdir"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.options.Options.mkdir()</span></code></a>
+during archiving (affects resulting file permissions of new folders)</p></li>
+<li><p>Write binary (<code class="docutils literal notranslate"><span class="pre">lr4</span></code>) instead of ASCII <code class="docutils literal notranslate"><span class="pre">.triq</span></code> files when using <em>it_avg</em>
+in <a class="reference internal" href="api/pycart/index.html#module-cape.pycart" title="cape.pycart"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code></a>; speeds up <code class="docutils literal notranslate"><span class="pre">pycart</span> <span class="pre">--ll</span></code> significantly</p></li>
+<li><p>Allow users to write PNG or JPG files during <code class="docutils literal notranslate"><span class="pre">--report</span></code> commands w/o also
+creating PDFs; also ability to include PNG or JPG into compiled report</p></li>
+</ul>
+</section>
+<section id="id39">
+<h3>Bug fixes<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Better control of force &amp; moment requests in <a class="reference internal" href="api/pycart/index.html#module-cape.pycart" title="cape.pycart"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code></a></p></li>
+<li><p>Fix bug in reading some OVERFLOW iterative residual histories</p></li>
+<li><p>Support columns with all <code class="docutils literal notranslate"><span class="pre">np.nan</span></code> in
+<code class="docutils literal notranslate"><span class="pre">cape.attdb.rdb.DataKit.write_csv()</span></code></p></li>
+<li><p>Allow adding two <code class="docutils literal notranslate"><span class="pre">cape.pycart.dataBook.CaseFM</span></code> instances with
+different iteration counts</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#release-2-3-0">Release 2.3.0</a><ul>
+<li><a class="reference internal" href="#new-features">New Features</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-2-2-1">Release 2.2.1</a><ul>
+<li><a class="reference internal" href="#bugs-fixed">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-2-2-0">Release 2.2.0</a><ul>
+<li><a class="reference internal" href="#id2">New Features</a></li>
+<li><a class="reference internal" href="#behavior-changes">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id3">Bugs Fixed</a></li>
+<li><a class="reference internal" href="#features-paused">Features Paused</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-2-1-1">Release 2.1.1</a><ul>
+<li><a class="reference internal" href="#id4">New Features</a></li>
+<li><a class="reference internal" href="#id5">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-2-1-0">Release 2.1.0</a><ul>
+<li><a class="reference internal" href="#id6">New Features</a></li>
+<li><a class="reference internal" href="#id7">Behavior Changes</a></li>
+<li><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-2-0-3">Release 2.0.3</a><ul>
+<li><a class="reference internal" href="#id8">New Features</a></li>
+<li><a class="reference internal" href="#id9">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id10">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-2-0-2">Release 2.0.2</a><ul>
+<li><a class="reference internal" href="#id11">New Features</a></li>
+<li><a class="reference internal" href="#id12">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id13">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-2-0-1">Release 2.0.1</a><ul>
+<li><a class="reference internal" href="#id14">New Features</a></li>
+<li><a class="reference internal" href="#id15">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id16">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-2-0-0">Release 2.0.0</a><ul>
+<li><a class="reference internal" href="#id17">New Features</a></li>
+<li><a class="reference internal" href="#id18">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id19">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-1-2-1">Release 1.2.1</a><ul>
+<li><a class="reference internal" href="#id20">New Features</a></li>
+<li><a class="reference internal" href="#id21">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id22">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-1-2-0">Release 1.2.0</a><ul>
+<li><a class="reference internal" href="#id23">New Features</a></li>
+<li><a class="reference internal" href="#id24">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id25">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-1-1-1-post2">Release 1.1.1.post2</a><ul>
+<li><a class="reference internal" href="#id26">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-1-1-1-post1">Release 1.1.1.post1</a><ul>
+<li><a class="reference internal" href="#id27">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-1-1-1">Release 1.1.1</a><ul>
+<li><a class="reference internal" href="#features-added">Features added</a></li>
+<li><a class="reference internal" href="#id28">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-1-1-0">Release 1.1.0</a><ul>
+<li><a class="reference internal" href="#id29">Features added</a></li>
+<li><a class="reference internal" href="#id30">Bugs fixed</a></li>
+<li><a class="reference internal" href="#id31">Behavior changes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-1-0-4">Release 1.0.4</a><ul>
+<li><a class="reference internal" href="#id32">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-1-0-3">Release 1.0.3</a><ul>
+<li><a class="reference internal" href="#id33">Features added</a></li>
+<li><a class="reference internal" href="#id34">Bugs fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-1-0-2-post1">Release 1.0.2.post1</a><ul>
+<li><a class="reference internal" href="#id35">Bugs fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-1-0-2">Release 1.0.2</a><ul>
+<li><a class="reference internal" href="#id36">Features added</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-1-0-1">Release 1.0.1</a><ul>
+<li><a class="reference internal" href="#id37">Features added</a></li>
+<li><a class="reference internal" href="#id38">Behavior changes</a></li>
+<li><a class="reference internal" href="#id39">Bug fixes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="bin/triqfm.html"
+                          title="previous chapter"><span class="section-number">7.23. </span><code class="docutils literal notranslate"><span class="pre">triqfm</span></code>: Calculate forces and moments on a <code class="docutils literal notranslate"><span class="pre">.triq</span></code> file</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="api/index.html"
+                          title="next chapter">Introduction to CAPE Application Program Interface</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/changelog.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api/index.html" title="Introduction to CAPE Application Program Interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bin/triqfm.html" title="7.23. triqfm: Calculate forces and moments on a .triq file"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CAPE 2.3.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Changelog</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>
