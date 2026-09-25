@@ -44,37 +44,146 @@
             
   <section id="changelog">
 <span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h1>
-<section id="development">
-<h2>Development<a class="headerlink" href="#development" title="Link to this heading">¶</a></h2>
+<section id="release-3-0-0">
+<h2>Release 3.0.0<a class="headerlink" href="#release-3-0-0" title="Link to this heading">¶</a></h2>
 <section id="new-features">
 <h3>New Features<a class="headerlink" href="#new-features" title="Link to this heading">¶</a></h3>
 <ul>
-<li><p><em>Clickable option prompts</em></p>
-<p>Interactive prompts that offer a list of options (e.g. the review
-prompts from <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">approve</span></code> and case-deletion confirmations) are
-now shown as clickable menus when the optional <code class="docutils literal notranslate"><span class="pre">textual</span></code> package
-is installed and the terminal environment supports it. Clicking an
-option has the same effect as typing <code class="docutils literal notranslate"><span class="pre">&#64;N</span></code>; typed input, <code class="docutils literal notranslate"><span class="pre">&#64;N</span></code>
-answers, and empty input to accept the default all still work.
-Auto-detection is controlled by <code class="docutils literal notranslate"><span class="pre">$CAPE_PROMPT_CLICK</span></code> (set it to
-<code class="docutils literal notranslate"><span class="pre">always</span></code> or <code class="docutils literal notranslate"><span class="pre">never</span></code>) and by the <em>clickable</em> option of
-<code class="docutils literal notranslate"><span class="pre">cape.promptutils.prompt_color</span></code>. Menus are rendered inline (when
-the terminal supports it) so that questions and options remain part
-of the terminal stream along with the user’s answers; on other
-terminals, menus fall back to a full-screen display or the
-traditional readline prompt. Installing <code class="docutils literal notranslate"><span class="pre">textual</span></code> also provides
-<code class="docutils literal notranslate"><span class="pre">rich</span></code> and therefore the <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">tui</span></code> interface.</p>
+<li><p><em>AI integration</em></p>
+<p>The new command</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>agentic
+</pre></div>
+</div>
+<p>now starts a persistent user interface that allows users to interact with
+CAPE using a human-language chatbot. <strong>Users supply their own Open
+AI-compatible endpoint.</strong> This could be a commercial website e.g. from
+Open AI or Anthropic, an internal service to your agency/institute/company,
+or a locally run model. The CAPE agentic harness is designed to be
+functional with any level of model from a simple 1B model to a frontier
+model. Declare the <em>ToolSet</em> in the new <code class="docutils literal notranslate"><span class="pre">cape-agentic.json</span></code> file to be
+<code class="docutils literal notranslate"><span class="pre">&quot;low&quot;</span></code> for smaller models to avoid exposing it to complex tool calls.</p>
+<p>The CAPE-Agentic UI will be an interactive, clickable interface if your
+terminal emulator app supports it; there’s a fall-back to a standard
+persistent command-line interface tool otherwise.</p>
 </li>
-<li><p><em>Proof-of-concept persistent TUI</em></p>
-<p>An experimental OpenCode-style CAPE terminal interface, based on
-<code class="docutils literal notranslate"><span class="pre">textual</span></code>, is available for evaluation via
-<code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">cape.tui.poc</span></code>. It runs CAPE and system commands in
-worker threads with output streamed into a scroll log, and mounts
-interactive prompts (see above) as clickable widgets in the stream.
-It is not (yet) part of the CAPE CLI, and lacks the history,
-tab-completion, and meta-commands of the <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">tui</span></code> interface.</p>
+<li><p><em>Persistent TUI</em></p>
+<p>The new command</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>tui
+</pre></div>
+</div>
+<p>will open a persistent user interface if your terminal emulator supports
+it. This is separate from the LLM-enabled capability of <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">agentic</span></code>.
+The Terminal User Interface (TUI) is interesting because it provides smart
+tab completion and uses cached <a class="reference internal" href="api/cfdx/cntl.html#cape.cfdx.cntl.Cntl" title="cape.cfdx.cntl.Cntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.cntl.Cntl</span></code></a> instances so you
+can save on overhead of rereading your JSON file for each new CAPE command.</p>
+<p>There is also</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>ui
+</pre></div>
+</div>
+<p>that uses a <code class="xref py py-mod docutils literal notranslate"><span class="pre">readline</span></code>-based user interface with many of those same
+benefits without the clickable interface, log folding, etc.</p>
+</li>
+<li><p><em>Interactive “dispatch” command</em></p>
+<p>The new command</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>dispatch<span class="w"> </span><span class="o">[</span>CASES<span class="o">]</span>
+</pre></div>
+</div>
+<p>starts an interactive session where users can decide on what to do with
+each case in a (potentially large) list. The typical use case for this
+command is to have a report (generated by <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">report</span></code>) open in one
+window while issuing a matching <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">dispatch</span></code> command in a terminal.
+E.g. you might run</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>report<span class="w"> </span>-I<span class="w"> </span><span class="m">50</span>:100
+</pre></div>
+</div>
+<p>and then open the PDF that it generates. While scrolling through that PDF
+to decide on each case, also run</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>dispatch<span class="w"> </span>-I<span class="w"> </span><span class="m">50</span>:100
+</pre></div>
+</div>
+<p>This will ask the user what to do with each case 50 to 100. By default
+<code class="docutils literal notranslate"><span class="pre">cape-dispatch</span></code> offers the options of <code class="docutils literal notranslate"><span class="pre">approve</span></code>, <code class="docutils literal notranslate"><span class="pre">extend</span></code>,
+<code class="docutils literal notranslate"><span class="pre">extend2</span></code>, and <code class="docutils literal notranslate"><span class="pre">skip</span></code>, which are relatively self-explanatory. Users can
+also add their own custom actions. This is convenient because it builds up
+the lists in a single window and immediately takes the appropriate
+follow-up actions.</p>
+</li>
+<li><p><em>Cusotmized CLI actions</em></p>
+<p>The new command <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">perform</span></code>, which also ties in with <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">dispatch</span></code>
+allows users to create compound and, optionally, parallel actions. There
+are three built-in actions, matching the three <code class="docutils literal notranslate"><span class="pre">approve</span></code>, <code class="docutils literal notranslate"><span class="pre">extend</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">extend2</span></code> actions built into <code class="docutils literal notranslate"><span class="pre">cape-dispatch</span></code>.</p>
+<p>For example the default</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>perform<span class="w"> </span>approve<span class="w"> </span><span class="o">[</span>CASES<span class="o">]</span>
+<span class="gp">$ </span>cape<span class="w"> </span>perform<span class="w"> </span>extend<span class="w"> </span><span class="o">[</span>CASES<span class="o">]</span>
+<span class="gp">$ </span>cape<span class="w"> </span>perform<span class="w"> </span>extend2<span class="w"> </span><span class="o">[</span>CASES<span class="o">]</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>approve<span class="w"> </span><span class="o">[</span>CASES<span class="o">]</span>
+<span class="gp">$ </span>cape<span class="w"> </span>extend<span class="w"> </span><span class="o">[</span>CASES<span class="o">]</span>
+<span class="gp">$ </span>cape<span class="w"> </span>extend<span class="w"> </span><span class="o">[</span>CASES<span class="o">]</span><span class="w"> </span>--extend<span class="w"> </span><span class="m">2</span>
+</pre></div>
+</div>
+<p>but you can customize what any “action” does in the new <em>Actions</em> section
+of the main CAPE JSON file. An example from the initial Artemis V ascent
+CFD runs</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Actions&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;approve&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cntl&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;function&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;MarkPASS&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cntl&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;function&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;update_dex&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;kwargs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;dex&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CMA*&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cntl&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;function&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;update_dex&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;kwargs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;dex&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CS_[A-G]*&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cntl&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;function&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;update_dex&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;kwargs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;dex&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CS_[H-O]*&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cntl&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;function&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;update_dex&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;kwargs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;dex&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;CS_[P-Z]*&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This truncated example first approves the case (<code class="docutils literal notranslate"><span class="pre">MarkPASS()</span></code>) and then
+extracts a single databook component (<code class="docutils literal notranslate"><span class="pre">&quot;CMA*&quot;</span></code> only matches a single
+component from the <code class="docutils literal notranslate"><span class="pre">&quot;DataBook&quot;</span></code> section in this case) and then runs three
+data-extraction processes in parallel. The parallel specification is
+controlled by the <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;:</span> <span class="pre">2</span></code> lines. The reason for running <code class="docutils literal notranslate"><span class="pre">&quot;CMA*&quot;</span></code>
+first is to avoid conflicts on converting the raw FUN3D file to the
+<code class="docutils literal notranslate"><span class="pre">.triq</span></code> format that many of the other components use. The point is you
+can combine and parallelize actions as you see fit using <code class="docutils literal notranslate"><span class="pre">cape-perform</span></code>.
+To add non-default actions, just add their names to <code class="docutils literal notranslate"><span class="pre">&quot;Actions&quot;</span></code> &gt;
+<code class="docutils literal notranslate"><span class="pre">&quot;UsetTools&quot;</span></code> and then define their actions.</p>
 </li>
 </ul>
+</section>
+<section id="behavior-changes">
+<h3>Behavior Changes<a class="headerlink" href="#behavior-changes" title="Link to this heading">¶</a></h3>
+<p>Version 3.0 drops support for Python versions prior to Python 3.9.</p>
 </section>
 </section>
 <section id="release-2-3-0">
@@ -280,8 +389,8 @@ but rename it <code class="docutils literal notranslate"><span class="pre">pyfun
 integrated into the <code class="docutils literal notranslate"><span class="pre">cape.pykes</span></code> module.</p></li>
 </ul>
 </section>
-<section id="behavior-changes">
-<h3>Behavior Changes<a class="headerlink" href="#behavior-changes" title="Link to this heading">¶</a></h3>
+<section id="id4">
+<h3>Behavior Changes<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>The infrastructure for “DataBook” has been rewritten. Commands like</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfun<span class="w"> </span>--fm
@@ -338,8 +447,8 @@ compiled.</p>
 </li>
 </ul>
 </section>
-<section id="id4">
-<h3>Bugs Fixed<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<section id="id5">
+<h3>Bugs Fixed<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>Several recent versions of CAPE did not support having mixed CSV/JSON
 definitions for run matrix conditions. For example, you might have a run
@@ -376,8 +485,8 @@ too much difficulty, but didn’t make the priority cut for this release.</p></l
 </section>
 <section id="release-2-1-1">
 <h2>Release 2.1.1<a class="headerlink" href="#release-2-1-1" title="Link to this heading">¶</a></h2>
-<section id="id5">
-<h3>New Features<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<section id="id6">
+<h3>New Features<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>The interface for <code class="docutils literal notranslate"><span class="pre">py{x}</span> <span class="pre">-c</span></code> now has more options. For example you can
 show the values of additional columns from the run matrix explicitly.</p>
@@ -391,8 +500,8 @@ release of CAPE 2.2.0.</p>
 </li>
 </ul>
 </section>
-<section id="id6">
-<h3>Bugs Fixed<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<section id="id7">
+<h3>Bugs Fixed<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>When running Cart3D, CAPE will now avoid trying to restart <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> in
 an infinite loop for certain cases. This seemed to be caused by Cart3D
@@ -405,8 +514,8 @@ with fewer iterations than expected.</p></li>
 </section>
 <section id="release-2-1-0">
 <h2>Release 2.1.0<a class="headerlink" href="#release-2-1-0" title="Link to this heading">¶</a></h2>
-<section id="id7">
-<h3>New Features<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<section id="id8">
+<h3>New Features<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>CAPE now includes an unstructured mesh module called <code class="docutils literal notranslate"><span class="pre">cape.gruvoc</span></code>. It
 contains a mesh conversion capability, for example to convert a UGRID
@@ -522,8 +631,8 @@ values for <em>wall_temp_flag</em> and is especially convenient for the
 </li>
 </ul>
 </section>
-<section id="id8">
-<h3>Behavior Changes<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<section id="id9">
+<h3>Behavior Changes<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Many of the “DataBook” classes in <code class="docutils literal notranslate"><span class="pre">cape.cfdx.databook</span></code> have been renamed.
 These may cause issues for advanced users who have custom “hooks” or other
@@ -548,8 +657,8 @@ CAPE test cases run properly now.</p></li>
 </section>
 <section id="release-2-0-3">
 <h2>Release 2.0.3<a class="headerlink" href="#release-2-0-3" title="Link to this heading">¶</a></h2>
-<section id="id9">
-<h3>New Features<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<section id="id10">
+<h3>New Features<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>CAPE now includes <em>PreShellCmds</em> to go alongise <em>PostShellCmds</em>. This is an
 option in the <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> section that allows the user to run one or
@@ -600,8 +709,8 @@ ConfigJSON file and only specify a <code class="docutils literal notranslate"><s
 <a class="reference internal" href="common/file/configjson.html#configjson-syntax"><span class="std std-ref">Syntax for ConfigJSON Files</span></a>.</p></li>
 </ul>
 </section>
-<section id="id10">
-<h3>Behavior Changes<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<section id="id11">
+<h3>Behavior Changes<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Binary files storing iterative histories are no longer saved automatically</p></li>
 <li><p>Calculation of job status, especially for FUN3D, is much faster. This
@@ -612,8 +721,8 @@ to execute a hook. The <code class="docutils literal notranslate"><span class="p
 file but has no effect.</p></li>
 </ul>
 </section>
-<section id="id11">
-<h3>Bugs Fixed<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<section id="id12">
+<h3>Bugs Fixed<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Fix bug in area-weighted node normal calculation,
 <a class="reference internal" href="api/cape/trifile.html#cape.trifile.TriBase.GetNodeNormals" title="cape.trifile.TriBase.GetNodeNormals"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.trifile.TriBase.GetNodeNormals()</span></code></a>.</p></li>
@@ -623,8 +732,8 @@ file but has no effect.</p></li>
 </section>
 <section id="release-2-0-2">
 <h2>Release 2.0.2<a class="headerlink" href="#release-2-0-2" title="Link to this heading">¶</a></h2>
-<section id="id12">
-<h3>New Features<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<section id="id13">
+<h3>New Features<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>New capabilities in <em>nProc</em>, the number of MPI processes to use. Instead of
 requiring a positive integer, there are now four ways to interpret this
@@ -642,14 +751,14 @@ MPI procs available</p></li>
 </li>
 </ul>
 </section>
-<section id="id13">
-<h3>Behavior Changes<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<section id="id14">
+<h3>Behavior Changes<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Don’t write <em>Archive</em> settings to each case folder</p></li>
 </ul>
 </section>
-<section id="id14">
-<h3>Bugs Fixed<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<section id="id15">
+<h3>Bugs Fixed<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
 <p>All of the tutorials at</p>
 <p><a class="reference external" href="https://github.com/nasa-ddalle/">https://github.com/nasa-ddalle/</a></p>
 <p>now work properly with this version. Most of the updates were to the tutorials
@@ -658,23 +767,23 @@ themselves, but some CAPE bugs were fixed, too.</p>
 </section>
 <section id="release-2-0-1">
 <h2>Release 2.0.1<a class="headerlink" href="#release-2-0-1" title="Link to this heading">¶</a></h2>
-<section id="id15">
-<h3>New Features<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<section id="id16">
+<h3>New Features<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>GPU options in <em>RunControl</em> section of options</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">CaseRunner</span></code> system calls now allow piping lines of a file to STDIN</p></li>
 </ul>
 </section>
-<section id="id16">
-<h3>Behavior Changes<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<section id="id17">
+<h3>Behavior Changes<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Archiving uses <code class="docutils literal notranslate"><span class="pre">tar</span> <span class="pre">-u</span></code> if using the standard <code class="docutils literal notranslate"><span class="pre">.tar</span></code> archive format</p></li>
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">-e</span></code> option to execute commands in case folders, and allow it to run
 regular system commands (not just local scripts)</p></li>
 </ul>
 </section>
-<section id="id17">
-<h3>Bugs Fixed<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<section id="id18">
+<h3>Bugs Fixed<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Add several missing options to <em>RunMatrix</em> definitions</p></li>
 <li><p>Fix zone type when reading Tecplot file from Cart3D <code class="docutils literal notranslate"><span class="pre">.tri[q]</span></code> format</p></li>
@@ -685,8 +794,8 @@ regular system commands (not just local scripts)</p></li>
 </section>
 <section id="release-2-0-0">
 <h2>Release 2.0.0<a class="headerlink" href="#release-2-0-0" title="Link to this heading">¶</a></h2>
-<section id="id18">
-<h3>New Features<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<section id="id19">
+<h3>New Features<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>Added a command <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">--1to2</span></code> to help update Python files written against
 the CAPE 1.2 API to the newer module names mentioned below.</p></li>
@@ -753,16 +862,16 @@ points as the <code class="docutils literal notranslate"><span class="pre">&quot
 is translated can be affected by prior <em>RunMatrix</em> keys</p></li>
 </ul>
 </section>
-<section id="id19">
-<h3>Behavior Changes<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<section id="id20">
+<h3>Behavior Changes<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Many modules have been renamed, including renaming the <code class="docutils literal notranslate"><span class="pre">case</span></code> modules to
 the less-confusing name <code class="docutils literal notranslate"><span class="pre">casecntl</span></code>. In addition, the main <code class="docutils literal notranslate"><span class="pre">cntl</span></code> module
 has been moved into the <code class="docutils literal notranslate"><span class="pre">cape.cfdx</span></code> folder.</p></li>
 </ul>
 </section>
-<section id="id20">
-<h3>Bugs Fixed<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
+<section id="id21">
+<h3>Bugs Fixed<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Determination of number of available MPI ranks on Slurm jobs</p></li>
 </ul>
@@ -770,8 +879,8 @@ has been moved into the <code class="docutils literal notranslate"><span class="
 </section>
 <section id="release-1-2-1">
 <h2>Release 1.2.1<a class="headerlink" href="#release-1-2-1" title="Link to this heading">¶</a></h2>
-<section id="id21">
-<h3>New Features<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<section id="id22">
+<h3>New Features<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Each case now generates logs, which are helpful for debugging or just
 understanding the sequence of actions CAPE takes. The two log files within
@@ -780,8 +889,8 @@ each case are <code class="docutils literal notranslate"><span class="pre">cape/
 is configurable (<em>RunMatrix</em> &gt; <em>MaxJobNameLength</em>).</p></li>
 </ul>
 </section>
-<section id="id22">
-<h3>Behavior Changes<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<section id="id23">
+<h3>Behavior Changes<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>PBS/Slurm job IDs are now saved as the full string instead of just the
 job number (often something like <code class="docutils literal notranslate"><span class="pre">123456.pbspl1</span></code>)</p></li>
@@ -789,8 +898,8 @@ job number (often something like <code class="docutils literal notranslate"><spa
 and later. The Python 3.9 extension is still build against NumPy 1.x.</p></li>
 </ul>
 </section>
-<section id="id23">
-<h3>Bugs Fixed<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h3>
+<section id="id24">
+<h3>Bugs Fixed<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Better support of newer <code class="docutils literal notranslate"><span class="pre">aero.csh</span></code> script for Cart3D</p></li>
 <li><p>Various compatibility issues with NumPy 2.0 release</p></li>
@@ -803,8 +912,8 @@ and later. The Python 3.9 extension is still build against NumPy 1.x.</p></li>
 of CAPE’s underlying code. Many modules have been de-linted, and some of the
 older modules have been rewritten. Test coverage is also significantly
 improved.</p>
-<section id="id24">
-<h3>New Features<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h3>
+<section id="id25">
+<h3>New Features<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>The iterative histories (both <code class="docutils literal notranslate"><span class="pre">CaseFM</span></code> and <code class="docutils literal notranslate"><span class="pre">CaseResid</span></code>) now create a
 cache file so that CAPE can read them in much faster after the first read.
@@ -820,8 +929,8 @@ saving iterative histories.</p></li>
 <a class="reference external" href="https://nasa.github.io/cape-doc/1.2/bin/pyfun.html">https://nasa.github.io/cape-doc/1.2/bin/pyfun.html</a> for <code class="docutils literal notranslate"><span class="pre">--incremental</span></code>.</p></li>
 </ul>
 </section>
-<section id="id25">
-<h3>Behavior Changes<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
+<section id="id26">
+<h3>Behavior Changes<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>The iterative history modules, <code class="docutils literal notranslate"><span class="pre">CaseFM</span></code> and <code class="docutils literal notranslate"><span class="pre">CaseResid</span></code>, are now
 subclasses of <code class="docutils literal notranslate"><span class="pre">DataKit</span></code>. Among other things, this means that what used to
@@ -840,8 +949,8 @@ coverage.</p></li>
 </li>
 </ul>
 </section>
-<section id="id26">
-<h3>Bugs Fixed<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
+<section id="id27">
+<h3>Bugs Fixed<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>The documentation now builds without warnings.</p></li>
 </ul>
@@ -849,8 +958,8 @@ coverage.</p></li>
 </section>
 <section id="release-1-1-1-post2">
 <h2>Release 1.1.1.post2<a class="headerlink" href="#release-1-1-1-post2" title="Link to this heading">¶</a></h2>
-<section id="id27">
-<h3>Bugs Fixed<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h3>
+<section id="id28">
+<h3>Bugs Fixed<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Add (back) default <code class="docutils literal notranslate"><span class="pre">&quot;MuFormat&quot;</span></code> for coefficient table subfigures, which
 was causing tables full of the text “<em>None</em>” in some cases</p></li>
@@ -865,8 +974,8 @@ conditions table subfigures</p></li>
 <p>That’s a weird-looking version number…</p>
 <p>This post-release fixes some issues that the testing suite did not catch
 regarding the previous CAPE 1.1 releases.</p>
-<section id="id28">
-<h3>Bugs Fixed<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h3>
+<section id="id29">
+<h3>Bugs Fixed<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">TriRotate</span></code> and <code class="docutils literal notranslate"><span class="pre">TriTranslate</span></code> run matrix keys now work properly
 again; they were not getting noticed as the correct key type in previous
@@ -896,8 +1005,8 @@ jobs.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">&quot;NJob&quot;</span></code> option</p></li>
 </ul>
 </section>
-<section id="id29">
-<h3>Bugs Fixed<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h3>
+<section id="id30">
+<h3>Bugs Fixed<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h3>
 <p>(Same as Release 1.0.4)</p>
 <ul class="simple">
 <li><p>Allow spaces in strings when reading tab-delimited files using <code class="docutils literal notranslate"><span class="pre">DataKit</span></code>
@@ -977,8 +1086,8 @@ nodes to use based on a run matrix key called <code class="docutils literal notr
 </div>
 <p>You can also nest these features, with the most common example having an
 <code class="docutils literal notranslate"><span class="pre">&#64;expr</span></code> inside a <code class="docutils literal notranslate"><span class="pre">cons</span></code> set.</p>
-<section id="id30">
-<h3>Features added<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h3>
+<section id="id31">
+<h3>Features added<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Better error messages for JSON syntax errors</p></li>
 <li><p>Explicit checks for option names and option values in most of JSON file</p></li>
@@ -987,16 +1096,16 @@ matrix conditions</p></li>
 <li><p>Add support for Kestrel as fourth CFD solver (<a class="reference internal" href="api/pykes/index.html#module-cape.pykes" title="cape.pykes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pykes</span></code></a>)</p></li>
 </ul>
 </section>
-<section id="id31">
-<h3>Bugs fixed<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h3>
+<section id="id32">
+<h3>Bugs fixed<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Raise an exception if component list not found during <code class="docutils literal notranslate"><span class="pre">py{x}</span> <span class="pre">--ll</span></code>
 (previously wrote invalid triload input files and encountered an error
 later)</p></li>
 </ul>
 </section>
-<section id="id32">
-<h3>Behavior changes<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h3>
+<section id="id33">
+<h3>Behavior changes<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Drop support for Python 2.7.</p></li>
 <li><p>FUN3D namelists no longer preserve text of template file; instead
@@ -1013,8 +1122,8 @@ functions.</p></li>
 <p>The test suite now runs with three Python versions: Python 2.7, 3.6, and 3.11.
 We also found a way to create wheels with the <code class="docutils literal notranslate"><span class="pre">_cape2</span></code> or <code class="docutils literal notranslate"><span class="pre">_cape3</span></code>
 extension module in more Python versions.</p>
-<section id="id33">
-<h3>Bugs Fixed<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h3>
+<section id="id34">
+<h3>Bugs Fixed<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Allow spaces in strings when reading tab-delimited files using <code class="docutils literal notranslate"><span class="pre">DataKit</span></code>
 or <code class="docutils literal notranslate"><span class="pre">TextDataFile</span></code>.</p></li>
@@ -1027,8 +1136,8 @@ hooks.</p></li>
 </section>
 <section id="release-1-0-3">
 <h2>Release 1.0.3<a class="headerlink" href="#release-1-0-3" title="Link to this heading">¶</a></h2>
-<section id="id34">
-<h3>Features added<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h3>
+<section id="id35">
+<h3>Features added<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">&quot;KeepTemplateComponents&quot;</span></code> for pyfun, which tells
 pyfun to add components to the <code class="docutils literal notranslate"><span class="pre">'component_parameters'</span></code> section rather
@@ -1037,8 +1146,8 @@ than replacing it.</p></li>
 in <code class="docutils literal notranslate"><span class="pre">pyfun</span></code>)</p></li>
 </ul>
 </section>
-<section id="id35">
-<h3>Bugs fixed<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h3>
+<section id="id36">
+<h3>Bugs fixed<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Properly tests if <code class="docutils literal notranslate"><span class="pre">grid.i.tri</span></code> is already present using <code class="docutils literal notranslate"><span class="pre">usurp</span></code> for
 <code class="docutils literal notranslate"><span class="pre">pyover</span> <span class="pre">--ll</span></code></p></li>
@@ -1050,8 +1159,8 @@ later)</p></li>
 </section>
 <section id="release-1-0-2-post1">
 <h2>Release 1.0.2.post1<a class="headerlink" href="#release-1-0-2-post1" title="Link to this heading">¶</a></h2>
-<section id="id36">
-<h3>Bugs fixed<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h3>
+<section id="id37">
+<h3>Bugs fixed<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>Restore previous support for dictionaries like</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
@@ -1070,8 +1179,8 @@ related to GitHub issues #4 and #19.</p>
 </section>
 <section id="release-1-0-2">
 <h2>Release 1.0.2<a class="headerlink" href="#release-1-0-2" title="Link to this heading">¶</a></h2>
-<section id="id37">
-<h3>Features added<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h3>
+<section id="id38">
+<h3>Features added<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h3>
 <ul>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">&quot;PostShellCmds&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code> for <a class="reference internal" href="api/pyover/index.html#module-cape.pyover" title="cape.pyover"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyover</span></code></a>;
 allows users to add a list of commands that run after every call to
@@ -1116,15 +1225,15 @@ bounds. E.g. <code class="docutils literal notranslate"><span class="pre">&quot;
 </section>
 <section id="release-1-0-1">
 <h2>Release 1.0.1<a class="headerlink" href="#release-1-0-1" title="Link to this heading">¶</a></h2>
-<section id="id38">
-<h3>Features added<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h3>
+<section id="id39">
+<h3>Features added<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Warm-start capability for <a class="reference internal" href="api/pyfun/index.html#module-cape.pyfun" title="cape.pyfun"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pyfun</span></code></a>, adds options <em>WarmStart</em> and
 <em>WarmStartDir</em> to <code class="docutils literal notranslate"><span class="pre">&quot;RunControl&quot;</span></code>  section</p></li>
 </ul>
 </section>
-<section id="id39">
-<h3>Behavior changes<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h3>
+<section id="id40">
+<h3>Behavior changes<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Use <code class="xref py py-func docutils literal notranslate"><span class="pre">os.mkdir()</span></code> instead of <a class="reference internal" href="api/cfdx/options/index.html#cape.cfdx.options.Options.mkdir" title="cape.cfdx.options.Options.mkdir"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.options.Options.mkdir()</span></code></a>
 during archiving (affects resulting file permissions of new folders)</p></li>
@@ -1134,8 +1243,8 @@ in <a class="reference internal" href="api/pycart/index.html#module-cape.pycart"
 creating PDFs; also ability to include PNG or JPG into compiled report</p></li>
 </ul>
 </section>
-<section id="id40">
-<h3>Bug fixes<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h3>
+<section id="id41">
+<h3>Bug fixes<a class="headerlink" href="#id41" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Better control of force &amp; moment requests in <a class="reference internal" href="api/pycart/index.html#module-cape.pycart" title="cape.pycart"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.pycart</span></code></a></p></li>
 <li><p>Fix bug in reading some OVERFLOW iterative residual histories</p></li>
@@ -1162,8 +1271,9 @@ different iteration counts</p></li>
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
-<li><a class="reference internal" href="#development">Development</a><ul>
+<li><a class="reference internal" href="#release-3-0-0">Release 3.0.0</a><ul>
 <li><a class="reference internal" href="#new-features">New Features</a></li>
+<li><a class="reference internal" href="#behavior-changes">Behavior Changes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-2-3-0">Release 2.3.0</a><ul>
@@ -1176,98 +1286,98 @@ different iteration counts</p></li>
 </li>
 <li><a class="reference internal" href="#release-2-2-0">Release 2.2.0</a><ul>
 <li><a class="reference internal" href="#id3">New Features</a></li>
-<li><a class="reference internal" href="#behavior-changes">Behavior Changes</a></li>
-<li><a class="reference internal" href="#id4">Bugs Fixed</a></li>
+<li><a class="reference internal" href="#id4">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id5">Bugs Fixed</a></li>
 <li><a class="reference internal" href="#features-paused">Features Paused</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-2-1-1">Release 2.1.1</a><ul>
-<li><a class="reference internal" href="#id5">New Features</a></li>
-<li><a class="reference internal" href="#id6">Bugs Fixed</a></li>
+<li><a class="reference internal" href="#id6">New Features</a></li>
+<li><a class="reference internal" href="#id7">Bugs Fixed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-2-1-0">Release 2.1.0</a><ul>
-<li><a class="reference internal" href="#id7">New Features</a></li>
-<li><a class="reference internal" href="#id8">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id8">New Features</a></li>
+<li><a class="reference internal" href="#id9">Behavior Changes</a></li>
 <li><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-2-0-3">Release 2.0.3</a><ul>
-<li><a class="reference internal" href="#id9">New Features</a></li>
-<li><a class="reference internal" href="#id10">Behavior Changes</a></li>
-<li><a class="reference internal" href="#id11">Bugs Fixed</a></li>
+<li><a class="reference internal" href="#id10">New Features</a></li>
+<li><a class="reference internal" href="#id11">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id12">Bugs Fixed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-2-0-2">Release 2.0.2</a><ul>
-<li><a class="reference internal" href="#id12">New Features</a></li>
-<li><a class="reference internal" href="#id13">Behavior Changes</a></li>
-<li><a class="reference internal" href="#id14">Bugs Fixed</a></li>
+<li><a class="reference internal" href="#id13">New Features</a></li>
+<li><a class="reference internal" href="#id14">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id15">Bugs Fixed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-2-0-1">Release 2.0.1</a><ul>
-<li><a class="reference internal" href="#id15">New Features</a></li>
-<li><a class="reference internal" href="#id16">Behavior Changes</a></li>
-<li><a class="reference internal" href="#id17">Bugs Fixed</a></li>
+<li><a class="reference internal" href="#id16">New Features</a></li>
+<li><a class="reference internal" href="#id17">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id18">Bugs Fixed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-2-0-0">Release 2.0.0</a><ul>
-<li><a class="reference internal" href="#id18">New Features</a></li>
-<li><a class="reference internal" href="#id19">Behavior Changes</a></li>
-<li><a class="reference internal" href="#id20">Bugs Fixed</a></li>
+<li><a class="reference internal" href="#id19">New Features</a></li>
+<li><a class="reference internal" href="#id20">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id21">Bugs Fixed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-1-2-1">Release 1.2.1</a><ul>
-<li><a class="reference internal" href="#id21">New Features</a></li>
-<li><a class="reference internal" href="#id22">Behavior Changes</a></li>
-<li><a class="reference internal" href="#id23">Bugs Fixed</a></li>
+<li><a class="reference internal" href="#id22">New Features</a></li>
+<li><a class="reference internal" href="#id23">Behavior Changes</a></li>
+<li><a class="reference internal" href="#id24">Bugs Fixed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-1-2-0">Release 1.2.0</a><ul>
-<li><a class="reference internal" href="#id24">New Features</a></li>
-<li><a class="reference internal" href="#id25">Behavior Changes</a></li>
-<li><a class="reference internal" href="#id26">Bugs Fixed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#release-1-1-1-post2">Release 1.1.1.post2</a><ul>
+<li><a class="reference internal" href="#id25">New Features</a></li>
+<li><a class="reference internal" href="#id26">Behavior Changes</a></li>
 <li><a class="reference internal" href="#id27">Bugs Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#release-1-1-1-post1">Release 1.1.1.post1</a><ul>
+<li><a class="reference internal" href="#release-1-1-1-post2">Release 1.1.1.post2</a><ul>
 <li><a class="reference internal" href="#id28">Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release-1-1-1-post1">Release 1.1.1.post1</a><ul>
+<li><a class="reference internal" href="#id29">Bugs Fixed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-1-1-1">Release 1.1.1</a><ul>
 <li><a class="reference internal" href="#features-added">Features added</a></li>
-<li><a class="reference internal" href="#id29">Bugs Fixed</a></li>
+<li><a class="reference internal" href="#id30">Bugs Fixed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-1-1-0">Release 1.1.0</a><ul>
-<li><a class="reference internal" href="#id30">Features added</a></li>
-<li><a class="reference internal" href="#id31">Bugs fixed</a></li>
-<li><a class="reference internal" href="#id32">Behavior changes</a></li>
+<li><a class="reference internal" href="#id31">Features added</a></li>
+<li><a class="reference internal" href="#id32">Bugs fixed</a></li>
+<li><a class="reference internal" href="#id33">Behavior changes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-1-0-4">Release 1.0.4</a><ul>
-<li><a class="reference internal" href="#id33">Bugs Fixed</a></li>
+<li><a class="reference internal" href="#id34">Bugs Fixed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-1-0-3">Release 1.0.3</a><ul>
-<li><a class="reference internal" href="#id34">Features added</a></li>
-<li><a class="reference internal" href="#id35">Bugs fixed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#release-1-0-2-post1">Release 1.0.2.post1</a><ul>
+<li><a class="reference internal" href="#id35">Features added</a></li>
 <li><a class="reference internal" href="#id36">Bugs fixed</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#release-1-0-2-post1">Release 1.0.2.post1</a><ul>
+<li><a class="reference internal" href="#id37">Bugs fixed</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#release-1-0-2">Release 1.0.2</a><ul>
-<li><a class="reference internal" href="#id37">Features added</a></li>
+<li><a class="reference internal" href="#id38">Features added</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-1-0-1">Release 1.0.1</a><ul>
-<li><a class="reference internal" href="#id38">Features added</a></li>
-<li><a class="reference internal" href="#id39">Behavior changes</a></li>
-<li><a class="reference internal" href="#id40">Bug fixes</a></li>
+<li><a class="reference internal" href="#id39">Features added</a></li>
+<li><a class="reference internal" href="#id40">Behavior changes</a></li>
+<li><a class="reference internal" href="#id41">Bug fixes</a></li>
 </ul>
 </li>
 </ul>
