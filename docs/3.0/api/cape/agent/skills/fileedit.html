@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.agent.skills.fileedit: LLM-driven editing of allow-listed files &#8212; CAPE 3.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../../../_static/documentation_options.js?v=acc74ff5"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="icon" href="../../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="cape.agent.skills.fileread: LLM-driven reading of repo files" href="fileread.html" />
+    <link rel="prev" title="cape.agent.skills.cntlrunner: Run whitelisted Cntl methods" href="cntlrunner.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fileread.html" title="cape.agent.skills.fileread: LLM-driven reading of repo files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cntlrunner.html" title="cape.agent.skills.cntlrunner: Run whitelisted Cntl methods"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code>: Agent skills for the CAPE agent</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileedit</span></code>: LLM-driven editing of allow-listed files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-agent-skills-fileedit-llm-driven-editing-of-allow-listed-files">
+<span id="module-cape.agent.skills.fileedit"></span><h1><a class="reference internal" href="#module-cape.agent.skills.fileedit" title="cape.agent.skills.fileedit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileedit</span></code></a>: LLM-driven editing of allow-listed files<a class="headerlink" href="#cape-agent-skills-fileedit-llm-driven-editing-of-allow-listed-files" title="Link to this heading">¶</a></h1>
+<p>This module defines the built-in agent skill <code class="docutils literal notranslate"><span class="pre">&quot;file-editor&quot;</span></code>, which
+teaches the CAPE agent how to edit a restricted set of files in the
+repo in which the agent is launched.</p>
+<p>The skill provides three tools:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#cape.agent.skills.fileedit.list_editable_files" title="cape.agent.skills.fileedit.list_editable_files"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_editable_files()</span></code></a>: list the active allow-list patterns and
+the existing files that match them</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">read_file()</span></code>: read a file with line numbers (any repo file
+smaller than about 2 MB; provided by
+<a class="reference internal" href="fileread.html#module-cape.agent.skills.fileread" title="cape.agent.skills.fileread"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileread</span></code></a>)</p></li>
+<li><p><a class="reference internal" href="#cape.agent.skills.fileedit.edit_file" title="cape.agent.skills.fileedit.edit_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">edit_file()</span></code></a>: apply an exact-match search-and-replace edit to an
+allow-listed file, returning a unified diff of the change</p></li>
+</ul>
+<p>The <em>allow-list</em> restricts which files may be <em>edited</em>; it does not
+apply to reading, which is limited only by the repo root folder and the
+file-size limit of the <code class="docutils literal notranslate"><span class="pre">file-reader</span></code> skill (see
+<a class="reference internal" href="fileread.html#module-cape.agent.skills.fileread" title="cape.agent.skills.fileread"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileread</span></code></a>).</p>
+<p>The set of editable files (the <em>allow-list</em>) comes from three sources:</p>
+<ul class="simple">
+<li><p>the top-level <em>EditAllowList</em> option of the <code class="docutils literal notranslate"><span class="pre">cape-agent.json</span></code>
+file: a list of glob patterns relative to the repo root (see
+<a class="reference internal" href="../options/index.html#module-cape.agent.options" title="cape.agent.options"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.options</span></code></a>)</p></li>
+<li><p><a class="reference internal" href="../../../cfdx/cntl.html#cape.cfdx.cntl.Cntl.get_edit_allowlist" title="cape.cfdx.cntl.Cntl.get_edit_allowlist"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.cntl.Cntl.get_edit_allowlist()</span></code></a>, which allows the
+agent to edit the CAPE control JSON file itself</p></li>
+<li><p><code class="xref py py-data docutils literal notranslate"><span class="pre">cape.agent.agentcntl.EDIT_FILE_ALLOW_LIST</span></code>, a registry of
+file names that other skills (e.g. <code class="docutils literal notranslate"><span class="pre">fix-json</span></code>) append to at run
+time; this is the only route for files that cannot be read into a
+<em>Cntl</em> instance, such as a JSON file with a syntax error</p></li>
+</ul>
+<p>Note that <code class="xref py py-func docutils literal notranslate"><span class="pre">fnmatch.fnmatch()</span></code> is used for matching, so <code class="docutils literal notranslate"><span class="pre">&quot;*&quot;</span></code>
+matches folder separators as well; a pattern such as <code class="docutils literal notranslate"><span class="pre">&quot;tools/*.py&quot;</span></code>
+matches <code class="docutils literal notranslate"><span class="pre">tools/a/b.py</span></code> as well as <code class="docutils literal notranslate"><span class="pre">tools/a.py</span></code>.</p>
+<p>Every tool resolves any symlinks in the target file’s path and rejects
+files outside the repo root folder, regardless of the allow-list.</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.skills.fileedit.edit_file">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.skills.fileedit.</span></span><span class="sig-name descname"><span class="pre">edit_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">old</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.skills.fileedit.edit_file" title="Link to this definition">¶</a></dt>
+<dd><p>Replace one occurrence of <em>old</em> with <em>new</em> in an allow-listed file</p>
+<p>The text <em>old</em> must occur exactly once in the file; otherwise no
+edit is made. On success the result includes a unified diff of the
+change, truncated to <em>MAX_DIFF_CHARS</em> characters.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">edit_file</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to edit; must match the edit allow-list</p>
+</dd>
+<dt><em>old</em>: <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Exact text to search for; must occur exactly once</p>
+</dd>
+<dt><em>new</em>: <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Replacement text; may be <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> to delete the match</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>result</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Keys include <em>success</em>, <em>file</em>, and <em>diff</em></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.skills.fileedit.list_editable_files">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.skills.fileedit.</span></span><span class="sig-name descname"><span class="pre">list_editable_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.skills.fileedit.list_editable_files" title="Link to this definition">¶</a></dt>
+<dd><p>List the edit allow-list and the existing files that match it</p>
+<p>The allow-list combines the <em>EditAllowList</em> glob patterns from the
+<code class="docutils literal notranslate"><span class="pre">cape-agent.json</span></code> file, the files returned by
+<a class="reference internal" href="../../../cfdx/cntl.html#cape.cfdx.cntl.Cntl.get_edit_allowlist" title="cape.cfdx.cntl.Cntl.get_edit_allowlist"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.cntl.Cntl.get_edit_allowlist()</span></code></a> for the current CAPE
+control instance (if any), and files registered by other skills via
+<code class="xref py py-data docutils literal notranslate"><span class="pre">cape.agent.agentcntl.EDIT_FILE_ALLOW_LIST</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">list_editable_files</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>result</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Keys include <em>success</em>, <em>patterns</em>, <em>cntl_files</em>,
+<em>skill_files</em>, and <em>files</em> (existing files matching the
+patterns)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.skills.fileedit.register_editable_file">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.skills.fileedit.</span></span><span class="sig-name descname"><span class="pre">register_editable_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.skills.fileedit.register_editable_file" title="Link to this definition">¶</a></dt>
+<dd><p>Add a file to the session edit allow-list, for use by skills</p>
+<p>This is how other skills, e.g. <code class="docutils literal notranslate"><span class="pre">fix-json</span></code>, grant the agent edit
+access to a specific file that is not covered by the static
+<em>EditAllowList</em> patterns or by the <code class="docutils literal notranslate"><span class="pre">Cntl</span></code>-provided allow-list
+(for example a JSON file that cannot be read due to a syntax
+error). The file must be inside the repo root folder.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">register_editable_file</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to register, absolute or relative to the
+current folder</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>result</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Keys include <em>success</em>, <em>path</em> (resolved absolute path),
+<em>file</em> (name relative to the root folder), and <em>added</em>
+(<code class="docutils literal notranslate"><span class="pre">False</span></code> if already registered)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="cntlrunner.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.cntlrunner</span></code>: Run whitelisted <code class="docutils literal notranslate"><span class="pre">Cntl</span></code> methods</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="fileread.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileread</span></code>: LLM-driven reading of repo files</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/api/cape/agent/skills/fileedit.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fileread.html" title="cape.agent.skills.fileread: LLM-driven reading of repo files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cntlrunner.html" title="cape.agent.skills.cntlrunner: Run whitelisted Cntl methods"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code>: Agent skills for the CAPE agent</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileedit</span></code>: LLM-driven editing of allow-listed files</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

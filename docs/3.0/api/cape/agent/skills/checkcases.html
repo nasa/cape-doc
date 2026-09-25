@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.agent.skills.checkcases: Efficient case-status queries &#8212; CAPE 3.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../../../_static/documentation_options.js?v=acc74ff5"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="icon" href="../../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="cape.agent.skills.cntlrunner: Run whitelisted Cntl methods" href="cntlrunner.html" />
+    <link rel="prev" title="cape.agent.skills.skilltools: Skill activation tool" href="skilltools.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cntlrunner.html" title="cape.agent.skills.cntlrunner: Run whitelisted Cntl methods"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="skilltools.html" title="cape.agent.skills.skilltools: Skill activation tool"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code>: Agent skills for the CAPE agent</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.checkcases</span></code>: Efficient case-status queries</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-agent-skills-checkcases-efficient-case-status-queries">
+<span id="module-cape.agent.skills.checkcases"></span><h1><a class="reference internal" href="#module-cape.agent.skills.checkcases" title="cape.agent.skills.checkcases"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.checkcases</span></code></a>: Efficient case-status queries<a class="headerlink" href="#cape-agent-skills-checkcases-efficient-case-status-queries" title="Link to this heading">¶</a></h1>
+<p>This module defines the built-in agent skill <code class="docutils literal notranslate"><span class="pre">&quot;check-cases&quot;</span></code>, which
+teaches the CAPE agent how to use the full capability of the <code class="docutils literal notranslate"><span class="pre">cape</span>
+<span class="pre">check</span></code> command (<a class="reference internal" href="../../../cfdx/cli.html#cape.cfdx.cli.cape_c" title="cape.cfdx.cli.cape_c"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.cli.cape_c()</span></code></a>) efficiently.</p>
+<p>The fixed <code class="docutils literal notranslate"><span class="pre">cape_c</span></code> tool exposes only <em>f</em>, <em>I</em>, and <em>add_cols</em>, so
+every call computes the default columns (including <code class="docutils literal notranslate"><span class="pre">status</span></code>,
+<code class="docutils literal notranslate"><span class="pre">progress</span></code>, <code class="docutils literal notranslate"><span class="pre">queue</span></code>, and <code class="docutils literal notranslate"><span class="pre">cpu-hours</span></code>), which are the most
+expensive ones. The skill’s <a class="reference internal" href="#cape.agent.skills.checkcases.cape_check" title="cape.agent.skills.checkcases.cape_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape_check()</span></code></a> tool exposes explicit
+column and counter selection and the full set of case-subset filters
+so the agent computes only what the user’s question needs.</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.skills.checkcases.cape_check">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.skills.checkcases.</span></span><span class="sig-name descname"><span class="pre">cape_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.skills.checkcases.cape_check" title="Link to this definition">¶</a></dt>
+<dd><p>Check case status with explicit column and counter selection</p>
+<p>This wraps <a class="reference internal" href="../../../cfdx/cli.html#cape.cfdx.cli.cape_c" title="cape.cfdx.cli.cape_c"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.cli.cape_c()</span></code></a> after translating a few
+agent-friendly inputs: comma-separated strings for <em>cols</em>,
+<em>counters</em>, and <em>hide_cols</em> are split into lists, and an empty
+string for <em>counters</em> becomes an empty list (disabling all
+counter output).</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">cape_check</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>a</em>: <a class="reference internal" href="../../../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></dt><dd><p>Positional arguments passed to the CAPE CLI function</p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Keyword arguments passed to the CAPE CLI function</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>result</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Wrapped CLI result</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="skilltools.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.skilltools</span></code>: Skill activation tool</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="cntlrunner.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.cntlrunner</span></code>: Run whitelisted <code class="docutils literal notranslate"><span class="pre">Cntl</span></code> methods</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/api/cape/agent/skills/checkcases.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cntlrunner.html" title="cape.agent.skills.cntlrunner: Run whitelisted Cntl methods"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="skilltools.html" title="cape.agent.skills.skilltools: Skill activation tool"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code>: Agent skills for the CAPE agent</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.checkcases</span></code>: Efficient case-status queries</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.agent.tools.toolutils: Common functions for CAPE tool usage &#8212; CAPE 3.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../../../_static/documentation_options.js?v=acc74ff5"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="icon" href="../../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="cape.agent.skills: Agent skills for the CAPE agent" href="../skills/index.html" />
+    <link rel="prev" title="cape.agent.tools.cfdxtools: CAPE CLI tools for cape.agent" href="cfdxtools.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../skills/index.html" title="cape.agent.skills: Agent skills for the CAPE agent"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cfdxtools.html" title="cape.agent.tools.cfdxtools: CAPE CLI tools for cape.agent"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.tools</span></code>: Tools exposed to the CAPE agent</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.tools.toolutils</span></code>: Common functions for CAPE tool usage</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-agent-tools-toolutils-common-functions-for-cape-tool-usage">
+<span id="module-cape.agent.tools.toolutils"></span><h1><a class="reference internal" href="#module-cape.agent.tools.toolutils" title="cape.agent.tools.toolutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.tools.toolutils</span></code></a>: Common functions for CAPE tool usage<a class="headerlink" href="#cape-agent-tools-toolutils-common-functions-for-cape-tool-usage" title="Link to this heading">¶</a></h1>
+<p>This module provides a function <a class="reference internal" href="#cape.agent.tools.toolutils.wrap_cli" title="cape.agent.tools.toolutils.wrap_cli"><code class="xref py py-func docutils literal notranslate"><span class="pre">wrap_cli()</span></code></a> that places several
+preprocessing, protection, and postprocessing steps around a tool call
+eminated by an LLM.</p>
+<p>This includes normalizing the arguments, e.g. replacing the string
+<code class="docutils literal notranslate"><span class="pre">&quot;true&quot;</span></code> with the Python value <code class="docutils literal notranslate"><span class="pre">True</span></code>, removing any keyword
+arguments set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, capturing STDOUT, and more.</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.agent.tools.toolutils.Tee">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.agent.tools.toolutils.</span></span><span class="sig-name descname"><span class="pre">Tee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">streams</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.agent.tools.toolutils.Tee" title="Link to this definition">¶</a></dt>
+<dd><p>Class to simultaneously capture and display STDOUT</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tee</span> <span class="o">=</span> <span class="n">Tee</span><span class="p">(</span><span class="o">*</span><span class="n">streams</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>streams</em>: <a class="reference internal" href="../../../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">io.IOBase</span></code>]</dt><dd><p>List of streams to capture/display</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.tools.toolutils.normalize_kwargs">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.tools.toolutils.</span></span><span class="sig-name descname"><span class="pre">normalize_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.tools.toolutils.normalize_kwargs" title="Link to this definition">¶</a></dt>
+<dd><p>Filter keyword args to tool, removing <code class="docutils literal notranslate"><span class="pre">''</span></code> and <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kw_tool</span> <span class="o">=</span> <span class="n">normalize_kwargs</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>kw</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Keyword args created by LLM tool caller</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>kw_tool</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Modified <em>kw</em> as such:</p>
+<ul class="simple">
+<li><p>String conversion: <code class="docutils literal notranslate"><span class="pre">&quot;true&quot;</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p>Remove keys set to <code class="docutils literal notranslate"><span class="pre">None</span></code> after normalization</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.tools.toolutils.normalize_tool_arg">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.tools.toolutils.</span></span><span class="sig-name descname"><span class="pre">normalize_tool_arg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.agent.tools.toolutils.normalize_tool_arg" title="Link to this definition">¶</a></dt>
+<dd><p>Normalize strings of special values to Pythonic values</p>
+<p>E.g. <code class="docutils literal notranslate"><span class="pre">&quot;null&quot;</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.tools.toolutils.register_module_tools">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.tools.toolutils.</span></span><span class="sig-name descname"><span class="pre">register_module_tools</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.agent.tools.toolutils.register_module_tools" title="Link to this definition">¶</a></dt>
+<dd><p>Register <code class="docutils literal notranslate"><span class="pre">TOOL_SCHEMAS</span></code> and <code class="docutils literal notranslate"><span class="pre">TOOLS</span></code> to calling module</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">register_module_tools</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>params</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary of parameter definitiosn for use in this tool set</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.tools.toolutils.wrap_cli">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.tools.toolutils.</span></span><span class="sig-name descname"><span class="pre">wrap_cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.tools.toolutils.wrap_cli" title="Link to this definition">¶</a></dt>
+<dd><p>Run a CAPE command-line tool through <a class="reference internal" href="../../../cfdx/cli.html#module-cape.cfdx.cli" title="cape.cfdx.cli"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.cli</span></code></a></p>
+<p>This performs several preprocessing, error handling, and
+postprocessing steps. The output of this function includes the
+results of the underlying function and appends the returncode. It
+also captures STDOUT and appends that to the result</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">wrap_cli</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>func</em>: <strong>callable</strong></dt><dd><p>A function to be wrapped</p>
+</dd>
+<dt><em>a</em>: <a class="reference internal" href="../../../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></dt><dd><p>Args passed into <em>func</em> after preprocessing</p>
+</dd>
+<dt><em>kw</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Keyword args passed into <em>func</em> after preprocessing</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>result</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Results of code; includes keys <em>result</em>, <em>success</em>,
+<em>returncode</em>, and <em>stdout</em></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="cfdxtools.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.tools.cfdxtools</span></code>: CAPE CLI tools for <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code></a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../skills/index.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code>: Agent skills for the CAPE agent</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/api/cape/agent/tools/toolutils.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../skills/index.html" title="cape.agent.skills: Agent skills for the CAPE agent"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cfdxtools.html" title="cape.agent.tools.cfdxtools: CAPE CLI tools for cape.agent"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.tools</span></code>: Tools exposed to the CAPE agent</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.tools.toolutils</span></code>: Common functions for CAPE tool usage</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

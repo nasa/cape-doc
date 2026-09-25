@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.agent.agentcntl: Controller class for CAPE agent &#8212; CAPE 3.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../../_static/documentation_options.js?v=acc74ff5"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.agent.agenttui: Textual interface for CAPE agent" href="agenttui.html" />
+    <link rel="prev" title="cape.agent: Agentic interface to CAPE" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="agenttui.html" title="cape.agent.agenttui: Textual interface for CAPE agent"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.agent: Agentic interface to CAPE"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.agentcntl</span></code>: Controller class for CAPE agent</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-agent-agentcntl-controller-class-for-cape-agent">
+<span id="module-cape.agent.agentcntl"></span><h1><a class="reference internal" href="#module-cape.agent.agentcntl" title="cape.agent.agentcntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.agentcntl</span></code></a>: Controller class for CAPE agent<a class="headerlink" href="#cape-agent-agentcntl-controller-class-for-cape-agent" title="Link to this heading">¶</a></h1>
+<p>This module provdes the class <a class="reference internal" href="#cape.agent.agentcntl.AgentCntl" title="cape.agent.agentcntl.AgentCntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">AgentCntl</span></code></a> which serves as an
+object-oriented interface to the CAPE agentic capability and interface.
+Most of the actual agent loop, including passing user responses on to
+an external LLM and processing the results, is implemented by methods of
+<a class="reference internal" href="#cape.agent.agentcntl.AgentCntl" title="cape.agent.agentcntl.AgentCntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">AgentCntl</span></code></a>.</p>
+<p>The module-level list <code class="xref py py-data docutils literal notranslate"><span class="pre">EDIT_FILE_ALLOW_LIST</span></code> is a registry of
+POSIX-style file names, relative to the folder in which the agent is
+launched, that skills may append to at run time (e.g. the <code class="docutils literal notranslate"><span class="pre">fix-json</span></code>
+skill registers the file the user asked to repair). The
+<a class="reference internal" href="skills/fileedit.html#module-cape.agent.skills.fileedit" title="cape.agent.skills.fileedit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileedit</span></code></a> module merges these names into its
+edit allow-list in addition to its own static patterns and the files
+provided by <a class="reference internal" href="../../cfdx/cntl.html#cape.cfdx.cntl.Cntl.get_edit_allowlist" title="cape.cfdx.cntl.Cntl.get_edit_allowlist"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.cntl.Cntl.get_edit_allowlist()</span></code></a>.</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.agent.agentcntl.</span></span><span class="sig-name descname"><span class="pre">AgentCntl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl" title="Link to this definition">¶</a></dt>
+<dd><p>Controller class for the CAPE agentic interface</p>
+<p>This class implements the agent loop behind <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">--agentic</span></code>:
+reading user input, passing messages to an external LLM server,
+and processing any tool calls in its response. The tools and
+skills exposed to the LLM are filtered based on the options for
+the model in use (see <a class="reference internal" href="options/index.html#module-cape.agent.options" title="cape.agent.options"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.options</span></code></a>); user skills are
+discovered from the folder in which the agent is launched (see
+<a class="reference internal" href="skills/index.html#module-cape.agent.skills" title="cape.agent.skills"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code></a>).</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cntl</span> <span class="o">=</span> <span class="n">AgentCntl</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of CAPE-agentic JSON file (defaults to
+<code class="docutils literal notranslate"><span class="pre">&quot;cape-agent.json&quot;</span></code>)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>cntl</em>: <a class="reference internal" href="#cape.agent.agentcntl.AgentCntl" title="cape.agent.agentcntl.AgentCntl"><code class="xref py py-class docutils literal notranslate"><span class="pre">AgentCntl</span></code></a></dt><dd><p>Controller for the CAPE agent loop</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.RootDir">
+<span class="sig-name descname"><span class="pre">RootDir</span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.RootDir" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+Root folder for this controller</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.activate_skill_tools">
+<span class="sig-name descname"><span class="pre">activate_skill_tools</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#tuple" title="tuple"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.activate_skill_tools" title="Link to this definition">¶</a></dt>
+<dd><p>Activate tools belonging to one available skill</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.base_url">
+<span class="sig-name descname"><span class="pre">base_url</span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.base_url" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+Base URL of LLM server’s OpenAI-compatible API</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.client">
+<span class="sig-name descname"><span class="pre">client</span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.client" title="Link to this definition">¶</a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">openai.OpenAI</span></code>
+Client interface to LLM server</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.fdir">
+<span class="sig-name descname"><span class="pre">fdir</span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.fdir" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+Folder in which JSON file is located, relative to root dir</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.fname">
+<span class="sig-name descname"><span class="pre">fname</span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.fname" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+JSON file name (follows links if necessary) rel. to root dir</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.history">
+<span class="sig-name descname"><span class="pre">history</span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.history" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>] | <code class="docutils literal notranslate"><span class="pre">None</span></code>
+Message history for current conversation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.launch_cli_task">
+<span class="sig-name descname"><span class="pre">launch_cli_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">messages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmdlist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.launch_cli_task" title="Link to this definition">¶</a></dt>
+<dd><p>Launch a typed command as a background task</p>
+<p>Runs <em>cmdlist</em> as a background task and records the launch in
+the conversation history.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.launch_tool_task">
+<span class="sig-name descname"><span class="pre">launch_tool_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.launch_tool_task" title="Link to this definition">¶</a></dt>
+<dd><p>Launch a tool call as a background task</p>
+<p>Returns the tool’s immediate result; its full result is
+delivered as a follow-up message when the task completes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.model" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+Name of LLM model currently in use</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.reap_tasks">
+<span class="sig-name descname"><span class="pre">reap_tasks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">section_handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.reap_tasks" title="Link to this definition">¶</a></dt>
+<dd><p>Notify user and history of completed background tasks</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.run_agent">
+<span class="sig-name descname"><span class="pre">run_agent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spinner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#bool" title="bool"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capture_subprocess</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#bool" title="bool"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section_handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.run_agent" title="Link to this definition">¶</a></dt>
+<dd><p>Run one pass of model with multi-round tool calling</p>
+<p>Run one user turn with up to <em>MaxToolCallLoops</em> rounds of tool
+calls. This allows the agent to chain tool calls, e.g., calling
+<code class="xref py py-func docutils literal notranslate"><span class="pre">cape_find()</span></code> followed by <code class="xref py py-func docutils literal notranslate"><span class="pre">cape_c()</span></code> with the results from
+the first call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Inputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>user_message</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>User prompt or direct command</p>
+</dd>
+<dt><em>spinner</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Show the readline thinking spinner; Textual supplies its own</p>
+</dd>
+<dt><em>capture_subprocess</em>: {<code class="docutils literal notranslate"><span class="pre">False</span></code>} | <code class="docutils literal notranslate"><span class="pre">True</span></code></dt><dd><p>Pipe direct system-command output through <code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code></p>
+</dd>
+<dt><em>section_handler</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | callable</dt><dd><p>Optional presentation hook called at the start and end of
+reasoning and tool sections</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>result</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Counts of tool calls and failures for this turn</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.tasks">
+<span class="sig-name descname"><span class="pre">tasks</span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.tasks" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bgtasks.BackgroundTask</span></code>]
+Background tasks launched during this session</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentCntl.use_skill">
+<span class="sig-name descname"><span class="pre">use_skill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentCntl.use_skill" title="Link to this definition">¶</a></dt>
+<dd><p>Load an available skill and activate the tools it provides</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.agent.agentcntl.</span></span><span class="sig-name descname"><span class="pre">AgentResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">returncode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.agent.agentcntl.AgentResult" title="Link to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentResult.result">
+<span class="sig-name descname"><span class="pre">result</span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentResult.result" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.AgentResult.returncode">
+<span class="sig-name descname"><span class="pre">returncode</span></span><a class="headerlink" href="#cape.agent.agentcntl.AgentResult.returncode" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.genr8_image_message">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.agentcntl.</span></span><span class="sig-name descname"><span class="pre">genr8_image_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.agentcntl.genr8_image_message" title="Link to this definition">¶</a></dt>
+<dd><p>Build a user message carrying image content for the model</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">msg</span> <span class="o">=</span> <span class="n">genr8_image_message</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>images</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></dt><dd><p>Image entries from a tool result; each item is either a
+<a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> with <em>url</em> (and optional <em>case</em>/<em>file</em>) or a
+bare data-URL <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>msg</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Multimodal user message for the chat API</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.genr8_system_prompt">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.agentcntl.</span></span><span class="sig-name descname"><span class="pre">genr8_system_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skills</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tools</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.agent.agentcntl.genr8_system_prompt" title="Link to this definition">¶</a></dt>
+<dd><p>Build the system prompt, listing available agent skills</p>
+<p>Tool-specific guidance (e.g. for <code class="docutils literal notranslate"><span class="pre">cape_find</span></code> or <code class="docutils literal notranslate"><span class="pre">view_subfig</span></code>)
+is included only when the corresponding tool is exposed to the
+model, and available skills are listed at the end.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prompt</span> <span class="o">=</span> <span class="n">genr8_system_prompt</span><span class="p">(</span><span class="n">skills</span><span class="p">,</span> <span class="n">tools</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>skills</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="skills/skillbase.html#cape.agent.skills.skillbase.Skill" title="cape.agent.skills.skillbase.Skill"><code class="xref py py-class docutils literal notranslate"><span class="pre">skills.skillbase.Skill</span></code></a>]</dt><dd><p>Map of skill names to skill definitions</p>
+</dd>
+<dt><em>tools</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Map of tool names exposed to the model</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>prompt</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>System prompt for the LLM</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.get_reasoning_text">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.agentcntl.</span></span><span class="sig-name descname"><span class="pre">get_reasoning_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.agent.agentcntl.get_reasoning_text" title="Link to this definition">¶</a></dt>
+<dd><p>Get normalized reasoning text from a completion message</p>
+<dl class="field-list simple">
+<dt class="field-odd">Inputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>message</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></dt><dd><p>Chat-completion response message</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>text</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Reasoning text, or an empty string when none was exposed</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.show_reasoning">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.agentcntl.</span></span><span class="sig-name descname"><span class="pre">show_reasoning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#bool" title="bool"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#bool" title="bool"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#cape.agent.agentcntl.show_reasoning" title="Link to this definition">¶</a></dt>
+<dd><p>Display post-response reasoning content when available</p>
+<p>This uses the nonstandard <code class="docutils literal notranslate"><span class="pre">reasoning</span></code> field exposed by current vLLM
+servers, with <code class="docutils literal notranslate"><span class="pre">reasoning_content</span></code> as a fallback for older compatible
+servers. The OpenAI Python client keeps unknown response fields as model
+extras, so <code class="xref py py-func docutils literal notranslate"><span class="pre">getattr()</span></code> works even when the installed SDK does not
+declare either field.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">shown</span> <span class="o">=</span> <span class="n">show_reasoning</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>message</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></dt><dd><p>Chat-completion response message</p>
+</dd>
+<dt><em>framed</em>: {<code class="docutils literal notranslate"><span class="pre">True</span></code>} | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Print the classic prompt and horizontal rules</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>shown</em>: <a class="reference internal" href="../../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></dt><dd><p>Whether nonempty reasoning content was displayed</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.start_response">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.agentcntl.</span></span><span class="sig-name descname"><span class="pre">start_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Agent:</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">txt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.agent.agentcntl.start_response" title="Link to this definition">¶</a></dt>
+<dd><p>Produce the header at the start of agent’s actual response</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">start_response</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>title</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Section title, diplayed purple as <code class="docutils literal notranslate"><span class="pre">f&quot;[{title}]&quot;</span></code></p>
+</dd>
+<dt><em>txt</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional text after section title</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.agentcntl.start_section">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.agentcntl.</span></span><span class="sig-name descname"><span class="pre">start_section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">txt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.agent.agentcntl.start_section" title="Link to this definition">¶</a></dt>
+<dd><p>Produce the header at the start of a section, non-TUI</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">start_section</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>title</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Section title, diplayed purple as <code class="docutils literal notranslate"><span class="pre">f&quot;[{title}]&quot;</span></code></p>
+</dd>
+<dt><em>txt</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Optional text after section title</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="agenttui.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.agenttui</span></code>: Textual interface for CAPE agent</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/cape/agent/agentcntl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="agenttui.html" title="cape.agent.agenttui: Textual interface for CAPE agent"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.agent: Agentic interface to CAPE"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.agentcntl</span></code>: Controller class for CAPE agent</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.agent.skills: Agent skills for the CAPE agent &#8212; CAPE 3.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../../../_static/documentation_options.js?v=acc74ff5"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="icon" href="../../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="cape.agent.skills.skillbase: Core skill definition and discovery" href="skillbase.html" />
+    <link rel="prev" title="cape.agent.tools.toolutils: Common functions for CAPE tool usage" href="../tools/toolutils.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="skillbase.html" title="cape.agent.skills.skillbase: Core skill definition and discovery"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../tools/toolutils.html" title="cape.agent.tools.toolutils: Common functions for CAPE tool usage"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code>: Agent skills for the CAPE agent</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.agent.skills">
+<span id="cape-agent-skills-agent-skills-for-the-cape-agent"></span><h1><a class="reference internal" href="#module-cape.agent.skills" title="cape.agent.skills"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code></a>: Agent skills for the CAPE agent<a class="headerlink" href="#module-cape.agent.skills" title="Link to this heading">¶</a></h1>
+<p>This package collects the <em>agent skills</em> available to the CAPE agent.
+A skill is a documented workflow that tells the agent how and when to
+use certain tools and how to chain tool calls together. Skills come
+from two sources:</p>
+<p><em>Built-in skills</em> are defined in this package, alongside any tools they
+provide (see <a class="reference internal" href="cntlrunner.html#module-cape.agent.skills.cntlrunner" title="cape.agent.skills.cntlrunner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.cntlrunner</span></code></a>).</p>
+<p><em>User skills</em> are discovered from <code class="docutils literal notranslate"><span class="pre">.agents/skills/&lt;NAME&gt;/SKILL.md</span></code>
+files in the folder in which the user launches the agent (see
+<a class="reference internal" href="skillbase.html#cape.agent.skills.skillbase.discover_user_skills" title="cape.agent.skills.skillbase.discover_user_skills"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.agent.skills.skillbase.discover_user_skills()</span></code></a>).</p>
+<p>Skills are gated by the <em>SkillSet</em> option of the model in use (see
+<a class="reference internal" href="../options/modelopts.html#module-cape.agent.options.modelopts" title="cape.agent.options.modelopts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.options.modelopts</span></code></a>), and activated by the agent using
+the <code class="docutils literal notranslate"><span class="pre">use_skill</span></code> tool (see <a class="reference internal" href="skilltools.html#module-cape.agent.skills.skilltools" title="cape.agent.skills.skilltools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.skilltools</span></code></a>).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.agent.skills.Skill">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.agent.skills.</span></span><span class="sig-name descname"><span class="pre">Skill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tools</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#list" title="list"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.agent.skills.Skill" title="Link to this definition">¶</a></dt>
+<dd><p>Definition of an agent skill, from code or a <code class="docutils literal notranslate"><span class="pre">SKILL.md</span></code> file</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">skill</span> <span class="o">=</span> <span class="n">Skill</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>name</em>: <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Short name of the skill, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;cntl-runner&quot;</span></code></p>
+</dd>
+<dt><em>description</em>: <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>One-line summary shown in the skill listing</p>
+</dd>
+<dt><em>content</em>: <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Full Markdown instructions for the agent</p>
+</dd>
+<dt><em>tools</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Names of tools this skill provides, if any</p>
+</dd>
+<dt><em>fname</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file skill was read from, if any</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>skill</em>: <a class="reference internal" href="#cape.agent.skills.Skill" title="cape.agent.skills.Skill"><code class="xref py py-class docutils literal notranslate"><span class="pre">Skill</span></code></a></dt><dd><p>Definition of one agent skill</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.skills.Skill.content">
+<span class="sig-name descname"><span class="pre">content</span></span><a class="headerlink" href="#cape.agent.skills.Skill.content" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+Full Markdown instructions for the agent</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.skills.Skill.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#cape.agent.skills.Skill.description" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+One-line summary shown in the skill listing</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.skills.Skill.fname">
+<span class="sig-name descname"><span class="pre">fname</span></span><a class="headerlink" href="#cape.agent.skills.Skill.fname" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code>
+Name of file skill was read from, if any</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.agent.skills.Skill.from_defn">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_defn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">defn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.agent.skills.Skill.from_defn" title="Link to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference internal" href="#cape.agent.skills.Skill" title="cape.agent.skills.Skill"><code class="xref py py-class docutils literal notranslate"><span class="pre">Skill</span></code></a> from a dictionary definition</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">skill</span> <span class="o">=</span> <span class="n">Skill</span><span class="o">.</span><span class="n">from_defn</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">defn</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>name</em>: <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Short name of the skill</p>
+</dd>
+<dt><em>defn</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Dictionary with at least <em>description</em> and <em>content</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>skill</em>: <a class="reference internal" href="#cape.agent.skills.Skill" title="cape.agent.skills.Skill"><code class="xref py py-class docutils literal notranslate"><span class="pre">Skill</span></code></a></dt><dd><p>Definition of one agent skill</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.skills.Skill.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#cape.agent.skills.Skill.name" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+Short name of the skill</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.skills.Skill.tools">
+<span class="sig-name descname"><span class="pre">tools</span></span><a class="headerlink" href="#cape.agent.skills.Skill.tools" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]
+Names of tools this skill provides, if any</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.skills.discover_user_skills">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.skills.</span></span><span class="sig-name descname"><span class="pre">discover_user_skills</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.skills.discover_user_skills" title="Link to this definition">¶</a></dt>
+<dd><p>Discover user skills from an <code class="docutils literal notranslate"><span class="pre">.agents/skills/</span></code> folder</p>
+<p>Scans <code class="docutils literal notranslate"><span class="pre">&lt;rootdir&gt;/.agents/skills/&lt;NAME&gt;/SKILL.md</span></code> and reads every
+valid skill file. Malformed files are skipped with a warning.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user_skills</span> <span class="o">=</span> <span class="n">discover_user_skills</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>rootdir</em>: <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Folder in which the agent was launched</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>user_skills</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference internal" href="#cape.agent.skills.Skill" title="cape.agent.skills.Skill"><code class="xref py py-class docutils literal notranslate"><span class="pre">Skill</span></code></a>]</dt><dd><p>Map of skill names to skill definitions</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2026-09-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.skills.read_skillfile">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.skills.</span></span><span class="sig-name descname"><span class="pre">read_skillfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="skillbase.html#cape.agent.skills.skillbase.Skill" title="cape.agent.skills.skillbase.Skill"><span class="pre">Skill</span></a></span></span><a class="headerlink" href="#cape.agent.skills.read_skillfile" title="Link to this definition">¶</a></dt>
+<dd><p>Read an agent skill definition from a <code class="docutils literal notranslate"><span class="pre">SKILL.md</span></code> file</p>
+<p>The file must start with a YAML front matter section delimited by
+<code class="docutils literal notranslate"><span class="pre">---</span></code> lines, containing at least <em>name</em> and <em>description</em>. The
+remainder of the file is Markdown instructions for the agent.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">skill</span> <span class="o">=</span> <span class="n">read_skillfile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of <code class="docutils literal notranslate"><span class="pre">SKILL.md</span></code> file to read</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>skill</em>: <a class="reference internal" href="#cape.agent.skills.Skill" title="cape.agent.skills.Skill"><code class="xref py py-class docutils literal notranslate"><span class="pre">Skill</span></code></a></dt><dd><p>Definition of one agent skill</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><a class="reference internal" href="../../../python.html#ValueError" title="ValueError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a></dt><dd><p>If <em>fname</em> has no valid front matter or is missing a
+required key</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Versions<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>2026-09-01 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="skillbase.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.skillbase</span></code>: Core skill definition and discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skilltools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.skilltools</span></code>: Skill activation tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkcases.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.checkcases</span></code>: Efficient case-status queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cntlrunner.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.cntlrunner</span></code>: Run whitelisted <code class="docutils literal notranslate"><span class="pre">Cntl</span></code> methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileedit.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileedit</span></code>: LLM-driven editing of allow-listed files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileread.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileread</span></code>: LLM-driven reading of repo files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fixjson.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fixjson</span></code>: Diagnose and repair invalid JSON files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usertools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.usertools</span></code>: Discover and run repo scripts</a></li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../tools/toolutils.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.tools.toolutils</span></code>: Common functions for CAPE tool usage</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="skillbase.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.skillbase</span></code>: Core skill definition and discovery</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/api/cape/agent/skills/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="skillbase.html" title="cape.agent.skills.skillbase: Core skill definition and discovery"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../tools/toolutils.html" title="cape.agent.tools.toolutils: Common functions for CAPE tool usage"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code>: Agent skills for the CAPE agent</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

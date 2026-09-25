@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.ui Readline-based user interface to CAPE &#8212; CAPE 3.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../../_static/documentation_options.js?v=acc74ff5"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.promptutils: Useful tools for interactive CLI prompts" href="promptutils.html" />
+    <link rel="prev" title="cape.agent.skills.usertools: Discover and run repo scripts" href="../agent/skills/usertools.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="promptutils.html" title="cape.promptutils: Useful tools for interactive CLI prompts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../agent/skills/usertools.html" title="cape.agent.skills.usertools: Discover and run repo scripts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.ui</span></code> Readline-based user interface to CAPE</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-ui-readline-based-user-interface-to-cape">
+<span id="module-cape.ui"></span><h1><a class="reference internal" href="#module-cape.ui" title="cape.ui"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.ui</span></code></a> Readline-based user interface to CAPE<a class="headerlink" href="#cape-ui-readline-based-user-interface-to-cape" title="Link to this heading">¶</a></h1>
+<p>This class provides an interactive interface for the main CAPE tools
+(that is, running CFD) without major third-party dependencies. This
+simplified CAPE UI is launched using</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>ui
+</pre></div>
+</div>
+<p>There are two main applications to using this user interface:</p>
+<ol class="arabic">
+<li><p><strong>Targeted tab-completion</strong></p>
+<p>The user interface provides CAPE-aware tab completions based on
+details of the CLI defined in <a class="reference internal" href="../../cfdx/cli.html#module-cape.cfdx.cli" title="cape.cfdx.cli"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.cli</span></code></a>, including</p>
+<ul class="simple">
+<li><p>inferring the sub-command such as <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">extend</span></code>, <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">run</span></code>,
+etc. (see <code class="xref py py-attr docutils literal notranslate"><span class="pre">cape.cfdx.cli.CfdxFrontDesk._cmdlist</span></code>);</p></li>
+<li><p>knowledge of which options are available for each sub-command
+(for example <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">edit-json</span> <span class="pre">-</span></code> and <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">c</span> <span class="pre">-</span></code> will have
+different tab-completion suggestions);</p></li>
+<li><p>knowledge of which options expect file names.</p></li>
+</ul>
+</li>
+<li><p><strong>Dedicated history</strong></p>
+<p>The CAPE UI maintains a separate history file so that users can
+recall previous commands using the “UP” arrow key.</p>
+</li>
+</ol>
+<p>While using the CAPE UI pseudo-shell, users will still be able to run
+non-CAPE commands, though in that case tab-completion may not be as
+smart as the native shell.</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.ui.main">
+<span class="sig-prename descclassname"><span class="pre">cape.ui.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#type" title="type"><span class="pre">type</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../python.html#int" title="int"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cape.ui.main" title="Link to this definition">¶</a></dt>
+<dd><p>Main interactive UI function</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ierr</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">main</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cls</em>: <a class="reference internal" href="../../python.html#type" title="type"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></dt><dd><p><a class="reference internal" href="../argread.html#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.argread.ArgReader</span></code></a> subtype, for completions</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>ierr</em>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Return code</p>
+</dd>
+<dt><em>result</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Information about results of commands run</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="promptutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.promptutils</span></code>: Useful tools for interactive CLI prompts</a></li>
+</ul>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../agent/skills/usertools.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.usertools</span></code>: Discover and run repo scripts</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="promptutils.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.promptutils</span></code>: Useful tools for interactive CLI prompts</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/cape/ui/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="promptutils.html" title="cape.promptutils: Useful tools for interactive CLI prompts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../agent/skills/usertools.html" title="cape.agent.skills.usertools: Discover and run repo scripts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.ui</span></code> Readline-based user interface to CAPE</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

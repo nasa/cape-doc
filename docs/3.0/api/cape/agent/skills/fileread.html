@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.agent.skills.fileread: LLM-driven reading of repo files &#8212; CAPE 3.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../../../_static/documentation_options.js?v=acc74ff5"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="icon" href="../../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="cape.agent.skills.fixjson: Diagnose and repair invalid JSON files" href="fixjson.html" />
+    <link rel="prev" title="cape.agent.skills.fileedit: LLM-driven editing of allow-listed files" href="fileedit.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fixjson.html" title="cape.agent.skills.fixjson: Diagnose and repair invalid JSON files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fileedit.html" title="cape.agent.skills.fileedit: LLM-driven editing of allow-listed files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code>: Agent skills for the CAPE agent</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileread</span></code>: LLM-driven reading of repo files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-agent-skills-fileread-llm-driven-reading-of-repo-files">
+<span id="module-cape.agent.skills.fileread"></span><h1><a class="reference internal" href="#module-cape.agent.skills.fileread" title="cape.agent.skills.fileread"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileread</span></code></a>: LLM-driven reading of repo files<a class="headerlink" href="#cape-agent-skills-fileread-llm-driven-reading-of-repo-files" title="Link to this heading">¶</a></h1>
+<p>This module defines the built-in agent skill <code class="docutils literal notranslate"><span class="pre">&quot;file-reader&quot;</span></code>, which
+teaches the CAPE agent how to read any text file in the repo in which
+the agent is launched, subject to a file-size limit of about 2 MB
+(<em>MAX_READ_BYTES</em>).  Editing files is deliberately out of scope here;
+it is restricted by the allow-list of the <code class="docutils literal notranslate"><span class="pre">file-editor</span></code> skill (see
+<a class="reference internal" href="fileedit.html#module-cape.agent.skills.fileedit" title="cape.agent.skills.fileedit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileedit</span></code></a>).</p>
+<p>The skill provides one tool:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#cape.agent.skills.fileread.read_file" title="cape.agent.skills.fileread.read_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_file()</span></code></a>: read a file with line numbers, truncating large
+files to their first and last lines</p></li>
+</ul>
+<p>This module also hosts the path-resolution helpers
+<code class="xref py py-func docutils literal notranslate"><span class="pre">get_rootdir()</span></code> and <a class="reference internal" href="#cape.agent.skills.fileread.resolve_fname" title="cape.agent.skills.fileread.resolve_fname"><code class="xref py py-func docutils literal notranslate"><span class="pre">resolve_fname()</span></code></a>, which are shared with
+<a class="reference internal" href="fileedit.html#module-cape.agent.skills.fileedit" title="cape.agent.skills.fileedit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileedit</span></code></a>.</p>
+<p>Every tool resolves any symlinks in the target file’s path and rejects
+files outside the repo root folder.</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.skills.fileread.read_file">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.skills.fileread.</span></span><span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.skills.fileread.read_file" title="Link to this definition">¶</a></dt>
+<dd><p>Read a repo file, prefixing each line with its number</p>
+<p>The file must be inside the repo root folder and no larger than
+<em>MAX_READ_BYTES</em>.  Large files are truncated to the first
+<em>HEAD_LINES</em> and last <em>TAIL_LINES</em> lines.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">read_file</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>fname</em>: <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of file to read; must be inside the repo root folder
+and smaller than 2 MB</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>result</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Keys include <em>success</em>, <em>file</em>, <em>n_lines</em>, <em>content</em>, and
+<em>truncated</em></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.skills.fileread.resolve_fname">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.skills.fileread.</span></span><span class="sig-name descname"><span class="pre">resolve_fname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../../python.html#tuple" title="tuple"><span class="pre">tuple</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.skills.fileread.resolve_fname" title="Link to this definition">¶</a></dt>
+<dd><p>Resolve a file name and check that it is inside the root folder</p>
+<p>Returns a tuple <code class="docutils literal notranslate"><span class="pre">(fabs,</span> <span class="pre">relname)</span></code> with the resolved absolute path
+and the POSIX-style name relative to the root folder, or an error
+<a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> with <code class="docutils literal notranslate"><span class="pre">&quot;success&quot;:</span> <span class="pre">False</span></code>.</p>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="fileedit.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileedit</span></code>: LLM-driven editing of allow-listed files</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="fixjson.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fixjson</span></code>: Diagnose and repair invalid JSON files</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/api/cape/agent/skills/fileread.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fixjson.html" title="cape.agent.skills.fixjson: Diagnose and repair invalid JSON files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fileedit.html" title="cape.agent.skills.fileedit: LLM-driven editing of allow-listed files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code>: Agent skills for the CAPE agent</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fileread</span></code>: LLM-driven reading of repo files</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.agent.bgtasks: Background tasks for the CAPE agent &#8212; CAPE 3.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../../_static/documentation_options.js?v=acc74ff5"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.agent.options: Options for CAPE agentic" href="options/index.html" />
+    <link rel="prev" title="cape.agent.agentutils: Extra utilities for agentic interface" href="agentutils.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="options/index.html" title="cape.agent.options: Options for CAPE agentic"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="agentutils.html" title="cape.agent.agentutils: Extra utilities for agentic interface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.bgtasks</span></code>: Background tasks for the CAPE agent</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-agent-bgtasks-background-tasks-for-the-cape-agent">
+<span id="module-cape.agent.bgtasks"></span><h1><a class="reference internal" href="#module-cape.agent.bgtasks" title="cape.agent.bgtasks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.bgtasks</span></code></a>: Background tasks for the CAPE agent<a class="headerlink" href="#cape-agent-bgtasks-background-tasks-for-the-cape-agent" title="Link to this heading">¶</a></h1>
+<p>This module provides background task support for the CAPE agentic
+interface (see <a class="reference internal" href="agentcntl.html#module-cape.agent.agentcntl" title="cape.agent.agentcntl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.agentcntl</span></code></a>). A <em>background task</em> is a
+CAPE command, such as <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">report</span> <span class="pre">-I</span> <span class="pre">100:150</span></code>, that is run in a
+child process so that the interactive agent session can continue with
+other work. The main session checks for completed tasks each time it
+displays a new prompt.</p>
+<p>Two kinds of background task are supported:</p>
+<ul class="simple">
+<li><p><strong>CLI tasks</strong> are full command lines, for example when a user
+types <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">report</span> <span class="pre">-I</span> <span class="pre">100:150</span> <span class="pre">&amp;</span></code> at the agent prompt. The
+trailing <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> requests backgrounding, following the usual shell
+convention.</p></li>
+<li><p><strong>Tool tasks</strong> are agent tool calls, e.g. <code class="docutils literal notranslate"><span class="pre">cape_report()</span></code> with
+its <em>background</em> option set. These are run by a child copy of
+this module (<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">cape.agent.bgtasks</span></code>) so that the full
+tool result is once again available when the task finishes.</p></li>
+</ul>
+<p>Each task redirects STDOUT and STDERR to a log file in the task folder
+(<code class="docutils literal notranslate"><span class="pre">&lt;CacheDir&gt;/agent-tasks/</span></code> by default, where <em>CacheDir</em> is from the
+CAPE user configuration), has no STDIN, and is launched in its own
+session so that Ctrl-C in the main session does not interrupt it.
+Note that tasks share the file system with the main session; users
+should avoid running a background task and a foreground command on the
+same cases at the same time.</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.BackgroundTask">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.agent.bgtasks.</span></span><span class="sig-name descname"><span class="pre">BackgroundTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#int" title="int"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmdlist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tool_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.agent.bgtasks.BackgroundTask" title="Link to this definition">¶</a></dt>
+<dd><p>Record and process handle of one background task</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">task</span> <span class="o">=</span> <span class="n">BackgroundTask</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">cmdlist</span><span class="p">,</span> <span class="n">tool_name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>task_id</em>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Task ID for this session, starting at <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt><em>cmdlist</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Command being run by the child process</p>
+</dd>
+<dt><em>tool_name</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of agent tool being run; <code class="docutils literal notranslate"><span class="pre">None</span></code> for CLI tasks</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>task</em>: <a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackgroundTask</span></code></a></dt><dd><p>Record of one background task</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.BackgroundTask.cmdlist">
+<span class="sig-name descname"><span class="pre">cmdlist</span></span><a class="headerlink" href="#cape.agent.bgtasks.BackgroundTask.cmdlist" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]
+Command being run by the child process</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.BackgroundTask.describe">
+<span class="sig-name descname"><span class="pre">describe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.agent.bgtasks.BackgroundTask.describe" title="Link to this definition">¶</a></dt>
+<dd><p>Create a short text description of this task</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.BackgroundTask.logfile">
+<span class="sig-name descname"><span class="pre">logfile</span></span><a class="headerlink" href="#cape.agent.bgtasks.BackgroundTask.logfile" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+Log file receiving the task’s STDOUT and STDERR</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.BackgroundTask.poll">
+<span class="sig-name descname"><span class="pre">poll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#int" title="int"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#cape.agent.bgtasks.BackgroundTask.poll" title="Link to this definition">¶</a></dt>
+<dd><p>Check exit status, <code class="docutils literal notranslate"><span class="pre">None</span></code> if still running</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.BackgroundTask.proc">
+<span class="sig-name descname"><span class="pre">proc</span></span><a class="headerlink" href="#cape.agent.bgtasks.BackgroundTask.proc" title="Link to this definition">¶</a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">subprocess.Popen</span></code>
+Child process running this task</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.BackgroundTask.reaped">
+<span class="sig-name descname"><span class="pre">reaped</span></span><a class="headerlink" href="#cape.agent.bgtasks.BackgroundTask.reaped" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>
+Whether this task has exited and been processed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.BackgroundTask.resultfile">
+<span class="sig-name descname"><span class="pre">resultfile</span></span><a class="headerlink" href="#cape.agent.bgtasks.BackgroundTask.resultfile" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code>
+JSON file of tool results; <code class="docutils literal notranslate"><span class="pre">None</span></code> for CLI tasks</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.BackgroundTask.specfile">
+<span class="sig-name descname"><span class="pre">specfile</span></span><a class="headerlink" href="#cape.agent.bgtasks.BackgroundTask.specfile" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code>
+JSON file defining a tool task; <code class="docutils literal notranslate"><span class="pre">None</span></code> for CLI tasks</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.BackgroundTask.t0">
+<span class="sig-name descname"><span class="pre">t0</span></span><a class="headerlink" href="#cape.agent.bgtasks.BackgroundTask.t0" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>
+Time at which this task was launched</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.BackgroundTask.task_id">
+<span class="sig-name descname"><span class="pre">task_id</span></span><a class="headerlink" href="#cape.agent.bgtasks.BackgroundTask.task_id" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>
+Task ID for this session, starting at <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.BackgroundTask.tool_name">
+<span class="sig-name descname"><span class="pre">tool_name</span></span><a class="headerlink" href="#cape.agent.bgtasks.BackgroundTask.tool_name" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code>
+Name of agent tool being run; <code class="docutils literal notranslate"><span class="pre">None</span></code> for CLI tasks</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.format_completion_note">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.bgtasks.</span></span><span class="sig-name descname"><span class="pre">format_completion_note</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><span class="pre">BackgroundTask</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.agent.bgtasks.format_completion_note" title="Link to this definition">¶</a></dt>
+<dd><p>Format a terminal note for a completed task</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">note</span> <span class="o">=</span> <span class="n">format_completion_note</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>task</em>: <a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackgroundTask</span></code></a></dt><dd><p>Record of the completed task</p>
+</dd>
+<dt><em>result</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Tool-style result of the task</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>note</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Note to display to the user</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.format_history_record">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.bgtasks.</span></span><span class="sig-name descname"><span class="pre">format_history_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><span class="pre">BackgroundTask</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.agent.bgtasks.format_history_record" title="Link to this definition">¶</a></dt>
+<dd><p>Format a history record for a completed task</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">record</span> <span class="o">=</span> <span class="n">format_history_record</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>task</em>: <a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackgroundTask</span></code></a></dt><dd><p>Record of the completed task</p>
+</dd>
+<dt><em>result</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Tool-style result of the task</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>record</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Message to append to the conversation history</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.format_launch_note">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.bgtasks.</span></span><span class="sig-name descname"><span class="pre">format_launch_note</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><span class="pre">BackgroundTask</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.agent.bgtasks.format_launch_note" title="Link to this definition">¶</a></dt>
+<dd><p>Format a terminal note for a newly launched task</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">note</span> <span class="o">=</span> <span class="n">format_launch_note</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>task</em>: <a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackgroundTask</span></code></a></dt><dd><p>Record of the new task</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>note</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Note to display to the user</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.get_task_dir">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.bgtasks.</span></span><span class="sig-name descname"><span class="pre">get_task_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.agent.bgtasks.get_task_dir" title="Link to this definition">¶</a></dt>
+<dd><p>Get the folder for task logs, creating it if necessary</p>
+<p>By default this is <code class="docutils literal notranslate"><span class="pre">agent-tasks/</span></code> inside the CAPE <em>CacheDir</em>,
+but it can be overridden by setting the module-level <em>TASK_DIR</em>.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">taskdir</span> <span class="o">=</span> <span class="n">get_task_dir</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Outputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>taskdir</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of folder for background task files</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.launch_cli_task">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.bgtasks.</span></span><span class="sig-name descname"><span class="pre">launch_cli_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#int" title="int"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmdlist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><span class="pre">BackgroundTask</span></a></span></span><a class="headerlink" href="#cape.agent.bgtasks.launch_cli_task" title="Link to this definition">¶</a></dt>
+<dd><p>Launch a command line as a background task</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">task</span> <span class="o">=</span> <span class="n">launch_cli_task</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">cmdlist</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>task_id</em>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Task ID for this session, starting at <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt><em>cmdlist</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Command to run in the child process</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>task</em>: <a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackgroundTask</span></code></a></dt><dd><p>Record of the newly launched task</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.launch_tool_task">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.bgtasks.</span></span><span class="sig-name descname"><span class="pre">launch_tool_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#int" title="int"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tool_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><span class="pre">BackgroundTask</span></a></span></span><a class="headerlink" href="#cape.agent.bgtasks.launch_tool_task" title="Link to this definition">¶</a></dt>
+<dd><p>Launch an agent tool call as a background task</p>
+<p>The tool is run by a child copy of this module (see <a class="reference internal" href="#cape.agent.bgtasks.main" title="cape.agent.bgtasks.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">main()</span></code></a>)
+so that the full tool result is written to a JSON file and
+recovered by the main session once the task completes.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">task</span> <span class="o">=</span> <span class="n">launch_tool_task</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">tool_name</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>task_id</em>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Task ID for this session, starting at <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt><em>tool_name</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of agent tool, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;cape_report&quot;</span></code></p>
+</dd>
+<dt><em>kwargs</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Keyword arguments to the tool</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>task</em>: <a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackgroundTask</span></code></a></dt><dd><p>Record of the newly launched task</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.main">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.bgtasks.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#int" title="int"><span class="pre">int</span></a></span></span><a class="headerlink" href="#cape.agent.bgtasks.main" title="Link to this definition">¶</a></dt>
+<dd><p>Run one agent tool from a JSON spec file</p>
+<p>This is the entry point used by child processes created by
+<a class="reference internal" href="#cape.agent.bgtasks.launch_tool_task" title="cape.agent.bgtasks.launch_tool_task"><code class="xref py py-func docutils literal notranslate"><span class="pre">launch_tool_task()</span></code></a>; it runs the tool and writes its result
+to the JSON file named in the spec.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ierr</span> <span class="o">=</span> <span class="n">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>argv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Command-line args, the last of which is the spec file;
+defaults to <code class="docutils literal notranslate"><span class="pre">sys.argv[1:]</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>ierr</em>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Return code of the tool call</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.poll_finished">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.bgtasks.</span></span><span class="sig-name descname"><span class="pre">poll_finished</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a></span></span><a class="headerlink" href="#cape.agent.bgtasks.poll_finished" title="Link to this definition">¶</a></dt>
+<dd><p>Check for newly completed background tasks</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">finished</span> <span class="o">=</span> <span class="n">poll_finished</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>tasks</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackgroundTask</span></code></a>]</dt><dd><p>List of tasks launched during this session</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>finished</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>]</dt><dd><p>Newly completed <code class="docutils literal notranslate"><span class="pre">(task,</span> <span class="pre">result)</span></code> pairs; <em>result</em> is a
+<a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> in the style of a normal tool result</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.bgtasks.read_task_result">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.bgtasks.</span></span><span class="sig-name descname"><span class="pre">read_task_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><span class="pre">BackgroundTask</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">returncode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.bgtasks.read_task_result" title="Link to this definition">¶</a></dt>
+<dd><p>Assemble a tool-style result dict for a completed task</p>
+<p>For tool tasks the result written by the child process is read
+back; for other tasks (or a tool task whose child died early) a
+result is synthesized from the exit code and a tail of the log
+file.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">read_task_result</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">returncode</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>task</em>: <a class="reference internal" href="#cape.agent.bgtasks.BackgroundTask" title="cape.agent.bgtasks.BackgroundTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackgroundTask</span></code></a></dt><dd><p>Record of the completed task</p>
+</dd>
+<dt><em>returncode</em>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Exit status of the child process</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>result</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Tool-style result, including <em>success</em> and <em>returncode</em></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="agentutils.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.agentutils</span></code>: Extra utilities for agentic interface</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="options/index.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.options</span></code>: Options for CAPE agentic</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/cape/agent/bgtasks.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="options/index.html" title="cape.agent.options: Options for CAPE agentic"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="agentutils.html" title="cape.agent.agentutils: Extra utilities for agentic interface"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.bgtasks</span></code>: Background tasks for the CAPE agent</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

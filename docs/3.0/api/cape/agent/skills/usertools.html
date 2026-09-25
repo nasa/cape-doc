@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.agent.skills.usertools: Discover and run repo scripts &#8212; CAPE 3.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../../../_static/documentation_options.js?v=acc74ff5"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="icon" href="../../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="cape.ui Readline-based user interface to CAPE" href="../../ui/index.html" />
+    <link rel="prev" title="cape.agent.skills.fixjson: Diagnose and repair invalid JSON files" href="fixjson.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../ui/index.html" title="cape.ui Readline-based user interface to CAPE"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fixjson.html" title="cape.agent.skills.fixjson: Diagnose and repair invalid JSON files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code>: Agent skills for the CAPE agent</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.usertools</span></code>: Discover and run repo scripts</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-agent-skills-usertools-discover-and-run-repo-scripts">
+<span id="module-cape.agent.skills.usertools"></span><h1><a class="reference internal" href="#module-cape.agent.skills.usertools" title="cape.agent.skills.usertools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.usertools</span></code></a>: Discover and run repo scripts<a class="headerlink" href="#cape-agent-skills-usertools-discover-and-run-repo-scripts" title="Link to this heading">¶</a></h1>
+<p>This module defines the built-in agent skill <code class="docutils literal notranslate"><span class="pre">&quot;user-tools&quot;</span></code>, which
+teaches the CAPE agent how to use customized scripts the user has placed
+in the <code class="docutils literal notranslate"><span class="pre">tools/</span></code> folder of the repo in which the agent is launched.</p>
+<p>Many CAPE-based repos accumulate local scripts that extend CAPE’s
+built-in capabilities, e.g. scripts to restart failed adaptations or
+gather surface data. Such scripts are ordinary Python files with an
+<code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">&quot;__main__&quot;:</span></code> block, usually with a help message
+available from <code class="docutils literal notranslate"><span class="pre">-h</span></code> or <code class="docutils literal notranslate"><span class="pre">--help</span></code>.</p>
+<p>The skill provides two tools:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#cape.agent.skills.usertools.discover_user_tools" title="cape.agent.skills.usertools.discover_user_tools"><code class="xref py py-func docutils literal notranslate"><span class="pre">discover_user_tools()</span></code></a>: scan the tools folder for executable
+scripts (those with a <code class="docutils literal notranslate"><span class="pre">__main__</span></code> guard) and extract a one-line
+description from each script’s docstring</p></li>
+<li><p><a class="reference internal" href="#cape.agent.skills.usertools.run_user_tool" title="cape.agent.skills.usertools.run_user_tool"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_user_tool()</span></code></a>: run one of the discovered scripts with
+user-provided command-line arguments</p></li>
+</ul>
+<p>Scripts are run using the same Python executable as the agent itself,
+so they import the same CAPE installation, and with the repo root as
+the working folder so relative file names (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;pyFun.json&quot;</span></code>)
+resolve as they would if the user ran the script from the repo root.</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.skills.usertools.discover_user_tools">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.skills.usertools.</span></span><span class="sig-name descname"><span class="pre">discover_user_tools</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#bool" title="bool"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.skills.usertools.discover_user_tools" title="Link to this definition">¶</a></dt>
+<dd><p>Discover executable scripts in the repo’s tools folder</p>
+<p>Scans <code class="docutils literal notranslate"><span class="pre">&lt;ROOT_DIR&gt;/&lt;TOOL_DIR_NAME&gt;/</span></code> for Python scripts (top-level
+only; subfolders are not scanned) containing an
+<code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">&quot;__main__&quot;:</span></code> block. Files whose name starts with
+an underscore (including <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>) are skipped. Results are
+cached for the rest of the agent session unless <em>refresh</em> is true.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">discover_user_tools</span><span class="p">(</span><span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>refresh</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | {<code class="docutils literal notranslate"><span class="pre">False</span></code>} | <code class="docutils literal notranslate"><span class="pre">None</span></code></dt><dd><p>Rescan even if tools were already discovered</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>result</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Keys include <em>success</em>, <em>tooldir</em>, and <em>tools</em>: a list of
+dicts with <em>name</em>, <em>file</em>, and <em>description</em> for each
+discovered script</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2026-09-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.agent.skills.usertools.run_user_tool">
+<span class="sig-prename descclassname"><span class="pre">cape.agent.skills.usertools.</span></span><span class="sig-name descname"><span class="pre">run_user_tool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#list" title="list"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../python.html#int" title="int"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.agent.skills.usertools.run_user_tool" title="Link to this definition">¶</a></dt>
+<dd><p>Run a script from the repo’s tools folder</p>
+<p>The script must have been discovered by <a class="reference internal" href="#cape.agent.skills.usertools.discover_user_tools" title="cape.agent.skills.usertools.discover_user_tools"><code class="xref py py-func docutils literal notranslate"><span class="pre">discover_user_tools()</span></code></a>
+(discovery runs automatically if it has not been). The script’s
+<code class="docutils literal notranslate"><span class="pre">__main__</span></code> guard is re-validated before running. The script is
+executed with the same Python executable as the CAPE agent and with
+the repo root folder as the working directory.</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">run_user_tool</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>name</em>: <a class="reference internal" href="../../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of a discovered script, with or without <code class="docutils literal notranslate"><span class="pre">&quot;.py&quot;</span></code></p>
+</dd>
+<dt><em>argv</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></dt><dd><p>Command-line arguments to the script, e.g.
+<code class="docutils literal notranslate"><span class="pre">[&quot;-I&quot;,</span> <span class="pre">&quot;1:5&quot;,</span> <span class="pre">&quot;--force&quot;]</span></code>; use <code class="docutils literal notranslate"><span class="pre">[&quot;--help&quot;]</span></code> to show
+the script’s own help message</p>
+</dd>
+<dt><em>timeout</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Maximum seconds to wait for the script</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>result</em>: <a class="reference internal" href="../../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Keys include <em>success</em> (<code class="docutils literal notranslate"><span class="pre">True</span></code> only if return code is 0),
+<em>returncode</em>, <em>stdout</em>, and <em>argv</em></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2026-09-02 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="fixjson.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.fixjson</span></code>: Diagnose and repair invalid JSON files</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../../ui/index.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.ui</span></code> Readline-based user interface to CAPE</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/api/cape/agent/skills/usertools.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../ui/index.html" title="cape.ui Readline-based user interface to CAPE"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fixjson.html" title="cape.agent.skills.fixjson: Diagnose and repair invalid JSON files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent</span></code>: Agentic interface to CAPE</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills</span></code>: Agent skills for the CAPE agent</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.agent.skills.usertools</span></code>: Discover and run repo scripts</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

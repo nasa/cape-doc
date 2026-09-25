@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.tui.tuiapp: Textual app for the CAPE terminal UI &#8212; CAPE 3.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../../_static/documentation_options.js?v=acc74ff5"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.tui.tuiutils: Render helpers for the CAPE TUI" href="tuiutils.html" />
+    <link rel="prev" title="cape.tui Textual-based user interface to CAPE" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tuiutils.html" title="cape.tui.tuiutils: Render helpers for the CAPE TUI"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.tui Textual-based user interface to CAPE"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui</span></code> Textual-based user interface to CAPE</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui.tuiapp</span></code>: Textual app for the CAPE terminal UI</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-tui-tuiapp-textual-app-for-the-cape-terminal-ui">
+<span id="module-cape.tui.tuiapp"></span><h1><a class="reference internal" href="#module-cape.tui.tuiapp" title="cape.tui.tuiapp"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui.tuiapp</span></code></a>: Textual app for the CAPE terminal UI<a class="headerlink" href="#cape-tui-tuiapp-textual-app-for-the-cape-terminal-ui" title="Link to this heading">¶</a></h1>
+<p>This module contains the OpenCode-style terminal user interface to
+CAPE, built on the optional <code class="docutils literal notranslate"><span class="pre">textual</span></code> package. It provides, in one
+persistent app with a scroll log and a pinned command composer:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>In-process CAPE commands</strong></dt><dd><p>Commands starting with <code class="docutils literal notranslate"><span class="pre">cape</span></code>, <code class="docutils literal notranslate"><span class="pre">pycart</span></code>, <code class="docutils literal notranslate"><span class="pre">pyfun</span></code>, etc. run
+in-process using <a class="reference internal" href="../../cfdx/cli.html#cape.cfdx.cli.main" title="cape.cfdx.cli.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.cli.main()</span></code></a> in a worker thread,
+with their output streamed into the scroll log.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>External commands</strong></dt><dd><p>Any other command runs as a subprocess in its own process group;
+its combined output is streamed into the scroll log.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Tab completion</strong></dt><dd><p>Pressing TAB in the editor completes the current word using the
+same <code class="xref py py-class docutils literal notranslate"><span class="pre">cape.ui.promptutils.CfdxCompleter</span></code> logic as
+<a class="reference internal" href="../ui/index.html#module-cape.ui" title="cape.ui"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.ui</span></code></a>, plus TUI meta-commands. Multiple matches appear
+in a selectable box immediately above the editor.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Ctrl-C / ESC interrupts</strong></dt><dd><p>Pressing Ctrl-C (or ESC) while a command is running interrupts
+it. External commands receive <code class="docutils literal notranslate"><span class="pre">SIGINT</span></code> in their process group;
+in-process CAPE commands get a <code class="xref py py-class docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code>
+injected into their worker thread. With nothing running, Ctrl-C
+clears the editor.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Prompt bridge</strong></dt><dd><p>Interactive prompts raised by commands (via
+<a class="reference internal" href="../promptutils.html#cape.promptutils.prompt_color" title="cape.promptutils.prompt_color"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.promptutils.prompt_color()</span></code></a>) mount as clickable widgets
+in the stream. Answering with Ctrl-C aborts the command.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>TUI meta-commands</strong></dt><dd><p>Commands starting with <code class="docutils literal notranslate"><span class="pre">:</span></code> are handled by the TUI itself:
+<code class="docutils literal notranslate"><span class="pre">:help</span></code> [&lt;cmd&gt;], <code class="docutils literal notranslate"><span class="pre">:history</span></code> [&lt;n&gt;], <code class="docutils literal notranslate"><span class="pre">:!N</span></code>, <code class="docutils literal notranslate"><span class="pre">:status</span></code>,
+<code class="docutils literal notranslate"><span class="pre">:cd</span></code> &lt;dir&gt; (plain <code class="docutils literal notranslate"><span class="pre">cd</span></code> also works), <code class="docutils literal notranslate"><span class="pre">:pwd</span></code>, <code class="docutils literal notranslate"><span class="pre">:clear</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">:exit</span></code> / <code class="docutils literal notranslate"><span class="pre">:quit</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>OpenCode-style chrome</strong></dt><dd><p>Dark command composer, context and command discovery below the
+prompt, a live spinner while a command runs, and backgrounded
+command bubbles in the scroll log. Ctrl-P opens the command picker;
+clicking a blue command chevron folds or expands its output.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Text selection</strong></dt><dd><p>Dragging the mouse over log or editor text highlights it, and
+releasing copies the selection to the system clipboard (OSC 52),
+like OpenCode.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>History (loaded from and saved to the CAPE TUI history file) is
+recalled with the up/down arrow keys.</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiApp">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.tui.tuiapp.</span></span><span class="sig-name descname"><span class="pre">CapeTuiApp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#type" title="type"><span class="pre">type</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">histfile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiApp" title="Link to this definition">¶</a></dt>
+<dd><p>OpenCode-style CAPE terminal user interface</p>
+<p>A scroll log plus a pinned command composer. Commands run in
+worker threads: CAPE CLI commands in-process with redirected
+<code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code>/<code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stderr</span></code>, other commands as
+subprocesses in their own process group. Interactive prompts mount
+clickable widgets above the editor while the worker waits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>_log</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">textual.widgets.RichLog</span></code></dt><dd><p>Scroll log of commands and output</p>
+</dd>
+<dt><em>_input</em>: <a class="reference internal" href="#cape.tui.tuiapp.ComposerTextArea" title="cape.tui.tuiapp.ComposerTextArea"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComposerTextArea</span></code></a></dt><dd><p>Command editor</p>
+</dd>
+<dt><em>_status</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">textual.widgets.Static</span></code></dt><dd><p>One-line status bar below the composer</p>
+</dd>
+<dt><em>_prompt_widget</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">textual.widget.Widget</span></code></dt><dd><p>Currently mounted interactive prompt, if any</p>
+</dd>
+<dt><em>_completer</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="#cape.tui.tuiapp.CapeTuiCompleter" title="cape.tui.tuiapp.CapeTuiCompleter"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeTuiCompleter</span></code></a></dt><dd><p>Tab-completer for the editor</p>
+</dd>
+<dt><em>_proc</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">subprocess.Popen</span></code></dt><dd><p>Currently running external command, if any</p>
+</dd>
+<dt><em>_worker</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></dt><dd><p>Currently running command’s worker thread, if any</p>
+</dd>
+<dt><em>_running_cmd</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text of the command currently running, if any</p>
+</dd>
+<dt><em>_histfile</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of the command history file</p>
+</dd>
+<dt><em>_json_files</em>: <a class="reference internal" href="../../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Successfully loaded JSON files, least to most recently used</p>
+</dd>
+<dt><em>_last_json_file</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Most recently used JSON file</p>
+</dd>
+<dt><em>_last_json_display_file</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Most recent JSON file relative to its controller’s root</p>
+</dd>
+<dt><em>_history</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Session command history (oldest first)</p>
+</dd>
+<dt><em>_hist_ix</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Index being browsed during history recall, if any</p>
+</dd>
+<dt><em>_hist_draft</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Editor text saved when history browsing started</p>
+</dd>
+<dt><em>_stats</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Session statistics (<code class="docutils literal notranslate"><span class="pre">commands</span></code>, <code class="docutils literal notranslate"><span class="pre">failures</span></code>, etc.)</p>
+</dd>
+<dt><em>_t0_cmd</em>: <a class="reference internal" href="../../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Start time of the running command</p>
+</dd>
+<dt><em>_t0_session</em>: <a class="reference internal" href="../../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></dt><dd><p>Start time of the session</p>
+</dd>
+<dt><em>_spin_ix</em>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Current frame of the busy spinner</p>
+</dd>
+<dt><em>_spin_timer</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">textual.timer.Timer</span></code></dt><dd><p>Timer advancing the busy spinner</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiApp.BINDINGS">
+<span class="sig-name descname"><span class="pre">BINDINGS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[Binding(key='ctrl+d',</span> <span class="pre">action='quit',</span> <span class="pre">description='Quit',</span> <span class="pre">show=False,</span> <span class="pre">key_display=None,</span> <span class="pre">priority=True,</span> <span class="pre">tooltip='',</span> <span class="pre">id=None,</span> <span class="pre">system=False,</span> <span class="pre">group=None),</span> <span class="pre">Binding(key='ctrl+c',</span> <span class="pre">action='interrupt',</span> <span class="pre">description='Interrupt',</span> <span class="pre">show=False,</span> <span class="pre">key_display=None,</span> <span class="pre">priority=True,</span> <span class="pre">tooltip='',</span> <span class="pre">id=None,</span> <span class="pre">system=False,</span> <span class="pre">group=None),</span> <span class="pre">Binding(key='escape',</span> <span class="pre">action='interrupt',</span> <span class="pre">description='Interrupt',</span> <span class="pre">show=False,</span> <span class="pre">key_display=None,</span> <span class="pre">priority=True,</span> <span class="pre">tooltip='',</span> <span class="pre">id=None,</span> <span class="pre">system=False,</span> <span class="pre">group=None),</span> <span class="pre">Binding(key='tab',</span> <span class="pre">action='tab_complete',</span> <span class="pre">description='Complete',</span> <span class="pre">show=False,</span> <span class="pre">key_display=None,</span> <span class="pre">priority=True,</span> <span class="pre">tooltip='',</span> <span class="pre">id=None,</span> <span class="pre">system=False,</span> <span class="pre">group=None),</span> <span class="pre">Binding(key='up',</span> <span class="pre">action='history_prev',</span> <span class="pre">description='Previous</span> <span class="pre">command',</span> <span class="pre">show=False,</span> <span class="pre">key_display=None,</span> <span class="pre">priority=True,</span> <span class="pre">tooltip='',</span> <span class="pre">id=None,</span> <span class="pre">system=False,</span> <span class="pre">group=None),</span> <span class="pre">Binding(key='down',</span> <span class="pre">action='history_next',</span> <span class="pre">description='Next</span> <span class="pre">command',</span> <span class="pre">show=False,</span> <span class="pre">key_display=None,</span> <span class="pre">priority=True,</span> <span class="pre">tooltip='',</span> <span class="pre">id=None,</span> <span class="pre">system=False,</span> <span class="pre">group=None),</span> <span class="pre">Binding(key='enter',</span> <span class="pre">action='submit_input',</span> <span class="pre">description='Submit',</span> <span class="pre">show=False,</span> <span class="pre">key_display=None,</span> <span class="pre">priority=True,</span> <span class="pre">tooltip='',</span> <span class="pre">id=None,</span> <span class="pre">system=False,</span> <span class="pre">group=None),</span> <span class="pre">Binding(key='shift+enter',</span> <span class="pre">action='insert_newline',</span> <span class="pre">description='New</span> <span class="pre">line',</span> <span class="pre">show=False,</span> <span class="pre">key_display=None,</span> <span class="pre">priority=True,</span> <span class="pre">tooltip='',</span> <span class="pre">id=None,</span> <span class="pre">system=False,</span> <span class="pre">group=None),</span> <span class="pre">Binding(key='ctrl+p',</span> <span class="pre">action='command_palette',</span> <span class="pre">description='Commands',</span> <span class="pre">show=False,</span> <span class="pre">key_display=None,</span> <span class="pre">priority=True,</span> <span class="pre">tooltip='',</span> <span class="pre">id=None,</span> <span class="pre">system=False,</span> <span class="pre">group=None)]</span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiApp.BINDINGS" title="Link to this definition">¶</a></dt>
+<dd><p>The default key bindings.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiApp.CSS">
+<span class="sig-name descname"><span class="pre">CSS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\n</span>&#160;&#160;&#160; <span class="pre">Screen</span> <span class="pre">&gt;</span> <span class="pre">.screen--selection</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">background:</span> <span class="pre">#264f78;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">color:</span> <span class="pre">#ffffff;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">App,</span> <span class="pre">#body,</span> <span class="pre">RichLog</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">background:</span> <span class="pre">#0d0d0d;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">color:</span> <span class="pre">#d6d6d6;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">#body</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">height:</span> <span class="pre">100%;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">RichLog</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">height:</span> <span class="pre">1fr;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">padding:</span> <span class="pre">1</span> <span class="pre">2</span> <span class="pre">0</span> <span class="pre">2;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">scrollbar-color:</span> <span class="pre">#343434;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">scrollbar-color-hover:</span> <span class="pre">#565f89;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">#suggestions</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">display:</span> <span class="pre">none;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">width:</span> <span class="pre">64;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">max-width:</span> <span class="pre">90%;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">height:</span> <span class="pre">auto;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">max-height:</span> <span class="pre">9;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">margin:</span> <span class="pre">0</span> <span class="pre">2;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">padding:</span> <span class="pre">0</span> <span class="pre">1;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">background:</span> <span class="pre">#202020;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">border-left:</span> <span class="pre">solid</span> <span class="pre">#7aa2f7;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">color:</span> <span class="pre">#d6d6d6;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">#suggestions</span> <span class="pre">&gt;</span> <span class="pre">.option-list--option-highlighted</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">background:</span> <span class="pre">#343a48;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">#composer</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">height:</span> <span class="pre">auto;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">min-height:</span> <span class="pre">4;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">max-height:</span> <span class="pre">6;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">margin:</span> <span class="pre">0</span> <span class="pre">2;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">padding:</span> <span class="pre">1</span> <span class="pre">1</span> <span class="pre">0</span> <span class="pre">1;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">background:</span> <span class="pre">#202020;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">border-left:</span> <span class="pre">solid</span> <span class="pre">#7aa2f7;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">#composer.busy</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">border-left:</span> <span class="pre">solid</span> <span class="pre">#ff9e64;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">#prompt-input</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">height:</span> <span class="pre">1;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">min-height:</span> <span class="pre">1;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">max-height:</span> <span class="pre">3;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">border:</span> <span class="pre">none;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">background:</span> <span class="pre">transparent;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">color:</span> <span class="pre">#eeeeee;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">padding:</span> <span class="pre">0;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">scrollbar-size-vertical:</span> <span class="pre">0;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">scrollbar-size-horizontal:</span> <span class="pre">0;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">#composer-hint</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">height:</span> <span class="pre">1;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">color:</span> <span class="pre">#858585;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">#status-bar</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">height:</span> <span class="pre">2;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">margin:</span> <span class="pre">0</span> <span class="pre">2;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">padding:</span> <span class="pre">0</span> <span class="pre">0</span> <span class="pre">1</span> <span class="pre">0;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">background:</span> <span class="pre">#0d0d0d;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">color:</span> <span class="pre">#888888;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">'</span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiApp.CSS" title="Link to this definition">¶</a></dt>
+<dd><p>Inline CSS, useful for quick scripts. This is loaded after CSS_PATH,
+and therefore takes priority in the event of a specificity clash.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiApp.action_command_palette">
+<span class="sig-name descname"><span class="pre">action_command_palette</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiApp.action_command_palette" title="Link to this definition">¶</a></dt>
+<dd><p>Open a picker for built-in TUI commands (Ctrl-P).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiApp.action_insert_newline">
+<span class="sig-name descname"><span class="pre">action_insert_newline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiApp.action_insert_newline" title="Link to this definition">¶</a></dt>
+<dd><p>Insert a literal newline without submitting the editor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiApp.action_interrupt">
+<span class="sig-name descname"><span class="pre">action_interrupt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiApp.action_interrupt" title="Link to this definition">¶</a></dt>
+<dd><p>Interrupt the running command, or clear the editor</p>
+<p>External commands run in their own process group and are sent
+<code class="docutils literal notranslate"><span class="pre">SIGINT</span></code>; in-process CAPE commands get a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code> injected into the worker thread.
+With nothing running, the editor is cleared.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiApp.action_submit_input">
+<span class="sig-name descname"><span class="pre">action_submit_input</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiApp.action_submit_input" title="Link to this definition">¶</a></dt>
+<dd><p>Accept a completion or submit the current editor contents.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiApp.action_tab_complete">
+<span class="sig-name descname"><span class="pre">action_tab_complete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiApp.action_tab_complete" title="Link to this definition">¶</a></dt>
+<dd><p>Complete the word left of the cursor (TAB action)</p>
+<p>Completions come from <a class="reference internal" href="#cape.tui.tuiapp.CapeTuiCompleter" title="cape.tui.tuiapp.CapeTuiCompleter"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeTuiCompleter</span></code></a>. A unique
+match is inserted directly; multiple matches open a picker
+directly above the command editor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiApp.check_action">
+<span class="sig-name descname"><span class="pre">check_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#bool" title="bool"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiApp.check_action" title="Link to this definition">¶</a></dt>
+<dd><p>Check whether an action is enabled.</p>
+<p>Implement this method to add logic for [dynamic actions](/guide/actions#dynamic-actions) / bindings.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>action: The name of an action.
+parameters: A tuple of any action parameters.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt><cite>True</cite> if the action is enabled+visible,</dt><dd><p><cite>False</cite> if the action is disabled+hidden,
+<cite>None</cite> if the action is disabled+visible (grayed out in footer)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiApp.compose">
+<span class="sig-name descname"><span class="pre">compose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Widget</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiApp.compose" title="Link to this definition">¶</a></dt>
+<dd><p>Yield child widgets for a container.</p>
+<p>This method should be implemented in a subclass.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiApp.finalize_stats">
+<span class="sig-name descname"><span class="pre">finalize_stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiApp.finalize_stats" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the session duration and return the stats dict</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiApp.save_history">
+<span class="sig-name descname"><span class="pre">save_history</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiApp.save_history" title="Link to this definition">¶</a></dt>
+<dd><p>Write the (trimmed) session history back to the file</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiCompleter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.tui.tuiapp.</span></span><span class="sig-name descname"><span class="pre">CapeTuiCompleter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cape.tui.tuiapp.CapeTuiApp" title="cape.tui.tuiapp.CapeTuiApp"><span class="pre">CapeTuiApp</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiCompleter" title="Link to this definition">¶</a></dt>
+<dd><p>CAPE tab-completer that reads the line from the TUI editor</p>
+<p>This overrides <code class="xref py py-func docutils literal notranslate"><span class="pre">CfdxCompleter.get_line_buffer()</span></code> to source the
+command line from the app’s <a class="reference internal" href="#cape.tui.tuiapp.ComposerTextArea" title="cape.tui.tuiapp.ComposerTextArea"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComposerTextArea</span></code></a> (text before the
+cursor) instead of <code class="xref py py-mod docutils literal notranslate"><span class="pre">readline</span></code>, and adds suggestions for the
+TUI <code class="docutils literal notranslate"><span class="pre">:</span></code> meta-commands.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>app</em>: <a class="reference internal" href="#cape.tui.tuiapp.CapeTuiApp" title="cape.tui.tuiapp.CapeTuiApp"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeTuiApp</span></code></a></dt><dd><p>App whose editor is being completed</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiCompleter.genr8_suggestions">
+<span class="sig-name descname"><span class="pre">genr8_suggestions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiCompleter.genr8_suggestions" title="Link to this definition">¶</a></dt>
+<dd><p>Generate suggestions, including TUI meta-commands</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">suggestions</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">genr8_suggestions</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>comp</em>: <a class="reference internal" href="#cape.tui.tuiapp.CapeTuiCompleter" title="cape.tui.tuiapp.CapeTuiCompleter"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeTuiCompleter</span></code></a></dt><dd><p>TUI autocompleter</p>
+</dd>
+<dt><em>text</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Current text of current word</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>suggestions</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>List of suggested completions for current word</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CapeTuiCompleter.get_line_buffer">
+<span class="sig-name descname"><span class="pre">get_line_buffer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></span><a class="headerlink" href="#cape.tui.tuiapp.CapeTuiCompleter.get_line_buffer" title="Link to this definition">¶</a></dt>
+<dd><p>Get the editor text before the cursor</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">line</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">get_line_buffer</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>comp</em>: <a class="reference internal" href="#cape.tui.tuiapp.CapeTuiCompleter" title="cape.tui.tuiapp.CapeTuiCompleter"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeTuiCompleter</span></code></a></dt><dd><p>TUI autocompleter</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>line</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Command input text, truncated at the cursor</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandLog">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.tui.tuiapp.</span></span><span class="sig-name descname"><span class="pre">CommandLog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tui.tuiapp.CommandLog" title="Link to this definition">¶</a></dt>
+<dd><p>Scroll log whose command markers fold their associated output.</p>
+<p>Text selection is implemented here because <code class="xref py py-class docutils literal notranslate"><span class="pre">RichLog</span></code> renders
+its lines to cached strips: by itself it neither highlights the
+selection nor can it extract the selected text for copying.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandLog.can_focus">
+<span class="sig-name descname"><span class="pre">can_focus</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#cape.tui.tuiapp.CommandLog.can_focus" title="Link to this definition">¶</a></dt>
+<dd><p>Widget may receive focus.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandLog.can_focus_children">
+<span class="sig-name descname"><span class="pre">can_focus_children</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#cape.tui.tuiapp.CommandLog.can_focus_children" title="Link to this definition">¶</a></dt>
+<dd><p>Widget’s children may receive focus.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandLog.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cape.tui.tuiapp.CommandLog.clear" title="Link to this definition">¶</a></dt>
+<dd><p>Clear the text log.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The <cite>RichLog</cite> instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandLog.end_group">
+<span class="sig-name descname"><span class="pre">end_group</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cape.tui.tuiapp.CommandLog.end_group" title="Link to this definition">¶</a></dt>
+<dd><p>Route subsequent writes to the top-level transcript.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandLog.get_selection">
+<span class="sig-name descname"><span class="pre">get_selection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tui.tuiapp.CommandLog.get_selection" title="Link to this definition">¶</a></dt>
+<dd><p>Get the text under the selection</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text</span><span class="p">,</span> <span class="n">ending</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">get_selection</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>selection</em>: selection information</p>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>text</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Text extracted from selection</p>
+</dd>
+<dt><em>ending</em>: <code class="docutils literal notranslate"><span class="pre">&quot;\n&quot;</span></code></dt><dd><p>Ending</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandLog.render_line">
+<span class="sig-name descname"><span class="pre">render_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#int" title="int"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tui.tuiapp.CommandLog.render_line" title="Link to this definition">¶</a></dt>
+<dd><p>Render a line of content.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>y: Y Coordinate of line.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A rendered line.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandLog.start_section">
+<span class="sig-name descname"><span class="pre">start_section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folded</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collapsed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#bool" title="bool"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cape.tui.tuiapp.CommandLog.start_section" title="Link to this definition">¶</a></dt>
+<dd><p>Start a separately foldable output section.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandLog.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tui.tuiapp.CommandLog.write" title="Link to this definition">¶</a></dt>
+<dd><p>Writre a string or Rich renderable to the bottom of the log</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">content</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>content</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <strong>renderable</strong></dt><dd><p>Rich renderable (or a string) to write</p>
+</dd>
+<dt><em>width</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Minimum width; <code class="docutils literal notranslate"><span class="pre">None</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">RichLog.min-width</span></code></p>
+</dd>
+<dt><em>expand</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Permit expanding of content to the width of content
+region; ignored if <em>width</em> specified</p>
+</dd>
+<dt><em>shrink</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Permit shrinking of content to the width of content
+region; ignored if <em>width</em> specified</p>
+</dd>
+<dt><em>scroll_end</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Enable automatic croll to end</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>content</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">RichLog</span></code></dt><dd><p>The <cite>RichLog</cite> intsance</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandPalette">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.tui.tuiapp.</span></span><span class="sig-name descname"><span class="pre">CommandPalette</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tui.tuiapp.CommandPalette" title="Link to this definition">¶</a></dt>
+<dd><p>Small picker for the TUI’s built-in commands.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandPalette.BINDINGS">
+<span class="sig-name descname"><span class="pre">BINDINGS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[Binding(key='escape',</span> <span class="pre">action='dismiss_palette',</span> <span class="pre">description='Close',</span> <span class="pre">show=False,</span> <span class="pre">key_display=None,</span> <span class="pre">priority=False,</span> <span class="pre">tooltip='',</span> <span class="pre">id=None,</span> <span class="pre">system=False,</span> <span class="pre">group=None),</span> <span class="pre">Binding(key='ctrl+p',</span> <span class="pre">action='dismiss_palette',</span> <span class="pre">description='Close',</span> <span class="pre">show=False,</span> <span class="pre">key_display=None,</span> <span class="pre">priority=False,</span> <span class="pre">tooltip='',</span> <span class="pre">id=None,</span> <span class="pre">system=False,</span> <span class="pre">group=None)]</span></span><a class="headerlink" href="#cape.tui.tuiapp.CommandPalette.BINDINGS" title="Link to this definition">¶</a></dt>
+<dd><p>A list of key bindings.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandPalette.CSS">
+<span class="sig-name descname"><span class="pre">CSS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\n</span>&#160;&#160;&#160; <span class="pre">CommandPalette</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">align:</span> <span class="pre">center</span> <span class="pre">middle;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">background:</span> <span class="pre">#000000</span> <span class="pre">65%;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">#command-list</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">width:</span> <span class="pre">60;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">max-width:</span> <span class="pre">90%;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">height:</span> <span class="pre">auto;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">max-height:</span> <span class="pre">70%;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">background:</span> <span class="pre">#202020;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">border-left:</span> <span class="pre">solid</span> <span class="pre">#7aa2f7;\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">padding:</span> <span class="pre">1</span> <span class="pre">2;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">#command-list</span> <span class="pre">&gt;</span> <span class="pre">.option-list--option-highlighted</span> <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">background:</span> <span class="pre">#343a48;\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">'</span></span><a class="headerlink" href="#cape.tui.tuiapp.CommandPalette.CSS" title="Link to this definition">¶</a></dt>
+<dd><p>Inline CSS, useful for quick scripts. Rules here take priority over CSS_PATH.</p>
+<dl class="simple">
+<dt>Note:</dt><dd><p>This CSS applies to the whole app.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandPalette.can_focus">
+<span class="sig-name descname"><span class="pre">can_focus</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#cape.tui.tuiapp.CommandPalette.can_focus" title="Link to this definition">¶</a></dt>
+<dd><p>Widget may receive focus.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandPalette.can_focus_children">
+<span class="sig-name descname"><span class="pre">can_focus_children</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#cape.tui.tuiapp.CommandPalette.can_focus_children" title="Link to this definition">¶</a></dt>
+<dd><p>Widget’s children may receive focus.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.CommandPalette.compose">
+<span class="sig-name descname"><span class="pre">compose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Widget</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cape.tui.tuiapp.CommandPalette.compose" title="Link to this definition">¶</a></dt>
+<dd><p>Called by Textual to create child widgets</p>
+<p>This method is called when a widget is mounted or by setting
+<cite>recompose=True</cite> when calling
+<cite>textual.widget.Widget.refresh()`</cite>.</p>
+<p>Note that you don’t typically need to explicitly call this
+method.</p>
+<p><strong>Example</strong>:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compose</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ComposeResult</span><span class="p">:</span>
+    <span class="k">yield</span> <span class="n">Header</span><span class="p">()</span>
+    <span class="k">yield</span> <span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Press the button below:&quot;</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">Button</span><span class="p">()</span>
+    <span class="k">yield</span> <span class="n">Footer</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.ComposerTextArea">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.tui.tuiapp.</span></span><span class="sig-name descname"><span class="pre">ComposerTextArea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tui.tuiapp.ComposerTextArea" title="Link to this definition">¶</a></dt>
+<dd><p>One-to-three-line soft-wrapping editor for the TUI composer.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.ComposerTextArea.can_cursor_down">
+<span class="sig-name descname"><span class="pre">can_cursor_down</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#bool" title="bool"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#cape.tui.tuiapp.ComposerTextArea.can_cursor_down" title="Link to this definition">¶</a></dt>
+<dd><p>Return whether the cursor has a visual row below it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.ComposerTextArea.can_cursor_up">
+<span class="sig-name descname"><span class="pre">can_cursor_up</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#bool" title="bool"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#cape.tui.tuiapp.ComposerTextArea.can_cursor_up" title="Link to this definition">¶</a></dt>
+<dd><p>Return whether the cursor has a visual row above it.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.ComposerTextArea.can_focus">
+<span class="sig-name descname"><span class="pre">can_focus</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#cape.tui.tuiapp.ComposerTextArea.can_focus" title="Link to this definition">¶</a></dt>
+<dd><p>Widget may receive focus.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.ComposerTextArea.can_focus_children">
+<span class="sig-name descname"><span class="pre">can_focus_children</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#cape.tui.tuiapp.ComposerTextArea.can_focus_children" title="Link to this definition">¶</a></dt>
+<dd><p>Widget’s children may receive focus.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.ComposerTextArea.cursor_position">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cursor_position</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../python.html#int" title="int"><span class="pre">int</span></a></span><a class="headerlink" href="#cape.tui.tuiapp.ComposerTextArea.cursor_position" title="Link to this definition">¶</a></dt>
+<dd><p>Return the cursor as an offset into <a class="reference internal" href="#cape.tui.tuiapp.ComposerTextArea.value" title="cape.tui.tuiapp.ComposerTextArea.value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.ComposerTextArea.insert_newline">
+<span class="sig-name descname"><span class="pre">insert_newline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cape.tui.tuiapp.ComposerTextArea.insert_newline" title="Link to this definition">¶</a></dt>
+<dd><p>Replace the current selection with an explicit newline.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.ComposerTextArea.value">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">value</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span><a class="headerlink" href="#cape.tui.tuiapp.ComposerTextArea.value" title="Link to this definition">¶</a></dt>
+<dd><p>Alias matching the former <code class="xref py py-class docutils literal notranslate"><span class="pre">Input</span></code> interface.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.LogWriter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.tui.tuiapp.</span></span><span class="sig-name descname"><span class="pre">LogWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cape.tui.tuiapp.CapeTuiApp" title="cape.tui.tuiapp.CapeTuiApp"><span class="pre">CapeTuiApp</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.tui.tuiapp.LogWriter" title="Link to this definition">¶</a></dt>
+<dd><p>Redirect writes (e.g. <code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stdout</span></code>) into a RichLog</p>
+<p>Lines are buffered; complete lines are posted to the app’s scroll
+log from the writing thread via <code class="docutils literal notranslate"><span class="pre">call_from_thread</span></code>. ANSI color
+codes are converted to Rich <code class="xref py py-class docutils literal notranslate"><span class="pre">Text</span></code> styling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>app</em>: <a class="reference internal" href="#cape.tui.tuiapp.CapeTuiApp" title="cape.tui.tuiapp.CapeTuiApp"><code class="xref py py-class docutils literal notranslate"><span class="pre">CapeTuiApp</span></code></a></dt><dd><p>App whose log receives written lines</p>
+</dd>
+<dt><em>_buf</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Buffer holding an incomplete line</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.LogWriter.flush">
+<span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cape.tui.tuiapp.LogWriter.flush" title="Link to this definition">¶</a></dt>
+<dd><p>Flush write buffers, if applicable.</p>
+<p>This is not implemented for read-only and non-blocking streams.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.tui.tuiapp.LogWriter.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#int" title="int"><span class="pre">int</span></a></span></span><a class="headerlink" href="#cape.tui.tuiapp.LogWriter.write" title="Link to this definition">¶</a></dt>
+<dd><p>Write string s to stream.</p>
+<p>Return the number of characters written
+(which is always equal to the length of the string).</p>
+</dd></dl>
+
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui</span></code> Textual-based user interface to CAPE</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="tuiutils.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui.tuiutils</span></code>: Render helpers for the CAPE TUI</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/cape/tui/tuiapp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tuiutils.html" title="cape.tui.tuiutils: Render helpers for the CAPE TUI"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.tui Textual-based user interface to CAPE"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui</span></code> Textual-based user interface to CAPE</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui.tuiapp</span></code>: Textual app for the CAPE terminal UI</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

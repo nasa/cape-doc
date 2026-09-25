@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.tui Textual-based user interface to CAPE &#8212; CAPE 3.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../../_static/documentation_options.js?v=acc74ff5"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.tui.tuiapp: Textual app for the CAPE terminal UI" href="tuiapp.html" />
+    <link rel="prev" title="cape.triqfm: Command-line interface to triqfm tool" href="../triqfm.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tuiapp.html" title="cape.tui.tuiapp: Textual app for the CAPE terminal UI"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../triqfm.html" title="cape.triqfm: Command-line interface to triqfm tool"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui</span></code> Textual-based user interface to CAPE</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-cape.tui">
+<span id="cape-tui-textual-based-user-interface-to-cape"></span><h1><a class="reference internal" href="#module-cape.tui" title="cape.tui"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui</span></code></a> Textual-based user interface to CAPE<a class="headerlink" href="#module-cape.tui" title="Link to this heading">¶</a></h1>
+<p>OpenCode-style interactive terminal user interface to CAPE, built on
+the optional <code class="docutils literal notranslate"><span class="pre">textual</span></code> package and launched with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>tui
+</pre></div>
+</div>
+<p>It provides the same core features as <a class="reference internal" href="../ui/index.html#module-cape.ui" title="cape.ui"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.ui</span></code></a> – CAPE-aware
+tab-completion and a dedicated history file – inside a persistent app
+with a scroll log, a pinned dark composer, and context below the prompt.
+Ctrl-P opens a picker for the built-in TUI commands:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>In-process CAPE commands</strong></dt><dd><p>Commands starting with <code class="docutils literal notranslate"><span class="pre">cape</span></code>, <code class="docutils literal notranslate"><span class="pre">pycart</span></code>, <code class="docutils literal notranslate"><span class="pre">pyfun</span></code>, etc. run
+in-process using <a class="reference internal" href="../../cfdx/cli.html#cape.cfdx.cli.main" title="cape.cfdx.cli.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">cape.cfdx.cli.main()</span></code></a>, with output streamed
+into the log; other commands run as subprocesses.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Interruptions and prompts</strong></dt><dd><p>Ctrl-C (or ESC) interrupts the running command, and interactive
+CAPE prompts mount as clickable widgets above the editor.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>TUI meta-commands</strong></dt><dd><p>Commands starting with <code class="docutils literal notranslate"><span class="pre">:</span></code> are handled by the TUI itself:
+<code class="docutils literal notranslate"><span class="pre">:help</span> <span class="pre">[&lt;cmd&gt;]</span></code>, <code class="docutils literal notranslate"><span class="pre">:history</span> <span class="pre">[&lt;n&gt;]</span></code>, <code class="docutils literal notranslate"><span class="pre">:!N</span></code>, <code class="docutils literal notranslate"><span class="pre">:status</span></code>,
+<code class="docutils literal notranslate"><span class="pre">:cd</span> <span class="pre">&lt;dir&gt;</span></code> (plain <code class="docutils literal notranslate"><span class="pre">cd</span></code> also works), <code class="docutils literal notranslate"><span class="pre">:pwd</span></code>, <code class="docutils literal notranslate"><span class="pre">:clear</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">:exit</span></code> / <code class="docutils literal notranslate"><span class="pre">:quit</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>See <a class="reference internal" href="tuiapp.html#module-cape.tui.tuiapp" title="cape.tui.tuiapp"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui.tuiapp</span></code></a> for the app itself and
+<a class="reference internal" href="tuiutils.html#module-cape.tui.tuiutils" title="cape.tui.tuiutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui.tuiutils</span></code></a> for the render helpers.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tui.main">
+<span class="sig-prename descclassname"><span class="pre">cape.tui.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#type" title="type"><span class="pre">type</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../python.html#int" title="int"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cape.tui.main" title="Link to this definition">¶</a></dt>
+<dd><p>Main Textual-based interactive TUI function</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ierr</span><span class="p">,</span> <span class="n">stats</span> <span class="o">=</span> <span class="n">main</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>cls</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <a class="reference internal" href="../../python.html#type" title="type"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></dt><dd><p><a class="reference internal" href="../argread.html#cape.argread.ArgReader" title="cape.argread.ArgReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.argread.ArgReader</span></code></a> subtype for completions
+and <code class="docutils literal notranslate"><span class="pre">:help</span></code>; defaults to
+<a class="reference internal" href="../../cfdx/cli.html#cape.cfdx.cli.CfdxFrontDesk" title="cape.cfdx.cli.CfdxFrontDesk"><code class="xref py py-class docutils literal notranslate"><span class="pre">cape.cfdx.cli.CfdxFrontDesk</span></code></a></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>ierr</em>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></dt><dd><p>Return code</p>
+</dd>
+<dt><em>stats</em>: <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></dt><dd><p>Information about results of commands run</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">commands</span></code>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> number of commands run</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">failures</span></code>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> number of failed commands</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tui_commands</span></code>: <a class="reference internal" href="../../python.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> number of TUI meta-cmds</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">duration</span></code>: <a class="reference internal" href="../../python.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> session wall time (sec)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">json_files</span></code>: <a class="reference internal" href="../../python.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> of loaded JSON paths,
+least to most recently used</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">last_json_file</span></code>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code> most recent
+absolute JSON path</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">last_json_display_file</span></code>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <code class="docutils literal notranslate"><span class="pre">None</span></code> path
+displayed relative to the controller’s root</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cape.tui.run_app">
+<span class="sig-prename descclassname"><span class="pre">cape.tui.</span></span><span class="sig-name descname"><span class="pre">run_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../python.html#str" title="str"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'CAPE</span> <span class="pre">TUI</span> <span class="pre">summary'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../python.html#int" title="int"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../python.html#dict" title="dict"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#cape.tui.run_app" title="Link to this definition">¶</a></dt>
+<dd><p>Run a CAPE Textual app with shared prompt/history lifecycle</p>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuiapp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui.tuiapp</span></code>: Textual app for the CAPE terminal UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuiutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui.tuiutils</span></code>: Render helpers for the CAPE TUI</a></li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../triqfm.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.triqfm</span></code>: Command-line interface to <code class="docutils literal notranslate"><span class="pre">triqfm</span></code> tool</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="tuiapp.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui.tuiapp</span></code>: Textual app for the CAPE terminal UI</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/cape/tui/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tuiapp.html" title="cape.tui.tuiapp: Textual app for the CAPE terminal UI"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../triqfm.html" title="cape.triqfm: Command-line interface to triqfm tool"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >The <code class="xref py py-mod docutils literal notranslate"><span class="pre">cape</span></code> module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.tui</span></code> Textual-based user interface to CAPE</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>

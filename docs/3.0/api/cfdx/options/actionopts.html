@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>cape.cfdx.options.actionopts: Customize case-disposition actions &#8212; CAPE 3.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css?v=34905f61" />
+    <script src="../../../_static/documentation_options.js?v=acc74ff5"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="icon" href="../../../_static/NASA_logo_icon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="cape.cfdx.options.aflr3opts: AFLR3 mesh generation options" href="aflr3opts.html" />
+    <link rel="prev" title="cape.cfdx.options: Options package" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="aflr3opts.html" title="cape.cfdx.options.aflr3opts: AFLR3 mesh generation options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.cfdx.options: Options package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx</span></code>: Templates for CFD control tools</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.options</span></code>: Options package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.options.actionopts</span></code>: Customize case-disposition actions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cape-cfdx-options-actionopts-customize-case-disposition-actions">
+<span id="module-cape.cfdx.options.actionopts"></span><h1><a class="reference internal" href="#module-cape.cfdx.options.actionopts" title="cape.cfdx.options.actionopts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.options.actionopts</span></code></a>: Customize case-disposition actions<a class="headerlink" href="#cape-cfdx-options-actionopts-customize-case-disposition-actions" title="Link to this heading">¶</a></h1>
+<p>This provides a list of what CAPE should normally do in any of a variety
+of case disposition actions. The most common example is how to handle
+“approved” cases. This would normally start with</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>approve<span class="w"> </span>-I<span class="w"> </span><span class="o">{</span>CASES<span class="o">}</span>
+<span class="gp">$ </span>cape<span class="w"> </span>dex<span class="w"> </span>-I<span class="w"> </span><span class="o">{</span>CASES<span class="o">}</span>
+</pre></div>
+</div>
+<p>but may also include custom actions (e.g. <code class="docutils literal notranslate"><span class="pre">./tools/writesurfcp.py</span></code>) or
+divide the commands into groups.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>--PASS<span class="w"> </span>-I<span class="w"> </span><span class="o">{</span>CASES<span class="o">}</span>
+<span class="gp">$ </span>cape<span class="w"> </span>--dex<span class="w"> </span><span class="s2">&quot;[A-L]*&quot;</span><span class="w"> </span>-I<span class="w"> </span><span class="o">{</span>CASES<span class="o">}</span>
+<span class="gp">$ </span>cape<span class="w"> </span>--dex<span class="w"> </span><span class="s2">&quot;[M-Z]*&quot;</span><span class="w"> </span>-I<span class="w"> </span><span class="o">{</span>CASES<span class="o">}</span>
+<span class="gp">$ </span>./tools/writesurfcp.py<span class="w"> </span>-I<span class="w"> </span><span class="o">{</span>CASES<span class="o">}</span>
+</pre></div>
+</div>
+<p>This would look like the following in the <code class="docutils literal notranslate"><span class="pre">&quot;Actions&quot;</span></code> section of the
+CAPE JSON file:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Actions&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;approve&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cntl&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;function&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;MarkPASS&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;./tools/writesurfcp.py&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cli&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;function&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cape_extract_dex&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;kwargs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;dex&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;[A-L]*&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cli&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;function&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cape_extract_dex&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;kwargs&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;dex&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;[M-Z]*&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This means that when a user calls</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>perform<span class="w"> </span>approve<span class="w"> </span>-I<span class="w"> </span><span class="o">{</span>CASES<span class="o">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The following commands will happen:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cape<span class="w"> </span>approve<span class="w"> </span>-I<span class="w"> </span><span class="o">{</span>CASES<span class="o">}</span>
+<span class="gp">$ </span>./tools/writesurfcp.py<span class="w"> </span>-I<span class="w"> </span><span class="o">{</span>CASES<span class="o">}</span>
+<span class="gp">$ </span>cape<span class="w"> </span>dex<span class="w"> </span>--dex<span class="w"> </span><span class="s2">&quot;[A-L]*&quot;</span><span class="w"> </span>-I<span class="w"> </span><span class="o">{</span>CASES<span class="o">}</span>
+<span class="gp">$ </span>cape<span class="w"> </span>dex<span class="w"> </span>--dex<span class="w"> </span><span class="s2">&quot;[M-Z]*&quot;</span><span class="w"> </span>-I<span class="w"> </span><span class="o">{</span>CASES<span class="o">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>However, the last two are run simultaneously because they have the
+same value for <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;</span></code>. Each action in such a group runs in a
+forked child process with its STDOUT redirected to a log file named
+<code class="docutils literal notranslate"><span class="pre">log/cape-perform.{j+1}.{k+1}</span></code> (relative to the root folder) and its
+STDERR shown on the terminal, along with the action’s title, any error
+messages, and a live status board while the group is running. Since
+the actions run in child processes, only their on-disk side effects
+persist in the main process.</p>
+<p>User-defined tools for <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">review</span></code> and <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">dispatch</span></code> are also
+defined in this section: the <code class="docutils literal notranslate"><span class="pre">&quot;UserTools&quot;</span></code> option is a list of
+names, and each name is defined as an action just like <code class="docutils literal notranslate"><span class="pre">&quot;approve&quot;</span></code>
+in the example above.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Actions&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;UserTools&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;writecp&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;writecp&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;./tools/writesurfcp.py {I}&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The names <code class="docutils literal notranslate"><span class="pre">&quot;approve&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;defail&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;dezombie&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;extend&quot;</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">&quot;extend2&quot;</span></code> have default definitions (see <em>DEFAULT_ACTIONS</em>)
+that reproduce the behavior of <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">approve</span></code>, <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">defail</span></code>,
+etc., unless redefined in this section.</p>
+<p>For shell commands, a <code class="docutils literal notranslate"><span class="pre">{I}</span></code> placeholder is replaced by the case
+indices being processed; shell commands without one get
+<code class="docutils literal notranslate"><span class="pre">-I</span> <span class="pre">{CASES}</span></code> appended automatically. Shell commands from the legacy
+top-level <em>UserTools</em> option (a dict of names and commands), however,
+must contain a <code class="docutils literal notranslate"><span class="pre">{I}</span></code> placeholder.</p>
+<p>Actions of type <code class="docutils literal notranslate"><span class="pre">&quot;shell&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;cli&quot;</span></code> also accept an
+<code class="docutils literal notranslate"><span class="pre">&quot;AddFileName&quot;</span></code> option. When <code class="docutils literal notranslate"><span class="pre">true</span></code>, the name of the JSON file the
+current run matrix was read from (relative to the root folder,
+following any links) is passed along: <code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">{JSON}</span></code> is appended to
+<code class="docutils literal notranslate"><span class="pre">shell</span></code> commands, and an <code class="docutils literal notranslate"><span class="pre">f={JSON}</span></code> keyword argument is added to
+<code class="docutils literal notranslate"><span class="pre">cli</span></code> function calls (unless the action’s <em>kwargs</em> already set
+<code class="docutils literal notranslate"><span class="pre">&quot;f&quot;</span></code>). This option has no effect for <code class="docutils literal notranslate"><span class="pre">&quot;cntl&quot;</span></code> actions.</p>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.cfdx.options.actionopts.ActionOpts">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.cfdx.options.actionopts.</span></span><span class="sig-name descname"><span class="pre">ActionOpts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.options.actionopts.ActionOpts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cape.cfdx.options.actionopts.ActionsOpts">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cape.cfdx.options.actionopts.</span></span><span class="sig-name descname"><span class="pre">ActionsOpts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.options.actionopts.ActionsOpts" title="Link to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.options.actionopts.ActionsOpts.check_optname">
+<span class="sig-name descname"><span class="pre">check_optname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.options.actionopts.ActionsOpts.check_optname" title="Link to this definition">¶</a></dt>
+<dd><p>Check validity of option named <em>opt</em></p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">valid</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">check_optname</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">OptionsDict</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>opt</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of option to test</p>
+</dd>
+<dt><em>mode</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="docutils literal notranslate"><span class="pre">0</span></code> | <code class="docutils literal notranslate"><span class="pre">1</span></code> | <code class="docutils literal notranslate"><span class="pre">2</span></code> | <code class="docutils literal notranslate"><span class="pre">3</span></code></dt><dd><p>Warning mode code</p>
+<dl class="field-list simple">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">0</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>no checks</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">1</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p>validate silently</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">2</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>validate and show warnings</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">3</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p>raise an exception if invalid</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>valid</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not option name <em>opt</em> is allowed</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2022-09-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2022-09-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v2.0: _save_lastwarn()</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.options.actionopts.ActionsOpts.check_opttype">
+<span class="sig-name descname"><span class="pre">check_opttype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cape.cfdx.options.actionopts.ActionsOpts.check_opttype" title="Link to this definition">¶</a></dt>
+<dd><p>Check type of a named option’s value</p>
+<p>This uses the options type dictionary in <em>type(opts)._opttypes</em>
+and/or <em>opts._xopttypes</em>. If <em>opt</em> is present in neither of
+these dicts, no checks are performed.</p>
+<p>Special dicts, e.g</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;@map&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;arch&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>are checked against their own special rules, for example</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;&#64;expr&quot;</span></code> must be a <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;&#64;map&quot;</span></code> must be a <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;&#64;cons&quot;</span></code> must be a <a class="reference internal" href="../../python.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;&#64;map&quot;</span></code> must be accompanied by <code class="docutils literal notranslate"><span class="pre">&quot;key&quot;</span></code>, a <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p></li>
+</ul>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">valid</span><span class="p">,</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">opts</span><span class="o">.</span><span class="n">check_opttype</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <code class="xref py py-class docutils literal notranslate"><span class="pre">OptionsDict</span></code></dt><dd><p>Options interface</p>
+</dd>
+<dt><em>opt</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of option to test</p>
+</dd>
+<dt><em>val</em>: <strong>any</strong></dt><dd><p>Value for <em>opt</em> to test</p>
+</dd>
+<dt><em>mode</em>: {<code class="docutils literal notranslate"><span class="pre">None</span></code>} | <code class="docutils literal notranslate"><span class="pre">0</span></code> | <code class="docutils literal notranslate"><span class="pre">1</span></code> | <code class="docutils literal notranslate"><span class="pre">2</span></code> | <code class="docutils literal notranslate"><span class="pre">3</span></code></dt><dd><p>Warning mode code</p>
+<dl class="field-list simple">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">0</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>no checks</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">1</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p>validate silently</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">2</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>validate and show warnings</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">3</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p>raise an exception if invalid</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>valid</em>: <code class="docutils literal notranslate"><span class="pre">True</span></code> | <code class="docutils literal notranslate"><span class="pre">False</span></code></dt><dd><p>Whether or not option name <em>opt</em> is allowed</p>
+</dd>
+<dt><em>v2</em>: <strong>any</strong></dt><dd><p>Either <em>val</em> or converted to new class</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Versions<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>2022-09-18 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.0</p></li>
+<li><p>2022-09-30 <code class="docutils literal notranslate"><span class="pre">&#64;ddalle</span></code>: v1.1; use <code class="docutils literal notranslate"><span class="pre">_lastwarn</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.options.actionopts.ActionsOpts.get_Action">
+<span class="sig-name descname"><span class="pre">get_Action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a></span></span><a class="headerlink" href="#cape.cfdx.options.actionopts.ActionsOpts.get_Action" title="Link to this definition">¶</a></dt>
+<dd><p>Get list of action definitions for an action name</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">actlist</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_Action</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.cfdx.options.actionopts.ActionsOpts" title="cape.cfdx.options.actionopts.ActionsOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionsOpts</span></code></a></dt><dd><p>Actions options interface</p>
+</dd>
+<dt><em>name</em>: <a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></dt><dd><p>Name of action, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;approve&quot;</span></code> or a <em>UserTools</em> name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>actlist</em>: <code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="#cape.cfdx.options.actionopts.ActionOpts" title="cape.cfdx.options.actionopts.ActionOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionOpts</span></code></a>]</dt><dd><p>List of actions to perform, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if <em>name</em> is
+neither defined locally nor a default action name</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cape.cfdx.options.actionopts.ActionsOpts.get_UserToolsNames">
+<span class="sig-name descname"><span class="pre">get_UserToolsNames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../python.html#list" title="list"><span class="pre">list</span></a></span></span><a class="headerlink" href="#cape.cfdx.options.actionopts.ActionsOpts.get_UserToolsNames" title="Link to this definition">¶</a></dt>
+<dd><p>Get names of user-defined tools</p>
+<dl class="field-list">
+<dt class="field-odd">Call<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">names</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get_UserToolsNames</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Inputs<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><em>opts</em>: <a class="reference internal" href="#cape.cfdx.options.actionopts.ActionsOpts" title="cape.cfdx.options.actionopts.ActionsOpts"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionsOpts</span></code></a></dt><dd><p>Actions options interface</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Outputs<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><em>names</em>: <a class="reference internal" href="../../python.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="../../python.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</dt><dd><p>Names of user tools for <code class="docutils literal notranslate"><span class="pre">cape</span> <span class="pre">review</span></code>/<code class="docutils literal notranslate"><span class="pre">dispatch</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/NASA_logo.png" alt="Logo of CAPE"/>
+            </a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.options</span></code>: Options package</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="aflr3opts.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.options.aflr3opts</span></code>: AFLR3 mesh generation options</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/cfdx/options/actionopts.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="aflr3opts.html" title="cape.cfdx.options.aflr3opts: AFLR3 mesh generation options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cape.cfdx.options: Options package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CAPE 3.0.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Introduction to CAPE Application Program Interface</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx</span></code>: Templates for CFD control tools</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.options</span></code>: Options package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">cape.cfdx.options.actionopts</span></code>: Customize case-disposition actions</a></li> 
+      </ul>
+    </div>
+
+  <div class="footer">
+   CAPE version 2.0.0 documentation, 2025
+  </div>
+
+
+  </body>
+</html>
